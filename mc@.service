@@ -1,0 +1,31 @@
+[Unit]
+After=network.target
+# Implicit needs are explicitly needed to survive shutdown till stop finishes
+Before=shutdown.target
+# Stop before shutdown
+Description=Minecraft server
+# sudo tmux -S /tmp/tmux-`id -u mc`/default a -t %i
+# Attach to mc's tmux session as root
+
+[Service]
+ExecReload=/usr/bin/tmux send-keys -t %i:0.0 reload Enter
+# Enter reload in the first pane of the first window of session %i
+# type says script path
+ExecStart=/usr/bin/tmux new -ds %i /usr/bin/java -jar server.jar
+# Makes session %i in background
+ExecStop=/opt/MC/MCstop.sh %i
+PrivateUsers=true
+# Security
+# Thanks agowa338
+ProtectHome=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectSystem=full
+Type=forking
+User=mc
+WorkingDirectory=/opt/MC/%i
+# Launch jar in %i
+
+[Install]
+WantedBy=multi-user.target
