@@ -6,8 +6,8 @@ year=`date +%Y`
 
 server_do()
 {
-	tmux send-keys -t "$sessionname":0.0 "$*" Enter
-	# Enter $* in the first pane of the first window of session $sessionname
+	tmux -S /tmp/$sessionname send-keys -t "$sessionname":0.0 "$*" Enter
+	# Enter $* in the first pane of the first window of session $sessionname on socket /tmp/%i
 }
 
 if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
@@ -32,7 +32,7 @@ world=`grep level-name "$properties" | cut -d = -f 2`
 # $properties says level-name=$world
 
 sessionname=$2
-if ! tmux ls 2>&1 | grep -q "$sessionname"; then
+if ! tmux -S /tmp/$sessionname ls 2>&1 | grep -q "$sessionname"; then
 	>&2 echo No session $sessionname
 	exit 4
 fi
@@ -53,8 +53,8 @@ while [ -z "$success" ]; do
 	sleep 1
 	server_do save query
 	# Check if backup is ready
-	buffer=`tmux capture-pane -pt "$sessionname":0.0 -S -`
-	# Get buffer from the first pane of the first window of session $sessionname
+	buffer=`tmux -S /tmp/$sessionname capture-pane -pt "$sessionname":0.0 -S -`
+	# Get buffer from the first pane of the first window of session $sessionname on socket /tmp/%i
 	buffer=`echo "$buffer" | awk 'file{file=file"\n"$0} /save query/{file=$0} END {print file}'`
 	# Trim off $buffer before last occurence of save query
 	# If file exists append $0, if $0 contains save-all set file to $0, and at end print file

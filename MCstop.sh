@@ -2,8 +2,8 @@
 
 server_do()
 {
-	tmux send-keys -t "$sessionname":0.0 "$*" Enter
-	# Enter $* in the first pane of the first window of session $sessionname
+	tmux -S /tmp/$sessionname send-keys -t "$sessionname":0.0 "$*" Enter
+	# Enter $* in the first pane of the first window of session $sessionname on socket /tmp/%i
 }
 
 countdown()
@@ -21,7 +21,7 @@ if [ -z "$1" -o "$1" = -h -o "$1" = --help ]; then
 fi
 
 sessionname=$1
-if ! tmux ls 2>&1 | grep -q "$sessionname"; then
+if ! tmux -S $sessionname ls 2>&1 | grep -q "$sessionname"; then
         >&2 echo No session $sessionname
         exit 2
 fi
