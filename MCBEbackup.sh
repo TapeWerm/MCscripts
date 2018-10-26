@@ -79,6 +79,7 @@ IFS=,
 for string in $files; do
 	file=${string%:*}
 	length=${string##*:}
+	# Trim off everything before last colon
 	truncate --size=$length $file
 done
 unset IFS
