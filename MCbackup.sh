@@ -68,8 +68,6 @@ server_do save-off
 # Disable autosave
 server_do save-all flush
 # Pause and save the server
-cd "$server_dir"
-# zip restores path of directory given to it ($world), not just the directory itself
 while [ -z "$success" ]; do
 	buffer=`tmux capture-pane -pt "$sessionname":0.0 -S -`
 	# Get buffer from the first pane of the first window of session $sessionname
@@ -83,6 +81,8 @@ while [ -z "$success" ]; do
 		sleep 1
 	fi
 done
+cd "$server_dir"
+# zip restores path of directory given to it ($world), not just the directory itself
 zip -r "$backup_dir/$date.zip" "$world"
 server_do save-on
 server_do say "Well that's better now, isn't it?"
