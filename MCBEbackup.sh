@@ -75,6 +75,7 @@ cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 cp -r "worlds/$world" .
 IFS=,
+# Delimit on , instead of space
 for string in $files; do
 	file=${string%:*}
 	length=${string##*:}
