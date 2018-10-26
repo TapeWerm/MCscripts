@@ -80,7 +80,7 @@ while [ -z "$success" ]; do
 	buffer=`echo "$buffer" | awk 'file{file=file"\n"$0} /save-all/{file=$0} END {print file}'`
 	# Trim off $buffer before last occurence of save-all
 	# If file exists append $0, if $0 contains save-all set file to $0, and at end print file
-	if echo "$buffer" | grep -q '[Server thread/INFO]: Saved the game'; then
+	if echo "$buffer" | grep -q 'Saved the game'; then
 	# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 		success=true
 	else
