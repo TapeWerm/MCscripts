@@ -11,7 +11,7 @@ ExecReload=/usr/bin/tmux -S /tmp/%i send-keys -t %i:0.0 reload Enter
 # type says script path
 ExecStart=/usr/bin/tmux -S /tmp/%i new -ds %i /usr/bin/java -jar server.jar
 # Makes session %i on socket /tmp/%i in background
-ExecStop=/opt/MC/MCstop.sh %i
+ExecStop=/opt/MC/MCstop.sh %i /tmp/%i
 PrivateUsers=true
 # Security
 # Thanks agowa338

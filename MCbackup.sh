@@ -6,8 +6,8 @@ year=`date +%Y`
 
 server_do()
 {
-	tmux -S /tmp/$sessionname send-keys -t "$sessionname":0.0 "$*" Enter
-	# Enter $* in the first pane of the first window of session $sessionname on socket /tmp/%i
+	tmux -S "$tmux_socket" send-keys -t "$sessionname":0.0 "$*" Enter
+	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
 }
 
 countdown()
@@ -19,7 +19,7 @@ countdown()
 
 if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
 	>&2 echo Backs up Minecraft server world running in tmux session.
-	>&2 echo '`./MCbackup.sh $server_dir $sessionname [$backup_dir]`'
+	>&2 echo '`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 	>&2 echo 'Backups are ${world}_Backups/$year/$month/$date.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit 1
 fi
@@ -39,10 +39,6 @@ world=`grep level-name "$properties" | cut -d = -f 2`
 # $properties says level-name=$world
 
 sessionname=$2
-if ! tmux -S /tmp/$sessionname ls 2>&1 | grep -q "$sessionname"; then
-	>&2 echo No session $sessionname
-	exit 4
-fi
 
 if [ -n "$3" ]; then
 	backup_dir=${3%/}
@@ -53,6 +49,16 @@ backup_dir=$backup_dir/${world}_Backups/$year/$month
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
 backup_dir=`realpath "$backup_dir"`
+
+if [ -n "$4" ]; then
+	tmux_socket=${4%/}
+else
+	tmux_socket=/tmp/tmux-`id -u $USER`/default
+fi
+if ! tmux -S "$tmux_socket" ls | grep -q "$sessionname"; then
+	>&2 echo No session $sessionname on socket $tmux_socket
+	exit 4
+fi
 
 countdown 20 seconds
 sleep 17
@@ -69,13 +75,13 @@ server_do save-off
 server_do save-all flush
 # Pause and save the server
 while [ -z "$success" ]; do
-	buffer=`tmux -S /tmp/$sessionname capture-pane -pt "$sessionname":0.0 -S -`
-	# Get buffer from the first pane of the first window of session $sessionname on socket /tmp/%i
+	buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
+	# Get buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
 	buffer=`echo "$buffer" | awk 'file{file=file"\n"$0} /save-all/{file=$0} END {print file}'`
 	# Trim off $buffer before last occurence of save-all
 	# If file exists append $0, if $0 contains save-all set file to $0, and at end print file
-	if echo "$buffer" | grep -q 'Saved'; then
-	# Minecraft says Saved the game
+	if echo "$buffer" | grep -q '[Server thread/INFO]: Saved the game'; then
+	# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 		success=true
 	else
 		sleep 1

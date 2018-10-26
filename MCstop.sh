@@ -2,8 +2,8 @@
 
 server_do()
 {
-	tmux -S /tmp/$sessionname send-keys -t "$sessionname":0.0 "$*" Enter
-	# Enter $* in the first pane of the first window of session $sessionname on socket /tmp/%i
+	tmux -S "$tmux_socket" send-keys -t "$sessionname":0.0 "$*" Enter
+	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
 }
 
 countdown()
@@ -15,14 +15,21 @@ countdown()
 
 if [ -z "$1" -o "$1" = -h -o "$1" = --help ]; then
 	>&2 echo Warns Minecraft server running in tmux session 20 seconds before stopping.
-	>&2 echo '`./MClose.sh $sessionname`'
+	>&2 echo '`./MCstop.sh $sessionname [$tmux_socket]`'
 	>&2 echo Best ran by systemd before shutdown.
 	exit 1
 fi
 
 sessionname=$1
-if ! tmux -S $sessionname ls 2>&1 | grep -q "$sessionname"; then
-        >&2 echo No session $sessionname
+
+if [ -n "$2" ]; then
+	tmux_socket=${2%/}
+	# Remove trailing slash
+else
+	tmux_socket=/tmp/tmux-`id -u $USER`/default
+fi
+if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
+	>&2 echo No session $sessionname on socket $tmux_socket
         exit 2
 fi
 

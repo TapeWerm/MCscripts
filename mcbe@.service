@@ -10,7 +10,7 @@ ExecStart=/usr/bin/tmux -S /tmp/%i new -ds %i 'LD_LIBRARY_PATH=. ./bedrock_serve
 # Makes session %i on socket /tmp/%i in background
 # Passing environment variables needs quotes in tmux
 # type says script path
-ExecStop=/opt/MC/MCstop.sh %i
+ExecStop=/opt/MC/MCstop.sh %i /tmp/%i
 PrivateUsers=true
 # Security
 # Thanks agowa338
