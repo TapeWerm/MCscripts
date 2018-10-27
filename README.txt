@@ -15,13 +15,13 @@ sudo mv mcbe@.service /etc/systemd/service/
 Java Edition setup:
 sudo systemctl enable mc@MC.service --now
 Enter `crontab -u mc -e` and add this to mc's crontab:
-0 4 * * * ~/MCbackup.sh MC MC ~ /tmp/MC > /dev/null
+0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null
 
 I recommend replacing the 3rd argument to MCbackup.sh with an external drive to dump backups on
 
 Bedrock Edition setup:
 sudo systemctl enable mcbe@MCBE.service --now
 Enter `crontab -u mc -e` and add this to mc's crontab:
-0 4 * * * ~/MCBEbackup.sh MCBE MCBE ~ /tmp/MCBE > /dev/null
+0 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null
 
 I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
