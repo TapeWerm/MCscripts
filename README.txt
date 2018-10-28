@@ -9,6 +9,9 @@ sudo adduser --home /opt/MC mc
 Copy and paste goodness:
 chmod 700 MCstop.sh MCbackup.sh MCBEbackup.sh
 sudo chown mc:mc MCstop.sh MCbackup.sh MCBEbackup.sh
+sudo mv MCstop.sh /opt/MC/
+sudo mv MCbackup.sh /opt/MC/
+sudo mv MCBEbackup.sh /opt/MC/
 sudo mv mc@.service /etc/systemd/service/
 sudo mv mcbe@.service /etc/systemd/service/
 
