@@ -77,9 +77,10 @@ server_do save-all flush
 while [ -z "$success" ]; do
 	buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
 	# Get buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
-	buffer=`echo "$buffer" | awk 'file{file=file"\n"$0} /save-all/{file=$0} END {print file}'`
+	buffer=`echo "$buffer" | awk 'buffer{buffer=buffer"\n"$0} /save-all/{buffer=$0} END {print buffer}'`
 	# Trim off $buffer before last occurence of save-all
-	# If file exists append $0, if $0 contains save-all set file to $0, and at end print file
+	# If buffer exists append $0, if $0 contains save-all set buffer to $0, repeat, and in the end print buffer
+	# $0 is the current line in awk
 	if echo "$buffer" | grep -q 'Saved the game'; then
 	# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 		success=true
