@@ -55,10 +55,12 @@ fi
 
 server_do save hold
 # Prepare backup
+sleep 1
+# Wait one second to avoid infinite loop
 while [ -z "$success" ]; do
-	sleep 1
 	server_do save query
 	# Check if backup is ready
+	sleep 1
 	buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
 	# Get buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
 	buffer=`echo "$buffer" | awk 'file{file=file"\n"$0} /save query/{file=$0} END {print file}'`
