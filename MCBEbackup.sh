@@ -63,9 +63,10 @@ while [ -z "$success" ]; do
 	sleep 1
 	buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
 	# Get buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
-	buffer=`echo "$buffer" | awk 'file{file=file"\n"$0} /save query/{file=$0} END {print file}'`
+	buffer=`echo "$buffer" | awk 'buffer{buffer=buffer"\n"$0} /save query/{buffer=$0} END {print buffer}'`
 	# Trim off $buffer before last occurence of save query
-	# If file exists append $0, if $0 contains save query set file to $0, and at end print file
+	# If buffer exists append $0, if $0 contains save query set buffer to $0, repeat, and at the end print buffer
+	# $0 is the current line in awk
 	if echo "$buffer" | grep -q 'Data saved'; then
 	# Minecraft Bedrock Edition says Data saved.
 		success=true
