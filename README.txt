@@ -27,4 +27,5 @@ sudo systemctl enable mcbe@MCBE.service --now
 Enter `crontab -u mc -e` and add this to mc's crontab:
 0 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null
 
+WARNING: level-name cannot contain ,
 I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
