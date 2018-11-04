@@ -14,6 +14,7 @@ if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
 	>&2 echo Backs up Minecraft Bedrock Edition server world running in tmux session.
 	>&2 echo '`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 	>&2 echo 'Backups are ${world}_Backups/$year/$month/$date.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
+	>&2 echo WARNING: level-name cannot contain ,
 	exit 1
 fi
 
@@ -46,7 +47,8 @@ backup_dir=`realpath "$backup_dir"`
 if [ -n "$4" ]; then
 	tmux_socket=${4%/}
 else
-	tmux_socket=/tmp/tmux-`id -u $USER`/default
+	tmux_socket=/tmp/tmux-$(id -u `whoami`)/default
+	# $USER = `whoami` and is not set in cron
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "$sessionname"; then
 	>&2 echo No session $sessionname on socket $tmux_socket
@@ -56,7 +58,8 @@ fi
 server_do save hold
 # Prepare backup
 sleep 1
-# Wait one second to avoid infinite loop
+# Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
+# Only unplayably slow servers take more than a second to run a command
 while [ -z "$success" ]; do
 	server_do save query
 	# Check if backup is ready
@@ -79,6 +82,7 @@ cd "$server_dir"
 cp -r "worlds/$world" .
 IFS=,
 # Delimit on , instead of space
+# This does not work if $world contains , but only bad people do that
 for string in $files; do
 	file=${string%:*}
 	length=${string##*:}

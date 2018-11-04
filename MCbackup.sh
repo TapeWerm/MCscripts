@@ -53,7 +53,8 @@ backup_dir=`realpath "$backup_dir"`
 if [ -n "$4" ]; then
 	tmux_socket=${4%/}
 else
-	tmux_socket=/tmp/tmux-`id -u $USER`/default
+	tmux_socket=/tmp/tmux-$(id -u `whoami`)/default
+	# $USER = `whoami` and is not set in cron
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "$sessionname"; then
 	>&2 echo No session $sessionname on socket $tmux_socket
