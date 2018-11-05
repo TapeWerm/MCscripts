@@ -26,7 +26,8 @@ if [ -n "$2" ]; then
 	tmux_socket=${2%/}
 	# Remove trailing slash
 else
-	tmux_socket=/tmp/tmux-`id -u $USER`/default
+	tmux_socket=/tmp/tmux-$(id -u `whoami`)/default
+	# $USER = `whoami` and is not set in cron
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	>&2 echo No session $sessionname on socket $tmux_socket
