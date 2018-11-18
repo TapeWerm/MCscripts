@@ -74,7 +74,7 @@ while [ -z "$success" ]; do
 		success=true
 	fi
 done
-files=`echo "$buffer" | grep "$world" | tr -d '\n' | sed 's/, /,/g' | sed "s/$world//g"`
+files=`echo "$buffer" | grep "$world" | tr -d '\n' | sed "s/$world//g" | sed 's/, /,/g'`
 # Remove $world so it can contain ,
 # $files will be delimited on ,
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
