@@ -1,5 +1,4 @@
 Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd services and scripts for backups and shutdown warning
-MCBEbackup.sh level-name cannot contain ,
 You must restart the server after backup in Bedrock Edition
 https://bugs.mojang.com/browse/BDS-198
 Xbox One can only connect on LAN, Nintendo Switch cannot connect at all

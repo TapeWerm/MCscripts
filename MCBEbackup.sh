@@ -14,7 +14,6 @@ if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
 	>&2 echo Backs up Minecraft Bedrock Edition server world running in tmux session.
 	>&2 echo '`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 	>&2 echo 'Backups are ${world}_Backups/$year/$month/$date.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
-	>&2 echo WARNING: level-name cannot contain ,
 	exit 1
 fi
 
@@ -75,16 +74,18 @@ while [ -z "$success" ]; do
 		success=true
 	fi
 done
-files=`echo "$buffer" | grep "$world" | tr -d '\n' | sed 's/, /,/g'`
+files=`echo "$buffer" | grep "$world" | tr -d '\n' | sed 's/, /,/g' | sed "s/$world//g"`
+# Remove $world so it can contain ,
+# $files will be delimited on ,
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 cp -r "worlds/$world" .
 IFS=,
 # Delimit on , instead of space
-# This does not work if $world contains , but only bad people do that
 for string in $files; do
-	file=${string%:*}
+	file=$world${string%:*}
+	# Readd $world after delimiting
 	length=${string##*:}
 	# Trim off $string before last colon
 	truncate --size=$length $file
