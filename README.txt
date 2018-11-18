@@ -20,7 +20,7 @@ sudo mv $server_dir /opt/MC/MC
 sudo chown -R mc:mc /opt/MC/MC
 sudo systemctl enable mc@MC.service --now
 Enter `crontab -u mc -e` and add this to mc's crontab:
-0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null
+0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null 2>&1
 
 I recommend replacing the 3rd argument to MCbackup.sh with an external drive to dump backups on
 
@@ -29,7 +29,7 @@ sudo mv $server_dir /opt/MC/MCBE
 sudo chown -R mc:mc /opt/MC/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
 Enter `crontab -u mc -e` and add this to mc's crontab:
-3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null
+3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null 2>&1
 
 WARNING: level-name cannot contain ,
 I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
