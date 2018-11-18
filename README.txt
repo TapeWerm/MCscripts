@@ -1,4 +1,5 @@
-Minecraft Java Edition and Bedrock Edition server (also known as bedrock dedicated server or BDS for short) systemd services and scripts for backups and shutdown warning
+Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd services and scripts for backups and shutdown warning
+MCBEbackup.sh level-name cannot contain ,
 You must restart the server after backup in Bedrock Edition
 https://bugs.mojang.com/browse/BDS-198
 Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
@@ -31,7 +32,6 @@ Bedrock Edition setup
 		sudo systemctl enable mcbe@MCBE.service --now
 	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
 		3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null 2>&1
-	level-name cannot contain ,
 	I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
 	Enter `sudo crontab -e` and add this to root's crontab:
 		30 4 * * * sudo service mcbe@MCBE restart > /dev/null 2>&1
