@@ -92,8 +92,6 @@ while [ -z "$success" ]; do
 	if echo "$buffer" | grep -q 'Saved the game'; then
 	# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 		success=true
-	else
-		sleep 1
 	fi
 done
 cd "$server_dir"
