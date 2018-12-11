@@ -10,6 +10,18 @@ server_do()
 	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
 }
 
+server_read()
+{
+        sleep 1
+        # Wait for output
+        buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
+        # Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
+        buffer=`echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}'`
+        # Trim off $buffer before last occurence of $*
+        # If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
+        # $0 is the current line in awk
+}
+
 if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
 	>&2 echo Backs up Minecraft Bedrock Edition server world running in tmux session.
 	>&2 echo '`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
@@ -60,35 +72,26 @@ sleep 1
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
 while [ -z "$success" ]; do
-	server_do save query
-	# Check if backup is ready
-	sleep 1
-	buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
-	# Get buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
-	buffer=`echo "$buffer" | awk 'buffer{buffer=buffer"\n"$0} /save query/{buffer=$0} END {print buffer}'`
-	# Trim off $buffer before last occurence of save query
-	# If buffer exists append $0, if $0 contains save query set buffer to $0, repeat, and in the end print buffer
-	# $0 is the current line in awk
-	if echo "$buffer" | grep -q 'Data saved'; then
-	# Minecraft Bedrock Edition says Data saved.
-		success=true
-	fi
+        server_do save query
+        # Check if backup is ready
+        server_read save query
+        if echo "$buffer" | grep -q 'Data saved'; then
+        # Minecraft Bedrock Edition says Data saved.
+                success=true
+        fi
 done
-files=`echo "$buffer" | grep "$world" | tr -d '\n' | sed "s/$world//g" | sed 's/, /,/g'`
-# Remove $world so it can contain ,
-# $files will be delimited on ,
+files=`echo "$buffer" | tr -d '\n' | grep -o "$world\S*:[0-9]*"`
+# Remove line wrapping and grep only matching strings from line
+# ${world}not space...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 cp -r "worlds/$world" .
-IFS=,
-# Delimit on , instead of space
 for string in $files; do
-	file=$world${string%:*}
-	# Readd $world after delimiting
-	length=${string##*:}
-	# Trim off $string before last colon
-	truncate --size=$length $file
+        file=${string%:*}
+        length=${string##*:}
+        # Trim off $string before last colon
+        truncate --size=$length $file
 done
 unset IFS
 zip -r "$backup_dir/$date.zip" "$world"
