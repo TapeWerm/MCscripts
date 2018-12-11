@@ -17,6 +17,18 @@ countdown()
 	echo $warning
 }
 
+server_read()
+{
+        sleep 1
+        # Wait for output
+        buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
+        # Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
+        buffer=`echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}'`
+        # Trim off $buffer before last occurence of $*
+        # If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
+        # $0 is the current line in awk
+}
+
 if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
 	>&2 echo Backs up Minecraft server world running in tmux session.
 	>&2 echo '`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
@@ -76,12 +88,7 @@ server_do save-off
 server_do save-all flush
 # Pause and save the server
 while [ -z "$success" ]; do
-	buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
-	# Get buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
-	buffer=`echo "$buffer" | awk 'buffer{buffer=buffer"\n"$0} /save-all/{buffer=$0} END {print buffer}'`
-	# Trim off $buffer before last occurence of save-all
-	# If buffer exists append $0, if $0 contains save-all set buffer to $0, repeat, and in the end print buffer
-	# $0 is the current line in awk
+	server_read save-all flush
 	if echo "$buffer" | grep -q 'Saved the game'; then
 	# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 		success=true
