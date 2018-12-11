@@ -93,7 +93,6 @@ for string in $files; do
         # Trim off $string before last colon
         truncate --size=$length $file
 done
-unset IFS
 zip -r "$backup_dir/$date.zip" "$world"
 rm -r "$world"
 server_do save resume
