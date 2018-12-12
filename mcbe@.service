@@ -6,6 +6,9 @@ Before=shutdown.target
 Description=Minecraft Bedrock Edition server
 
 [Service]
+ExecReload=/usr/bin/tmux -S /tmp/%i send-keys -t %i:0.0 reload Enter
+# Enter reload in the first pane of the first window of session %i on socket /tmp/%i
+# type says script path
 ExecStart=/usr/bin/tmux -S /tmp/%i new -ds %i 'LD_LIBRARY_PATH=. ./bedrock_server'
 # Makes session %i on socket /tmp/%i in background
 # Passing environment variables needs quotes in tmux
