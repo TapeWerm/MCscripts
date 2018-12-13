@@ -12,7 +12,6 @@ ExecReload=/usr/bin/tmux -S /tmp/%i send-keys -t %i:0.0 reload Enter
 ExecStart=/usr/bin/tmux -S /tmp/%i new -ds %i 'LD_LIBRARY_PATH=. ./bedrock_server'
 # Makes session %i on socket /tmp/%i in background
 # Passing environment variables needs quotes in tmux
-# type says script path
 ExecStop=/opt/MC/MCstop.sh %i /tmp/%i
 PrivateUsers=true
 # Security
