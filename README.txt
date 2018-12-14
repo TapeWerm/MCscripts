@@ -1,6 +1,4 @@
 Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd services and scripts for backups and shutdown warning
-You must restart the server after backup in Bedrock Edition
-https://bugs.mojang.com/browse/BDS-198
 You cannot enable instances of Java Edition and Bedrock Edition with the same name
 mc@example and mcbe@example
 Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
@@ -34,5 +32,3 @@ Bedrock Edition setup:
 	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
 		3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null 2>&1
 	I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
-	Enter `sudo crontab -e` and add this to root's crontab:
-		30 4 * * * sudo service mcbe@MCBE restart > /dev/null 2>&1
