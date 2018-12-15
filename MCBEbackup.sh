@@ -80,9 +80,9 @@ while [ -z "$success" ]; do
                 success=true
         fi
 done
-files=`echo "$buffer" | tr -d '\n' | grep -o "$world\S*:[0-9]*"`
+files=`echo "$buffer" | tr -d '\n' | grep -o "$world[^:]*:[0-9]*"`
 # Remove line wrapping and grep only matching strings from line
-# ${world}not space...:#...
+# ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
