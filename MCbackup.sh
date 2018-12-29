@@ -18,6 +18,9 @@ countdown()
 }
 
 server_read()
+# Set $buffer to buffer from $sessionname from last occurence of $* to end
+# $buffer may not have output from server_do
+# [server_do] server_read while ! grep $wanted_output to wait until server is done
 {
         sleep 1
         # Wait for output
@@ -87,12 +90,9 @@ server_do save-off
 # Disable autosave
 server_do save-all flush
 # Pause and save the server
-while [ -z "$success" ]; do
+while ! echo "$buffer" | grep -q 'Saved the game'; do
+# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 	server_read save-all flush
-	if echo "$buffer" | grep -q 'Saved the game'; then
-	# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
-		success=true
-	fi
 done
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself

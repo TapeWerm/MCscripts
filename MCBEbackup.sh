@@ -11,6 +11,9 @@ server_do()
 }
 
 server_read()
+# Set $buffer to buffer from $sessionname from last occurence of $* to end
+# $buffer may not have output from server_do
+# [server_do] server_read while ! grep $wanted_output to wait until server is done
 {
         sleep 1
         # Wait for output
@@ -71,14 +74,11 @@ server_do save hold
 sleep 1
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
-while [ -z "$success" ]; do
+while ! echo "$buffer" | grep -q 'Data saved'; do
+# Minecraft Bedrock Edition says Data saved.
         server_do save query
         # Check if backup is ready
         server_read save query
-        if echo "$buffer" | grep -q 'Data saved'; then
-        # Minecraft Bedrock Edition says Data saved.
-                success=true
-        fi
 done
 files=`echo "$buffer" | tr -d '\n' | grep -o "$world[^:]*:[0-9]*"`
 # Remove line wrapping and grep only matching strings from line
