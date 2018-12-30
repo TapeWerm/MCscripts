@@ -13,7 +13,9 @@ server_do()
 server_read()
 # Set $buffer to buffer from $sessionname from last occurence of $* to end
 # $buffer may not have output from server_do
-# [server_do] server_read while ! grep $wanted_output to wait until server is done
+# while ! echo "$buffer" | grep -q "$wanted_output"; do server_read; done
+# Wait until server is done
+# Detached tmux sessions line wrap at 80 chars without -x #
 {
         sleep 1
         # Wait for output
