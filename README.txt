@@ -7,11 +7,10 @@ https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-fo
 Common setup:
 	sudo adduser --home /opt/MC mc
 	Copy and paste goodness:
-		chmod 700 MCstop.sh MCbackup.sh MCupdate.sh MCBEbackup.sh MCBEupdate.sh
-		sudo chown mc:mc MCstop.sh MCbackup.sh MCupdate.sh MCBEbackup.sh MCBEupdate.sh
+		chmod 700 MCstop.sh MCbackup.sh MCBEbackup.sh MCBEupdate.sh
+		sudo chown mc:mc MCstop.sh MCbackup.sh MCBEbackup.sh MCBEupdate.sh
 		sudo mv MCstop.sh /opt/MC/
 		sudo mv MCbackup.sh /opt/MC/
-		sudo mv MCupdate.sh /opt/MC/
 		sudo mv MCBEbackup.sh /opt/MC/
 		sudo mv MCBEupdate.sh /opt/MC/
 		sudo mv mc@.service /etc/systemd/system/
