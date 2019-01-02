@@ -54,6 +54,15 @@ if [ ! -r "$properties" ]; then
 fi
 world=`grep level-name "$properties" | cut -d = -f 2`
 # $properties says level-name=$world
+world_dir=$server_dir/worlds/$world
+if [ ! -r "$world_dir" ]; then
+	if [ -d "$world_dir" ]; then
+		>&2 echo $world_dir is not readable
+		exit 2
+	fi
+	>&2 echo No directory $world_dir
+	exit 3
+fi
 
 sessionname=$2
 
@@ -61,6 +70,14 @@ if [ -n "$3" ]; then
 	backup_dir=${3%/}
 else
 	backup_dir=~
+fi
+if [ ! -w "$backup_dir" ]; then
+	if [ -d "$backup_dir" ]; then
+		>&2 echo $backup_dir is not writable
+		exit 2
+	fi
+	>&2 echo No directory $backup_dir
+	exit 3
 fi
 backup_dir=$backup_dir/${world}_Backups/$year/$month
 mkdir -p "$backup_dir"

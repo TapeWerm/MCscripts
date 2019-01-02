@@ -47,6 +47,16 @@ if [ ! -r "$properties" ]; then
 fi
 world=`grep level-name "$properties" | cut -d = -f 2`
 # $properties says level-name=$world
+world_dir=$server_dir/worlds/$world
+if [ ! -r "$world_dir" ]; then
+	if [ -d "$world_dir" ]; then
+		>&2 echo $world_dir is not readable
+		exit 2
+	fi
+	>&2 echo No directory $world_dir
+	exit 3
+fi
+world_dir=`realpath "$world_dir"`
 
 sessionname=$2
 
@@ -55,10 +65,17 @@ if [ -n "$3" ]; then
 else
 	backup_dir=~
 fi
+if [ ! -w "$backup_dir" ]; then
+	if [ -d "$backup_dir" ]; then
+		>&2 echo $backup_dir is not writable
+		exit 2
+	fi
+	>&2 echo No directory $backup_dir
+	exit 3
+fi
 backup_dir=$backup_dir/${world}_Backups/$year/$month
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
-backup_dir=`realpath "$backup_dir"`
 
 if [ -n "$4" ]; then
 	tmux_socket=${4%/}
@@ -86,15 +103,15 @@ files=`echo "$buffer" | tr -d '\n' | grep -o "$world[^:]*:[0-9]*"`
 # Remove line wrapping and grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
-cd "$server_dir"
+cd "$backup_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-cp -r "worlds/$world" .
+cp -r "$world_dir" .
 for string in $files; do
         file=${string%:*}
         length=${string##*:}
         # Trim off $string before last colon
         truncate --size=$length $file
 done
-zip -r "$backup_dir/$date.zip" "$world"
+zip -r $date.zip "$world"
 rm -r "$world"
 server_do save resume
