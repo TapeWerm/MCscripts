@@ -90,7 +90,7 @@ else
 	tmux_socket=/tmp/tmux-$(id -u `whoami`)/default
 	# $USER = `whoami` and is not set in cron
 fi
-if ! tmux -S "$tmux_socket" ls | grep -q "$sessionname"; then
+if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	>&2 echo No session $sessionname on socket $tmux_socket
 	exit 4
 fi
