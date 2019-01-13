@@ -14,7 +14,7 @@ countdown()
 }
 
 if [ -z "$1" -o "$1" = -h -o "$1" = --help ]; then
-	>&2 echo Warns Minecraft server running in tmux session 20 seconds before stopping.
+	>&2 echo Warns Minecraft server running in tmux session 10 seconds before stopping.
 	>&2 echo '`./MCstop.sh $sessionname [$tmux_socket]`'
 	>&2 echo Best ran by systemd before shutdown.
 	exit 1
@@ -34,10 +34,10 @@ if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
         exit 2
 fi
 
-countdown 20 seconds
-sleep 10
+countdown 10 seconds
+sleep 5
 server_do say "It was nice knowing you. What's your name again?"
-sleep 7
+sleep 2
 countdown 3 seconds
 sleep 1
 countdown 2 seconds
