@@ -1,6 +1,7 @@
 Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
 You cannot enable instances of Java Edition and Bedrock Edition with the same name
 mc@example and mcbe@example
+Have different level-names between instances or backups will get overwritten
 Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
 https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock
 
