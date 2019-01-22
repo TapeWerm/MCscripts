@@ -28,7 +28,7 @@ Java Edition setup:
 		sudo chown -R mc:mc /opt/MC/MC
 		sudo systemctl enable mc@MC.service --now
 	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
-		0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null 2>&1
+		0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null
 	I recommend replacing the 3rd argument to MCbackup.sh with an external drive to dump backups on
 
 Bedrock Edition setup:
@@ -37,5 +37,5 @@ Bedrock Edition setup:
 		sudo chown -R mc:mc /opt/MC/MCBE
 		sudo systemctl enable mcbe@MCBE.service --now
 	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
-		3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null 2>&1
+		3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null
 	I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
