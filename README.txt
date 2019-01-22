@@ -1,4 +1,5 @@
 Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
+You can run the scripts without enabling the systemd units
 You cannot enable instances of Java Edition and Bedrock Edition with the same name
 mc@example and mcbe@example
 Have different level-names between instances or backups will get overwritten
