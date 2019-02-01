@@ -13,7 +13,7 @@ server_do()
 server_read()
 # Set $buffer to buffer from $sessionname from last occurence of $* to end
 # $buffer may not have output from server_do
-# while ! echo "$buffer" | grep -q "$wanted_output"; do server_read; done
+# until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Wait until server is done
 # Detached tmux sessions line wrap at 80 chars without -x #
 {
@@ -93,7 +93,7 @@ server_do save hold
 sleep 1
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
-while ! echo "$buffer" | grep -q 'Data saved'; do
+until echo "$buffer" | grep -q 'Data saved'; do
 # Minecraft Bedrock Edition says Data saved.
         server_do save query
         # Check if backup is ready

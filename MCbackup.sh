@@ -20,7 +20,7 @@ countdown()
 server_read()
 # Set $buffer to buffer from $sessionname from last occurence of $* to end
 # $buffer may not have output from server_do
-# while ! echo "$buffer" | grep -q "$wanted_output"; do server_read; done
+# until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Wait until server is done
 # Detached tmux sessions line wrap at 80 chars without -x #
 {
@@ -109,7 +109,7 @@ server_do save-off
 # Disable autosave
 server_do save-all flush
 # Pause and save the server
-while ! echo "$buffer" | grep -q 'Saved the game'; do
+until echo "$buffer" | grep -q 'Saved the game'; do
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 	server_read save-all flush
 done
