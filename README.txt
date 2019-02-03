@@ -8,6 +8,7 @@ mc@example and mcbe@example
 Have different level-names between instances or backups will get overwritten
 Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
 https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock
+Try https://github.com/jhead/phantom to work around this
 Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
 
 Common setup:
