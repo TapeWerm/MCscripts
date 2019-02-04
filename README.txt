@@ -1,15 +1,17 @@
-Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
-How to attach to the systemd service's tmux session:
-su mc; tmux -S /tmp/$instance a
-service mc@instance status
-You can run the scripts without enabling the systemd units
-You cannot enable instances of Java Edition and Bedrock Edition with the same name
-mc@example and mcbe@example
-Have different level-names between instances or backups will get overwritten
-Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
-https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock
-Try https://github.com/jhead/phantom to work around this
-Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
+Description:
+	Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
+	How to attach to the systemd service's tmux session:
+	su mc; tmux -S /tmp/$instance a
+	service mc@instance status
+Notes:
+	You can run the scripts without enabling the systemd units
+	You cannot enable instances of Java Edition and Bedrock Edition with the same name
+	mc@example and mcbe@example
+	Have different level-names between instances or backups will get overwritten
+	Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
+	https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock
+	Try https://github.com/jhead/phantom to work around this
+	Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
 
 Common setup:
 	sudo adduser --home /opt/MC mc
