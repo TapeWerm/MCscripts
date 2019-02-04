@@ -24,7 +24,6 @@ Common setup:
 		sudo mv MCBEupdate.sh /opt/MC/
 		sudo mv mc@.service /etc/systemd/system/
 		sudo mv mcbe@.service /etc/systemd/system/
-
 Java Edition setup:
 	Copy and paste goodness:
 		sudo mv $server_dir /opt/MC/MC
@@ -33,7 +32,6 @@ Java Edition setup:
 	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
 		0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null
 	I recommend replacing the 3rd argument to MCbackup.sh with an external drive to dump backups on
-
 Bedrock Edition setup:
 	Copy and paste goodness:
 		sudo mv $server_dir /opt/MC/MCBE
