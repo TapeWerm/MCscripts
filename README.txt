@@ -1,7 +1,7 @@
 Description:
 	Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
-	How to attach to the systemd service's tmux session:
 	su mc; tmux -S /tmp/$instance a
+	# Attach to the systemd service's tmux session
 	service mc@instance status
 Notes:
 	You can run the scripts without enabling the systemd units
