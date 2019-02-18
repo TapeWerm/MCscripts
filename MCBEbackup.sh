@@ -47,7 +47,7 @@ if [ ! -r "$properties" ]; then
 fi
 world=`grep level-name "$properties" | cut -d = -f 2`
 # $properties says level-name=$world
-world_dir=$server_dir/worlds/$world
+world_dir=$server_dir/worlds
 if [ ! -r "$world_dir" ]; then
 	if [ -d "$world_dir" ]; then
 		>&2 echo $world_dir is not readable
@@ -105,11 +105,13 @@ files=`echo "$buffer" | tr -d '\n' | grep -o "$world[^:]*:[0-9]*"`
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 cd "$backup_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-cp -r "$world_dir" .
 for string in $files; do
         file=${string%:*}
+	dir=${file%/*}
         length=${string##*:}
-        # Trim off $string before last colon
+        # Trim off $string before last :
+	mkdir -p $dir
+	cp "$world_dir/$file" $dir/
         truncate --size=$length $file
 done
 zip -r $date.zip "$world"
