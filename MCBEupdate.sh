@@ -4,7 +4,7 @@ backup_dir=/tmp
 files='worlds whitelist.json permissions.json server.properties'
 
 if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
-	>&2 echo Updates Minecraft Bedrock Edition server keeping worlds, whitelist, permissions, and properties.
+	>&2 echo Update Minecraft Bedrock Edition server keeping worlds, whitelist, permissions, and properties.
 	>&2 echo '`./MCBEupdate.sh $server_dir $minecraft_zip`'
 	>&2 echo Remember to stop server before updating.
 	exit 1

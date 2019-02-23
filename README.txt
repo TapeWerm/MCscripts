@@ -2,7 +2,8 @@ Description:
 	Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
 Notes:
 	How to attach to the systemd service's tmux session:
-		su mc; tmux -S /tmp/$instance a
+		sudo su mc -s /bin/bash
+		tmux -S /tmp/$instance a
 		service mc@instance status
 	You can run the scripts without enabling the systemd units
 	You cannot enable instances of Java Edition and Bedrock Edition with the same name
@@ -14,29 +15,24 @@ Notes:
 	Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
 
 Common setup:
-	sudo adduser --home /opt/MC mc
 	Copy and paste goodness:
-		chmod 700 MCstop.sh MCbackup.sh MCBEbackup.sh MCBEupdate.sh
-		sudo chown mc:mc MCstop.sh MCbackup.sh MCBEbackup.sh MCBEupdate.sh
-		sudo mv MCstop.sh /opt/MC/
-		sudo mv MCbackup.sh /opt/MC/
-		sudo mv MCBEbackup.sh /opt/MC/
-		sudo mv MCBEupdate.sh /opt/MC/
-		sudo mv mc@.service /etc/systemd/system/
-		sudo mv mcbe@.service /etc/systemd/system/
+		sudo adduser --home /opt/MC --system mc
+		echo set-option -g default-shell /bin/bash >> .tmux.conf
+		sudo chown mc:nogroup .tmux.conf *.sh
+		sudo mv .tmux.conf /opt/MC/
+		for file in `ls *.sh`; do sudo mv $file /opt/MC/; done
+		for file in `ls *.service *.timer`; do sudo mv $file /etc/systemd/system/; done
 Java Edition setup:
+	sudo mv $server_dir /opt/MC/MC
 	Copy and paste goodness:
-		sudo mv $server_dir /opt/MC/MC
-		sudo chown -R mc:mc /opt/MC/MC
+		sudo chown -R mc:nogroup /opt/MC/MC
 		sudo systemctl enable mc@MC.service --now
-	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
-		0 4 * * * ~/MCbackup.sh ~/MC MC ~ /tmp/MC > /dev/null
-	I recommend replacing the 3rd argument to MCbackup.sh with an external drive to dump backups on
+		sudo systemctl enable mc-backup@MC.timer --now
+	I recommend replacing the 3rd argument to MCbackup.sh in mc-backup@.service with an external drive to dump backups on
 Bedrock Edition setup:
+	sudo mv $server_dir /opt/MC/MCBE
 	Copy and paste goodness:
-		sudo mv $server_dir /opt/MC/MCBE
-		sudo chown -R mc:mc /opt/MC/MCBE
+		sudo chown -R mc:nogroup /opt/MC/MCBE
 		sudo systemctl enable mcbe@MCBE.service --now
-	Enter `sudo crontab -u mc -e` and add this to mc's crontab:
-		3 4 * * * ~/MCBEbackup.sh ~/MCBE MCBE ~ /tmp/MCBE > /dev/null
-	I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
+		sudo systemctl enable mcbe-backup@MC.timer --now
+	I recommend replacing the 3rd argument to MCBEbackup.sh in mcbe-backup@.service with an external drive to dump backups on

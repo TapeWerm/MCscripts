@@ -14,7 +14,7 @@ countdown()
 }
 
 if [ -z "$1" -o "$1" = -h -o "$1" = --help ]; then
-	>&2 echo Warns Minecraft server running in tmux session 10 seconds before stopping.
+	>&2 echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
 	>&2 echo '`./MCstop.sh $sessionname [$tmux_socket]`'
 	>&2 echo Best ran by systemd before shutdown.
 	exit 1

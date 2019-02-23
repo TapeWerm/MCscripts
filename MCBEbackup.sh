@@ -28,7 +28,7 @@ server_read()
 }
 
 if [ -z "$1" -o -z "$2" -o "$1" = -h -o "$1" = --help ]; then
-	>&2 echo Backs up Minecraft Bedrock Edition server world running in tmux session.
+	>&2 echo Back up Minecraft Bedrock Edition server world running in tmux session.
 	>&2 echo '`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 	>&2 echo 'Backups are ${world}_Backups/$year/$month/$date.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit 1

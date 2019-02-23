@@ -1,0 +1,8 @@
+[Unit]
+Description=Back up Minecraft Java Edition server world daily at 4 AM
+
+[Timer]
+OnCalendar=*-*-* 04:00
+
+[Install]
+WantedBy=timers.target

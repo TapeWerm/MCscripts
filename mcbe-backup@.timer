@@ -1,0 +1,8 @@
+[Unit]
+Description=Back up Minecraft Bedrock Edition server world daily at 4:05 AM
+
+[Timer]
+OnCalendar=*-*-* 04:05
+
+[Install]
+WantedBy=timers.target

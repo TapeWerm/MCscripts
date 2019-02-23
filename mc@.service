@@ -3,7 +3,7 @@ After=network.target
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
 Before=shutdown.target
 # Stop before shutdown
-Description=Minecraft server
+Description=Minecraft Java Edition server
 
 [Service]
 ExecReload=/usr/bin/tmux -S /tmp/%i send-keys -t %i:0.0 reload Enter
