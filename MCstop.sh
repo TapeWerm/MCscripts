@@ -2,7 +2,7 @@
 
 server_do()
 {
-	tmux -S "$tmux_socket" send-keys -t "$sessionname":0.0 "$*" Enter
+	tmux -S "$tmux_socket" send-keys -t "$sessionname:0.0" "$*" Enter
 	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
 }
 

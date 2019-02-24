@@ -12,7 +12,7 @@ fi
 
 server_dir=${1%/}
 # Remove trailing slash
-if [ "$server_dir" -ef $backup_dir ]; then
+if [ "$server_dir" -ef "$backup_dir" ]; then
 	>&2 echo '$server_dir cannot be '"$backup_dir"
 	exit 4
 fi

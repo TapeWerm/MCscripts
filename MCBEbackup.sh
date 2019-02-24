@@ -6,7 +6,7 @@ year=`date +%Y`
 
 server_do()
 {
-	tmux -S "$tmux_socket" send-keys -t "$sessionname":0.0 "$*" Enter
+	tmux -S "$tmux_socket" send-keys -t "$sessionname:0.0" "$*" Enter
 	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
 }
 
@@ -19,7 +19,7 @@ server_read()
 {
         sleep 1
         # Wait for output
-        buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname":0.0 -S -`
+        buffer=`tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -`
         # Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
         buffer=`echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}'`
         # Trim off $buffer before last occurence of $*
