@@ -30,7 +30,7 @@ else
 	# $USER = `whoami` and is not set in cron
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
-	>&2 echo No session $sessionname on socket $tmux_socket
+	>&2 echo "No session $sessionname on socket $tmux_socket"
         exit 2
 fi
 

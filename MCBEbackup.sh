@@ -39,10 +39,10 @@ server_dir=${1%/}
 properties=$server_dir/server.properties
 if [ ! -r "$properties" ]; then
 	if [ -f "$properties" ]; then
-		>&2 echo $properties is not readable
+		>&2 echo "$properties is not readable"
 		exit 2
 	fi
-	>&2 echo No file $properties
+	>&2 echo "No file $properties"
 	exit 3
 fi
 world=`grep level-name "$properties" | cut -d = -f 2`
@@ -50,10 +50,10 @@ world=`grep level-name "$properties" | cut -d = -f 2`
 world_dir=$server_dir/worlds
 if [ ! -r "$world_dir" ]; then
 	if [ -d "$world_dir" ]; then
-		>&2 echo $world_dir is not readable
+		>&2 echo "$world_dir is not readable"
 		exit 2
 	fi
-	>&2 echo No directory $world_dir
+	>&2 echo "No directory $world_dir"
 	exit 3
 fi
 world_dir=`realpath "$world_dir"`
@@ -67,10 +67,10 @@ else
 fi
 if [ ! -w "$backup_dir" ]; then
 	if [ -d "$backup_dir" ]; then
-		>&2 echo $backup_dir is not writable
+		>&2 echo "$backup_dir is not writable"
 		exit 2
 	fi
-	>&2 echo No directory $backup_dir
+	>&2 echo "No directory $backup_dir"
 	exit 3
 fi
 backup_dir=$backup_dir/${world}_Backups/$year/$month
@@ -84,7 +84,7 @@ else
 	# $USER = `whoami` and is not set in cron
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
-	>&2 echo No session $sessionname on socket $tmux_socket
+	>&2 echo "No session $sessionname on socket $tmux_socket"
 	exit 4
 fi
 
@@ -110,9 +110,9 @@ for string in $files; do
 	dir=${file%/*}
         length=${string##*:}
         # Trim off $string before last :
-	mkdir -p $dir
-	cp "$world_dir/$file" $dir/
-        truncate --size=$length $file
+	mkdir -p "$dir"
+	cp "$world_dir/$file" "$dir/"
+        truncate --size=$length "$file"
 done
 zip -r $date.zip "$world"
 rm -r "$world"

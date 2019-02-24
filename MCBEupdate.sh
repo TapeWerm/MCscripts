@@ -13,7 +13,7 @@ fi
 server_dir=${1%/}
 # Remove trailing slash
 if [ "$server_dir" -ef $backup_dir ]; then
-	>&2 echo '$server_dir cannot be '$backup_dir
+	>&2 echo '$server_dir cannot be '"$backup_dir"
 	exit 4
 fi
 server_dir=`realpath "$server_dir"`
@@ -29,7 +29,7 @@ if [ ! -r "$minecraft_zip" ]; then
 fi
 minecraft_zip=`realpath "$minecraft_zip"`
 
-cd $server_dir
+cd "$server_dir"
 for file in $files; do
 	if [ ! -w "$file" ]; then
 		if [ -f "$file" ]; then
@@ -39,12 +39,12 @@ for file in $files; do
 		>&2 echo No file $file
 		exit 3
 	fi
-	mv $file $backup_dir/
+	mv $file "$backup_dir/"
 done
 
-rm -r $server_dir/*
+rm -r "$server_dir"/*
 unzip $minecraft_zip
 
 for file in $files; do
-	mv $backup_dir/$file .
+	mv "$backup_dir/$file" .
 done
