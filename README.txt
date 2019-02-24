@@ -3,7 +3,7 @@ Description:
 Notes:
 	How to attach to the systemd service's tmux session:
 		sudo su mc -s /bin/bash
-		tmux -S /tmp/$instance a
+		tmux -S /tmp/tmux-mc/$instance a
 		service mc@instance status
 	You can run the scripts without enabling the systemd units
 	You cannot enable instances of Java Edition and Bedrock Edition with the same name
