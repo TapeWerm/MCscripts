@@ -4,7 +4,7 @@ Notes:
 	How to attach to the systemd service's tmux session:
 		sudo su mc -s /bin/bash
 		tmux -S /tmp/tmux-mc/$instance a
-		service mc@instance status
+		Example: service mc@instance status
 	You can run the scripts without enabling the systemd units
 	You cannot enable instances of Java Edition and Bedrock Edition with the same name
 	mc@example and mcbe@example
@@ -15,13 +15,14 @@ Notes:
 	Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
 
 Common setup:
+	cd MCscripts
 	Copy and paste goodness:
 		sudo adduser --home /opt/MC --system mc
 		echo set-option -g default-shell /bin/bash >> .tmux.conf
-		sudo chown mc:nogroup .tmux.conf *.sh
-		sudo mv .tmux.conf /opt/MC/
-		for file in `ls *.sh`; do sudo mv $file /opt/MC/; done
-		for file in `ls *.service *.timer`; do sudo mv $file /etc/systemd/system/; done
+		sudo mv .tmux.conf ~mc/
+		for file in `ls *.sh`; do sudo cp $file ~mc/; done
+		sudo chown mc:nogroup ~mc/*
+		for file in `ls *.service *.timer`; do sudo cp $file /etc/systemd/system/; done
 Java Edition setup:
 	sudo mv $server_dir /opt/MC/MC
 	Copy and paste goodness:

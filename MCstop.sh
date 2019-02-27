@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
 
-server_do()
-{
+server_do() {
 	tmux -S "$tmux_socket" send-keys -t "$sessionname:0.0" "$*" Enter
 	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
 }
 
-countdown()
-{
+countdown() {
 	warning="Server stopping in $*"
-	server_do say $warning
-	echo $warning
+	server_do say "$warning"
+	echo "$warning"
 }
 
-if [ -z "$1" -o "$1" = -h -o "$1" = --help ]; then
+if [ -z "$1" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
 	>&2 echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
 	>&2 echo '`./MCstop.sh $sessionname [$tmux_socket]`'
 	>&2 echo Best ran by systemd before shutdown.
@@ -26,7 +24,7 @@ if [ -n "$2" ]; then
 	tmux_socket=${2%/}
 	# Remove trailing slash
 else
-	tmux_socket=/tmp/tmux-$(id -u `whoami`)/default
+	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default
 	# $USER = `whoami` and is not set in cron
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
