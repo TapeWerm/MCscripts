@@ -21,6 +21,8 @@ fi
 server_dir=$(realpath "$server_dir")
 
 minecraft_zip=$(realpath "$2")
+unzip -t "$minecraft_zip"
+# Test extraction
 
 cd "$server_dir"
 for file in $files; do
