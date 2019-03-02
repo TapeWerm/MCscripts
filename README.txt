@@ -1,5 +1,5 @@
 Description:
-	Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and scripts for backups, updates, and shutdown warnings
+	Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and bash scripts for backups, updates, and shutdown warnings
 Notes:
 	How to attach to the systemd service's tmux session:
 		sudo su mc -s /bin/bash
