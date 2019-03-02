@@ -1,5 +1,7 @@
 Description:
 	Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and bash scripts for backups, updates, and shutdown warnings
+	Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd
+	Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
 Notes:
 	How to attach to the systemd service's tmux session:
 		sudo su mc -s /bin/bash
@@ -12,7 +14,6 @@ Notes:
 	Xbox One can only connect on LAN, Nintendo Switch cannot connect at all
 	https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock
 	Try https://github.com/jhead/phantom to work around this
-	Ubuntu 18.04 Server Setup: https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3
 
 Common setup:
 	cd MCscripts
