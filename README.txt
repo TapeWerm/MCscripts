@@ -23,7 +23,7 @@ Common setup:
 		sudo mv .tmux.conf ~mc/
 		for file in `ls *.sh`; do sudo cp $file ~mc/; done
 		sudo chown mc:nogroup ~mc/*
-		for file in `ls *.service *.timer`; do sudo cp $file /etc/systemd/system/; done
+		for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 Java Edition setup:
 	sudo mv $server_dir /opt/MC/MC
 	Copy and paste goodness:
