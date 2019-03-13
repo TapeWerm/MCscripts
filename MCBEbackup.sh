@@ -30,7 +30,7 @@ server_read() {
 if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
 	>&2 echo Back up Minecraft Bedrock Edition server world running in tmux session.
 	>&2 echo '`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
-	>&2 echo 'Backups are ${world}_Backups/$year/$month/$date.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
+	>&2 echo 'Backups are ${world}_Backups_BE/$year/$month/$date.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit 1
 fi
 
@@ -53,7 +53,7 @@ if [ -n "$3" ]; then
 else
 	backup_dir=~
 fi
-backup_dir=$backup_dir/${world}_Backups/$year/$month
+backup_dir=$backup_dir/${world}_Backups_BE/$year/$month
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
 
@@ -68,6 +68,14 @@ if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	exit 4
 fi
 
+server_read save hold
+if [ -n "$buffer" ]; then
+	if ! echo "$buffer" | grep -q 'save resume'; then
+		>&2 echo Save held, is a backup in progress?
+		exit 5
+	fi
+fi
+
 server_do save hold
 # Prepare backup
 sleep 1
@@ -79,7 +87,7 @@ until echo "$buffer" | grep -q 'Data saved'; do
         # Check if backup is ready
         server_read save query
 done
-files=$(echo "$buffer" | tr -d '\n' | grep -o "$world[^:]*:[0-9]*")
+files=$(echo "$buffer" | tr -d '\n' | grep -o "$world[^:]+:[0-9]+")
 # Remove line wrapping and grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
