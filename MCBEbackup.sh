@@ -78,13 +78,8 @@ fi
 
 server_do save hold
 # Prepare backup
-resume_saves_on_err() {
-  echo "Resuming save after error"
-  server_do save resume
-}
-
-trap "resume_saves_on_err" ERR
-
+trap "server_do 'save resume'" ERR
+# Spaces in $* become newlines when IFS changes
 sleep 1
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
@@ -94,25 +89,20 @@ until echo "$buffer" | grep -q 'Data saved'; do
         # Check if backup is ready
         server_read save query
 done
-OLDIFS=$IFS
 IFS=$'\n'
-files=($(echo "$buffer" | tr -d '\n' | grep -o -E "$world[^:]+:[0-9]+"))
-IFS=$OLDIFS
+files=($(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+"))
 # Remove line wrapping and grep only matching strings from linea
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
+unset IFS
+
 cd "$backup_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-
-fLen=${#files[@]}
-for (( i=0; i<${fLen}; i++ ));
-do
-	string=${files[$i]}
-        echo "$string"
-	file=${string%:*}
+for ((i=0; i < ${#files[*]}; i++)); do
+	file=${files[$i]%:*}
 	dir=${file%/*}
-        length=${string##*:}
-        # Trim off $string before last :
+        length=${files[$i]##*:}
+        # Trim off ${files[$i]} before last :
 	mkdir -p "$dir"
 	cp "$world_dir/$file" "$dir/"
         truncate --size="$length" "$file"

@@ -93,6 +93,7 @@ server_do say Darnit
 
 server_do save-off
 # Disable autosave
+trap 'server_do save-on' ERR
 server_do save-all flush
 # Pause and save the server
 until echo "$buffer" | grep -q 'Saved the game'; do
