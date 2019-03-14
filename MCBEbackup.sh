@@ -95,12 +95,12 @@ files=$(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
 
 cd "$backup_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-echo "$files" | while read -r string; do
+echo "$files" | while read -r line; do
 # Escape \ while reading line from $files
-	file=${string%:*}
+	file=${line%:*}
 	dir=${file%/*}
-        length=${string##*:}
-        # Trim off $string before last :
+        length=${line##*:}
+        # Trim off $line before last :
 	mkdir -p "$dir"
 	cp "$world_dir/$file" "$dir/"
         truncate --size="$length" "$file"
