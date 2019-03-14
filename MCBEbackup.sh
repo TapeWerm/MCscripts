@@ -95,7 +95,8 @@ files=$(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
 
 cd "$backup_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-echo "$files" | while read string; do
+echo "$files" | while read -r string; do
+# Escape \ while reading line from $files
 	file=${string%:*}
 	dir=${file%/*}
         length=${string##*:}
