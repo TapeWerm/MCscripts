@@ -15,6 +15,7 @@ Notes:
 	Try https://github.com/jhead/phantom to work around this
 
 Common setup:
+	git clone https://github.com/TapeWerm/MCscripts.git
 	cd MCscripts
 	Copy and paste goodness:
 		sudo adduser --home /opt/MC --system mc
