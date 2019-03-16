@@ -15,6 +15,7 @@ Notes:
 	Try https://github.com/jhead/phantom to work around this
 
 Common setup:
+	sudo apt install git zip
 	git clone https://github.com/TapeWerm/MCscripts.git
 	cd MCscripts
 	Copy and paste goodness:
