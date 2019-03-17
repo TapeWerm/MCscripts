@@ -17,14 +17,14 @@ server_read() {
 # until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Wait until server is done
 # Detached tmux sessions line wrap at 80 chars without -x #
-        sleep 1
-        # Wait for output
-        buffer=$(tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -)
-        # Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
-        buffer=$(echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}')
-        # Trim off $buffer before last occurence of $*
-        # If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
-        # $0 is the current line in awk
+	sleep 1
+	# Wait for output
+	buffer=$(tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -)
+	# Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
+	buffer=$(echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}')
+	# Trim off $buffer before last occurence of $*
+	# If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
+	# $0 is the current line in awk
 }
 
 if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
@@ -83,13 +83,13 @@ sleep 1
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
 until echo "$buffer" | grep -q 'Data saved'; do
-# Minecraft Bedrock Edition says Data saved.
-        server_do save query
-        # Check if backup is ready
-        server_read save query
+# Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
+	server_do save query
+	# Check if backup is ready
+	server_read save query
 done
 files=$(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
-# Remove line wrapping and grep only matching strings from linea
+# Remove line wrapping and grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 
@@ -99,11 +99,11 @@ echo "$files" | while read -r line; do
 # Escape \ while reading line from $files
 	file=${line%:*}
 	dir=${file%/*}
-        length=${line##*:}
-        # Trim off $line before last :
+	length=${line##*:}
+	# Trim off $linee before last :
 	mkdir -p "$dir"
 	cp "$world_dir/$file" "$dir/"
-        truncate --size="$length" "$file"
+	truncate --size="$length" "$file"
 done
 zip -r "$date.zip" "$world"
 rm -r "$world"
