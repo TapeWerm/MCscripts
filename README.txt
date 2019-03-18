@@ -26,16 +26,16 @@ Common setup:
 		sudo chown mc:nogroup ~mc/*
 		for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 Java Edition setup:
-	sudo mv $server_dir /opt/MC/MC
+	sudo mv $server_dir ~mc/MC
 	Copy and paste goodness:
-		sudo chown -R mc:nogroup /opt/MC/MC
+		sudo chown -R mc:nogroup ~mc/MC
 		sudo systemctl enable mc@MC.service --now
 		sudo systemctl enable mc-backup@MC.timer --now
 	I recommend replacing the 3rd argument to MCbackup.sh in mc-backup@.service with an external drive to dump backups on
 Bedrock Edition setup:
-	sudo mv $server_dir /opt/MC/MCBE
+	sudo mv $server_dir ~mc/MCBE
 	Copy and paste goodness:
-		sudo chown -R mc:nogroup /opt/MC/MCBE
+		sudo chown -R mc:nogroup ~mc/MCBE
 		sudo systemctl enable mcbe@MCBE.service --now
 		sudo systemctl enable mcbe-backup@MC.timer --now
 	I recommend replacing the 3rd argument to MCBEbackup.sh in mcbe-backup@.service with an external drive to dump backups on
