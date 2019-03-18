@@ -7,8 +7,8 @@ Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu 1
 ```bash
 sudo su mc -s /bin/bash
 tmux -S /tmp/tmux-mc/$instance a
+# Example: service mc@instance status
 ```
-Example: service mc@instance status
 
 You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [phantom](https://github.com/jhead/phantom) to work around this.
 # Common setup
@@ -17,7 +17,7 @@ sudo apt install git zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 ```
-## Copy and paste goodness
+## Copy and paste this block
 ```bash
 sudo adduser --home /opt/MC --system mc
 echo set-option -g default-shell /bin/bash >> .tmux.conf
@@ -30,7 +30,7 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```bash
 sudo mv $server_dir ~mc/MC
 ```
-## Copy and paste goodness
+## Copy and paste this block
 ```bash
 sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
@@ -41,7 +41,7 @@ I recommend replacing the 3rd argument to MCbackup.sh in mc-backup@.service with
 ```bash
 sudo mv $server_dir ~mc/MCBE
 ```
-## Copy and paste goodness
+## Copy and paste this block
 ```bash
 sudo chown -R mc:nogroup ~mc/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
