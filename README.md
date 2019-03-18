@@ -27,6 +27,7 @@ sudo chown mc:nogroup ~mc/*
 for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```
 # Java Edition setup
+[Set RAM and more in a BAT file.](https://minecraft.gamepedia.com/Tutorials/Setting_up_a_server#Creating_a_.bat_file_to_store_the_commands)
 ```bash
 sudo mv $server_dir ~mc/MC
 ```
