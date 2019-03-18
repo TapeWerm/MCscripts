@@ -33,6 +33,7 @@ sudo mv $server_dir ~mc/MC
 ```
 Copy and paste this block:
 ```bash
+sudo chmod 700 ~mc/MC/start.bat
 sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
 sudo systemctl enable mc-backup@MC.timer --now
