@@ -20,7 +20,7 @@ cd MCscripts
 Copy and paste this block:
 ```bash
 sudo adduser --home /opt/MC --system mc
-echo set-option -g default-shell /bin/bash >> .tmux.conf
+echo set -g default-shell /bin/bash >> .tmux.conf
 sudo mv .tmux.conf ~mc/
 for file in `ls *.sh`; do sudo cp $file ~mc/; done
 sudo chown mc:nogroup ~mc/*
