@@ -45,6 +45,6 @@ Copy and paste this block:
 ```bash
 sudo chown -R mc:nogroup ~mc/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
-sudo systemctl enable mcbe-backup@MC.timer --now
+sudo systemctl enable mcbe-backup@MCBE.timer --now
 ```
 I recommend replacing the 3rd argument to MCBEbackup.sh in [mcbe-backup@.service](systemd/mcbe-backup@.service) with an external drive to dump backups on.
