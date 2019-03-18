@@ -1,9 +1,9 @@
 # Description
 Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and bash scripts for backups, updates, and shutdown warnings
 
-Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu 18.04 Server Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run the scripts without enabling the systemd units.
+Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run the scripts without enabling the systemd units.
 # Notes
-## How to attach to the systemd service's tmux session
+How to attach to the systemd service's tmux session:
 ```bash
 sudo su mc -s /bin/bash
 tmux -S /tmp/tmux-mc/$instance a
@@ -17,7 +17,7 @@ sudo apt install git zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 ```
-## Copy and paste this block
+Copy and paste this block:
 ```bash
 sudo adduser --home /opt/MC --system mc
 echo set-option -g default-shell /bin/bash >> .tmux.conf
@@ -30,7 +30,7 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```bash
 sudo mv $server_dir ~mc/MC
 ```
-## Copy and paste this block
+Copy and paste this block:
 ```bash
 sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
@@ -41,7 +41,7 @@ I recommend replacing the 3rd argument to MCbackup.sh in mc-backup@.service with
 ```bash
 sudo mv $server_dir ~mc/MCBE
 ```
-## Copy and paste this block
+Copy and paste this block:
 ```bash
 sudo chown -R mc:nogroup ~mc/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
