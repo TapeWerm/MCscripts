@@ -27,9 +27,10 @@ sudo chown mc:nogroup ~mc/*
 for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```
 # Java Edition setup
-[Set RAM and more in a BAT file.](https://minecraft.gamepedia.com/Tutorials/Setting_up_a_server#Creating_a_.bat_file_to_store_the_commands)
 ```bash
 sudo mv $server_dir ~mc/MC
+echo java -Xms1G -Xmx2G -jar server.jar >> ~mc/MC/start.bat
+# Use 1-2 GB of RAM
 ```
 Copy and paste this block:
 ```bash
