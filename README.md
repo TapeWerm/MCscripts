@@ -30,7 +30,7 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```bash
 sudo mv $server_dir ~mc/MC
 echo java -Xms1G -Xmx2G -jar server.jar >> ~mc/MC/start.bat
-# Use 1-2 GB of RAM
+# Open server.jar with 1-2 GB of RAM
 ```
 Copy and paste this block:
 ```bash
