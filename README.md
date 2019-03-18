@@ -29,8 +29,8 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 # Java Edition setup
 ```bash
 sudo mv $server_dir ~mc/MC
-echo java -Xms1G -Xmx2G -jar server.jar nogui >> ~mc/MC/start.bat
-# Open server.jar with no GUI and 1-2 GB of RAM
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui >> ~mc/MC/start.bat
+# Open server.jar with no GUI and 1024-2048 MB of RAM
 ```
 Copy and paste this block:
 ```bash
