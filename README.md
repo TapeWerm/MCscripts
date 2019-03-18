@@ -36,7 +36,7 @@ sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
 sudo systemctl enable mc-backup@MC.timer --now
 ```
-I recommend replacing the 3rd argument to MCbackup.sh in mc-backup@.service with an external drive to dump backups on.
+I recommend replacing the 3rd argument to MCbackup.sh in [mc-backup@.service](systemd/mc-backup@.service) with an external drive to dump backups on.
 # Bedrock Edition setup
 ```bash
 sudo mv $server_dir ~mc/MCBE
@@ -47,4 +47,4 @@ sudo chown -R mc:nogroup ~mc/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
 sudo systemctl enable mcbe-backup@MC.timer --now
 ```
-I recommend replacing the 3rd argument to MCBEbackup.sh in mcbe-backup@.service with an external drive to dump backups on.
+I recommend replacing the 3rd argument to MCBEbackup.sh in [mcbe-backup@.service](systemd/mcbe-backup@.service) with an external drive to dump backups on.
