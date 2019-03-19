@@ -3,7 +3,7 @@ After=mcbe@%i.service
 Description=Back up Minecraft Bedrock Edition server world
 
 [Service]
-ExecStart=/opt/MC/MCBEbackup.sh ~/%i %i ~ /tmp/tmux-mc/%i
+ExecStart=/opt/MC/MCBEbackup.sh /opt/MC/%i %i /opt/MC /tmp/tmux-mc/%i
 # I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
 Type=oneshot
 User=mc
