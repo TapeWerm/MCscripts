@@ -29,11 +29,12 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 # Java Edition setup
 ```bash
 sudo mv $server_dir ~mc/MC
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui >> ~mc/MC/start.bat
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui >> start.bat
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 ```
 Copy and paste this block:
 ```bash
+sudo mv start.bat ~mc/MC/
 sudo chmod 700 ~mc/MC/start.bat
 sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
