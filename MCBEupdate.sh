@@ -20,6 +20,14 @@ if [ "$server_dir" -ef "$backup_dir" ]; then
 fi
 server_dir=$(realpath "$server_dir")
 
+echo "Enter Y if you stopped the server you're updating"
+read -r input
+input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+if [ "$input" != y ]; then
+	>&2 echo "$input != y"
+	exit 5
+fi
+
 minecraft_zip=$(realpath "$2")
 unzip -tq "$minecraft_zip"
 # Test extracting $minecraft_zip partially quietly

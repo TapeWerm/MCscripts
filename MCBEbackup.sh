@@ -100,7 +100,7 @@ echo "$files" | while read -r line; do
 	file=${line%:*}
 	dir=${file%/*}
 	length=${line##*:}
-	# Trim off $linee before last :
+	# Trim off $line before last :
 	mkdir -p "$dir"
 	cp "$world_dir/$file" "$dir/"
 	truncate --size="$length" "$file"
