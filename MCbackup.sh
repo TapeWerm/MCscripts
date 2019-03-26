@@ -96,6 +96,7 @@ server_do save-off
 trap 'server_do save-on' ERR
 server_do save-all flush
 # Pause and save the server
+unset buffer
 until echo "$buffer" | grep -q 'Saved the game'; do
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 	server_read save-all flush

@@ -82,6 +82,7 @@ trap 'server_do save resume' ERR
 sleep 1
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
+unset buffer
 until echo "$buffer" | grep -q 'Data saved'; do
 # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
 	server_do save query
