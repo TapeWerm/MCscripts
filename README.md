@@ -10,7 +10,7 @@ tmux -S /tmp/tmux-mc/$instance a
 # Example: service mc@instance status
 ```
 
-You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [phantom](https://github.com/jhead/phantom) to work around this.
+Backups are in ~mc by default. You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [phantom](https://github.com/jhead/phantom) to work around this.
 # Common setup
 ```bash
 sudo apt install git zip
