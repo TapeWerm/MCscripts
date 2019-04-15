@@ -58,9 +58,9 @@ else
 	backup_dir=~
 fi
 backup_dir=$backup_dir/${world}_Backups/$year/$month
+backup_dir=$(realpath "$backup_dir")
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
-backup_dir=$(realpath "$backup_dir")
 
 if [ -n "$4" ]; then
 	tmux_socket=${4%/}
