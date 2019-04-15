@@ -21,6 +21,7 @@ if [ "$server_dir" -ef "$backup_dir" ]; then
 fi
 server_dir=$(realpath "$server_dir")
 backup_dir=$backup_dir/${server_dir##*/}
+# Trim off $server_dir before last /
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
