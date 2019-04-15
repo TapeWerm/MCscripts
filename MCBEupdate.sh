@@ -22,7 +22,7 @@ fi
 backup_dir=$backup_dir/$server_dir
 
 minecraft_zip=$(realpath "$2")
-if find "$server_dir" -wholename "$minecraft_zip"; then
+if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
 	>&2 echo '$minecraft_zip cannot be in $server_dir'
 	exit 6
 fi
