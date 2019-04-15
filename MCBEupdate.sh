@@ -19,7 +19,8 @@ if [ "$server_dir" -ef "$backup_dir" ]; then
 	>&2 echo '$server_dir cannot be '"$backup_dir"
 	exit 4
 fi
-backup_dir=$backup_dir/$server_dir
+server_dir=$(realpath "$server_dir")
+backup_dir=$backup_dir/${server_dir##*/}
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
