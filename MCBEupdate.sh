@@ -2,7 +2,6 @@
 
 set -e
 # Exit if error
-backup_dir=/tmp
 files='worlds whitelist.json permissions.json server.properties'
 pack_dirs='resource_packs behavior_packs'
 
@@ -15,13 +14,8 @@ fi
 
 server_dir=${1%/}
 # Remove trailing slash
-if [ "$server_dir" -ef "$backup_dir" ]; then
-	>&2 echo '$server_dir cannot be '"$backup_dir"
-	exit 4
-fi
 server_dir=$(realpath "$server_dir")
-backup_dir=$backup_dir/${server_dir##*/}
-# Trim off $server_dir before last /
+backup_dir=/tmp/$(basename "$server_dir")
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
@@ -47,8 +41,9 @@ rm -r ./*
 unzip "$minecraft_zip"
 
 for pack_dir in $pack_dirs; do
-	packs=$(ls "$backup_dir/$pack_dir" | grep -Ev 'vanilla|chemistry')
+	packs=$(ls "$backup_dir/$pack_dir" | grep -Ev 'vanilla|chemistry' || true)
 	# 3rd party packs
+	# grep fails if there's no match
 	echo "$packs" | while read -r pack; do
 	# Escape \ while reading line from $packs
 		cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"

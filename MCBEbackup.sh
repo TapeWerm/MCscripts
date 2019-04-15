@@ -40,11 +40,11 @@ properties=$server_dir/server.properties
 world=$(grep level-name "$properties" | cut -d = -f 2)
 # $properties says level-name=$world
 world_dir=$server_dir/worlds
+world_dir=$(realpath "$world_dir")
 if [ ! -d "$world_dir" ]; then
 	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
 	exit 2
 fi
-world_dir=$(realpath "$world_dir")
 
 sessionname=$2
 
