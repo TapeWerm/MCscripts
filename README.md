@@ -11,7 +11,7 @@ tmux -S /tmp/tmux-mc/$instance a
 ```
 Press Ctrl-B then D to detach from a tmux session.
 
-Backups are in ~mc by default. Outdated bedrock-server ZIPs in ~mc will be deleted by [MCBEautoUpdate.sh](MCBEautoUpdate.sh). You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [jhead/phantom](https://github.com/jhead/phantom) to work around this.
+Backups are in ~mc by default. Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEautoUpdate.sh](MCBEautoUpdate.sh). You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [jhead/phantom](https://github.com/jhead/phantom) to work around this.
 # Common setup
 Open Terminal:
 ```bash
