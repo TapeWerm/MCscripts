@@ -1,5 +1,5 @@
 # Description
-Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and bash scripts for backups, updates, and shutdown warnings
+Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and bash scripts for backups, automatic updates, and shutdown warnings
 
 Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run the scripts without enabling the systemd units.
 # Notes
@@ -11,7 +11,7 @@ tmux -S /tmp/tmux-mc/$instance a
 ```
 Press Ctrl-B then D to detach from a tmux session.
 
-Backups are in ~mc by default. You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [jhead/phantom](https://github.com/jhead/phantom) to work around this.
+Backups are in ~mc by default. Outdated bedrock-server ZIPs in ~mc will be deleted by [MCBEautoUpdate.sh](MCBEautoUpdate.sh). No automatic update scripts for Java Edition. You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example). [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [jhead/phantom](https://github.com/jhead/phantom) to work around this.
 # Common setup
 Open Terminal:
 ```bash
@@ -52,5 +52,6 @@ Copy and paste this block:
 sudo chown -R mc:nogroup ~mc/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
 sudo systemctl enable mcbe-backup@MCBE.timer --now
+sudo systemctl enable mcbe-autoupdate@MCBE.timer --now
 ```
 I recommend replacing the 3rd argument to MCBEbackup.sh in [mcbe-backup@.service](systemd/mcbe-backup@.service) with an external drive to dump backups on.
