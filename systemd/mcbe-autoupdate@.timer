@@ -1,8 +1,8 @@
 [Unit]
-Description=Automatically update Minecraft Bedrock Edition server daily at 4:15 AM
+Description=Automatically update Minecraft Bedrock Edition server hourly
 
 [Timer]
-OnCalendar=*-*-* 04:15
+OnCalendar=hourly
 
 [Install]
 WantedBy=timers.target
