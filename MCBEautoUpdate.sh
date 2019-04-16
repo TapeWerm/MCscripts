@@ -2,7 +2,7 @@
 
 set -e
 # Exit if error
-dir=$(dirname $0)
+dir=$(dirname "$0")
 # $0 is this script
 
 if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
