@@ -1,5 +1,6 @@
 [Unit]
 After=mcbe@%i.service
+Conflicts=mcbe-backup@.service
 Description=Automatically update Minecraft Bedrock Edition server
 
 [Service]
