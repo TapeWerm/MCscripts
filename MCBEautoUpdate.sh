@@ -16,7 +16,7 @@ if service "$2" status 2>&1 | grep 'could not be found'; then
 fi
 
 webpage=$(wget https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
-url=$(echo "$webpage" | grep linux/bedrock-server | grep -Eo 'https://[^ ]+.zip')
+url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+.zip')
 current_ver=$(basename "$url")
 installed_ver=$(ls ~mc/bedrock-server*.zip || true)
 
