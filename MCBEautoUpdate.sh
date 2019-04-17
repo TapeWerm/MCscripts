@@ -11,8 +11,7 @@ if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
 	exit 1
 fi
 
-if service "$2" status | grep -q 'could not be found'; then
-	>&2 echo "No service $2"
+if service "$2" status 2>&1 | grep 'could not be found'; then
 	exit 2
 fi
 
