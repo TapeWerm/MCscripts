@@ -18,17 +18,17 @@ countdown() {
 }
 
 server_read() {
-# Set $buffer to buffer from $sessionname from last occurence of $* to end
+# Set $buffer to buffer from $sessionname from the last occurence of $* to the end
 # $buffer may not have output from server_do
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Wait until server is done
-# Detached tmux sessions line wrap at 80 chars without -x #
+# New detached tmux sessions line wrap at 80 chars without -x #
         sleep 1
         # Wait for output
         buffer=$(tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -)
         # Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
         buffer=$(echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}')
-        # Trim off $buffer before last occurence of $*
+        # Trim off $buffer before the last occurence of $*
         # If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
         # $0 is the current line in awk
 }
