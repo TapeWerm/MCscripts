@@ -69,11 +69,9 @@ if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 fi
 
 server_read save hold
-if [ -n "$buffer" ]; then
-	if ! echo "$buffer" | grep -q 'save resume'; then
-		>&2 echo Save held, is a backup in progress?
-		exit 5
-	fi
+if ! echo "$buffer" | grep -q 'save resume'; then
+	>&2 echo Save held, is a backup in progress?
+	exit 5
 fi
 
 server_do save hold

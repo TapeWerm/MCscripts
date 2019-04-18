@@ -74,11 +74,9 @@ if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 fi
 
 server_read save-off
-if [ -n "$buffer" ]; then
-	if ! echo "$buffer" | grep -q 'save-on'; then
-		>&2 echo Save off, is a backup in progress?
-		exit 5
-	fi
+if ! echo "$buffer" | grep -q 'save-on'; then
+	>&2 echo Save off, is a backup in progress?
+	exit 5
 fi
 
 countdown 10 seconds
