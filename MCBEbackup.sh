@@ -91,7 +91,7 @@ until echo "$buffer" | grep -q 'Data saved'; do
 	# Check if backup is ready
 	server_read save query
 done
-files=$(echo "$buffer" | tr -d '\n' | tr -d ' ' | grep -Eo "$world[^:]+:[0-9]+")
+files=$(echo "$buffer" | tr -d '\n ' | grep -Eo "$world[^:]+:[0-9]+")
 # Remove line wrapping and grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
