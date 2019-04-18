@@ -19,9 +19,10 @@ countdown() {
 
 server_read() {
 # Set $buffer to buffer from $sessionname from the last occurence of $* to the end
-# $buffer may not have output from server_do
+# Pass same $* as server_do to see output afterward
+# $buffer may not have output from server_do first try
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
-# Wait until server is done
+# Read until $wanted_output is read
 # New detached tmux sessions line wrap at 80 chars without -x #
         sleep 1
         # Wait for output
