@@ -40,10 +40,6 @@ server_dir=${1%/}
 properties=$server_dir/server.properties
 world=$(grep level-name "$properties" | cut -d = -f 2)
 # $properties says level-name=$world
-if echo "$world" | grep -q ' '; then
-	>&2 echo Spaces in world names can be removed by line wrapping, use _ instead
-	exit 6
-fi
 world_dir=$server_dir/worlds
 world_dir=$(realpath "$world_dir")
 if [ ! -d "$world_dir" ]; then
@@ -92,7 +88,7 @@ until echo "$buffer" | grep -q 'Data saved'; do
 	# Check if backup is ready
 	server_read save query
 done
-files=$(echo "$buffer" | tr -d '\n ' | grep -Eo "$world[^:]+:[0-9]+")
+files=$(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
 # Remove line wrapping and grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
