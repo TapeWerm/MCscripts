@@ -37,7 +37,7 @@ server_read() {
 if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
 	>&2 echo Back up Minecraft Java Edition server world running in tmux session.
 	>&2 echo '`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
-	>&2 echo 'Backups are ${world}_Backups/$year/$month/$date_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
+	>&2 echo 'Backups are ${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit 1
 fi
 
