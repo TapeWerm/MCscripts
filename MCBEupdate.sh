@@ -12,9 +12,7 @@ if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
 	exit 1
 fi
 
-server_dir=${1%/}
-# Remove trailing slash
-server_dir=$(realpath "$server_dir")
+server_dir=$(realpath "$1")
 backup_dir=/tmp/$(basename "$server_dir")
 
 minecraft_zip=$(realpath "$2")

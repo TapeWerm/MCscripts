@@ -53,12 +53,11 @@ fi
 sessionname=$2
 
 if [ -n "$3" ]; then
-	backup_dir=${3%/}
+	backup_dir=$(realpath "$3")
 else
 	backup_dir=~
 fi
 backup_dir=$backup_dir/${world}_Backups/$year/$month
-backup_dir=$(realpath "$backup_dir")
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
 
