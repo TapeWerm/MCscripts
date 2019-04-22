@@ -5,6 +5,7 @@ set -e
 date=$(date +%d)
 month=$(date +%b)
 thyme=$(date +%H-%M)
+# Filenames can't contain : on some filesystems
 year=$(date +%Y)
 
 server_do() {
