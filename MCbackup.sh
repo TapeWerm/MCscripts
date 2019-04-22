@@ -23,11 +23,9 @@ server_read() {
 # $buffer may not have output from server_do first try
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Read until $wanted_output is read
-# Lines wrap at 80-characters-long in new detached tmux sessions
-# Attaching to tmux sessions resizes them
         sleep 1
         # Wait for output
-        buffer=$(tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -)
+        buffer=$(tmux -S "$tmux_socket" capture-pane -pJt "$sessionname:0.0" -S -)
         # Read buffer from the first pane of the first window of session $sessionname on socket $tmux_socket
         buffer=$(echo "$buffer" | awk -v cmd="$*" 'buffer{buffer=buffer"\n"$0} $0~cmd{buffer=$0} END {print buffer}')
         # Trim off $buffer before the last occurence of $*
