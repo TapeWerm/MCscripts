@@ -34,8 +34,7 @@ if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
 	exit 1
 fi
 
-server_dir=${1%/}
-# Remove trailing slash
+server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
 world=$(grep level-name "$properties" | cut -d = -f 2)
 # $properties says level-name=$world
@@ -44,12 +43,12 @@ if [ ! -d "$world_dir" ]; then
 	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
 	exit 2
 fi
-world_dir=$(realpath "$world_dir")
 
 sessionname=$2
 
 if [ -n "$3" ]; then
 	backup_dir=${3%/}
+	# Remove trailing slash
 else
 	backup_dir=~
 fi
