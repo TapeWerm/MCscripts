@@ -17,7 +17,8 @@ server_read() {
 # $buffer may not have output from server_do first try
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Read until $wanted_output is read
-# New detached tmux sessions line wrap at 80 chars without -x #
+# Lines wrap at 80-characters-long in new detached tmux sessions
+# Attaching to tmux sessions resizes them
 	sleep 1
 	# Wait for output
 	buffer=$(tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -)
@@ -70,9 +71,12 @@ if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 fi
 
 server_read save hold
-if ! echo "$buffer" | grep -q 'save resume'; then
-	>&2 echo Save held, is a backup in progress?
-	exit 5
+if [ -n "$buffer" ]; then
+# If save was held
+	if ! echo "$buffer" | grep -q 'save resume'; then
+		>&2 echo Save held, is a backup in progress?
+		exit 5
+	fi
 fi
 
 server_do save hold
@@ -99,7 +103,8 @@ trap 'server_do save resume; rm -rf "$world"' ERR
 echo "$files" | while read -r line; do
 # Escape \ while reading line from $files
 	file=${line%:*}
-	dir=${file%/*}
+	# Trim off $line after last :
+	dir=$(dirname "$file")
 	length=${line##*:}
 	# Trim off $line before last :
 	mkdir -p "$dir"

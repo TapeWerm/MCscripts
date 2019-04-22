@@ -23,7 +23,8 @@ server_read() {
 # $buffer may not have output from server_do first try
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Read until $wanted_output is read
-# New detached tmux sessions line wrap at 80 chars without -x #
+# Lines wrap at 80-characters-long in new detached tmux sessions
+# Attaching to tmux sessions resizes them
         sleep 1
         # Wait for output
         buffer=$(tmux -S "$tmux_socket" capture-pane -pt "$sessionname:0.0" -S -)
@@ -75,9 +76,12 @@ if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 fi
 
 server_read save-off
-if ! echo "$buffer" | grep -q 'save-on'; then
-	>&2 echo Save off, is a backup in progress?
-	exit 5
+if [ -n "$buffer" ]; then
+# If save was off
+	if ! echo "$buffer" | grep -q 'save-on'; then
+		>&2 echo Save off, is a backup in progress?
+		exit 5
+	fi
 fi
 
 countdown 10 seconds
