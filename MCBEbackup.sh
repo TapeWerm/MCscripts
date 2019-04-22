@@ -4,6 +4,7 @@ set -e
 # Exit if error
 date=$(date +%d)
 month=$(date +%b)
+thyme=$(date +%H-%M)
 year=$(date +%Y)
 
 server_do() {
@@ -108,6 +109,6 @@ echo "$files" | while read -r line; do
 	cp "$world_dir/$file" "$dir/"
 	truncate --size="$length" "$file"
 done
-zip -r "$date.zip" "$world"
+zip -r "${date}_$thyme.zip" "$world"
 rm -r "$world"
 server_do save resume

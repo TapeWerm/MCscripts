@@ -4,6 +4,7 @@ set -e
 # Exit if error
 date=$(date +%d)
 month=$(date +%b)
+thyme=$(date +%H-%M)
 year=$(date +%Y)
 
 server_do() {
@@ -104,6 +105,6 @@ done
 
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-zip -r "$backup_dir/$date.zip" "$world"
+zip -r "$backup_dir/${date}_$thyme.zip" "$world"
 server_do save-on
 server_do say "Well that's better now, isn't it?"
