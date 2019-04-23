@@ -19,6 +19,7 @@ webpage=$(wget https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+.zip')
 current_ver=$(basename "$url")
 installed_ver=$(ls ~mc/bedrock-server*.zip || true)
+# ls fails if there's no match
 
 if ! echo "$installed_ver" | grep -q "$current_ver"; then
 # There might be more than one ZIP
