@@ -6,6 +6,7 @@ date=$(date +%d)
 month=$(date +%b)
 thyme=$(date +%H-%M)
 # Filenames can't contain : on some filesystems
+backup_zip=${date}_$thyme.zip
 year=$(date +%Y)
 
 server_do() {
@@ -122,6 +123,7 @@ echo "$files" | while read -r line; do
 	cp "$world_dir/$file" "$dir/"
 	truncate --size="$length" "$file"
 done
-zip -r "${date}_$thyme.zip" "$world"
+zip -r "$backup_zip" "$world"
+echo "Backup is $backup_dir/$backup_zip"
 rm -r "$world"
 server_do save resume

@@ -74,6 +74,7 @@ fi
 backup_dir=$backup_dir/${world}_Backups/$year/$month
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
+backup_zip=$backup_dir/${date}_$thyme.zip
 
 if [ -n "$4" ]; then
 	tmux_socket=${4%/}
@@ -118,6 +119,7 @@ done
 
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-zip -r "$backup_dir/${date}_$thyme.zip" "$world"
+zip -r "$backup_zip" "$world"
+echo "Backup is $backup_zip"
 server_do save-on
 server_do say "Well that's better now, isn't it?"
