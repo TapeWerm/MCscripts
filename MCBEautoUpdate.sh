@@ -32,8 +32,12 @@ installed_ver=$(ls ~mc/bedrock-server*.zip || true)
 
 if ! echo "$installed_ver" | grep -q "$current_ver"; then
 # There might be more than one ZIP
+	trap 'rm -f ~mc/"$current_ver"' ERR
 	sudo wget "$url" -O ~mc/"$current_ver"
+	trap - ERR
+	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	sudo service "$2" stop
+	trap 'sudo chown -R mc:nogroup "$1" ~mc/"$current_ver"; sudo service "$2" start' ERR
 	echo y | sudo "$dir/MCBEupdate.sh" "$1" ~mc/"$current_ver"
 	# MCBEupdate.sh reads y asking if you stopped the server
 	sudo chown -R mc:nogroup "$1" ~mc/"$current_ver"
