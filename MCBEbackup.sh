@@ -7,7 +7,6 @@ month=$(date +%b)
 syntax='`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 thyme=$(date +%H-%M)
 # Filenames can't contain : on some filesystems
-backup_zip=${date}_$thyme.zip
 year=$(date +%Y)
 
 server_do() {
@@ -59,17 +58,18 @@ fi
 sessionname=$2
 
 if [ -n "$3" ]; then
-	backup_dir=${3%/}
-	# Remove trailing slash
+	backup_dir=$(realpath "$3")
 else
 	backup_dir=~
 fi
 backup_dir=$backup_dir/${world}_Backups_BE/$year/$month
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
+backup_zip=$backup_dir/${date}_$thyme.zip
 
 if [ -n "$4" ]; then
 	tmux_socket=${4%/}
+	# Remove trailing slash
 else
 	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default
 	# $USER = `whoami` and is not set in cron
@@ -121,6 +121,6 @@ echo "$files" | while read -r line; do
 	truncate --size="$length" "$file"
 done
 zip -r "$backup_zip" "$world"
-echo "Backup is $backup_dir/$backup_zip"
+echo "Backup is $backup_zip"
 rm -r "$world"
 server_do save resume
