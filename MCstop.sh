@@ -11,10 +11,22 @@ countdown() {
 	echo "$warning"
 }
 
-if [ -z "$1" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
-	>&2 echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
-	>&2 echo '`./MCstop.sh $sessionname [$tmux_socket]`'
-	>&2 echo Best ran by systemd before shutdown.
+syntax() {
+	echo '`./MCstop.sh $sessionname [$tmux_socket]`'
+}
+
+if [ "$1" = -h ] || [ "$1" = --help ]; then
+	echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
+	syntax
+	echo Best ran by systemd before shutdown.
+	exit
+elif [ "$#" -lt 1 ]; then
+	>&2 echo Not enough arguments
+	syntax
+	exit 1
+elif [ "$#" -gt 2 ]; then
+	>&2 echo Too much arguments
+	syntax
 	exit 1
 fi
 

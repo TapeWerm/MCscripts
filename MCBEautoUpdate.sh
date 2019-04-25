@@ -5,9 +5,21 @@ set -e
 dir=$(dirname "$0")
 # $0 is this script
 
-if [ -z "$1" ] || [ -z "$2" ] || [ "$1" = -h ] || [ "$1" = --help ]; then
-	>&2 echo "If the ZIP of the current version isn't in ~mc, download it, remove outdated ZIPs in ~mc, and update and restart service of Minecraft Bedrock Edition server."
-	>&2 echo '`./MCBEautoUpdate.sh $server_dir $service`'
+syntax() {
+	echo '`./MCBEautoUpdate.sh $server_dir $service`'
+}
+
+if [ "$1" = -h ] || [ "$1" = --help ]; then
+	echo "If the ZIP of the current version isn't in ~mc, download it, remove outdated ZIPs in ~mc, and update and restart service of Minecraft Bedrock Edition server."
+	syntax
+	exit
+elif [ "$#" -lt 2 ]; then
+	>&2 echo Not enough arguments
+	syntax
+	exit 1
+elif [ "$#" -gt 2 ]; then
+	>&2 echo Too much arguments
+	syntax
 	exit 1
 fi
 
