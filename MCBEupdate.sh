@@ -4,23 +4,20 @@ set -e
 # Exit if error
 files='worlds whitelist.json permissions.json server.properties'
 pack_dirs='resource_packs behavior_packs'
-
-syntax() {
-	echo '`./MCBEupdate.sh $server_dir $minecraft_zip`'
-}
+syntax='`./MCBEupdate.sh $server_dir $minecraft_zip`'
 
 if [ "$1" = -h ] || [ "$1" = --help ]; then
 	echo 'Update Minecraft Bedrock Edition server keeping packs, worlds, whitelist, permissions, and properties. You can convert a Windows $server_dir to Ubuntu and vice versa.'
-	syntax
+	echo "$syntax"
 	echo '$minecraft_zip cannot be in $server_dir. Remember to stop server before updating.'
 	exit
 elif [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
-	syntax
+	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
 	>&2 echo Too much arguments
-	syntax
+	>&2 echo "$syntax"
 	exit 1
 fi
 

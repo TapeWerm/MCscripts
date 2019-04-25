@@ -4,22 +4,19 @@ set -e
 # Exit if error
 dir=$(dirname "$0")
 # $0 is this script
-
-syntax() {
-	echo '`./MCBEautoUpdate.sh $server_dir $service`'
-}
+syntax='`./MCBEautoUpdate.sh $server_dir $service`'
 
 if [ "$1" = -h ] || [ "$1" = --help ]; then
 	echo "If the ZIP of the current version isn't in ~mc, download it, remove outdated ZIPs in ~mc, and update and restart service of Minecraft Bedrock Edition server."
-	syntax
+	echo "$syntax"
 	exit
 elif [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
-	syntax
+	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
 	>&2 echo Too much arguments
-	syntax
+	>&2 echo "$syntax"
 	exit 1
 fi
 

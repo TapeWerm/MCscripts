@@ -4,6 +4,7 @@ set -e
 # Exit if error
 date=$(date +%d)
 month=$(date +%b)
+syntax='`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 thyme=$(date +%H-%M)
 # Filenames can't contain : on some filesystems
 year=$(date +%Y)
@@ -35,22 +36,18 @@ server_read() {
         # $0 is the current line in awk
 }
 
-syntax() {
-	echo '`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
-}
-
 if [ "$1" = -h ] || [ "$1" = --help ]; then
 	echo Back up Minecraft Java Edition server world running in tmux session.
-	syntax
+	echo "$syntax"
 	echo 'Backups are ${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit
 elif [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
-	syntax
+	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 4 ]; then
 	>&2 echo Too much arguments
-	syntax
+	>&2 echo "$syntax"
 	exit 1
 fi
 
