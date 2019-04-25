@@ -39,7 +39,7 @@ server_read() {
 if [ "$1" = -h ] || [ "$1" = --help ]; then
 	echo Back up Minecraft Java Edition server world running in tmux session.
 	echo "$syntax"
-	echo 'Backups are ${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
+	echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit
 elif [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
@@ -68,7 +68,7 @@ if [ -n "$3" ]; then
 else
 	backup_dir=~
 fi
-backup_dir=$backup_dir/${world}_Backups/$year/$month
+backup_dir=$backup_dir/$(basename "$server_dir")_Backups/${world}_Backups/$year/$month
 mkdir -p "$backup_dir"
 # Make directory and parents quietly
 backup_zip=$backup_dir/${date}_$thyme.zip
