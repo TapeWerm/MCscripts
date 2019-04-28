@@ -29,6 +29,7 @@ sudo chown mc:nogroup ~mc/*
 for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```
 # Java Edition setup
+Stop the server.
 ```bash
 sudo mv $server_dir ~mc/MC
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui >> start.bat
@@ -44,6 +45,7 @@ sudo systemctl enable mc-backup@MC.timer --now
 ```
 I recommend replacing the 3rd argument to MCbackup.sh in [mc-backup@.service](systemd/mc-backup@.service) with an external drive to dump backups on.
 # Bedrock Edition setup
+Stop the server.
 ```bash
 sudo mv $server_dir ~mc/MCBE
 ```
