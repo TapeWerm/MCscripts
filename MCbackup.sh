@@ -36,12 +36,15 @@ server_read() {
 	# $0 is the current line in awk
 }
 
-if [ "$1" = -h ] || [ "$1" = --help ]; then
+case $1 in
+--help|-h)
 	echo Back up Minecraft Java Edition server world running in tmux session.
 	echo "$syntax"
 	echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
 	exit
-elif [ "$#" -lt 2 ]; then
+	;;
+esac
+if [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"
 	exit 1

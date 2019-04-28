@@ -13,12 +13,15 @@ countdown() {
 	echo "$warning"
 }
 
-if [ "$1" = -h ] || [ "$1" = --help ]; then
+case $1 in
+--help|-h)
 	echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
 	echo "$syntax"
 	echo Best ran by systemd before shutdown.
 	exit
-elif [ "$#" -lt 1 ]; then
+	;;
+esac
+if [ "$#" -lt 1 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"
 	exit 1

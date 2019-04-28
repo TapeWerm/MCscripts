@@ -6,11 +6,14 @@ dir=$(dirname "$0")
 # $0 is this script
 syntax='`./MCBEautoUpdate.sh $server_dir $service`'
 
-if [ "$1" = -h ] || [ "$1" = --help ]; then
+case $1 in
+--help|-h)
 	echo "If the ZIP of the current version isn't in ~mc, download it, remove outdated ZIPs in ~mc, and update and restart service of Minecraft Bedrock Edition server."
 	echo "$syntax"
 	exit
-elif [ "$#" -lt 2 ]; then
+	;;
+esac
+if [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"
 	exit 1
