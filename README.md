@@ -31,7 +31,7 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 Stop the server.
 ```bash
 sudo mv $server_dir ~mc/MC
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/start.bat
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 ```
 Copy and paste this block:
