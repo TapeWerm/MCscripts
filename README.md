@@ -22,8 +22,8 @@ cd MCscripts
 Copy and paste this block:
 ```bash
 sudo adduser --home /opt/MC --system mc
-echo set -g default-shell /bin/bash >> .tmux.conf
-sudo mv .tmux.conf ~mc/
+echo set -g default-shell /bin/bash > /tmp/.tmux.conf
+sudo mv /tmp/.tmux.conf ~mc/
 for file in `ls *.sh`; do sudo cp $file ~mc/; done
 sudo chown mc:nogroup ~mc/*
 for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
@@ -32,12 +32,12 @@ for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 Stop the server.
 ```bash
 sudo mv $server_dir ~mc/MC
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui >> start.bat
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui > /tmp/start.bat
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 ```
 Copy and paste this block:
 ```bash
-sudo mv start.bat ~mc/MC/
+sudo mv /tmp/start.bat ~mc/MC/
 sudo chmod 700 ~mc/MC/start.bat
 sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
