@@ -15,7 +15,7 @@ Backups are in ~mc by default. Outdated bedrock-server ZIPs in ~mc will be remov
 # Common setup
 Open Terminal:
 ```bash
-sudo apt install git zip
+sudo apt install git tmux wget zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 ```
