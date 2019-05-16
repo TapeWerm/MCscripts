@@ -111,7 +111,7 @@ files=$(echo "$buffer" | grep -Eo "$world[^:]+:[0-9]+")
 
 cd "$backup_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-trap 'server_do save resume; rm -rf "$world"; rm -f "$backup_zip"' ERR
+trap 'server_do save resume; rm -r "$world"; rm "$backup_zip"' ERR
 echo "$files" | while read -r line; do
 # Escape \ while reading line from $files
 	file=${line%:*}

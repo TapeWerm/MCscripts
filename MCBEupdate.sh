@@ -26,6 +26,10 @@ fi
 
 server_dir=$(realpath "$1")
 backup_dir=/tmp/$(basename "$server_dir")
+if [ -f "$backup_dir" ]; then
+	>&2 echo "Backup dir $backup_dir already exists, check and remove it"
+	exit 7
+fi
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
@@ -46,8 +50,9 @@ fi
 cd "$server_dir"
 trap 'rm -rf "$backup_dir"' ERR
 cp -r . "$backup_dir"
-trap 'rm -r ./*; cp -r "$backup_dir"/* .; rm -r "$backup_dir"' ERR
+trap 'cp -rn "$backup_dir"/* .; rm -rf "$backup_dir"' ERR
 rm -r ./*
+trap 'rm -r ./*; cp -r "$backup_dir"/* .; rm -rf "$backup_dir"' ERR
 unzip "$minecraft_zip"
 
 for pack_dir in $pack_dirs; do
