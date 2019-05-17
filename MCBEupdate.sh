@@ -51,6 +51,7 @@ cd "$server_dir"
 trap 'rm -rf "$backup_dir"' ERR
 cp -r . "$backup_dir"
 trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
+# Copy recursively no overwriting
 rm -r $(ls -A)
 # All but . and ..
 trap 'rm -rf $(ls -A); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
