@@ -50,9 +50,10 @@ fi
 cd "$server_dir"
 trap 'rm -rf "$backup_dir"' ERR
 cp -r . "$backup_dir"
-trap 'cp -rn "$backup_dir"/* .; rm -rf "$backup_dir"' ERR
-rm -r ./*
-trap 'rm -r ./*; cp -r "$backup_dir"/* .; rm -rf "$backup_dir"' ERR
+trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
+rm -r $(ls -A)
+# All but . and ..
+trap 'rm -rf $(ls -A); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
 unzip "$minecraft_zip"
 
 for pack_dir in $pack_dirs; do

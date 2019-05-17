@@ -119,7 +119,7 @@ done
 
 cd "$server_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
-trap 'server_do save-on; rm "$backup_zip"' ERR
+trap 'server_do save-on; rm -f "$backup_zip"' ERR
 zip -r "$backup_zip" "$world"
 echo "Backup is $backup_zip"
 server_do save-on
