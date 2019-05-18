@@ -51,9 +51,9 @@ cd "$server_dir"
 trap 'rm -rf "$backup_dir"' ERR
 cp -r . "$backup_dir"
 trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
-# Copy recursively no overwriting
+# Copy all files in $backup_dir no overwriting
 rm -r $(ls -A)
-# All but . and ..
+# List all files except . and ..
 trap 'rm -rf $(ls -A); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
 unzip "$minecraft_zip"
 
