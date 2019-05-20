@@ -52,9 +52,9 @@ trap 'rm -rf "$backup_dir"' ERR
 cp -r . "$backup_dir"
 trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
 # Copy all files in $backup_dir no overwriting
-rm -r $(ls -A)
+rm -r $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$")
 # List all files except . and ..
-trap 'rm -rf $(ls -A); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
+trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
 unzip "$minecraft_zip"
 
 for pack_dir in $pack_dirs; do
