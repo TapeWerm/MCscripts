@@ -24,6 +24,7 @@ elif [ "$#" -gt 2 ]; then
 fi
 
 if service "$2" status 2>&1 | grep 'could not be found'; then
+# service says Unit $2 could not be found.
 	exit 2
 fi
 
