@@ -42,17 +42,19 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	sudo chown -R mc:nogroup ~mc/"$current_ver"
 	sudo rm -f $installed_ver
+	if [ -n "$2" ]; then
+	# If service
+		sudo service "$2" stop
+		trap 'sudo chown -R mc:nogroup "$1"; sudo service "$2" start' ERR
+		echo y | sudo "$dir/MCBEupdate.sh" "$1" ~mc/"$current_ver"
+		# MCBEupdate.sh reads y asking if you stopped the server
+		sudo chown -R mc:nogroup "$1"
+		sudo service "$2" start
+	fi
 fi
 
-if [ -n "$2" ]; then
-# If service
-	sudo service "$2" stop
-	trap 'sudo chown -R mc:nogroup "$1"; sudo service "$2" start' ERR
-	echo y | sudo "$dir/MCBEupdate.sh" "$1" ~mc/"$current_ver"
-	# MCBEupdate.sh reads y asking if you stopped the server
-	sudo chown -R mc:nogroup "$1"
-	sudo service "$2" start
-else
+if [ -z "$1" ]; then
+# If no service
 	mkdir "$1"
 	unzip -tq ~mc/"$current_ver"
 	# Test extracting $current_ver partially quietly
