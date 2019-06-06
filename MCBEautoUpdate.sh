@@ -54,7 +54,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	fi
 fi
 
-if [ -z "$1" ]; then
+if [ -z "$2" ]; then
 # If no service
 	mkdir "$1"
 	unzip -tq ~mc/"$current_ver"
