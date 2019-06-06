@@ -29,13 +29,25 @@ if [ -n "$2" ] && service "$2" status 2>&1 | grep 'could not be found'; then
 fi
 
 webpage=$(wget https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
-url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+.zip')
+url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.zip')
 current_ver=$(basename "$url")
-installed_ver=$(ls ~mc/bedrock-server*.zip || true)
+installed_ver=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip || true)
 # ls fails if there's no match
 
 if ! echo "$installed_ver" | grep -q "$current_ver"; then
-# There might be more than one ZIP
+# There might be more than one ZIP in ~mc
+	if [ -z "$2" ]; then
+		echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
+		echo Minecraft End User License Agreement: https://minecraft.net/terms
+		echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
+		read -r input
+		input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+		if [ "$input" != y ]; then
+			>&2 echo "$input != y"
+			exit 3
+		fi
+	fi
+
 	trap 'sudo rm -f ~mc/"$current_ver"' ERR
 	sudo wget "$url" -O ~mc/"$current_ver"
 	trap - ERR
@@ -44,7 +56,6 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	sudo rm -f $installed_ver
 
 	if [ -n "$2" ]; then
-	# If outdated service
 		sudo service "$2" stop
 		trap 'sudo chown -R mc:nogroup "$1"; sudo service "$2" start' ERR
 		echo y | sudo "$dir/MCBEupdate.sh" "$1" ~mc/"$current_ver"
@@ -56,17 +67,6 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 fi
 
 if [ -z "$2" ]; then
-# If no service
-	echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
-	echo Minecraft End User License Agreement: https://minecraft.net/terms
-	echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
-	read -r input
-	input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
-	if [ "$input" != y ]; then
-		>&2 echo "$input != y"
-		exit 3
-	fi
-
 	mkdir "$1"
 	trap 'rm -r "$1"' ERR
 	unzip -tq ~mc/"$current_ver"
