@@ -46,6 +46,9 @@ I recommend replacing the 3rd argument to MCbackup.sh in [mc-backup@.service](sy
 Stop the Minecraft server.
 ```bash
 sudo mv $server_dir ~mc/MCBE
+# or
+sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
+# Make new server directory
 ```
 Copy and paste this block:
 ```bash
