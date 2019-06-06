@@ -51,6 +51,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 		# MCBEupdate.sh reads y asking if you stopped the server
 		sudo chown -R mc:nogroup "$1"
 		sudo service "$2" start
+		exit
 	fi
 fi
 
