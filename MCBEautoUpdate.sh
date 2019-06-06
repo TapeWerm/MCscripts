@@ -57,6 +57,16 @@ fi
 
 if [ -z "$2" ]; then
 # If no service
+	echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
+	echo Minecraft End User License Agreement: https://minecraft.net/terms
+	echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
+	read -r input
+	input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+	if [ "$input" != y ]; then
+		>&2 echo "$input != y"
+		exit 3
+	fi
+
 	mkdir "$1"
 	trap 'rm -r "$1"' ERR
 	unzip -tq ~mc/"$current_ver"
