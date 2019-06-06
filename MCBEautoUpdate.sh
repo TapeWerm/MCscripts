@@ -58,6 +58,7 @@ fi
 if [ -z "$2" ]; then
 # If no service
 	mkdir "$1"
+	trap 'rm -r "$1"' ERR
 	unzip -tq ~mc/"$current_ver"
 	# Test extracting $current_ver partially quietly
 	unzip ~mc/"$current_ver" -d "$1"
