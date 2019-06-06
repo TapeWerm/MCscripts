@@ -42,8 +42,9 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	sudo chown -R mc:nogroup ~mc/"$current_ver"
 	sudo rm -f $installed_ver
+
 	if [ -n "$2" ]; then
-	# If service
+	# If outdated service
 		sudo service "$2" stop
 		trap 'sudo chown -R mc:nogroup "$1"; sudo service "$2" start' ERR
 		echo y | sudo "$dir/MCBEupdate.sh" "$1" ~mc/"$current_ver"
