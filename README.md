@@ -1,5 +1,5 @@
 # Description
-Minecraft Java Edition and Bedrock Edition server (also known as Bedrock Dedicated Server or BDS for short) systemd units and bash scripts for backups, automatic updates, installation, and shutdown warnings
+Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd units and bash scripts for backups, automatic updates, installation, and shutdown warnings
 
 Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run the scripts without enabling the systemd units, except for [MCBEautoUpdate.sh](MCBEautoUpdate.sh). No automatic update/install scripts for Java Edition.
 # Notes
