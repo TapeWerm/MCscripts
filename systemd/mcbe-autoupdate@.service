@@ -2,7 +2,6 @@
 After=mcbe@%i.service
 Conflicts=mcbe-backup@.service
 Description=Automatically update Minecraft Bedrock Edition server
-RequiresMountsFor=/tmp
 
 [Service]
 ExecStart=/opt/MC/MCBEautoUpdate.sh /opt/MC/%i mcbe@%i

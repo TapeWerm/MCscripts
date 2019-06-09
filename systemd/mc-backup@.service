@@ -1,6 +1,8 @@
 [Unit]
 After=mc@%i.service
 Description=Back up Minecraft Java Edition server world
+RequiresMountsFor=/opt/MC
+# I recommend replacing this with an external drive to dump backups on
 
 [Service]
 ExecStart=/opt/MC/MCbackup.sh /opt/MC/%i %i /opt/MC /tmp/tmux-mc/%i
