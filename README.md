@@ -30,7 +30,7 @@ sudo chown mc:nogroup ~mc/*
 for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```
 # Java Edition setup
-Stop the Minecraft server.
+I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [/etc/systemd/system/mc-backup@.service](systemd/mc-backup@.service) with an external drive to dump backups on. Stop the Minecraft server.
 ```bash
 sudo mv $server_dir ~mc/MC
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
@@ -43,9 +43,8 @@ sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
 sudo systemctl enable mc-backup@MC.timer --now
 ```
-I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [mc-backup@.service](systemd/mc-backup@.service) with an external drive to dump backups on.
 # Bedrock Edition setup
-Stop the Minecraft server.
+I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) with an external drive to dump backups on. Stop the Minecraft server.
 ```bash
 sudo mv $server_dir ~mc/MCBE
 # Move $server_dir or
@@ -59,4 +58,3 @@ sudo systemctl enable mcbe@MCBE.service --now
 sudo systemctl enable mcbe-backup@MCBE.timer --now
 sudo systemctl enable mcbe-autoupdate@MCBE.timer --now
 ```
-I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [mcbe-backup@.service](systemd/mcbe-backup@.service) with an external drive to dump backups on.
