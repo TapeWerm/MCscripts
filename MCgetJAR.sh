@@ -6,7 +6,7 @@ syntax='`./MCgetJAR.sh`'
 
 case $1 in
 --help|-h)
-	echo "Download the JAR of the current version."
+	echo "Download and chmod 700 the JAR of the current version."
 	echo "$syntax"
 	exit
 	;;
