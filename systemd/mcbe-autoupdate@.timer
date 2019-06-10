@@ -1,8 +1,0 @@
-[Unit]
-Description=Automatically update Minecraft Bedrock Edition server hourly
-
-[Timer]
-OnCalendar=hourly
-
-[Install]
-WantedBy=timers.target

@@ -56,6 +56,8 @@ rm -r $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$")
 # List all files except . and ..
 trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
 unzip "$minecraft_zip"
+basename "${minecraft_zip%.zip}" > version
+# Trim off $minecraft_zip after last .zip
 
 for pack_dir in $pack_dirs; do
 	packs=$(ls "$backup_dir/$pack_dir" | grep -Ev 'vanilla|chemistry' || true)

@@ -1,0 +1,11 @@
+[Unit]
+After=mcbe@%i.service
+Conflicts=mcbe-backup@.service
+Description=Automatically download Minecraft Bedrock Edition server ZIP
+
+[Service]
+ExecStart=/opt/MC/MCBEgetZIP.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target

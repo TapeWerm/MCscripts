@@ -8,7 +8,7 @@ syntax='`./MCBEautoUpdate.sh $server_dir [$service]`'
 
 case $1 in
 --help|-h)
-	echo "If the ZIP of the current version isn't in ~mc, download it, remove outdated ZIPs in ~mc, and update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc "'$server_dir.'
+	echo 'If $server_dir/version '"isn't the same as the ZIP in ~mc, update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc "'$server_dir.'
 	echo "$syntax"
 	exit
 	;;
@@ -23,55 +23,46 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
+installed_ver=$(cat "$1/version" 2> /dev/null || true)
+# cat fails if there's no file $1/version
+minecraft_zip=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | head -n 1 || true)
+# There might be more than one ZIP in ~mc
+# ls fails if there's no match
+current_ver=$(basename "${minecraft_zip%.zip}")
+# Trim off $minecraft_zip after last .zip
+
 if [ -n "$2" ] && service "$2" status 2>&1 | grep 'could not be found'; then
 # service says Unit $2 could not be found.
 	exit 2
 fi
 
-webpage=$(wget https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
-url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.zip')
-current_ver=$(basename "$url")
-installed_ver=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip || true)
-# ls fails if there's no match
-
-if ! echo "$installed_ver" | grep -q "$current_ver"; then
-# There might be more than one ZIP in ~mc
-	if [ -z "$2" ]; then
-		echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
-		echo Minecraft End User License Agreement: https://minecraft.net/terms
-		# Does prompting the EULA seem so official that it violates the EULA?
-		echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
-		read -r input
-		input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
-		if [ "$input" != y ]; then
-			>&2 echo "$input != y"
-			exit 3
-		fi
-	fi
-
-	trap 'sudo rm -f ~mc/"$current_ver"' ERR
-	sudo wget "$url" -O ~mc/"$current_ver"
-	trap - ERR
-	# Do not remove $current_ver if wget succeeded, below fails will repeat
-	sudo chown -R mc:nogroup ~mc/"$current_ver"
-	sudo rm -f $installed_ver
-
-	if [ -n "$2" ]; then
+if [ -n "$2" ]; then
+	if [ "$installed_ver" != "$current_ver" ]; then
 		sudo service "$2" stop
 		trap 'sudo chown -R mc:nogroup "$1"; sudo service "$2" start' ERR
-		echo y | sudo "$dir/MCBEupdate.sh" "$1" ~mc/"$current_ver"
+		echo y | sudo "$dir/MCBEupdate.sh" "$1" "$minecraft_zip"
 		# MCBEupdate.sh reads y asking if you stopped the server
 		sudo chown -R mc:nogroup "$1"
 		sudo service "$2" start
 		exit
 	fi
-fi
+else
+	echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
+	echo Minecraft End User License Agreement: https://minecraft.net/terms
+	# Does prompting the EULA seem so official that it violates the EULA?
+	echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
+	read -r input
+	input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+	if [ "$input" != y ]; then
+		>&2 echo "$input != y"
+		exit 3
+	fi
 
-if [ -z "$2" ]; then
-	mkdir "$1"
-	trap 'rm -r "$1"' ERR
-	unzip -tq ~mc/"$current_ver"
-	# Test extracting $current_ver partially quietly
-	unzip ~mc/"$current_ver" -d "$1"
+	sudo mkdir "$1"
+	trap 'sudo rm -r "$1"' ERR
+	unzip -tq "$minecraft_zip"
+	# Test extracting $minecraft_zip partially quietly
+	sudo unzip "$minecraft_zip" -d "$1"
+	echo "$current_ver" | sudo tee "$1/version"
 	sudo chown -R mc:nogroup "$1"
 fi

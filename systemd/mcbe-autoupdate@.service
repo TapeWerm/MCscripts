@@ -1,6 +1,5 @@
 [Unit]
-After=mcbe@%i.service
-Conflicts=mcbe-backup@.service
+After=mcbe-getzip.service
 Description=Automatically update Minecraft Bedrock Edition server
 
 [Service]
@@ -8,4 +7,5 @@ ExecStart=/opt/MC/MCBEautoUpdate.sh /opt/MC/%i mcbe@%i
 Type=oneshot
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=mcbe-getzip.service
+# Start after mcbe-getzip.service
