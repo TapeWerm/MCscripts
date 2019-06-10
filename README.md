@@ -48,6 +48,7 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in
 ```bash
 sudo mv $server_dir ~mc/MCBE
 # Move $server_dir or
+sudo ~mc/MCBEgetZIP.sh
 sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
 # Make new server directory
 ```
