@@ -58,5 +58,5 @@ sudo chown -R mc:nogroup ~mc/MCBE
 sudo systemctl enable mcbe@MCBE.service --now
 sudo systemctl enable mcbe-backup@MCBE.timer --now
 sudo systemctl enable mcbe-getzip.timer --now
-sudo systemctl enable mcbe-autoupdate@MCBE --now
+sudo systemctl enable mcbe-autoupdate@MCBE.service --now
 ```
