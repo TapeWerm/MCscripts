@@ -2,7 +2,8 @@
 Description=Automatically download Minecraft Bedrock Edition server ZIP hourly
 
 [Timer]
-OnActiveSec=1 hour
+OnStartupSec=0 hours
+OnUnitActiveSec=1 hour
 
 [Install]
 WantedBy=timers.target
