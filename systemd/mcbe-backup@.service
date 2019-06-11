@@ -1,13 +1,14 @@
 [Unit]
 After=mcbe@%i.service
-Conflicts=mcbe-autoupdate@.service
 Description=Back up Minecraft Bedrock Edition server world
+Requisite=mcbe@%i.service
 RequiresMountsFor=/opt/MC
 # I recommend replacing this with an external drive to dump backups on
 
 [Service]
 ExecStart=/opt/MC/MCBEbackup.sh /opt/MC/%i %i /opt/MC /tmp/tmux-mc/%i
 # I recommend replacing the 3rd argument to MCBEbackup.sh with an external drive to dump backups on
+KillMode=none
 Type=oneshot
 User=mc
 
