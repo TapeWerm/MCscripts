@@ -1,5 +1,4 @@
 [Unit]
-After=mcbe@%i.service
 Description=Automatically download Minecraft Bedrock Edition server ZIP
 
 [Service]

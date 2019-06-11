@@ -1,5 +1,5 @@
 [Unit]
-After=mcbe-getzip.service mcbe-backup@%i.service
+After=mcbe-getzip.service mcbe@%i.service mcbe-backup@%i.service
 Description=Automatically update Minecraft Bedrock Edition server
 
 [Service]
