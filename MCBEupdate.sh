@@ -48,13 +48,13 @@ if [ "$input" != y ]; then
 fi
 
 cd "$server_dir"
-trap 'rm -rf "$backup_dir"' ERR
+trap 'rm -rf "$backup_dir"; echo fail > version' ERR
 cp -r . "$backup_dir"
-trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
+trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 # Copy all files in $backup_dir no overwriting
 rm -r $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$")
 # List all files except . and ..
-trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"' ERR
+trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 unzip "$minecraft_zip"
 basename "${minecraft_zip%.zip}" > version
 # Trim off $minecraft_zip after last .zip
