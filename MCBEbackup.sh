@@ -2,11 +2,12 @@
 
 set -e
 # Exit if error
-date=$(date +%d)
-month=$(date +%b)
 syntax='`./MCBEbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
+temp_dir=/tmp/MCBEbackup
 thyme=$(date +%H-%M)
 # Filenames can't contain : on some filesystems
+date=$(date +%d)
+month=$(date +%b)
 year=$(date +%Y)
 
 server_do() {
@@ -109,7 +110,8 @@ files=$(echo "$buffer" | grep -Eo "$world[^:]+:[0-9]+")
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 
-cd /tmp
+mkdir -p "$temp_dir"
+cd "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 rm -rf "$world"
 trap 'server_do save resume; rm -rf "$world"; rm -f "$backup_zip"' ERR

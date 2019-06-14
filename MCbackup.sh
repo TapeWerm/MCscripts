@@ -2,11 +2,11 @@
 
 set -e
 # Exit if error
-date=$(date +%d)
-month=$(date +%b)
 syntax='`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
 thyme=$(date +%H-%M)
 # Filenames can't contain : on some filesystems
+date=$(date +%d)
+month=$(date +%b)
 year=$(date +%Y)
 
 server_do() {
