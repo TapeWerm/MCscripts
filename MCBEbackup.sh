@@ -109,7 +109,7 @@ files=$(echo "$buffer" | grep -Eo "$world[^:]+:[0-9]+")
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 
-cd "$backup_dir"
+cd /tmp
 # zip restores path of directory given to it ($world), not just the directory itself
 rm -rf "$world"
 trap 'server_do save resume; rm -rf "$world"; rm -f "$backup_zip"' ERR
