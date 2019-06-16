@@ -1,5 +1,5 @@
 [Unit]
-After=mcbe@%i.service
+After=mcbe@%i.service mcbe-autoupdate@%i.service
 Description=Back up Minecraft Bedrock Edition server world
 Requisite=mcbe@%i.service
 RequiresMountsFor=/opt/MC
