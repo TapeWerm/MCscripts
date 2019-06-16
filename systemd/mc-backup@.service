@@ -1,7 +1,7 @@
 [Unit]
-After=mcbe@%i.service mcbe-autoupdate@%i.service
+After=mc@%i.service
 Description=Back up Minecraft Java Edition server world
-Requisite=mcbe@%i.service
+Requisite=mc@%i.service
 RequiresMountsFor=/opt/MC
 # I recommend replacing this with an external drive to dump backups on
 
