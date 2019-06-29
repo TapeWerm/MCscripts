@@ -5,6 +5,7 @@ Description=Automatically download Minecraft Bedrock Edition server ZIP
 ExecStart=/opt/MC/MCBEgetZIP.sh
 KillMode=none
 Type=oneshot
+User=mc
 
 [Install]
 WantedBy=multi-user.target
