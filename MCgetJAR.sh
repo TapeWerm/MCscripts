@@ -17,7 +17,7 @@ if [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
-webpage=$(wget https://www.minecraft.net/en-us/download/server/ -O -)
+webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/server/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+server.jar')
-wget "$url"
+wget --prefer-family=IPv4 "$url"
 chmod 700 server.jar
