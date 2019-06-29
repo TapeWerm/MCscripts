@@ -22,6 +22,7 @@ ProtectControlGroups=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectSystem=full
+Restart=on-failure
 Type=forking
 User=mc
 WorkingDirectory=/opt/MC/%i
