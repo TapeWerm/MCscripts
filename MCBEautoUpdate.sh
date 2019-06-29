@@ -52,17 +52,6 @@ if [ -n "$service" ]; then
 		exit
 	fi
 else
-	echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
-	echo Minecraft End User License Agreement: https://minecraft.net/terms
-	# Does prompting the EULA seem so official that it violates the EULA?
-	echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
-	read -r input
-	input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
-	if [ "$input" != y ]; then
-		>&2 echo "$input != y"
-		exit 3
-	fi
-
 	sudo mkdir "$server_dir"
 	trap 'sudo rm -r "$server_dir"' ERR
 	unzip -tq "$minecraft_zip"
