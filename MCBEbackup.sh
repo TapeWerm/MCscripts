@@ -124,7 +124,8 @@ echo "$files" | while read -r line; do
 	# save query no longer gives path
 		file=${file#$world/}
 		# Trim off $line before first $world/
-		file=$(find "$world_dir" -name "$file")
+		file=$(find "$world_dir" -name "$file" | head -n 1)
+		# There might be more than one $file in $world_dir
 		file=${file#$world_dir/}
 	fi
 	dir=$(dirname "$file")
