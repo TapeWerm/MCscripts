@@ -123,7 +123,7 @@ echo "$files" | while read -r line; do
 	# https://bugs.mojang.com/browse/BDS-1085
 	# save query no longer gives path
 		file=${file#$world/}
-		# Trim off $line before first $world
+		# Trim off $line before first $world/
 		file=$(find "$world_dir" -name "$file")
 		file=${file#$world_dir/}
 	fi
