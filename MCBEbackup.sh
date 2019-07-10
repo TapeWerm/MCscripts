@@ -119,6 +119,14 @@ echo "$files" | while read -r line; do
 # Escape \ while reading line from $files
 	file=${line%:*}
 	# Trim off $line after last :
+	if [ ! -f "$world_dir/$file" ]; then
+	# https://bugs.mojang.com/browse/BDS-1085
+	# save query no longer gives path
+		file=${file#$world/}
+		# Trim off $line before first $world
+		file=$(find "$world_dir" -name "$file")
+		file=${file#$world_dir/}
+	fi
 	dir=$(dirname "$file")
 	length=${line##*:}
 	# Trim off $line before last :
