@@ -1,0 +1,14 @@
+[Unit]
+After=mcbe-backup@%i.service
+Description=Remove Minecraft Bedrock Edition server world backups more than 2-weeks-old
+
+[Service]
+ExecStart=/usr/bin/find /opt/MC/%i_Backups -type f -mtime +13 -delete
+# Replace the 1st argument to find if you use an external drive to dump backups on
+ExecStartPost=/usr/bin/find /opt/MC/%i_Backups -type d -empty -delete
+# Replace the 1st argument to find if you use an external drive to dump backups on
+Type=oneshot
+
+[Install]
+WantedBy=mcbe-backup.service
+# Start after mcbe-backup.service
