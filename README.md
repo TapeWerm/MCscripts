@@ -44,7 +44,7 @@ sudo systemctl enable mc@MC.service --now
 sudo systemctl enable mc-backup@MC.timer --now
 ```
 # Bedrock Edition setup
-I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) with an external drive to dump backups on. Stop the Minecraft server.
+I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) and the 1st argument to find in [/etc/systemd/system/mcbe-rmbackup@.service](systemd/mcbe-rmbackup@.service) with an external drive to dump backups on. Stop the Minecraft server.
 ```bash
 sudo mv $server_dir ~mc/MCBE
 # Move $server_dir or
@@ -61,4 +61,8 @@ sudo systemctl enable mcbe@MCBE.service --now
 sudo systemctl enable mcbe-backup@MCBE.timer --now
 sudo systemctl enable mcbe-getzip.timer --now
 sudo systemctl enable mcbe-autoupdate@MCBE.service --now
+```
+If you want to remove backups more than 2-weeks-old:
+```bash
+sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
