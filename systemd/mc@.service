@@ -1,8 +1,6 @@
 [Unit]
 After=network.target
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
-Before=shutdown.target
-# Stop before shutdown
 Description=Minecraft Java Edition server
 
 [Service]
@@ -14,8 +12,7 @@ ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i new -ds %i ./start.bat
 ExecStartPre=/bin/mkdir -p /tmp/tmux-mc
 ExecStop=/opt/MC/MCstop.sh %i /tmp/tmux-mc/%i
 PrivateUsers=true
-# Security
-# Thanks agowa338
+# Thanks for the security agowa338
 ProtectHome=true
 ProtectControlGroups=true
 ProtectKernelModules=true
