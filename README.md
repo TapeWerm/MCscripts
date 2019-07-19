@@ -25,16 +25,16 @@ Copy and paste this block:
 ```bash
 sudo adduser --home /opt/MC --system mc
 echo set -g default-shell /bin/bash | sudo tee ~mc/.tmux.conf
-for file in `ls *.sh`; do sudo cp $file ~mc/; done
+for file in $(ls *.sh); do sudo cp "$file" ~mc/; done
 sudo chown mc:nogroup ~mc/*
-for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
+for file in $(ls systemd); do sudo cp "systemd/$file" /etc/systemd/system/; done
 ```
 # Java Edition setup
 I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [/etc/systemd/system/mc-backup@.service](systemd/mc-backup@.service) and the 1st argument to find in [/etc/systemd/system/mc-rmbackup@.service](systemd/mc-rmbackup@.service) with an external drive to dump backups on.
 
 Stop the Minecraft server.
 ```bash
-sudo mv $server_dir ~mc/MC
+sudo mv "$server_dir" ~mc/MC
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 ```
@@ -54,7 +54,7 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in
 
 Stop the Minecraft server.
 ```bash
-sudo mv $server_dir ~mc/MCBE
+sudo mv "$server_dir" ~mc/MCBE
 # Move $server_dir or
 sudo su mc -s /bin/bash
 ~/MCBEgetZIP.sh
