@@ -30,7 +30,9 @@ sudo chown mc:nogroup ~mc/*
 for file in `ls systemd`; do sudo cp systemd/$file /etc/systemd/system/; done
 ```
 # Java Edition setup
-I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [/etc/systemd/system/mc-backup@.service](systemd/mc-backup@.service) with an external drive to dump backups on. Stop the Minecraft server.
+I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [/etc/systemd/system/mc-backup@.service](systemd/mc-backup@.service) and the 1st argument to find in [/etc/systemd/system/mc-rmbackup@.service](systemd/mc-rmbackup@.service) with an external drive to dump backups on.
+
+Stop the Minecraft server.
 ```bash
 sudo mv $server_dir ~mc/MC
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
@@ -43,8 +45,14 @@ sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
 sudo systemctl enable mc-backup@MC.timer --now
 ```
+If you want to automatically remove backups more than 2-weeks-old:
+```bash
+sudo systemctl enable mc-rmbackup@MCBE.service --now
+```
 # Bedrock Edition setup
-I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) and the 1st argument to find in [/etc/systemd/system/mcbe-rmbackup@.service](systemd/mcbe-rmbackup@.service) with an external drive to dump backups on. Stop the Minecraft server.
+I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) and the 1st argument to find in [/etc/systemd/system/mcbe-rmbackup@.service](systemd/mcbe-rmbackup@.service) with an external drive to dump backups on.
+
+Stop the Minecraft server.
 ```bash
 sudo mv $server_dir ~mc/MCBE
 # Move $server_dir or
