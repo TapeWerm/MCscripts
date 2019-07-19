@@ -62,7 +62,7 @@ sudo systemctl enable mcbe-backup@MCBE.timer --now
 sudo systemctl enable mcbe-getzip.timer --now
 sudo systemctl enable mcbe-autoupdate@MCBE.service --now
 ```
-If you want to remove backups more than 2-weeks-old:
+If you want to automatically remove backups more than 2-weeks-old:
 ```bash
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
