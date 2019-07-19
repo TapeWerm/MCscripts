@@ -6,7 +6,7 @@ Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu S
 How to attach to the systemd service's tmux session (server console):
 ```bash
 sudo su mc -s /bin/bash
-tmux -S /tmp/tmux-mc/$instance a
+tmux -S "/tmp/tmux-mc/$instance" a
 # Example: service mc@instance status
 ```
 Press Ctrl-B then D to detach from a tmux session.
