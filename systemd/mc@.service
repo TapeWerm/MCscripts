@@ -6,7 +6,7 @@ Description=Minecraft Java Edition server
 [Service]
 ExecReload=/usr/bin/tmux -S /tmp/tmux-mc/%i send-keys -t %i:0.0 reload Enter
 # Enter reload in the first pane of the first window of session %i on socket /tmp/tmux-mc/%i
-# type says script path
+# which says script path
 ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i new -ds %i ./start.bat
 # Makes session %i on socket /tmp/tmux-mc/%i in background
 ExecStartPre=/bin/mkdir -p /tmp/tmux-mc
