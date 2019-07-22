@@ -23,7 +23,6 @@ Restart=on-failure
 Type=forking
 User=mc
 WorkingDirectory=/opt/MC/%i
-# Launch bedrock_server in %i
 
 [Install]
 WantedBy=multi-user.target

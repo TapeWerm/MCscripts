@@ -22,7 +22,6 @@ Restart=on-failure
 Type=forking
 User=mc
 WorkingDirectory=/opt/MC/%i
-# Launch start.bat in %i
 
 [Install]
 WantedBy=multi-user.target
