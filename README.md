@@ -10,7 +10,7 @@ tmux -S "/tmp/tmux-mc/$instance" a
 # Example: service mc@instance status
 # mc-backup and mcbe-backup status say backup location
 ```
-Press Ctrl-B then D to detach from a tmux session. `exit` to switch back to previous user.
+Press <kbd>Ctrl</kbd>-<kbd>B</kbd> then <kbd>D</kbd> to detach from a tmux session. `exit` to switch back to previous user.
 
 Backups are in ~mc by default. Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh). [MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, whitelist, permissions, and properties. Other files will be removed. You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example).
 
