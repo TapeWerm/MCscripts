@@ -8,6 +8,7 @@ How to attach to the systemd service's tmux session (server console):
 sudo su mc -s /bin/bash
 tmux -S "/tmp/tmux-mc/$instance" a
 # Example: service mc@instance status
+# mc-backup and mcbe-backup status say backup location
 ```
 Press Ctrl-B then D to detach from a tmux session. `exit` to switch back to previous user.
 
