@@ -43,7 +43,7 @@ if [ -n "$service" ]; then
 		echo Previous update failed, rm "$server_dir/version" and try again
 		exit 3
 	elif [ "$installed_ver" != "$current_ver" ]; then
-		sudo service "$service" stop
+		sudo systemctl stop "$service"
 		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo service "$service" start' ERR
 		echo y | sudo "$dir/MCBEupdate.sh" "$server_dir" "$minecraft_zip"
 		# MCBEupdate.sh reads y asking if you stopped the server
