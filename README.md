@@ -45,7 +45,7 @@ sudo chown -R mc:nogroup ~mc/MC
 sudo systemctl enable mc@MC.service --now
 sudo systemctl enable mc-backup@MC.timer --now
 ```
-If you want to automatically remove backups more than 2-weeks-old:
+If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
 sudo systemctl enable mc-rmbackup@MCBE.service --now
 ```
@@ -70,7 +70,7 @@ sudo systemctl enable mcbe-backup@MCBE.timer --now
 sudo systemctl enable mcbe-getzip.timer --now
 sudo systemctl enable mcbe-autoupdate@MCBE.service --now
 ```
-If you want to automatically remove backups more than 2-weeks-old:
+If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
