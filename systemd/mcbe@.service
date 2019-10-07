@@ -1,19 +1,19 @@
 [Unit]
-After=network.target
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
+After=network.target
 Description=Minecraft Bedrock Edition server
 
 [Service]
-ExecReload=/usr/bin/tmux -S /tmp/tmux-mc/%i send-keys -t %i:0.0 reload Enter
 # Enter reload in the first pane of the first window of session %i on socket /tmp/tmux-mc/%i
 # which says script path
-ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i new -ds %i 'LD_LIBRARY_PATH=. ./bedrock_server'
+ExecReload=/usr/bin/tmux -S /tmp/tmux-mc/%i send-keys -t %i:0.0 reload Enter
 # Makes session %i on socket /tmp/tmux-mc/%i in background
 # Passing environment variables needs quotes in tmux
+ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i new -ds %i 'LD_LIBRARY_PATH=. ./bedrock_server'
 ExecStartPre=/bin/mkdir -p /tmp/tmux-mc
 ExecStop=/opt/MC/MCstop.sh %i /tmp/tmux-mc/%i
-PrivateUsers=true
 # Thanks for the security agowa338
+PrivateUsers=true
 ProtectHome=true
 ProtectControlGroups=true
 ProtectKernelModules=true

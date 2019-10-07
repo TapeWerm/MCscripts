@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
 # Exit if error
+set -e
 files='worlds whitelist.json permissions.json server.properties'
 pack_dirs='resource_packs behavior_packs'
 syntax='`./MCBEupdate.sh $server_dir $minecraft_zip`'
@@ -36,8 +36,8 @@ if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
 	>&2 echo '$minecraft_zip cannot be in $server_dir'
 	exit 6
 fi
-unzip -tq "$minecraft_zip"
 # Test extracting $minecraft_zip partially quietly
+unzip -tq "$minecraft_zip"
 
 echo "Enter Y if you stopped the server you're updating"
 read -r input
@@ -50,21 +50,21 @@ fi
 cd "$server_dir"
 trap 'rm -rf "$backup_dir"; echo fail > version' ERR
 cp -r . "$backup_dir"
-trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 # Copy all files in $backup_dir no overwriting
-rm -r $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$")
+trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 # List all files except . and ..
+rm -r $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$")
 trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 unzip "$minecraft_zip"
-basename "${minecraft_zip%.zip}" > version
 # Trim off $minecraft_zip after last .zip
+basename "${minecraft_zip%.zip}" > version
 
 for pack_dir in $pack_dirs; do
-	packs=$(ls "$backup_dir/$pack_dir" | grep -Ev 'vanilla|chemistry' || true)
 	# 3rd party packs
 	# grep fails if there's no match
-	echo "$packs" | while read -r pack; do
+	packs=$(ls "$backup_dir/$pack_dir" | grep -Ev 'vanilla|chemistry' || true)
 	# Escape \ while reading line from $packs
+	echo "$packs" | while read -r pack; do
 		cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"
 	done
 done

@@ -8,5 +8,5 @@ KillMode=none
 Type=oneshot
 
 [Install]
-WantedBy=mcbe-getzip.service
 # Start after mcbe-getzip.service
+WantedBy=mcbe-getzip.service

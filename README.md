@@ -6,8 +6,8 @@ Compatible with Ubuntu, Ubuntu on Windows 10 does not support systemd ([Ubuntu S
 How to attach to the systemd service's tmux session (server console):
 ```bash
 sudo su mc -s /bin/bash
-tmux -S "/tmp/tmux-mc/$instance" a
 # Example: systemctl status mc@instance
+tmux -S "/tmp/tmux-mc/$instance" a
 ```
 Press <kbd>Ctrl</kbd>-<kbd>B</kbd> then <kbd>D</kbd> to detach from a tmux session. `exit` to switch back to previous user.
 
@@ -35,8 +35,8 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [
 Stop the Minecraft server.
 ```bash
 sudo mv "$server_dir" ~mc/MC
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
 # Open server.jar with no GUI and 1024-2048 MB of RAM
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
 ```
 Copy and paste this block:
 ```bash
@@ -54,13 +54,14 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in
 
 Stop the Minecraft server.
 ```bash
+# Move $server_dir
 sudo mv "$server_dir" ~mc/MCBE
-# Move $server_dir or
+# or
 sudo su mc -s /bin/bash
 ~/MCBEgetZIP.sh
 exit
-sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
 # Make new server directory
+sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
 ```
 Copy and paste this block:
 ```bash

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
 # Exit if error
+set -e
 syntax='`./MCgetJAR.sh`'
 
 case $1 in

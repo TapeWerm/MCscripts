@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
 # Exit if error
+set -e
 syntax='`./MCBEgetZIP.sh`'
 
 case $1 in
@@ -20,14 +20,14 @@ fi
 webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.zip')
 current_ver=$(basename "$url")
-installed_ver=$(ls ~/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null || true)
 # ls fails if there's no match
+installed_ver=$(ls ~/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null || true)
 
-if ! echo "$installed_ver" | grep -q "$current_ver"; then
 # There might be more than one ZIP in ~
+if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
-	echo Minecraft End User License Agreement: https://minecraft.net/terms
 	# Does prompting the EULA seem so official that it violates the EULA?
+	echo Minecraft End User License Agreement: https://minecraft.net/terms
 	echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
 	read -r input
 	input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
@@ -38,7 +38,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 
 	trap 'sudo rm -f ~/"$current_ver"' ERR
 	wget --prefer-family=IPv4 "$url" -O ~/"$current_ver"
-	trap - ERR
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
+	trap - ERR
 	rm -f $installed_ver
 fi

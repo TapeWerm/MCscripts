@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
 # Exit if error
-dir=$(dirname "$0")
+set -e
 # $0 is this script
+dir=$(dirname "$0")
 syntax='`./MCBEautoUpdate.sh $server_dir [$service]`'
 
 case $1 in
@@ -24,17 +24,17 @@ elif [ "$#" -gt 2 ]; then
 fi
 
 server_dir=$1
-installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # cat fails if there's no file $server_dir/version
-minecraft_zip=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | head -n 1 || true)
+installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # There might be more than one ZIP in ~mc
 # ls fails if there's no match
-current_ver=$(basename "${minecraft_zip%.zip}")
+minecraft_zip=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | head -n 1 || true)
 # Trim off $minecraft_zip after last .zip
+current_ver=$(basename "${minecraft_zip%.zip}")
 
 service=$2
-if [ -n "$service" ] && service "$service" status 2>&1 | grep 'could not be found'; then
 # service says Unit $service could not be found.
+if [ -n "$service" ] && service "$service" status 2>&1 | grep 'could not be found'; then
 	exit 2
 fi
 
@@ -45,8 +45,8 @@ if [ -n "$service" ]; then
 	elif [ "$installed_ver" != "$current_ver" ]; then
 		sudo systemctl stop "$service"
 		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo service "$service" start' ERR
-		echo y | sudo "$dir/MCBEupdate.sh" "$server_dir" "$minecraft_zip"
 		# MCBEupdate.sh reads y asking if you stopped the server
+		echo y | sudo "$dir/MCBEupdate.sh" "$server_dir" "$minecraft_zip"
 		sudo chown -R mc:nogroup "$server_dir"
 		sudo service "$service" start
 		exit
@@ -54,8 +54,8 @@ if [ -n "$service" ]; then
 else
 	sudo mkdir "$server_dir"
 	trap 'sudo rm -r "$server_dir"' ERR
-	unzip -tq "$minecraft_zip"
 	# Test extracting $minecraft_zip partially quietly
+	unzip -tq "$minecraft_zip"
 	unzip "$minecraft_zip" -d "$server_dir"
 	echo "$current_ver" | tee "$server_dir/version"
 	sudo chown -R mc:nogroup "$server_dir"

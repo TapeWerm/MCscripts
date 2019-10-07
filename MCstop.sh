@@ -3,8 +3,8 @@
 syntax='`./MCstop.sh $sessionname [$tmux_socket]`'
 
 server_do() {
-	tmux -S "$tmux_socket" send-keys -t "$sessionname:0.0" "$*" Enter
 	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
+	tmux -S "$tmux_socket" send-keys -t "$sessionname:0.0" "$*" Enter
 }
 
 countdown() {
@@ -34,11 +34,11 @@ fi
 sessionname=$1
 
 if [ -n "$2" ]; then
-	tmux_socket=${2%/}
 	# Remove trailing slash
+	tmux_socket=${2%/}
 else
-	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default
 	# $USER = `whoami` and is not set in cron
+	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	>&2 echo "No session $sessionname on socket $tmux_socket"
