@@ -54,13 +54,12 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in
 
 Stop the Minecraft server.
 ```bash
-# Move $server_dir
+# Move $server_dir or
 sudo mv "$server_dir" ~mc/MCBE
-# or
+# Make new server directory
 sudo su mc -s /bin/bash
 ~/MCBEgetZIP.sh
 exit
-# Make new server directory
 sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
 ```
 Copy and paste this block:
