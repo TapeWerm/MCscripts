@@ -14,7 +14,7 @@ Press <kbd>Ctrl</kbd>-<kbd>B</kbd> then <kbd>D</kbd> to detach from a tmux sessi
 Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` says the last backup's location. Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh). [MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, whitelist, permissions, and properties. Other files will be removed. You cannot enable instances of Java Edition and Bedrock Edition with the same name (mc@example and mcbe@example).
 
 [Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.mojang.com/customer/en/portal/articles/2954250-dedicated-servers-for-minecraft-on-bedrock) Try [jhead/phantom](https://github.com/jhead/phantom) to work around this on Xbox One. Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/user/ProfessorValko/comments/9f438p/bedrock_dedicated_server_tutorial/).
-# Common setup
+# Setup
 Open Terminal:
 ```bash
 sudo apt install git tmux wget zip
@@ -29,7 +29,7 @@ for file in $(ls *.sh); do sudo cp "$file" ~mc/; done
 sudo chown mc:nogroup ~mc/*
 for file in $(ls systemd); do sudo cp "systemd/$file" /etc/systemd/system/; done
 ```
-# Java Edition setup
+## Java Edition setup
 I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [/etc/systemd/system/mc-backup@.service](systemd/mc-backup@.service) and the 1st argument to find in [/etc/systemd/system/mc-rmbackup@.service](systemd/mc-rmbackup@.service) with an external drive to dump backups on.
 
 Stop the Minecraft server.
@@ -50,7 +50,7 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 ```bash
 sudo systemctl enable mc-rmbackup@MCBE.service --now
 ```
-# Bedrock Edition setup
+## Bedrock Edition setup
 I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) and the 1st argument to find in [/etc/systemd/system/mcbe-rmbackup@.service](systemd/mcbe-rmbackup@.service) with an external drive to dump backups on.
 
 Stop the Minecraft server.
