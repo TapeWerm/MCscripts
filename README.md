@@ -34,6 +34,7 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [
 
 Stop the Minecraft server.
 ```bash
+# Move server directory
 sudo mv "$server_dir" ~mc/MC
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
@@ -54,7 +55,7 @@ I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in
 
 Stop the Minecraft server.
 ```bash
-# Move $server_dir or
+# Move server directory or
 sudo mv "$server_dir" ~mc/MCBE
 # Make new server directory
 sudo su mc -s /bin/bash
