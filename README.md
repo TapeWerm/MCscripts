@@ -22,6 +22,7 @@ git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
+# Example: sudo ln -s $ext_drive ~mc/backup_dir
 sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
