@@ -2,6 +2,7 @@
 Description=Back up Minecraft Bedrock Edition server world daily at 4:05 AM
 
 [Timer]
+# Every 2 hours: OnCalendar=0/2:00:00
 OnCalendar=*-*-* 04:05
 
 [Install]

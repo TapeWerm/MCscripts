@@ -8,5 +8,5 @@ ExecStartPost=/usr/bin/find /opt/MC/backup_dir/%i_Backups -type d -empty -delete
 Type=oneshot
 
 [Install]
-WantedBy=mcbe-backup.service
-# Start after mcbe-backup.service
+# Start after mcbe-backup@%i.service
+WantedBy=mcbe-backup@%i.service

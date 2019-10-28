@@ -2,6 +2,7 @@
 Description=Back up Minecraft Java Edition server world daily at 4 AM
 
 [Timer]
+# Every 2 hours: OnCalendar=0/2:00:00
 OnCalendar=*-*-* 04:00
 
 [Install]
