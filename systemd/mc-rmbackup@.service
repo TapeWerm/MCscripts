@@ -3,10 +3,8 @@ After=mc-backup@%i.service
 Description=Automatically remove Minecraft Java Edition server world backups more than 2-weeks-old
 
 [Service]
-# Replace the 1st argument to find if you use an external drive to dump backups on
-ExecStart=/usr/bin/find /opt/MC/%i_Backups -type f -mtime +13 -delete
-# Replace the 1st argument to find if you use an external drive to dump backups on
-ExecStartPost=/usr/bin/find /opt/MC/%i_Backups -type d -empty -delete
+ExecStart=/bin/bash -c '/usr/bin/find "$(readlink -f /opt/MC/backup_dir)/%i_Backups" -type f -mtime +13 -delete'
+ExecStartPost=/bin/bash -c '/usr/bin/find "$(readlink -f /opt/MC/backup_dir)/%i_Backups" -type d -empty -delete'
 Type=oneshot
 
 [Install]

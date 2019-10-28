@@ -20,18 +20,18 @@ Open Terminal:
 sudo apt install git tmux wget zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
+sudo adduser --home /opt/MC --system mc
+# I recommend replacing the 1st argument to ln with an external drive to dump backups on
+sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
 ```bash
-sudo adduser --home /opt/MC --system mc
 echo set -g default-shell /bin/bash | sudo tee ~mc/.tmux.conf
 for file in $(ls *.sh); do sudo cp "$file" ~mc/; done
-sudo chown mc:nogroup ~mc/*
+sudo chown -h mc:nogroup ~mc/*
 for file in $(ls systemd); do sudo cp "systemd/$file" /etc/systemd/system/; done
 ```
 ## Java Edition setup
-I recommend replacing RequiresMountsFor and the 3rd argument to MCbackup.sh in [/etc/systemd/system/mc-backup@.service](systemd/mc-backup@.service) and the 1st argument to find in [/etc/systemd/system/mc-rmbackup@.service](systemd/mc-rmbackup@.service) with an external drive to dump backups on.
-
 Stop the Minecraft server.
 ```bash
 # Move server directory
@@ -51,8 +51,6 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 sudo systemctl enable mc-rmbackup@MCBE.service --now
 ```
 ## Bedrock Edition setup
-I recommend replacing RequiresMountsFor and the 3rd argument to MCBEbackup.sh in [/etc/systemd/system/mcbe-backup@.service](systemd/mcbe-backup@.service) and the 1st argument to find in [/etc/systemd/system/mcbe-rmbackup@.service](systemd/mcbe-rmbackup@.service) with an external drive to dump backups on.
-
 Stop the Minecraft server.
 ```bash
 # Move server directory or
