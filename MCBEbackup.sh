@@ -29,9 +29,10 @@ server_read() {
 	# If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
 	# $0 is the current line in awk
 	buffer=$(echo "$buffer" | awk -v cmd="$*" '
-	buffer { buffer=buffer"\n"$0 }
-	$0~cmd { buffer=$0 }
-	END { print buffer }')
+		buffer { buffer=buffer"\n"$0 }
+		$0~cmd { buffer=$0 }
+		END { print buffer }
+	')
 }
 
 case $1 in
