@@ -119,8 +119,8 @@ timeout=0
 unset buffer
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 until echo "$buffer" | grep -q 'Saved the game'; do
-	# 1 minute timeout because server_read sleeps 1 second
-	if [ "$timeout" = 60 ]; then
+	# 5 minute timeout because server_read sleeps 1 second
+	if [ "$timeout" = 300 ]; then
 		server_do save resume
 		>&2 echo save query timeout
 	fi

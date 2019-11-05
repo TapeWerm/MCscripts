@@ -106,8 +106,8 @@ timeout=0
 unset buffer
 # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
 until echo "$buffer" | grep -q 'Data saved'; do
-	# 1 minute timeout because server_read sleeps 1 second
-	if [ "$timeout" = 60 ]; then
+	# 5 minute timeout because server_read sleeps 1 second
+	if [ "$timeout" = 300 ]; then
 		server_do save resume
 		>&2 echo save query timeout
 	fi
