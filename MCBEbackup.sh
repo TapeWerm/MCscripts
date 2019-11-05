@@ -102,12 +102,19 @@ trap 'server_do save resume' ERR
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
 sleep 1
+timeout=0
 unset buffer
 # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
 until echo "$buffer" | grep -q 'Data saved'; do
+	# 1 minute timeout because server_read sleeps 1 second
+	if [ "$timeout" = 60 ]; then
+		server_do save resume
+		>&2 echo save query timeout
+	fi
 	# Check if backup is ready
 	server_do save query
 	server_read save query
+	timeout=$(( ++timeout ))
 done
 # grep only matching strings from line
 # ${world}not :...:#...

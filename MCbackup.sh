@@ -115,10 +115,17 @@ server_do save-off
 trap 'server_do save-on' ERR
 # Pause and save the server
 server_do save-all flush
+timeout=0
 unset buffer
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 until echo "$buffer" | grep -q 'Saved the game'; do
+	# 1 minute timeout because server_read sleeps 1 second
+	if [ "$timeout" = 60 ]; then
+		server_do save resume
+		>&2 echo save query timeout
+	fi
 	server_read save-all flush
+	timeout=$(( ++timeout ))
 done
 
 # zip restores path of directory given to it ($world), not just the directory itself
