@@ -29,15 +29,18 @@ server_read() {
 	# Wait for output
 	sleep 1
 	# Read buffer and unwrap lines from the first pane of the first window of session $sessionname on socket $tmux_socket
-	buffer=$(tmux -S "$tmux_socket" capture-pane -pJt "$sessionname:0.0" -S -)
-	# Trim off $buffer before the last occurence of $*
-	# If buffer exists append $0, if $0 contains cmd set buffer to $0, repeat, and in the end print buffer
-	# $0 is the current line in awk
-	buffer=$(echo "$buffer" | awk -v cmd="$*" '
-		buffer { buffer=buffer"\n"$0 }
-		$0~cmd { buffer=$0 }
-		END { print buffer }
-	')
+	scrape=$(tmux -S "$tmux_socket" capture-pane -pJt "$sessionname:0.0" -S -)
+	unset buffer
+	# Trim off $scrape before the last occurence of $*
+	# Escape \ while reading line from $scrape
+	while read -r line; do
+		if echo "$line" | grep -q "$*"; then
+			buffer=$line
+		elif [ -n "$buffer" ]; then
+			buffer=$buffer$'\n'$line
+		fi
+	# Bash process substitution
+	done < <(echo "$scrape")
 }
 
 case $1 in
@@ -123,6 +126,7 @@ until echo "$buffer" | grep -q 'Saved the game'; do
 	if [ "$timeout" = 60 ]; then
 		server_do save resume
 		>&2 echo save query timeout
+		exit 6
 	fi
 	server_read save-all flush
 	timeout=$(( ++timeout ))
