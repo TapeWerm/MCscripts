@@ -2,8 +2,8 @@
 
 # Exit if error
 set -e
-files='worlds whitelist.json permissions.json server.properties'
-pack_dirs='resource_packs behavior_packs'
+files='worlds *.json *.properties'
+pack_dirs='*_packs'
 syntax='`./MCBEupdate.sh $server_dir $minecraft_zip`'
 
 case $1 in
@@ -60,12 +60,11 @@ unzip "$minecraft_zip"
 basename "${minecraft_zip%.zip}" > version
 
 for pack_dir in $pack_dirs; do
-	# 3rd party packs
-	# grep fails if there's no match
-	packs=$(ls "$backup_dir/$pack_dir" | grep -Ev 'vanilla|chemistry' || true)
+	packs=$(ls "$backup_dir/$pack_dir")
 	# Escape \ while reading line from $packs
 	echo "$packs" | while read -r pack; do
-		cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"
+		# Don't clobber 1st party packs
+		cp -rn "$backup_dir/$pack_dir/$pack" "$pack_dir/"
 	done
 done
 for file in $files; do
