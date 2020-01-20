@@ -33,8 +33,8 @@ minecraft_zip=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /de
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 service=$2
-# service says Unit $service could not be found.
-if [ -n "$service" ] && service "$service" status 2>&1 | grep 'could not be found'; then
+# systemctl says Unit $service could not be found.
+if [ -n "$service" ] && systemctl status "$service" 2>&1 | grep 'could not be found'; then
 	exit 2
 fi
 
@@ -44,12 +44,11 @@ if [ -n "$service" ]; then
 		exit 3
 	elif [ "$installed_ver" != "$current_ver" ]; then
 		sudo systemctl stop "$service"
-		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo service "$service" start' ERR
+		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo systemctl start "$service"' ERR
 		# MCBEupdate.sh reads y asking if you stopped the server
 		echo y | sudo "$dir/MCBEupdate.sh" "$server_dir" "$minecraft_zip"
 		sudo chown -R mc:nogroup "$server_dir"
-		sudo service "$service" start
-		exit
+		sudo systemctl start "$service"
 	fi
 else
 	sudo mkdir "$server_dir"
