@@ -72,6 +72,7 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 ```bash
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
+## Bedrock Edition IRC bot setup
 If you want to post connect/disconnect messages to IRC:
 ```bash
 sudo su mc -s /bin/bash
