@@ -82,6 +82,7 @@ Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = Ctr
 JOIN #chan,#chan $key,$key
 irc.domain.tld:$port
 ```
+Copy and paste this block:
 ```bash
 exit
 sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.timer --now
