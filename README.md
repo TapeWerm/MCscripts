@@ -88,3 +88,5 @@ Copy and paste this block:
 exit
 sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.timer --now
 ```
+# Contributing
+Please run modified scripts through `shellcheck` before making a pull request. Like spell checkers, code linters aren't always right, but neither are we.
