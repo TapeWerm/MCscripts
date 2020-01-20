@@ -72,3 +72,17 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 ```bash
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
+If you want to post connect/disconnect messages to IRC:
+```bash
+sudo su mc -s /bin/bash
+mkdir ~/.MCBE_Bot
+```
+Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = Ctrl-G):
+```
+JOIN #chan,#chan $key,$key
+irc.domain.tld:$port
+```
+```bash
+exit
+sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.timer --now
+```
