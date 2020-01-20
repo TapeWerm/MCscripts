@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Based on kekbot by dom, Aatrox, and Hunner.
 
 # getent says $ip             STREAM $fqdn
 fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | cut -c 24-)
