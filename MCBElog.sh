@@ -41,11 +41,13 @@ scrape=$(tmux -S "$tmux_socket" capture-pane -pJt "$sessionname:0.0" -S -)
 buffer=$(echo "$scrape" | grep "$thyme" || true)
 # Escape \ while reading line from $buffer
 echo "$buffer" | while read -r line; do
-	player=$(echo "$line" | cut -d ' ' -f 6)
-	player=${player%,}
 	if echo "$line" | grep -q 'Player connected'; then
+		player=$(echo "$line" | cut -d ' ' -f 6)
+		player=${player%,}
 		echo "PRIVMSG #minecraft :$player connected" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
 	elif echo "$line" | grep -q 'Player disconnected'; then
+		player=$(echo "$line" | cut -d ' ' -f 6)
+		player=${player%,}
 		echo "PRIVMSG #minecraft :$player disconnected" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
 	fi
 done
