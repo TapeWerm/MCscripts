@@ -7,6 +7,3 @@ Requisite=mcbe-bot@%i.service
 ExecStart=/opt/MC/MCBElog.sh %i /tmp/tmux-mc/%i
 Type=oneshot
 User=mc
-
-[Install]
-WantedBy=multi-user.target

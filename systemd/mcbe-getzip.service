@@ -7,6 +7,3 @@ ExecStart=/bin/bash -c 'echo y | /opt/MC/MCBEgetZIP.sh'
 KillMode=none
 Type=oneshot
 User=mc
-
-[Install]
-WantedBy=multi-user.target

@@ -9,6 +9,3 @@ ExecStart=/opt/MC/MCBEbackup.sh /opt/MC/%i %i /opt/MC/backup_dir /tmp/tmux-mc/%i
 KillMode=none
 Type=oneshot
 User=mc
-
-[Install]
-WantedBy=multi-user.target
