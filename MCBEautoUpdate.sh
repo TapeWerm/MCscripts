@@ -33,8 +33,8 @@ minecraft_zip=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /de
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 service=$2
-# systemctl says Unit $service could not be found.
 if [ -n "$service" ]; then
+	# systemctl says Unit $service could not be found.
 	if systemctl status "$service" 2>&1 | grep 'could not be found'; then
 		exit 2
 	elif ! systemctl status "$service" | cut -d $'\n' -f 3 | grep -q ' active'; then

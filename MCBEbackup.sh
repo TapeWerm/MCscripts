@@ -58,8 +58,7 @@ fi
 
 server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
-# $properties says level-name=$world
-world=$(grep level-name "$properties" | cut -d = -f 2)
+world=$(grep ^level-name= "$properties" | cut -d = -f 2)
 world_dir=$server_dir/worlds
 if [ ! -d "$world_dir/$world" ]; then
 	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"

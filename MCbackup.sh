@@ -64,8 +64,7 @@ fi
 # Remove trailing slash
 server_dir=${1%/}
 properties=$server_dir/server.properties
-# $properties says level-name=$world
-world=$(grep level-name "$properties" | cut -d = -f 2)
+world=$(grep ^level-name= "$properties" | cut -d = -f 2)
 if [ ! -d "$server_dir/$world" ]; then
 	>&2 echo "No world $world in $server_dir, check level-name in server.properties too"
 	exit 2
