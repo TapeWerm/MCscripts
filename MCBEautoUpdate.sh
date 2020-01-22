@@ -28,19 +28,14 @@ server_dir=$1
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # There might be more than one ZIP in ~mc
 # ls fails if there's no match
-minecraft_zip=$(ls ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | head -n 1 || true)
+minecraft_zip=$(find ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | head -n 1 || true)
 # Trim off $minecraft_zip after last .zip
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 service=$2
-if [ -n "$service" ]; then
-	# systemctl says Unit $service could not be found.
-	if systemctl status "$service" 2>&1 | grep 'could not be found'; then
-		exit 2
-	elif ! systemctl status "$service" | cut -d $'\n' -f 3 | grep -q ' active'; then
-		>&2 echo "Service $service not active"
-		exit 3
-	fi
+if [ -n "$service" ] && ! systemctl status "$service" | cut -d $'\n' -f 3 | grep -q ' active'; then
+	>&2 echo "Service $service not active"
+	exit 3
 fi
 
 if [ -n "$service" ]; then
