@@ -80,7 +80,7 @@ mkdir ~/.MCBE_Bot
 ```
 Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = Ctrl-G):
 ```
-JOIN #chan,#chan $key,$key
+JOIN #chan $key
 irc.domain.tld:$port
 ```
 Copy and paste this block:

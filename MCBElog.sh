@@ -5,6 +5,10 @@ set -e
 syntax='`./MCBElog.sh $sessionname [$tmux_socket]`'
 thyme=$(date -d '1 min ago' '+%Y-%m-%d %H:%M')
 
+send() {
+	echo "PRIVMSG $chan :$*" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
+}
+
 case $1 in
 --help|-h)
 	echo Post Minecraft Bedrock Edition server connect/disconnect messages running in tmux session to IRC.
@@ -23,6 +27,11 @@ elif [ "$#" -gt 2 ]; then
 fi
 
 sessionname=$1
+join_file=~/.MCBE_Bot/${sessionname}_BotJoin.txt
+join=$(cut -d $'\n' -f 1 < "$join_file")
+chans=$(echo "$join" | cut -d ' ' -f 2)
+# Trim off $chans after first ,
+chan=${chans%%,*}
 
 if [ -n "$2" ]; then
 	# Remove trailing slash
@@ -44,10 +53,10 @@ echo "$buffer" | while read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
 		player=$(echo "$line" | cut -d ' ' -f 6)
 		player=${player%,}
-		echo "PRIVMSG #minecraft :$player connected" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
+		send "$player connected"
 	elif echo "$line" | grep -q 'Player disconnected'; then
 		player=$(echo "$line" | cut -d ' ' -f 6)
 		player=${player%,}
-		echo "PRIVMSG #minecraft :$player disconnected" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
+		send "$player disconnected"
 	fi
 done
