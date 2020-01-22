@@ -34,8 +34,13 @@ current_ver=$(basename "${minecraft_zip%.zip}")
 
 service=$2
 # systemctl says Unit $service could not be found.
-if [ -n "$service" ] && systemctl status "$service" 2>&1 | grep 'could not be found'; then
-	exit 2
+if [ -n "$service" ]; then
+	if systemctl status "$service" 2>&1 | grep 'could not be found'; then
+		exit 2
+	elif ! systemctl status "$service" | cut -d $'\n' -f 3 | grep -q ' active'; then
+		>&2 echo "Service $service not active"
+		exit 3
+	fi
 fi
 
 if [ -n "$service" ]; then
