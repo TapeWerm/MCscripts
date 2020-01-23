@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # Based on kekbot by dom, Aatrox, and Hunner.
 
-# getent says $ip             STREAM $fqdn
-fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | cut -c 24-)
+fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | awk '{print $3}')
 # $USER = `whoami` and is not set in cron
 uid=$(id -u "$(whoami)")
 ram=/dev/shm/$uid

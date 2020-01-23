@@ -6,7 +6,10 @@ syntax='`./MCBElog.sh $sessionname [$tmux_socket]`'
 thyme=$(date -d '1 min ago' '+%Y-%m-%d %H:%M')
 
 send() {
-	echo "PRIVMSG $chan :$*" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
+	status=$(systemctl status "mcbe-bot@$sessionname" | cut -d $'\n' -f 3 | awk '{print $2}')
+	if [ "$status" = active ]; then
+		echo "PRIVMSG $chan :$*" >> ~/.MCBE_Bot/"${sessionname}_BotBuffer"
+	fi
 }
 
 case $1 in

@@ -1,7 +1,7 @@
 [Unit]
-After=mcbe-bot@%i.service
+After=mcbe%i.service
 Description=Post Minecraft Bedrock Edition server connect/disconnect messages to IRC
-Requisite=mcbe-bot@%i.service
+Requisite=mcbe@%i.service
 
 [Service]
 ExecStart=/opt/MC/MCBElog.sh %i /tmp/tmux-mc/%i

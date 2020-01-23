@@ -33,9 +33,12 @@ minecraft_zip=$(find ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 service=$2
-if [ -n "$service" ] && ! systemctl status "$service" | cut -d $'\n' -f 3 | grep -q ' active'; then
-	>&2 echo "Service $service not active"
-	exit 3
+if [ -n "$service" ]; then
+	status=$(systemctl status "$service" | cut -d $'\n' -f 3 | awk '{print $2}')
+	if [ "$status" != active ]; then
+		>&2 echo "Service $service not active"
+		exit 3
+	fi
 fi
 
 if [ -n "$service" ]; then
