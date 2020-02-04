@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Based on kekbot by dom, Aatrox, and Hunner.
+# Based on kekbot by dom, Aatrox, and Hunner from the CAT @ Portland State University.
 
 fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | awk '{print $3}')
 # $USER = `whoami` and is not set in cron
