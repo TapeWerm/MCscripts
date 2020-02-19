@@ -117,8 +117,8 @@ if [ -n "$buffer" ]; then
 	fi
 fi
 
-server_do save hold
 # Prepare backup
+server_do save hold
 trap 'server_do save resume' ERR
 # Wait one second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than a second to run a command
