@@ -51,10 +51,10 @@ while [ "$1"  != -- ]; do
 		echo Back up Minecraft Bedrock Edition server world running in tmux session.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-b, --backup-dir=BACKUP_DIR    directory backups go in'
+		echo '-b, --backup-dir=BACKUP_DIR    directory backups go in. defaults to ~'
 		echo '-t, --tmux-socket=TMUX_SOCKET  socket tmux session is on'
 		echo
-		echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
+		echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in $backup_dir. $backup_dir is best on another drive.'
 		exit
 		;;
 	--tmux-socket|-t)
