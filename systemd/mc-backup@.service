@@ -4,7 +4,7 @@ Description=Back up Minecraft Java Edition server world
 Requisite=mc@%i.service
 
 [Service]
-ExecStart=/opt/MC/MCbackup.sh /opt/MC/%i %i /opt/MC/backup_dir /tmp/tmux-mc/%i
+ExecStart=/opt/MC/MCbackup.sh -b /opt/MC/backup_dir -t /tmp/tmux-mc/%i /opt/MC/%i %i
 KillMode=none
 Type=oneshot
 User=mc

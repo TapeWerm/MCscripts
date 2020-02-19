@@ -2,12 +2,12 @@
 
 # Exit if error
 set -e
-syntax='`./MCBEgetZIP.sh`'
+syntax='Usage: MCBEgetZIP.sh'
 
 case $1 in
 --help|-h)
-	echo "If the ZIP of the current version isn't in ~, download it, and remove outdated ZIPs in ~."
 	echo "$syntax"
+	echo "If the ZIP of the current version isn't in ~, download it, and remove outdated ZIPs in ~."
 	exit
 	;;
 esac

@@ -10,7 +10,7 @@ ExecReload=/usr/bin/tmux -S /tmp/tmux-mc/%i send-keys -t %i:0.0 reload Enter
 # Makes session %i on socket /tmp/tmux-mc/%i in background
 ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i new -ds %i ./start.bat
 ExecStartPre=/bin/mkdir -p /tmp/tmux-mc
-ExecStop=/opt/MC/MCstop.sh %i /tmp/tmux-mc/%i
+ExecStop=/opt/MC/MCstop.sh -t /tmp/tmux-mc/%i %i
 # Thanks for the security agowa338
 PrivateUsers=true
 ProtectHome=true

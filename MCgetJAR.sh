@@ -2,12 +2,12 @@
 
 # Exit if error
 set -e
-syntax='`./MCgetJAR.sh`'
+syntax='Usage: MCgetJAR.sh'
 
 case $1 in
 --help|-h)
-	echo "Download and chmod 700 the JAR of the current version."
 	echo "$syntax"
+	echo "Download and chmod 700 the JAR of the current version."
 	exit
 	;;
 esac

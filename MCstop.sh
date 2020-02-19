@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-syntax='`./MCstop.sh $sessionname [$tmux_socket]`'
+syntax='Usage: MCstop.sh [OPTION] ... SESSIONNAME'
 
 server_do() {
 	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
@@ -13,19 +13,33 @@ countdown() {
 	echo "$warning"
 }
 
-case $1 in
---help|-h)
-	echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
-	echo "$syntax"
-	echo Best ran by systemd before shutdown.
-	exit
-	;;
-esac
+args=$(getopt -l help,tmux-socket: -o ht: -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo Warn Minecraft Java Edition or Bedrock Edition server running in tmux session 10 seconds before stopping.
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '-t, --tmux-socket=TMUX_SOCKET  socket tmux session is on'
+		echo
+		echo Best ran by systemd before shutdown.
+		exit
+		;;
+	--tmux-socket|-t)
+		tmux_socket=$2
+		shift 2
+		;;
+	esac
+done
+shift
+
 if [ "$#" -lt 1 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"
 	exit 1
-elif [ "$#" -gt 2 ]; then
+elif [ "$#" -gt 1 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"
 	exit 1
@@ -33,9 +47,9 @@ fi
 
 sessionname=$1
 
-if [ -n "$2" ]; then
+if [ -n "$tmux_socket" ]; then
 	# Remove trailing slash
-	tmux_socket=${2%/}
+	tmux_socket=${tmux_socket%/}
 else
 	# $USER = `whoami` and is not set in cron
 	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default

@@ -2,7 +2,7 @@
 
 set -e
 # Exit if error
-syntax='`./MCbackup.sh $server_dir $sessionname [$backup_dir] [$tmux_socket]`'
+syntax='Usage: MCbackup.sh [OPTION] ... SERVER_DIR SESSIONNAME'
 # Filenames can't contain : on some filesystems
 thyme=$(date +%H-%M)
 date=$(date +%d)
@@ -43,19 +43,38 @@ server_read() {
 	done < <(echo "$scrape")
 }
 
-case $1 in
---help|-h)
-	echo Back up Minecraft Java Edition server world running in tmux session.
-	echo "$syntax"
-	echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
-	exit
-	;;
-esac
+args=$(getopt -l backup-dir:,help,tmux-socket: -o b:ht: -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--backup-dir|-b)
+		backup_dir=$2
+		shift 2
+		;;
+	--help|-h)
+		echo "$syntax"
+		echo Back up Minecraft Java Edition server world running in tmux session.
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '-b, --backup-dir=BACKUP_DIR    directory backups go in'
+		echo '-t, --tmux-socket=TMUX_SOCKET  socket tmux session is on'
+		echo
+		echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in ~ or $backup_dir if applicable. $backup_dir is best on another drive.'
+		exit
+		;;
+	--tmux-socket|-t)
+		tmux_socket=$2
+		shift 2
+		;;
+	esac
+done
+shift
+
 if [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"
 	exit 1
-elif [ "$#" -gt 4 ]; then
+elif [ "$#" -gt 2 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"
 	exit 1
@@ -72,8 +91,8 @@ fi
 
 sessionname=$2
 
-if [ -n "$3" ]; then
-	backup_dir=$(realpath "$3")
+if [ -n "$backup_dir" ]; then
+	backup_dir=$(realpath "$backup_dir")
 else
 	backup_dir=~
 fi
@@ -82,8 +101,8 @@ backup_dir=$backup_dir/$(basename "$server_dir")_Backups/${world}_Backups/$year/
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$thyme.zip
 
-if [ -n "$4" ]; then
-	tmux_socket=${4%/}
+if [ -n "$tmux_socket" ]; then
+	tmux_socket=${tmux_socket%/}
 else
 	# $USER = `whoami` and is not set in cron
 	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default

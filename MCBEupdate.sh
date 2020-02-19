@@ -4,12 +4,13 @@
 set -e
 files='worlds *.json *.properties'
 pack_dirs='*_packs'
-syntax='`./MCBEupdate.sh $server_dir $minecraft_zip`'
+syntax='Usage: MCBEupdate.sh SERVER_DIR MINECRAFT_ZIP`'
 
 case $1 in
 --help|-h)
-	echo 'Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, and PROPERTIES files. Other files will be removed. You can convert a Windows $server_dir to Ubuntu and vice versa.'
 	echo "$syntax"
+	echo 'Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, and PROPERTIES files. Other files will be removed. You can convert a Windows $server_dir to Ubuntu and vice versa.'
+	echo
 	echo '$minecraft_zip cannot be in $server_dir. Remember to stop server before updating.'
 	exit
 	;;

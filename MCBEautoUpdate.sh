@@ -4,20 +4,33 @@
 set -e
 # $0 is this script
 dir=$(dirname "$0")
-syntax='`./MCBEautoUpdate.sh $server_dir [$service]`'
+syntax='Usage: MCBEautoUpdate.sh [OPTION] ... SERVER_DIR'
 
-case $1 in
---help|-h)
-	echo 'If $server_dir/version '"isn't the same as the ZIP in ~mc, update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc "'$server_dir.'
-	echo "$syntax"
-	exit
-	;;
-esac
+args=$(getopt -l help,service: -o hs: -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo 'If $server_dir/version '"isn't the same as the ZIP in ~mc, update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc "'$server_dir.'
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '-s, --service=SERVICE  service of Minecraft Bedrock Edition server'
+		exit
+		;;
+	--service|-s)
+		service=$2
+		shift 2
+		;;
+	esac
+done
+shift
+
 if [ "$#" -lt 1 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"
 	exit 1
-elif [ "$#" -gt 2 ]; then
+elif [ "$#" -gt 1 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"
 	exit 1
@@ -32,7 +45,6 @@ minecraft_zip=$(find ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /
 # Trim off $minecraft_zip after last .zip
 current_ver=$(basename "${minecraft_zip%.zip}")
 
-service=$2
 if [ -n "$service" ]; then
 	status=$(systemctl status "$service" | cut -d $'\n' -f 3 | awk '{print $2}')
 	if [ "$status" != active ]; then

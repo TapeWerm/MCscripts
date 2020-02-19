@@ -3,7 +3,7 @@ After=mcbe-getzip.service mcbe@%i.service mcbe-backup@%i.service
 Description=Automatically update Minecraft Bedrock Edition server
 
 [Service]
-ExecStart=/opt/MC/MCBEautoUpdate.sh /opt/MC/%i mcbe@%i
+ExecStart=/opt/MC/MCBEautoUpdate.sh -s mcbe@%i /opt/MC/%i
 KillMode=none
 Type=oneshot
 

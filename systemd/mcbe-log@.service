@@ -4,6 +4,6 @@ Description=Post Minecraft Bedrock Edition server connect/disconnect messages to
 Requisite=mcbe@%i.service
 
 [Service]
-ExecStart=/opt/MC/MCBElog.sh %i /tmp/tmux-mc/%i
+ExecStart=/opt/MC/MCBElog.sh -t /tmp/tmux-mc/%i %i
 Type=oneshot
 User=mc
