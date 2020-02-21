@@ -59,7 +59,7 @@ while [ "$1"  != -- ]; do
 		echo '-b, --backup-dir=BACKUP_DIR    directory backups go in. defaults to ~. best on another drive'
 		echo '-t, --tmux-socket=TMUX_SOCKET  socket tmux session is on'
 		echo
-		echo 'Backups are ${server_dir}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in $backup_dir.'
+		echo 'Backups are ${SERVER_DIR}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in BACKUP_DIR.'
 		exit
 		;;
 	--tmux-socket|-t)
