@@ -1,6 +1,6 @@
 [Unit]
 After=mcbe-getzip.service mcbe@%i.service mcbe-backup@%i.service
-Description=Automatically update Minecraft Bedrock Edition server
+Description=Automatically update Minecraft Bedrock Edition server @ %i
 
 [Service]
 ExecStart=/opt/MC/MCBEautoUpdate.sh -s mcbe@%i /opt/MC/%i

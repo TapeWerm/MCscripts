@@ -1,7 +1,7 @@
 [Unit]
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
 After=network.target
-Description=Minecraft Java Edition server
+Description=Minecraft Java Edition server @ %i
 
 [Service]
 # Enter reload in the first pane of the first window of session %i on socket /tmp/tmux-mc/%i
