@@ -1,0 +1,8 @@
+[Unit]
+BindsTo=%N.service
+
+[Socket]
+ListenFIFO=%t/%N
+RemoveOnStop=true
+SocketMode=600
+SocketUser=mc

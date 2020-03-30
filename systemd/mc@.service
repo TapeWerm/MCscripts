@@ -1,16 +1,14 @@
 [Unit]
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
 After=network.target
+BindsTo=%N.socket
 Description=Minecraft Java Edition server @ %i
 
 [Service]
-# Enter reload in the first pane of the first window of session %i on socket /tmp/tmux-mc/%i
 # which says script path
-ExecReload=/usr/bin/tmux -S /tmp/tmux-mc/%i send-keys -t %i:0.0 reload Enter
-# Makes session %i on socket /tmp/tmux-mc/%i in background
-ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i new -ds %i ./start.bat
-ExecStartPre=/bin/mkdir -p /tmp/tmux-mc
-ExecStop=/opt/MC/MCstop.sh -t /tmp/tmux-mc/%i %i
+ExecReload=/bin/bash -c 'echo reload > %t/%N'
+ExecStart=/bin/bash -c './start.bat'
+ExecStop=/opt/MC/MCstop.sh %N
 # Thanks for the security agowa338
 PrivateUsers=true
 ProtectHome=true
@@ -19,7 +17,11 @@ ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectSystem=full
 Restart=on-failure
-Type=forking
+# Thanks for sockets Lukáš Zapletal
+StandardInput=socket
+StandardOutput=journal
+StandardError=journal
+Type=simple
 User=mc
 WorkingDirectory=/opt/MC/%i
 

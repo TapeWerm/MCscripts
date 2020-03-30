@@ -3,15 +3,18 @@ Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd unit
 
 @@@ **Compatible with Ubuntu** @@@
 
-Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run the scripts without enabling the systemd units, except for [MCBEautoUpdate.sh](MCBEautoUpdate.sh). No automatic update scripts or IRC bot for Java Edition.
+Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but no others. No automatic update scripts or IRC bot for Java Edition.
 # Notes
-How to attach to the systemd service's tmux session (server console):
+How to send input to and read output from the server console:
 ```bash
-sudo su mc -s /bin/bash
-# Example: systemctl status mc@$instance
-tmux -S "/tmp/tmux-mc/$instance" a
+# Send input to server console
+echo $input | sudo tee /run/$service
+# Read output from server console
+systemctl status $service
+# Bedrock Dedicated Server example
+echo save query | sudo tee /run/mcbe@MCBE
+systemctl status mcbe@MCBE
 ```
-Press <kbd>Ctrl</kbd>-<kbd>B</kbd> then <kbd>D</kbd> to detach from a tmux session. `exit` to switch back to previous user.
 
 How to control systemd services:
 ```bash
@@ -27,7 +30,7 @@ Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` 
 # Setup
 Open Terminal:
 ```bash
-sudo apt install git tmux wget zip
+sudo apt install git wget zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
@@ -94,6 +97,6 @@ irc.domain.tld:$port
 Copy and paste this block:
 ```bash
 exit
-sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.timer --now
+sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
 ```
 # [Contributing](CONTRIBUTING.md)

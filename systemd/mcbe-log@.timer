@@ -1,8 +1,0 @@
-[Unit]
-Description=Post Minecraft Bedrock Edition server connect/disconnect messages to IRC every minute @ %i
-
-[Timer]
-OnCalendar=*-*-* *:*
-
-[Install]
-WantedBy=timers.target

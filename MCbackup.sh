@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-syntax='Usage: MCbackup.sh [OPTION] ... SERVER_DIR SESSIONNAME'
+syntax='Usage: MCbackup.sh [OPTION] ... SERVER_DIR SERVICE'
 # Filenames can't contain : on some filesystems
 thyme=$(date +%H-%M)
 date=$(date +%d)
@@ -10,17 +10,17 @@ month=$(date +%b)
 year=$(date +%Y)
 
 server_do() {
-	# Enter $* in the first pane of the first window of session $sessionname on socket $tmux_socket
-	tmux -S "$tmux_socket" send-keys -t "$sessionname:0.0" "$*" Enter
+	epoch=$(date +%s.%N)
+	echo "$*" > "/run/$service"
 }
 
 countdown() {
-	warning="Autosave pausing for backups in $*"
+	warning="Server stopping in $*"
 	server_do say "$warning"
 	echo "$warning"
 }
 
-# Set $buffer to buffer from $sessionname from the last occurence of $* to the end
+# Set $buffer to output of $service from the last occurence of $* to the end
 # Pass same $* as server_do to see output afterward
 # $buffer may not have output from server_do first try
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
@@ -28,22 +28,29 @@ countdown() {
 server_read() {
 	# Wait for output
 	sleep 1
-	# Read buffer and unwrap lines from the first pane of the first window of session $sessionname on socket $tmux_socket
-	scrape=$(tmux -S "$tmux_socket" capture-pane -pJt "$sessionname:0.0" -S -)
+	id=$(systemctl show "$service" -p InvocationID --value)
+	# Output of $service since last invocation with unix timestamps
+	scrape=$(journalctl _SYSTEMD_INVOCATION_ID="$id" -o short-unix)
+	# Trim off header line from $scrape
+	scrape=$(echo "$scrape" | tail -n +2)
 	unset buffer
-	# Trim off $scrape before the last occurence of $*
+	# Trim off logs before $epoch and metadata from $scrape
 	# Escape \ while reading line from $scrape
 	while read -r line; do
-		if echo "$line" | grep -q "$*"; then
-			buffer=$line
-		elif [ -n "$buffer" ]; then
-			buffer=$buffer$'\n'$line
+		stamp=$(echo "$line" | awk '{print $1}')
+		if [[ "$stamp" > "$epoch" ]]; then
+			log=$(echo "$line" | cut -d : -f 2- | cut -c 2-)
+			if [ -z "$buffer" ]; then
+				buffer=$log
+			else
+				buffer=$buffer$'\n'$log
+			fi
 		fi
 	# Bash process substitution
 	done < <(echo "$scrape")
 }
 
-args=$(getopt -l backup-dir:,help,tmux-socket: -o b:ht: -- "$@")
+args=$(getopt -l backup-dir:,help -o b:h -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -53,18 +60,13 @@ while [ "$1"  != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo Back up Minecraft Java Edition server world running in tmux session.
+		echo Back up Minecraft Java Edition server world running in service.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR    directory backups go in. defaults to ~. best on another drive'
-		echo '-t, --tmux-socket=TMUX_SOCKET  socket tmux session is on'
 		echo
 		echo 'Backups are ${SERVER_DIR}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in BACKUP_DIR.'
 		exit
-		;;
-	--tmux-socket|-t)
-		tmux_socket=$2
-		shift 2
 		;;
 	esac
 done
@@ -89,7 +91,12 @@ if [ ! -d "$server_dir/$world" ]; then
 	exit 1
 fi
 
-sessionname=$2
+service=$2
+status=$(systemctl status "$service" | cut -d $'\n' -f 3 | awk '{print $2}')
+if [ "$status" != active ]; then
+	>&2 echo "Service $service not active"
+	exit 1
+fi
 
 if [ -n "$backup_dir" ]; then
 	backup_dir=$(realpath "$backup_dir")
@@ -101,21 +108,12 @@ backup_dir=$backup_dir/$(basename "$server_dir")_Backups/${world}_Backups/$year/
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$thyme.zip
 
-if [ -n "$tmux_socket" ]; then
-	tmux_socket=${tmux_socket%/}
-else
-	# $USER = `whoami` and is not set in cron
-	tmux_socket=/tmp/tmux-$(id -u "$(whoami)")/default
-fi
-if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
-	>&2 echo "No session $sessionname on socket $tmux_socket"
-	exit 1
-fi
-
-server_read save-off
+server_read
 # If save was off
 if [ -n "$buffer" ]; then
-	if ! echo "$buffer" | grep -q 'save-on'; then
+	# The last line that matches either is the current save state
+	state=$(echo "$buffer" | grep -E 'Automatic saving is now (disabled|enabled)' | tail -n 1)
+	if echo "$state" | grep -q 'Automatic saving is now disabled'; then
 		>&2 echo Save off, is a backup in progress?
 		exit 1
 	fi
@@ -146,7 +144,7 @@ until echo "$buffer" | grep -q 'Saved the game'; do
 		>&2 echo save query timeout
 		exit 1
 	fi
-	server_read save-all flush
+	server_read
 	timeout=$(( ++timeout ))
 done
 

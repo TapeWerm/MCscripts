@@ -5,7 +5,6 @@ Description=Back up Minecraft Bedrock Edition server world @ %i
 Requisite=mcbe@%i.service
 
 [Service]
-ExecStart=/opt/MC/MCBEbackup.sh -b /opt/MC/backup_dir -t /tmp/tmux-mc/%i /opt/MC/%i %i
+ExecStart=/opt/MC/MCBEbackup.sh -b /opt/MC/backup_dir /opt/MC/%i mcbe@%i
 KillMode=none
 Type=oneshot
-User=mc
