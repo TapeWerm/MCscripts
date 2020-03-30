@@ -4,13 +4,9 @@ Description=Minecraft Bedrock Edition server IRC bot @ %i
 Requisite=mcbe@%i.service
 
 [Service]
-# Makes session %i_Bot on socket /tmp/tmux-mc/%i_Bot in background
-# which says script path
-ExecStart=/usr/bin/tmux -S /tmp/tmux-mc/%i_Bot new -ds %i_Bot ./MCBE_Bot.sh %i_Bot
-ExecStartPre=/bin/mkdir -p /tmp/tmux-mc
-ExecStop=/usr/bin/tmux -S /tmp/tmux-mc/%i_Bot kill-session -t %i_Bot
+ExecStart=/opt/MC/MCBE_Bot.sh %i_Bot
 Restart=always
-Type=forking
+Type=simple
 User=mc
 WorkingDirectory=/opt/MC
 
