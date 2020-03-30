@@ -29,13 +29,13 @@ server_dir=$(realpath "$1")
 backup_dir=/tmp/$(basename "$server_dir")
 if [ -f "$backup_dir" ]; then
 	>&2 echo "Backup dir $backup_dir already exists, check and remove it"
-	exit 7
+	exit 1
 fi
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
 	>&2 echo '$minecraft_zip cannot be in $server_dir'
-	exit 6
+	exit 1
 fi
 # Test extracting $minecraft_zip partially quietly
 unzip -tq "$minecraft_zip"
@@ -45,7 +45,7 @@ read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then
 	>&2 echo "$input != y"
-	exit 5
+	exit 1
 fi
 
 cd "$server_dir"

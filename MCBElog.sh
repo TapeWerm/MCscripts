@@ -58,7 +58,7 @@ else
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	>&2 echo "No session $sessionname on socket $tmux_socket"
-	exit 2
+	exit 1
 fi
 
 scrape=$(tmux -S "$tmux_socket" capture-pane -pJt "$sessionname:0.0" -S -)

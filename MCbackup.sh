@@ -86,7 +86,7 @@ properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2)
 if [ ! -d "$server_dir/$world" ]; then
 	>&2 echo "No world $world in $server_dir, check level-name in server.properties too"
-	exit 2
+	exit 1
 fi
 
 sessionname=$2
@@ -109,7 +109,7 @@ else
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	>&2 echo "No session $sessionname on socket $tmux_socket"
-	exit 4
+	exit 1
 fi
 
 server_read save-off
@@ -117,7 +117,7 @@ server_read save-off
 if [ -n "$buffer" ]; then
 	if ! echo "$buffer" | grep -q 'save-on'; then
 		>&2 echo Save off, is a backup in progress?
-		exit 5
+		exit 1
 	fi
 fi
 
@@ -144,7 +144,7 @@ until echo "$buffer" | grep -q 'Saved the game'; do
 	if [ "$timeout" = 60 ]; then
 		server_do save resume
 		>&2 echo save query timeout
-		exit 6
+		exit 1
 	fi
 	server_read save-all flush
 	timeout=$(( ++timeout ))

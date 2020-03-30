@@ -33,7 +33,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 	if [ "$input" != y ]; then
 		>&2 echo "$input != y"
-		exit 3
+		exit 1
 	fi
 
 	trap 'sudo rm -f ~/"$current_ver"' ERR

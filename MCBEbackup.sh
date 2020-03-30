@@ -81,7 +81,7 @@ world=$(grep ^level-name= "$properties" | cut -d = -f 2)
 world_dir=$server_dir/worlds
 if [ ! -d "$world_dir/$world" ]; then
 	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
-	exit 2
+	exit 1
 fi
 
 sessionname=$2
@@ -105,7 +105,7 @@ else
 fi
 if ! tmux -S "$tmux_socket" ls | grep -q "^$sessionname:"; then
 	>&2 echo "No session $sessionname on socket $tmux_socket"
-	exit 4
+	exit 1
 fi
 
 server_read save hold
@@ -113,7 +113,7 @@ server_read save hold
 if [ -n "$buffer" ]; then
 	if ! echo "$buffer" | grep -q 'save resume'; then
 		>&2 echo Save held, is a backup in progress?
-		exit 5
+		exit 1
 	fi
 fi
 
@@ -131,7 +131,7 @@ until echo "$buffer" | grep -q 'Data saved'; do
 	if [ "$timeout" = 60 ]; then
 		server_do save resume
 		>&2 echo save query timeout
-		exit 6
+		exit 1
 	fi
 	# Check if backup is ready
 	server_do save query
