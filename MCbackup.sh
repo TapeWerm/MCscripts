@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
 # Exit if error
+set -e
 syntax='Usage: MCbackup.sh [OPTION] ... SERVER_DIR SESSIONNAME'
 # Filenames can't contain : on some filesystems
 thyme=$(date +%H-%M)
