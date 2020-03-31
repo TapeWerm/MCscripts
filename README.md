@@ -8,11 +8,11 @@ Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup
 How to send input to and read output from the server console:
 ```bash
 # Send input to server console
-echo $input | sudo tee /run/$service
+sudo su mc -s /bin/bash -c "echo $input > /run/$service"
 # Read output from server console
 systemctl status $service
 # Bedrock Dedicated Server example
-echo save query | sudo tee /run/mcbe@MCBE
+sudo su mc -s /bin/bash -c "echo save query > /run/mcbe@MCBE"
 systemctl status mcbe@MCBE
 ```
 
