@@ -9,12 +9,23 @@ send() {
 	if [ "$status" = active ]; then
 		echo "PRIVMSG $chan :$*" >> ~mc/.MCBE_Bot/"${instance}_BotBuffer"
 	fi
+	if [ -f ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt" ]; then
+		# Escape \ while reading line from file
+		while read -r url; do
+			if echo "$url" | grep -q 'https://discordapp\.com'; then
+				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" "$url"
+			# Rocket Chat can be hosted by any domain
+			elif echo "$url" | grep -q 'https://rocket\.'; then
+				curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" "$url"
+			fi
+		done < ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt"
+	fi
 }
 
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo Post Minecraft Bedrock Edition server connect/disconnect messages running in service to IRC.
+	echo Post Minecraft Bedrock Edition server connect/disconnect messages running in service to chat.
 	exit
 	;;
 esac
@@ -45,7 +56,6 @@ chans=$(echo "$join" | cut -d ' ' -f 2)
 chan=${chans%%,*}
 
 # Follow log for unit $service 0 lines from bottom, no metadata
-# Escape \ while reading line from journalctl
 journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
 		player=$(echo "$line" | cut -d ' ' -f 6)

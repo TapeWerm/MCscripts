@@ -1,6 +1,6 @@
 [Unit]
 After=mcbe@%i.service
-Description=Post Minecraft Bedrock Edition server connect/disconnect messages to IRC @ %i
+Description=Post Minecraft Bedrock Edition server connect/disconnect messages to chat @ %i
 Requisite=mcbe@%i.service
 
 [Service]

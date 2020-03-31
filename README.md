@@ -1,9 +1,9 @@
 # Description
-Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd units, bash scripts, and IRC bot for backups, automatic updates, installation, and shutdown warnings
+Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd units, bash scripts, and chat bots for backups, automatic updates, installation, and shutdown warnings
 
 @@@ **Compatible with Ubuntu** @@@
 
-Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but no others. No automatic update scripts or IRC bot for Java Edition.
+Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but no others. No automatic update scripts or chat bots for Java Edition.
 # Notes
 How to send input to and read output from the server console:
 ```bash
@@ -87,7 +87,7 @@ sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 If you want to post connect/disconnect messages to IRC:
 ```bash
 sudo su mc -s /bin/bash
-mkdir ~/.MCBE_Bot
+mkdir -p ~/.MCBE_Bot
 ```
 Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = Ctrl-G):
 ```
@@ -98,5 +98,22 @@ Copy and paste this block:
 ```bash
 exit
 sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
+```
+# Bedrock Edition webhook bots setup
+If you want to post connect/disconnect messages to webhook bots (Discord and Rocket Chat):
+```bash
+sudo su mc -s /bin/bash
+mkdir -p ~/.MCBE_Bot
+```
+Enter `nano ~/.MCBE_Bot/MCBE_BotWebhook.txt`, fill this in, and write out (^G = Ctrl-G):
+```
+$url
+$url
+...
+```
+Copy and paste this block:
+```bash
+exit
+sudo systemctl enable mcbe-log@MCBE.service --now
 ```
 # [Contributing](CONTRIBUTING.md)
