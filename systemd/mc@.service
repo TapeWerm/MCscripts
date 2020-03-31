@@ -17,7 +17,6 @@ ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectSystem=full
 Restart=on-failure
-# Thanks for sockets Lukáš Zapletal
 StandardInput=socket
 StandardOutput=journal
 StandardError=journal
