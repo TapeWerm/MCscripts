@@ -25,7 +25,7 @@ send() {
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo Post Minecraft Bedrock Edition server connect/disconnect messages running in service to chat.
+	echo 'Post Minecraft Bedrock Edition server connect/disconnect messages running in service to IRC and webhooks (Discord and Rocket Chat).'
 	exit
 	;;
 esac
