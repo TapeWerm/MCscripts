@@ -99,7 +99,7 @@ Copy and paste this block:
 exit
 sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
 ```
-# Bedrock Edition webhook bots setup
+## Bedrock Edition webhook bots setup
 If you want to post connect/disconnect messages to webhook bots (Discord and Rocket Chat):
 ```bash
 sudo su mc -s /bin/bash
