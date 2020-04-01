@@ -40,9 +40,9 @@ sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
 ```bash
-for file in $(ls *.sh); do sudo cp "$file" ~mc/; done
+sudo cp -v *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
-for file in $(ls systemd); do sudo cp "systemd/$file" /etc/systemd/system/; done
+sudo cp -v systemd/* /etc/systemd/system/
 ```
 ## Java Edition setup
 Stop the Minecraft server.
