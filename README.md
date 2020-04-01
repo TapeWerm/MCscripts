@@ -40,7 +40,6 @@ sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
 ```bash
-echo set -g default-shell /bin/bash | sudo tee ~mc/.tmux.conf
 for file in $(ls *.sh); do sudo cp "$file" ~mc/; done
 sudo chown -h mc:nogroup ~mc/*
 for file in $(ls systemd); do sudo cp "systemd/$file" /etc/systemd/system/; done
