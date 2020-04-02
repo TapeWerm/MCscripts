@@ -68,9 +68,7 @@ Stop the Minecraft server.
 # Move server directory or
 sudo mv "$server_dir" ~mc/MCBE
 # Make new server directory
-sudo su mc -s /bin/bash
-~/MCBEgetZIP.sh
-exit
+sudo su mc -s /bin/bash -c '~/MCBEgetZIP.sh'
 sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
 ```
 Copy and paste this block:
