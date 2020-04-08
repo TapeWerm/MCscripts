@@ -5,6 +5,7 @@ Requisite=mcbe@%i.service
 
 [Service]
 ExecStart=/opt/MC/MCBElog.sh mcbe@%i
+Restart=always
 Type=simple
 
 [Install]
