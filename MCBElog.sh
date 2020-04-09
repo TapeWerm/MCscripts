@@ -50,16 +50,11 @@ fi
 # Trim off $service before last @
 instance=${service##*@}
 join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
-if [ -f $join_file ]; then
+if [ -f "$join_file" ]; then
 	join=$(cut -d $'\n' -f 1 < "$join_file")
 	chans=$(echo "$join" | cut -d ' ' -f 2)
 	# Trim off $chans after first ,
 	chan=${chans%%,*}
-fi
-
-world=Unknown
-if [ -f ~mc/${instance}/server.properties ]; then
-	world=$(sed -n -E 's/level-name=(.*)/\1/p' ~mc/${instance}/server.properties)
 fi
 
 # Follow log for unit $service 0 lines from bottom, no metadata
@@ -67,10 +62,10 @@ journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
 		player=$(echo "$line" | cut -d ' ' -f 6)
 		player=${player%,}
-		send "$player connected to $world"
+		send "$player connected to $instance"
 	elif echo "$line" | grep -q 'Player disconnected'; then
 		player=$(echo "$line" | cut -d ' ' -f 6)
 		player=${player%,}
-		send "$player disconnected from $world"
+		send "$player disconnected from $instance"
 	fi
 done
