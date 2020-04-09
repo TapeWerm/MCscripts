@@ -4,6 +4,7 @@ Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd unit
 @@@ **Compatible with Ubuntu** @@@
 
 Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but no others. No automatic update scripts or chat bots for Java Edition.
+# [Contributing](CONTRIBUTING.md)
 # Notes
 How to send input to and read output from the server console:
 ```bash
@@ -113,4 +114,3 @@ Copy and paste this block:
 exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
-# [Contributing](CONTRIBUTING.md)
