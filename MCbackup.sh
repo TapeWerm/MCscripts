@@ -31,22 +31,8 @@ server_read() {
 	if [ -z "$timestamp" ]; then
 		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3)
 	fi
-	# Output of $service since $timestamp with unix timestamps
-	scrape=$(journalctl -u "$service" -S "$timestamp" -o short-unix)
-	# Trim off header line from $scrape
-	scrape=$(echo "$scrape" | tail -n +2)
-	unset buffer
-	# Trim off metadata from $scrape
-	# Escape \ while reading line from $scrape
-	while read -r line; do
-		log=$(echo "$line" | cut -d : -f 2- | cut -c 2-)
-		if [ -z "$buffer" ]; then
-			buffer=$log
-		else
-			buffer=$buffer$'\n'$log
-		fi
-	# Bash process substitution
-	done < <(echo "$scrape")
+	# Output of $service since $timestamp with no metadata
+	buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
 }
 
 args=$(getopt -l backup-dir:,help -o b:h -- "$@")
