@@ -1,5 +1,5 @@
 [Unit]
-After=mcbe@%i.service
+After=mcbe@%i.service mcbe-bot@%i.service
 Description=Post Minecraft Bedrock Edition server connect/disconnect messages to chat @ %i
 Requisite=mcbe@%i.service
 
@@ -9,5 +9,5 @@ Restart=always
 Type=simple
 
 [Install]
-# Start after mcbe-bot@%i.service
-WantedBy=mcbe-bot@%i.service
+# Start after mcbe@%i.service
+WantedBy=mcbe@%i.service
