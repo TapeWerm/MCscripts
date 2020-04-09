@@ -11,34 +11,34 @@ month=$(date +%b)
 year=$(date +%Y)
 
 server_do() {
-	epoch=$(date +%s.%N)
+	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 	echo "$*" > "/run/$service"
 }
 
-# Set $buffer to output of $service after $epoch set by server_do
+# Set $buffer to output of $service after $timestamp set by server_do
+# If $timestamp doesn't exist set it to when $service started
 # $buffer may not have output from server_do first try
 # unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
 # Read until $wanted_output is read
 server_read() {
 	# Wait for output
 	sleep 1
-	id=$(systemctl show "$service" -p InvocationID --value)
-	# Output of $service since last invocation with unix timestamps
-	scrape=$(journalctl _SYSTEMD_INVOCATION_ID="$id" -o short-unix)
+	if [ -z "$timestamp" ]; then
+		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3)
+	fi
+	# Output of $service since $timestamp with unix timestamps
+	scrape=$(journalctl -u "$service" -S "$timestamp" -o short-unix)
 	# Trim off header line from $scrape
 	scrape=$(echo "$scrape" | tail -n +2)
 	unset buffer
-	# Trim off logs before $epoch and metadata from $scrape
+	# Trim off metadata from $scrape
 	# Escape \ while reading line from $scrape
 	while read -r line; do
-		stamp=$(echo "$line" | awk '{print $1}')
-		if [[ "$stamp" > "$epoch" ]]; then
-			log=$(echo "$line" | cut -d : -f 2- | cut -c 2-)
-			if [ -z "$buffer" ]; then
-				buffer=$log
-			else
-				buffer=$buffer$'\n'$log
-			fi
+		log=$(echo "$line" | cut -d : -f 2- | cut -c 2-)
+		if [ -z "$buffer" ]; then
+			buffer=$log
+		else
+			buffer=$buffer$'\n'$log
 		fi
 	# Bash process substitution
 	done < <(echo "$scrape")
