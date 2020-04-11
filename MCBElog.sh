@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Exit if error
-set -e
 syntax='Usage: MCBElog.sh SERVICE'
 
 send() {
