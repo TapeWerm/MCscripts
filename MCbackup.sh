@@ -48,7 +48,7 @@ while [ "$1"  != -- ]; do
 		echo Back up Minecraft Java Edition server world running in service.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-b, --backup-dir=BACKUP_DIR    directory backups go in. defaults to ~. best on another drive'
+		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
 		echo
 		echo 'Backups are ${SERVER_DIR}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in BACKUP_DIR.'
 		exit
@@ -77,7 +77,7 @@ if [ ! -d "$server_dir/$world" ]; then
 fi
 
 service=$2
-status=$(systemctl status "$service" | cut -d $'\n' -f 3 | awk '{print $2}')
+status=$(systemctl show "$service" -p ActiveState --value)
 if [ "$status" != active ]; then
 	>&2 echo "Service $service not active"
 	exit 1

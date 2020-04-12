@@ -41,12 +41,12 @@ server_dir=$1
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # There might be more than one ZIP in ~mc
 # ls fails if there's no match
-minecraft_zip=$(find ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | head -n 1 || true)
+minecraft_zip=$(find ~mc/bedrock-server-[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\.zip 2> /dev/null | xargs -0d '\n' ls -t | head -n 1 || true)
 # Trim off $minecraft_zip after last .zip
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 if [ -n "$service" ]; then
-	status=$(systemctl status "$service" | cut -d $'\n' -f 3 | awk '{print $2}')
+	status=$(systemctl show "$service" -p ActiveState --value)
 	if [ "$status" != active ]; then
 		>&2 echo "Service $service not active"
 		exit 1

@@ -3,7 +3,7 @@
 syntax='Usage: MCBElog.sh SERVICE'
 
 send() {
-	status=$(systemctl status "mcbe-bot@$instance" | cut -d $'\n' -f 3 | awk '{print $2}')
+	status=$(systemctl show "mcbe-bot@$instance" -p ActiveState --value)
 	if [ "$status" = active ]; then
 		echo "PRIVMSG $chan :$*" >> ~mc/.MCBE_Bot/"${instance}_BotBuffer"
 	fi
@@ -39,7 +39,7 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 service=$1
-status=$(systemctl status "$service" | cut -d $'\n' -f 3 | awk '{print $2}')
+status=$(systemctl show "$service" -p ActiveState --value)
 if [ "$status" != active ]; then
 	>&2 echo "Service $service not active"
 	exit 1

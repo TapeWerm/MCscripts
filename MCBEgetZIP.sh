@@ -2,15 +2,29 @@
 
 # Exit if error
 set -e
-syntax='Usage: MCBEgetZIP.sh'
+clobber=true
+syntax='Usage: MCBEgetZIP.sh [OPTION] ...'
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo "If the ZIP of the current version isn't in ~, download it, and remove outdated ZIPs in ~."
-	exit
-	;;
-esac
+args=$(getopt -l help,no-clobber -o hn -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo "If the ZIP of the current version isn't in ~, download it, and remove outdated ZIPs in ~."
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo "-n, --no-clobber  don't remove outdated ZIPs in ~"
+		exit
+		;;
+	--no-clobber|-n)
+		clobber=false
+		shift
+		;;
+	esac
+done
+shift
+
 if [ "$#" -gt 1 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"
@@ -40,5 +54,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	wget --prefer-family=IPv4 "$url" -O ~/"$current_ver"
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	trap - ERR
-	echo "$installed_ver" | xargs -d '\n' rm -f
+	if [ "$clobber" == true ]; then
+		echo "$installed_ver" | xargs -d '\n' rm -f
+	fi
 fi
