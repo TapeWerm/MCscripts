@@ -54,7 +54,7 @@ cp -r . "$backup_dir"
 # Copy all files in $backup_dir no overwriting
 trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 # List all files except . and ..
-rm -r $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$")
+find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$" | xargs -d '\n' rm -r
 trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 unzip "$minecraft_zip"
 # Trim off $minecraft_zip after last .zip

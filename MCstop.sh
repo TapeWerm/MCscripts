@@ -3,7 +3,6 @@
 syntax='Usage: MCstop.sh SERVICE'
 
 server_do() {
-	epoch=$(date +%s.%N)
 	echo "$*" > "/run/$service"
 }
 
