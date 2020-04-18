@@ -9,9 +9,9 @@ syntax='Usage: MCBEupdate.sh SERVER_DIR MINECRAFT_ZIP`'
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo 'Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, and PROPERTIES files. Other files will be removed. You can convert a Windows SERVER_DIR to Ubuntu and vice versa.'
+	echo Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, and PROPERTIES files. Other files will be removed. You can convert a Windows SERVER_DIR to Ubuntu and vice versa.
 	echo
-	echo 'MINECRAFT_ZIP cannot be in SERVER_DIR. Remember to stop server before updating.'
+	echo MINECRAFT_ZIP cannot be in SERVER_DIR. Remember to stop server before updating.
 	exit
 	;;
 esac
@@ -34,7 +34,7 @@ fi
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
-	>&2 echo '$minecraft_zip cannot be in $server_dir'
+	>&2 echo MINECRAFT_ZIP cannot be in SERVER_DIR
 	exit 1
 fi
 # Test extracting $minecraft_zip partially quietly

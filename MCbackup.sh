@@ -50,7 +50,7 @@ while [ "$1"  != -- ]; do
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
 		echo
-		echo 'Backups are ${SERVER_DIR}_Backups/${world}_Backups/$year/$month/${date}_$hour-$minute.zip in BACKUP_DIR.'
+		echo 'Backups are {SERVER_DIR}_Backups/{WORLD}_Backups/YEAR/MONTH/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
 		exit
 		;;
 	esac
