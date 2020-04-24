@@ -16,7 +16,7 @@ systemctl status $service
 sudo su mc -s /bin/bash -c "echo save query > /run/mcbe@MCBE"
 systemctl status mcbe@MCBE
 # Add everyone to the Bedrock Dedicated Server whitelist
-for x in steve alex herobrine; do sudo su mc -s /bin/bash -c "whitelist add $x > /run/mcbe@MCBE"; done
+for x in steve alex herobrine; do sudo su mc -s /bin/bash -c "echo whitelist add $x > /run/mcbe@MCBE"; done
 ```
 
 How to control systemd services:
