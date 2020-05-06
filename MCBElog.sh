@@ -10,7 +10,7 @@ send() {
 	if [ -f ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt" ]; then
 		# Escape \ while reading line from file
 		while read -r url; do
-			if echo "$url" | grep -q 'https://discordapp\.com'; then
+			if echo "$url" | grep -Eq 'https://discord(app)?\.com'; then
 				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" "$url"
 			# Rocket Chat can be hosted by any domain
 			elif echo "$url" | grep -q 'https://rocket\.'; then
