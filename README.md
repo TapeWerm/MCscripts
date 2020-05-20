@@ -117,3 +117,28 @@ Copy and paste this block:
 exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
+
+## Maintenance
+These scripts are constanly getting updates, to update the copy you are using follow this process:
+```bash
+# move to the repo directory
+cd MCscripts
+# fetch the changes from github
+git pull
+# stop the service (this will shutdown your server, make sure the kids aren't playing first)
+# BDS version:
+sudo systemctl stop mcbe@MCBE
+# Java version:
+sudo systemctl stop mc@MC
+
+# install the updated scripts and services (same 3 lines as setup above)
+sudo cp -v *.sh ~mc/
+sudo chown -h mc:nogroup ~mc/*
+sudo cp -v systemd/* /etc/systemd/system/
+
+# restart the server
+# BDS version:
+sudo systemctl start mcbe@MCBE
+# Java version:
+sudo systemctl start mc@MC
+```
