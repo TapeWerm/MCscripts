@@ -31,6 +31,16 @@ if [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
+timeout=0
+until getent hosts minecraft.net; do
+	if [ "$timeout" = 10 ]; then
+		>&2 echo DNS cannot resolve minecraft.net
+		exit 1
+	fi
+	sleep 1
+	timeout=$(( ++timeout ))
+done
+
 webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
 current_ver=$(basename "$url")
