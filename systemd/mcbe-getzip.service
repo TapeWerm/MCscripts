@@ -1,5 +1,7 @@
 [Unit]
+After=network-online.target
 Description=Automatically download Minecraft Bedrock Edition server ZIP
+Requisite=network-online.target
 
 [Service]
 # MCBEgetZIP.sh may read y asking if you agree to the EULA
