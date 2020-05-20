@@ -125,7 +125,7 @@ sudo systemctl disable mc-rmbackup@MC.service --now
 sudo systemctl disable mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 sudo systemctl disable mcbe-rmbackup@MCBE.service --now
 sudo systemctl disable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
-sudo systemctl disable mcbe-bot@MCBE.service --now
+sudo systemctl disable mcbe-log@MCBE.service --now
 ```
 Update the services:
 ```bash
@@ -136,7 +136,8 @@ sudo cp -v *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp -v systemd/* /etc/systemd/system/
 ```
-Reenable the services:
+Reenable the services you use:
 ```bash
 sudo systemctl enable "$service" --now
 ```
+
