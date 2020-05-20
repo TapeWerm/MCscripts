@@ -64,7 +64,7 @@ sudo systemctl enable mc@MC.service mc-backup@MC.timer --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
-sudo systemctl enable mc-rmbackup@MCBE.service --now
+sudo systemctl enable mc-rmbackup@MC.service --now
 ```
 ## Bedrock Edition setup
 Stop the Minecraft server.
@@ -117,28 +117,26 @@ Copy and paste this block:
 exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
-
-## Maintenance
-These scripts are constanly getting updates, to update the copy you are using follow this process:
+## Update MCscripts
+Disable the services you use (make sure people aren't playing first):
 ```bash
-# move to the repo directory
+sudo systemctl disable mc@MC.service mc-backup@MC.timer --now
+sudo systemctl disable mc-rmbackup@MC.service --now
+sudo systemctl disable mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
+sudo systemctl disable mcbe-rmbackup@MCBE.service --now
+sudo systemctl disable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
+sudo systemctl disable mcbe-bot@MCBE.service --now
+```
+Update the services:
+```bash
+sudo apt install git wget zip
 cd MCscripts
-# fetch the changes from github
 git pull origin master
-# stop the service (this will shutdown your server, make sure the kids aren't playing first)
-# BDS version:
-sudo systemctl stop mcbe@MCBE
-# Java version:
-sudo systemctl stop mc@MC
-
-# install the updated scripts and services (same 3 lines as setup above)
 sudo cp -v *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp -v systemd/* /etc/systemd/system/
-
-# restart the server
-# BDS version:
-sudo systemctl start mcbe@MCBE
-# Java version:
-sudo systemctl start mc@MC
+```
+Reenable the services:
+```bash
+sudo systemctl enable "$service" --now
 ```
