@@ -124,7 +124,7 @@ These scripts are constanly getting updates, to update the copy you are using fo
 # move to the repo directory
 cd MCscripts
 # fetch the changes from github
-git pull
+git pull origin master
 # stop the service (this will shutdown your server, make sure the kids aren't playing first)
 # BDS version:
 sudo systemctl stop mcbe@MCBE
