@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Based on kekbot by dom, Aatrox, and Hunner from the CAT @ Portland State University.
 
-fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | awk '{print $3}')
 # $USER = `whoami` and is not set in cron
 uid=$(id -u "$(whoami)")
 ram=/dev/shm/$uid
@@ -48,6 +47,18 @@ mkfifo "$buffer"
 join_file=~/.MCBE_Bot/${nick}Join.txt
 join=$(cut -d $'\n' -f 1 < "$join_file")
 server=$(cut -d $'\n' -f 2 -s < "$join_file")
+
+timeout=0
+# Trim off $server after first :
+until getent hosts "${server%%:*}"; do
+	if [ "$timeout" = 10 ]; then
+		>&2 echo "DNS cannot resolve ${server%%:*}"
+		exit 1
+	fi
+	sleep 1
+	timeout=$(( ++timeout ))
+done
+fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | awk '{print $3}')
 
 mkdir -p "$ram_dir"
 # Forked processes cannot share variables
