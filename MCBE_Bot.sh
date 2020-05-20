@@ -48,17 +48,12 @@ join_file=~/.MCBE_Bot/${nick}Join.txt
 join=$(cut -d $'\n' -f 1 < "$join_file")
 server=$(cut -d $'\n' -f 2 -s < "$join_file")
 
-timeout=0
 # Trim off $server after first :
-until host "${server%%:*}" > /dev/null; do
-	if [ "$timeout" = 10 ]; then
-		>&2 host "${server%%:*}"
-		exit 1
-	fi
-	sleep 1
-	timeout=$(( ++timeout ))
-done
-fqdn=$(getent ahostsv4 "$HOSTNAME" | head -n 1 | awk '{print $3}')
+if ! stdout=$(host "${server%%:*}"); then
+	>&2 echo "$stdout"
+	exit 1
+fi
+fqdn=$(host "$HOSTNAME" | head -n 1 | cut -d ' ' -f 1)
 
 mkdir -p "$ram_dir"
 # Forked processes cannot share variables

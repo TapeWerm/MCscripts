@@ -31,15 +31,10 @@ if [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
-timeout=0
-until host minecraft.net > /dev/null; do
-	if [ "$timeout" = 10 ]; then
-		>&2 host minecraft.net
-		exit 1
-	fi
-	sleep 1
-	timeout=$(( ++timeout ))
-done
+if ! stdout=$(host minecraft.net); then
+	>&2 echo "$stdout"
+	exit 1
+fi
 
 webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
