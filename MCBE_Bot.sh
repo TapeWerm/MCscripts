@@ -50,9 +50,9 @@ server=$(cut -d $'\n' -f 2 -s < "$join_file")
 
 timeout=0
 # Trim off $server after first :
-until getent hosts "${server%%:*}"; do
+until host "${server%%:*}" > /dev/null; do
 	if [ "$timeout" = 10 ]; then
-		>&2 echo "DNS cannot resolve ${server%%:*}"
+		>&2 host "${server%%:*}"
 		exit 1
 	fi
 	sleep 1

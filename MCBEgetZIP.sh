@@ -32,9 +32,9 @@ if [ "$#" -gt 1 ]; then
 fi
 
 timeout=0
-until getent hosts minecraft.net; do
+until host minecraft.net > /dev/null; do
 	if [ "$timeout" = 10 ]; then
-		>&2 echo DNS cannot resolve minecraft.net
+		>&2 host minecraft.net
 		exit 1
 	fi
 	sleep 1
