@@ -31,12 +31,6 @@ if [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
-# DNS check
-if ! stdout=$(host minecraft.net); then
-	>&2 echo "$stdout"
-	exit 1
-fi
-
 webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
 current_ver=$(basename "$url")

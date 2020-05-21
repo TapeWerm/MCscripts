@@ -4,6 +4,8 @@ Description=Automatically download Minecraft Bedrock Edition server ZIP
 Requisite=network-online.target
 
 [Service]
+# DNS check
+ExecStartPre=/bin/bash -c 'if ! stdout=$(host minecraft.net); then >&2 echo "$stdout"; exit 1; fi'
 # MCBEgetZIP.sh may read y asking if you agree to the EULA
 ExecStart=/bin/bash -c 'echo y | /opt/MC/MCBEgetZIP.sh'
 KillMode=none
