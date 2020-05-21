@@ -31,6 +31,7 @@ if [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
+# DNS check
 if ! stdout=$(host minecraft.net); then
 	>&2 echo "$stdout"
 	exit 1
