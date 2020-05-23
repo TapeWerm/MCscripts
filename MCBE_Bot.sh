@@ -85,7 +85,7 @@ input | openssl s_client -connect "$server" 2>&1 | while read -r irc; do
 				kill $$
 				exit
 			fi
-		elif [ "$(echo "$irc" | cut -d ' ' -f 2)" = NOTICE ]; then
+		elif [ "$(echo "$irc" | cut -d ' ' -f 2 -s)" = NOTICE ]; then
 			if echo "$irc" | grep -q 'Server Terminating'; then
 				kill $$
 				exit
