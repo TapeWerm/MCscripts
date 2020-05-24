@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 # Based on kekbot by dom, Aatrox, and Hunner from the CAT @ Portland State University.
 
-# $USER = `whoami` and is not set in cron
-uid=$(id -u "$(whoami)")
-ram=/dev/shm/$uid
-ram_dir=$ram/MCBE_Bot
-
 input() {
 	# $USER, $HOSTNAME, and $fqdn are verified, name is clearly not
 	echo "USER $(whoami) $HOSTNAME $fqdn :The Mafia"
@@ -51,6 +46,8 @@ buffer=~/.MCBE_Bot/${nick}Buffer
 # Duplicate bots exit if $buffer is removed
 rm -f "$buffer"
 mkfifo "$buffer"
+ping_time=~/.MCBE_Bot/${nick}Ping
+touch "$ping_time"
 
 join_file=~/.MCBE_Bot/${nick}Join.txt
 join=$(cut -d $'\n' -f 1 < "$join_file")
@@ -63,12 +60,6 @@ if ! stdout=$(host "${server%%:*}"); then
 	exit 1
 fi
 fqdn=$(host "$HOSTNAME" | head -n 1 | cut -d ' ' -f 1)
-
-mkdir -p "$ram_dir"
-# Forked processes cannot share variables
-ping_time=$ram_dir/$nick
-touch "$ping_time"
-trap 'rm -r "$ram_dir"; rmdir --ignore-fail-on-non-empty "$ram"' EXIT
 
 ping_timeout &
 
