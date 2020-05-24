@@ -29,7 +29,7 @@ server_read() {
 	# Wait for output
 	sleep 1
 	if [ -z "$timestamp" ]; then
-		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3)
+		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3 -s)
 	fi
 	# Output of $service since $timestamp with no metadata
 	buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
@@ -70,7 +70,7 @@ fi
 # Remove trailing slash
 server_dir=${1%/}
 properties=$server_dir/server.properties
-world=$(grep ^level-name= "$properties" | cut -d = -f 2)
+world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 if [ ! -d "$server_dir/$world" ]; then
 	>&2 echo "No world $world in $server_dir, check level-name in server.properties too"
 	exit 1
