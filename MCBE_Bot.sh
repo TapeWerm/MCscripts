@@ -3,6 +3,7 @@
 
 input() {
 	# $USER, $HOSTNAME, and $fqdn are verified, name is clearly not
+	# $USER = `whoami` and is not set in cron
 	echo "USER $(whoami) $HOSTNAME $fqdn :The Mafia"
 	echo "NICK $nick"
 	echo "$join"
