@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Based on kekbot by dom, Aatrox, and Hunner from the CAT @ Portland State University.
 
+syntax='Usage: Bot.sh [OPTION] ...'
+
 input() {
 	# $USER, $HOSTNAME, and $fqdn are verified, name is clearly not
 	# $USER = `whoami` and is not set in cron
@@ -34,25 +36,57 @@ send() {
 	echo "$*" >> "$buffer"
 }
 
-# If $1 doesn't exist
-if [ -z "$1" ]; then
-	nick=MCBE_Bot
-else
-	nick=$1
+args=$(getopt -l help,instance: -o hi: -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo Minecraft Bedrock Edition server IRC bot
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '-i, --instance=INSTANCE  use configuration file ~/.MCBE_Bot/{INSTANCE}Join.txt. defaults to MCBE_Bot.'
+		echo
+		echo 'See README.md for format of ~/.MCBE_Bot/{INSTANCE}Join.txt'
+		exit
+		;;
+	--instance|-i)
+		instance=$2
+		shift 2
+		;;
+	esac
+done
+shift
+
+if [ "$#" -gt 0 ]; then
+	>&2 echo Too much arguments
+	>&2 echo "$syntax"
+	exit 1
+fi
+
+# If $instance doesn't exist
+if [ -z "$instance" ]; then
+	instance=MCBE_Bot
 fi
 # Make directory and parents quietly
 mkdir -p ~/.MCBE_Bot
-buffer=~/.MCBE_Bot/${nick}Buffer
+buffer=~/.MCBE_Bot/${instance}Buffer
 # Kill all doppelgangers
 # Duplicate bots exit if $buffer is removed
 rm -f "$buffer"
 mkfifo "$buffer"
-ping_time=~/.MCBE_Bot/${nick}Ping
+ping_time=~/.MCBE_Bot/${instance}Ping
 touch "$ping_time"
 
-join_file=~/.MCBE_Bot/${nick}Join.txt
-join=$(cut -d $'\n' -f 1 < "$join_file")
-server=$(cut -d $'\n' -f 2 -s < "$join_file")
+join_file=~/.MCBE_Bot/${instance}Join.txt
+join=$(grep -Ev '^[^ ]+:[0-9]+$' "$join_file")
+server=$(grep -E '^[^ ]+:[0-9]+$' "$join_file")
+if echo "$join" | grep -q '^NICK '; then
+	nick=$(echo "$join" | grep '^NICK ' | cut -d ' ' -f 2 -s)
+	join=$(echo "$join" | grep -v '^NICK ')
+else
+	nick=$instance
+fi
 
 # DNS check
 # Trim off $server after first :

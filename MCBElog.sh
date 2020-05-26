@@ -49,7 +49,7 @@ fi
 instance=${service##*@}
 join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
 if [ -f "$join_file" ]; then
-	join=$(cut -d $'\n' -f 1 < "$join_file")
+	join=$(grep '^JOIN ' "$join_file")
 	chans=$(echo "$join" | cut -d ' ' -f 2 -s)
 	# Trim off $chans after first ,
 	chan=${chans%%,*}

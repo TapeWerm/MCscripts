@@ -92,9 +92,14 @@ mkdir -p ~/.MCBE_Bot
 ```
 Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = Ctrl-G):
 ```
+NICK $nick
 JOIN #chan $key
+PRIVMSG #chan :$msg
+...
 irc.domain.tld:$port
 ```
+If NICK line is missing it defaults to MCBE_Bot. PRIVMSG lines are optional and can be used before JOIN to identify with NickServ.
+
 Copy and paste this block:
 ```bash
 exit
