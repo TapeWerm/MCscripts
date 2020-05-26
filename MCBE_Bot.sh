@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Based on kekbot by dom, Aatrox, and Hunner from the CAT @ Portland State University.
 
-syntax='Usage: Bot.sh [OPTION] ...'
+syntax='Usage: MCBE_Bot.sh [OPTION] ...'
 
 input() {
 	# $USER, $HOSTNAME, and $fqdn are verified, name is clearly not
