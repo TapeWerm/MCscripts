@@ -55,7 +55,7 @@ cp -r . "$backup_dir"
 trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 # List all files except . and ..
 find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$" | xargs -d '\n' rm -r
-trap 'rm -rf $(find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$"); cp -r "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
+trap 'find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$" | xargs -d "\n" rm -rf; cp -r "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
 unzip "$minecraft_zip"
 # Trim off $minecraft_zip after last .zip
 basename "${minecraft_zip%.zip}" > version
@@ -65,7 +65,9 @@ for pack_dir in $pack_dirs; do
 	# Escape \ while reading line from $packs
 	echo "$packs" | while read -r pack; do
 		# Don't clobber 1st party packs
-		cp -rn "$backup_dir/$pack_dir/$pack" "$pack_dir/"
+		if [ ! -d "$pack_dir/$pack" ]; then
+			cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"
+		fi
 	done
 done
 for file in $files; do

@@ -28,7 +28,7 @@ while [ "$1"  != -- ]; do
 		;;
 	--seconds|-s)
 		seconds=$2
-		if ! [[ "$seconds" =~ ^-?[0-9]+$ ]]; then
+		if [[ ! "$seconds" =~ ^-?[0-9]+$ ]]; then
 			>&2 echo SECONDS must be an integer
 			exit 1
 		fi
