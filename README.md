@@ -6,13 +6,13 @@ Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd unit
 Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but no others. No automatic update scripts or chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
-- [Notes](README.md#notes)
-- [Setup](README.md#setup)
-  - [Java Edition setup](README.md#java-edition-setup)
-  - [Bedrock Edition setup](README.md#bedrock-edition-setup)
-  - [Bedrock Edition IRC bot setup](README.md#bedrock-edition-irc-bot-setup)
-  - [Bedrock Edition webhook bots setup](README.md#bedrock-edition-webhook-bots-setup)
-  - [Update MCscripts](README.md#update-mcscripts)
+- [Notes](#notes)
+- [Setup](#setup)
+  - [Java Edition setup](#java-edition-setup)
+  - [Bedrock Edition setup](#bedrock-edition-setup)
+  - [Bedrock Edition IRC bot setup](#bedrock-edition-irc-bot-setup)
+  - [Bedrock Edition webhook bots setup](#bedrock-edition-webhook-bots-setup)
+  - [Update MCscripts](#update-mcscripts)
 # Notes
 How to send input to and read output from the server console:
 ```bash
