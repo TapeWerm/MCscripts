@@ -15,7 +15,7 @@ while [ "$1"  != -- ]; do
 		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc SERVER_DIR."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo -s, --service=SERVICE  service of Minecraft Bedrock Edition server
+		echo '-s, --service=SERVICE  service of Minecraft Bedrock Edition server'
 		exit
 		;;
 	--service|-s)

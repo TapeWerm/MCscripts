@@ -21,7 +21,7 @@ while [ "$1"  != -- ]; do
 		echo Warn Minecraft Java Edition or Bedrock Edition server running in service 10 seconds before stopping.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo -s, --seconds=SECONDS  seconds before stopping. must be between 0 and 60. defaults to 10
+		echo '-s, --seconds=SECONDS  seconds before stopping. must be between 0 and 60. defaults to 10'
 		echo
 		echo Best ran by systemd before shutdown.
 		exit
