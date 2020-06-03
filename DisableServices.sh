@@ -33,7 +33,7 @@ if [ -z "${enabled[*]}" ]; then
 	exit
 fi
 echo "Enabled services: ${enabled[*]}"
-echo "Enter Y to disable services (make sure people aren't playing first)"
+echo "Enter Y to disable services and remove their files (make sure people aren't playing first)"
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then
