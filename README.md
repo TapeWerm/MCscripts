@@ -136,6 +136,7 @@ Disable the services you use and remove files:
 sudo apt install git wget zip
 cd MCscripts
 sudo ./DisableServices.sh
+# Highlight and copy enabled services for later
 sudo rm -v ~mc/*.sh
 for file in systemd/*; do sudo rm -v "/etc/systemd/system/$(basename "$file")"; done
 ```
