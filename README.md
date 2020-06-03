@@ -131,14 +131,12 @@ exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
 ## Update MCscripts
-Disable the services you use and remove files:
+Disable the services you use and remove their files:
 ```bash
 sudo apt install git wget zip
 cd MCscripts
 sudo ./DisableServices.sh
 # Highlight and copy enabled services for later
-sudo rm -v ~mc/*.sh
-for file in systemd/*; do sudo rm -v "/etc/systemd/system/$(basename "$file")"; done
 ```
 Update the services:
 ```bash

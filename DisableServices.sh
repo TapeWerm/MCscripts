@@ -8,7 +8,7 @@ syntax='Usage: DisableServices.sh'
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo Find enabled services and prompt user to disable them.
+	echo Find enabled services and prompt user to disable them and remove their files.
 	exit
 	;;
 esac
@@ -42,3 +42,5 @@ if [ "$input" != y ]; then
 fi
 
 sudo systemctl disable "${enabled[@]}" --now
+sudo rm ~mc/*.sh
+for file in systemd/*; do sudo rm "/etc/systemd/system/$(basename "$file")"; done
