@@ -131,19 +131,16 @@ exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
 ## Update MCscripts
-Disable the services you use (make sure people aren't playing first):
-```bash
-sudo systemctl disable mc@MC.service mc-backup@MC.timer --now
-sudo systemctl disable mc-rmbackup@MC.service --now
-sudo systemctl disable mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
-sudo systemctl disable mcbe-rmbackup@MCBE.service --now
-sudo systemctl disable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
-sudo systemctl disable mcbe-log@MCBE.service --now
-```
-Update the services:
+Disable the services you use and remove files:
 ```bash
 sudo apt install git wget zip
 cd MCscripts
+sudo ./DisableServices.sh
+sudo rm -v ~mc/*.sh
+for file in systemd/*; do sudo rm -v "/etc/systemd/system/$(basename "$file")"; done
+```
+Update the services:
+```bash
 git pull origin master
 sudo cp -v *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
@@ -151,5 +148,5 @@ sudo cp -v systemd/* /etc/systemd/system/
 ```
 Reenable the services you use:
 ```bash
-sudo systemctl enable "$service" --now
+sudo systemctl enable "$services" --now
 ```
