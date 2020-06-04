@@ -25,10 +25,6 @@ fi
 
 server_dir=$(realpath "$1")
 backup_dir=/tmp/MCBEupdate/$(basename "$server_dir")
-if [ -f "$backup_dir" ]; then
-	>&2 echo "Backup dir $backup_dir already exists, check and remove it"
-	exit 1
-fi
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
@@ -46,19 +42,18 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-cd "$server_dir"
-trap 'rm -rf "$backup_dir"; echo fail > version' ERR
 mkdir -p "$(dirname "$backup_dir")"
-cp -r . "$backup_dir"
-# Copy all files in $backup_dir no overwriting
-trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
-# List all files except . and ..
-find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$" | xargs -d '\n' rm -r
-trap 'find "$server_dir" -maxdepth 1 | grep -v "^$server_dir$" | xargs -d "\n" rm -rf; cp -r "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
-unzip "$minecraft_zip"
+if [ -f "$backup_dir" ]; then
+	>&2 echo "Backup dir $backup_dir already exists, check and remove it"
+	exit 1
+fi
+mv "$server_dir" "$backup_dir"
+trap 'rm -rf "$server_dir"; mv "$backup_dir" "$server_dir"; echo fail > version' ERR
+unzip "$minecraft_zip" -d "$server_dir"
+
+cd "$server_dir"
 # Trim off $minecraft_zip after last .zip
 basename "${minecraft_zip%.zip}" > version
-
 for pack_dir in *_packs; do
 	packs=$(ls "$backup_dir/$pack_dir")
 	# Escape \ while reading line from $packs

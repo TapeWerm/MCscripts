@@ -50,7 +50,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 		exit 1
 	fi
 
-	trap 'sudo rm -f ~/"$current_ver"' ERR
+	trap 'rm -f ~/"$current_ver"' ERR
 	wget --prefer-family=IPv4 "$url" -O ~/"$current_ver"
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	trap - ERR

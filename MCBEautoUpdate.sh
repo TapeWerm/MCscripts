@@ -66,11 +66,10 @@ if [ -n "$service" ]; then
 		sudo systemctl start "$service"
 	fi
 else
-	sudo mkdir "$server_dir"
-	trap 'sudo rm -r "$server_dir"' ERR
 	# Test extracting $minecraft_zip partially quietly
 	unzip -tq "$minecraft_zip"
-	unzip "$minecraft_zip" -d "$server_dir"
-	echo "$current_ver" | tee "$server_dir/version"
+	trap 'sudo rm -rf "$server_dir"' ERR
+	sudo unzip "$minecraft_zip" -d "$server_dir"
+	echo "$current_ver" > "$server_dir/version"
 	sudo chown -R mc:nogroup "$server_dir"
 fi
