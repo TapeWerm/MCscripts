@@ -69,7 +69,7 @@ if [ ! -d "$world_dir/$world" ]; then
 	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
 	exit 1
 fi
-temp_dir=/tmp/MCBEbackup/$(basename "$1")
+temp_dir=/tmp/MCBEbackup/$(basename "$server_dir")
 
 service=$2
 status=$(systemctl show "$service" -p ActiveState --value)
