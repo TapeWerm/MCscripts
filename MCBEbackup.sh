@@ -3,7 +3,6 @@
 # Exit if error
 set -e
 syntax='Usage: MCBEbackup.sh [OPTION] ... SERVER_DIR SERVICE'
-temp_dir=/tmp/MCBEbackup
 # Filenames can't contain : on some filesystems
 thyme=$(date +%H-%M)
 date=$(date +%d)
@@ -70,6 +69,7 @@ if [ ! -d "$world_dir/$world" ]; then
 	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
 	exit 1
 fi
+temp_dir=/tmp/MCBEbackup/$(basename "$1")
 
 service=$2
 status=$(systemctl show "$service" -p ActiveState --value)

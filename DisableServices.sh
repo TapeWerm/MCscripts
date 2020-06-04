@@ -4,6 +4,7 @@
 set -e
 services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-log@*.service)
 syntax='Usage: DisableServices.sh'
+units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
 
 case $1 in
 --help|-h)
@@ -43,4 +44,4 @@ fi
 
 sudo systemctl disable "${enabled[@]}" --now
 sudo rm ~mc/*.sh
-for file in systemd/*; do sudo rm "/etc/systemd/system/$(basename "$file")"; done
+for file in "${units[@]}"; do sudo rm "/etc/systemd/system/$file"; done

@@ -2,8 +2,6 @@
 
 # Exit if error
 set -e
-files=(worlds *.json *.properties)
-pack_dirs=(*_packs)
 syntax='Usage: MCBEupdate.sh SERVER_DIR MINECRAFT_ZIP`'
 
 case $1 in
@@ -26,7 +24,7 @@ elif [ "$#" -gt 2 ]; then
 fi
 
 server_dir=$(realpath "$1")
-backup_dir=/tmp/$(basename "$server_dir")
+backup_dir=/tmp/MCBEupdate/$(basename "$server_dir")
 if [ -f "$backup_dir" ]; then
 	>&2 echo "Backup dir $backup_dir already exists, check and remove it"
 	exit 1
@@ -50,6 +48,7 @@ fi
 
 cd "$server_dir"
 trap 'rm -rf "$backup_dir"; echo fail > version' ERR
+mkdir -p "$(dirname "$backup_dir")"
 cp -r . "$backup_dir"
 # Copy all files in $backup_dir no overwriting
 trap 'cp -rn "$backup_dir"/. .; rm -rf "$backup_dir"; echo fail > version' ERR
@@ -60,7 +59,7 @@ unzip "$minecraft_zip"
 # Trim off $minecraft_zip after last .zip
 basename "${minecraft_zip%.zip}" > version
 
-for pack_dir in "${pack_dirs[@]}"; do
+for pack_dir in *_packs; do
 	packs=$(ls "$backup_dir/$pack_dir")
 	# Escape \ while reading line from $packs
 	echo "$packs" | while read -r pack; do
@@ -70,7 +69,7 @@ for pack_dir in "${pack_dirs[@]}"; do
 		fi
 	done
 done
-for file in "${files[@]}"; do
+for file in worlds *.json *.properties; do
 	cp -r "$backup_dir/$file" .
 done
 rm -r "$backup_dir"
