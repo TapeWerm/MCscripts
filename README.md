@@ -141,6 +141,9 @@ sudo ./DisableServices.sh
 ```
 Update the services:
 ```bash
+# I recommend replacing the 1st argument to ln with an external drive to dump backups on
+# Example: sudo ln -s $ext_drive ~mc/backup_dir
+if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 sudo cp -v *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp -v systemd/* /etc/systemd/system/
