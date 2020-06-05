@@ -23,7 +23,7 @@ fi
 instances=$(systemctl show "${services[@]}" -p Id --value | grep .)
 if [ -n "$instances" ]; then
 	while read -r instance; do
-		if [ "$(systemctl is-enabled "$instance")" = enabled ]; then
+		if [ "$(systemctl is-enabled "$instance" 2> /dev/null)" = enabled ]; then
 			enabled+=($instance)
 		fi
 	# Bash process substitution

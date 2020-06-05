@@ -5,6 +5,12 @@ syntax='Usage: MCBElog.sh SERVICE'
 send() {
 	status=$(systemctl show "mcbe-bot@$instance" -p ActiveState --value)
 	if [ "$status" = active ]; then
+		if [ -f "$join_file" ]; then
+			join=$(grep '^JOIN ' "$join_file")
+			chans=$(echo "$join" | cut -d ' ' -f 2 -s)
+			# Trim off $chans after first ,
+			chan=${chans%%,*}
+		fi
 		echo "PRIVMSG $chan :$*" >> ~mc/.MCBE_Bot/"${instance}_BotBuffer"
 	fi
 	if [ -f ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt" ]; then
@@ -48,12 +54,6 @@ fi
 # Trim off $service before last @
 instance=${service##*@}
 join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
-if [ -f "$join_file" ]; then
-	join=$(grep '^JOIN ' "$join_file")
-	chans=$(echo "$join" | cut -d ' ' -f 2 -s)
-	# Trim off $chans after first ,
-	chan=${chans%%,*}
-fi
 
 # Follow log for unit $service 0 lines from bottom, no metadata
 journalctl -fu "$service" -n 0 -o cat | while read -r line; do

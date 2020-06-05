@@ -133,13 +133,13 @@ sudo systemctl enable mcbe-log@MCBE.service --now
 ## Update MCscripts
 Disable the services you use and remove their files:
 ```bash
-sudo apt install curl git wget zip
 cd MCscripts
 git pull origin master
 sudo ./DisableServices.sh
 ```
 Update the services:
 ```bash
+sudo apt install curl git wget zip
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s $ext_drive ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
