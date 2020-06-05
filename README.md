@@ -135,12 +135,12 @@ Disable the services you use and remove their files:
 ```bash
 sudo apt install git wget zip
 cd MCscripts
+git pull origin master
 sudo ./DisableServices.sh
 # Highlight and copy enabled services for later
 ```
 Update the services:
 ```bash
-git pull origin master
 sudo cp -v *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp -v systemd/* /etc/systemd/system/

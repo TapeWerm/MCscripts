@@ -2,8 +2,8 @@
 
 # Exit if error
 set -e
-services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-log@*.service)
-units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
+services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate.service mcbe-autoupdate@*.service mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-log@*.service mcbe-log@*.timer)
+units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate.service mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
 syntax='Usage: DisableServices.sh'
 
 case $1 in
@@ -22,7 +22,7 @@ fi
 instances=$(systemctl show "${services[@]}" -p Id --value | grep .)
 if [ -n "$instances" ]; then
 	while read -r instance; do
-		if systemctl is-enabled "$instance" > /dev/null; then
+		if [ "$(systemctl is-enabled "$instance")" = enabled ]; then
 			enabled+=($instance)
 		fi
 	# Bash process substitution
@@ -44,4 +44,4 @@ fi
 
 sudo systemctl disable "${enabled[@]}" --now
 sudo rm ~mc/*.sh
-for file in "${units[@]}"; do sudo rm "/etc/systemd/system/$file"; done
+for file in "${units[@]}"; do sudo rm -f "/etc/systemd/system/$file"; done
