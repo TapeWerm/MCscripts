@@ -42,7 +42,7 @@ Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` 
 # Setup
 Open Terminal:
 ```bash
-sudo apt install git wget zip
+sudo apt install curl git wget zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
@@ -133,7 +133,7 @@ sudo systemctl enable mcbe-log@MCBE.service --now
 ## Update MCscripts
 Disable the services you use and remove their files:
 ```bash
-sudo apt install git wget zip
+sudo apt install curl git wget zip
 cd MCscripts
 git pull origin master
 sudo ./DisableServices.sh
