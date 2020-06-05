@@ -46,3 +46,5 @@ fi
 sudo systemctl disable "${enabled[@]}" --now
 sudo rm ~mc/*.sh
 for file in "${units[@]}"; do sudo rm -f "/etc/systemd/system/$file"; done
+echo To reenable services copy and paste this later:
+echo "sudo systemctl enable ${enabled[*]} --now"

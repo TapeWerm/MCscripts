@@ -137,7 +137,6 @@ sudo apt install curl git wget zip
 cd MCscripts
 git pull origin master
 sudo ./DisableServices.sh
-# Highlight and copy enabled services for later
 ```
 Update the services:
 ```bash
