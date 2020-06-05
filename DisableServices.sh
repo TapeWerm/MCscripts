@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+# mcbe-autoupdate.service and mcbe-log@*.timer used to be in MCscripts
 services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate.service mcbe-autoupdate@*.service mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-log@*.service mcbe-log@*.timer)
 units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate.service mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
 syntax='Usage: DisableServices.sh'
