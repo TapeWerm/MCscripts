@@ -1,0 +1,9 @@
+[Unit]
+# If restarts exceed due to service outage try again in an hour
+Description=Start Minecraft Bedrock Edition server IRC bot hourly @ %i
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=timers.target
