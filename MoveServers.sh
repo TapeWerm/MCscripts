@@ -3,6 +3,7 @@
 # Exit if error
 set -e
 syntax='Usage: MoveServers.sh'
+temp_dir=/tmp/MoveServers
 
 case $1 in
 --help|-h)
@@ -41,7 +42,6 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-temp_dir=/tmp/MoveServers
 mkdir -p "$temp_dir"
 # If $server is named java or bedrock, it will collide with the java/bedrock directory unless you move it
 for server in "${java[@]}"; do
@@ -82,3 +82,5 @@ for server in "${bedrock[@]}"; do
 		sudo mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/bedrock/
 	fi
 done
+
+rmdir "$temp_dir"
