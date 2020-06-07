@@ -88,7 +88,7 @@ if [ -n "$backup_dir" ]; then
 else
 	backup_dir=~
 fi
-backup_dir=$backup_dir/$(basename "$server_dir")_Backups/${world}_Backups/$year/$month
+backup_dir=$backup_dir/java/$(basename "$server_dir")_Backups/${world}_Backups/$year/$month
 # Make directory and parents quietly
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$thyme.zip

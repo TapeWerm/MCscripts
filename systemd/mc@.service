@@ -22,7 +22,7 @@ StandardOutput=journal
 StandardError=journal
 Type=simple
 User=mc
-WorkingDirectory=/opt/MC/%i
+WorkingDirectory=/opt/MC/java/%i
 
 [Install]
 WantedBy=multi-user.target

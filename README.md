@@ -59,15 +59,16 @@ sudo cp systemd/* /etc/systemd/system/
 ## Java Edition setup
 Stop the Minecraft server.
 ```bash
+sudo mkdir ~mc/java
 # Move server directory
-sudo mv "$server_dir" ~mc/MC
+sudo mv "$server_dir" ~mc/java/MC
 # Open server.jar with no GUI and 1024-2048 MB of RAM
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/MC/start.bat
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
 ```
 Copy and paste this block:
 ```bash
-sudo chmod 700 ~mc/MC/start.bat
-sudo chown -R mc:nogroup ~mc/MC
+sudo chmod +x ~mc/java/MC/start.bat
+sudo chown -R mc:nogroup ~mc/java
 sudo systemctl enable mc@MC.service mc-backup@MC.timer --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
@@ -77,15 +78,16 @@ sudo systemctl enable mc-rmbackup@MC.service --now
 ## Bedrock Edition setup
 Stop the Minecraft server.
 ```bash
+sudo mkdir ~mc/bedrock
 # Move server directory or
-sudo mv "$server_dir" ~mc/MCBE
+sudo mv "$server_dir" ~mc/bedrock/MCBE
 # Make new server directory
 sudo su mc -s /bin/bash -c '~/MCBEgetZIP.sh'
-sudo ~mc/MCBEautoUpdate.sh ~mc/MCBE
+sudo ~mc/MCBEautoUpdate.sh ~mc/bedrock/MCBE
 ```
 Copy and paste this block:
 ```bash
-sudo chown -R mc:nogroup ~mc/MCBE
+sudo chown -R mc:nogroup ~mc/bedrock
 sudo systemctl enable mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
@@ -143,6 +145,10 @@ sudo apt install curl git wget zip
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s $ext_drive ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
+sudo ./MoveServers.sh
+```
+Copy and paste this block:
+```bash
 sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/

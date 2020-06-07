@@ -10,7 +10,7 @@ syntax='Usage: DisableServices.sh'
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo Find enabled services and prompt user to disable them and remove their files.
+	echo Find enabled services from MCscripts and prompt user to disable them and remove their files.
 	exit
 	;;
 esac

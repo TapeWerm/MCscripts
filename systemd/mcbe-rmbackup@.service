@@ -3,8 +3,8 @@ After=mcbe-backup@%i.service
 Description=Automatically remove Minecraft Bedrock Edition server world backups more than 2-weeks-old @ %i
 
 [Service]
-ExecStart=/usr/bin/find /opt/MC/backup_dir/%i_Backups -type f -mtime +13 -delete
-ExecStartPost=/usr/bin/find /opt/MC/backup_dir/%i_Backups -type d -empty -delete
+ExecStart=/usr/bin/find /opt/MC/backup_dir/bedrock/%i_Backups -type f -mtime +13 -delete
+ExecStartPost=/usr/bin/find /opt/MC/backup_dir/bedrock/%i_Backups -type d -empty -delete
 Type=oneshot
 
 [Install]
