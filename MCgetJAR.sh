@@ -20,4 +20,4 @@ fi
 webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/server/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+server\.jar' | head -n 1)
 wget --prefer-family=IPv4 "$url"
-chmod 700 server.jar
+chmod +x server.jar
