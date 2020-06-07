@@ -33,7 +33,7 @@ if [ -z "${java[*]}" ] && [ -z "${bedrock[*]}" ]; then
 fi
 echo "Java servers to move: ${java[*]}"
 echo "Bedrock servers to move: ${bedrock[*]}"
-echo "Enter Y if you stopped the servers to move"
+echo "Enter Y if you stopped the servers to move (DisableServices.sh stops them)"
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then
