@@ -2,9 +2,9 @@
 
 # Exit if error
 set -e
-# mcbe-autoupdate.service and mcbe-log@*.timer used to be in MCscripts
-services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate.service mcbe-autoupdate@*.service mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-bot@*.timer mcbe-log@*.service mcbe-log@*.timer)
-units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate.service mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
+# mcbe-autoupdate@*.timer and mcbe-log@*.timer used to be in MCscripts
+services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-autoupdate@*.timer mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-bot@*.timer mcbe-log@*.service mcbe-log@*.timer)
+units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate@.service mcbe-autoupdate@.timer mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
 syntax='Usage: DisableServices.sh'
 
 case $1 in
@@ -45,6 +45,32 @@ fi
 
 sudo systemctl disable "${enabled[@]}" --now
 sudo rm ~mc/*.sh
-for file in "${units[@]}"; do sudo rm -f "/etc/systemd/system/$file"; done
+for file in "${units[@]}"; do
+	sudo rm -f "/etc/systemd/system/$file"
+done
+
+for x in "${!enabled[@]}"; do
+	# Replace timer with service and mcbe-getzip
+	if [[ "${enabled[x]}" =~ ^mcbe-autoupdate@.+\.timer$ ]]; then
+		# Trim off ${enabled[x]} after last .
+		instance=${enabled[x]%.*}
+		enabled+=($instance.service)
+		getzip=true
+		unset 'enabled[x]'
+	# Don't reenable removed timer
+	elif [[ "${enabled[x]}" =~ ^mcbe-log@.+\.timer$ ]]; then
+		unset 'enabled[x]'
+	# If there's mcbe-bot service but no timer add timer
+	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.service$ ]]; then
+		# Trim off ${enabled[x]} after last .
+		instance=${enabled[x]%.*}
+		if ! echo "${enabled[*]}" | grep -q "$instance.timer"; then
+			enabled+=($instance.timer)
+		fi
+	fi
+done
+if [ "$getzip" = true ]; then
+	enabled+=(mcbe-getzip.timer)
+fi
 echo To reenable services copy and paste this later:
 echo "sudo systemctl enable ${enabled[*]} --now"
