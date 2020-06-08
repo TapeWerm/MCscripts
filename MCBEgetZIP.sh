@@ -35,7 +35,7 @@ webpage=$(wget --prefer-family=IPv4 https://www.minecraft.net/en-us/download/ser
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
 current_ver=$(basename "$url")
 # ls fails if there's no match
-installed_ver=$(ls ~/bedrock-server-*\.zip 2> /dev/null || true)
+installed_ver=$(ls ~/bedrock-server-*.zip 2> /dev/null || true)
 
 # There might be more than one ZIP in ~
 if ! echo "$installed_ver" | grep -q "$current_ver"; then
