@@ -10,7 +10,7 @@ syntax='Usage: DisableServices.sh'
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo Find enabled services from MCscripts and prompt user to disable them and remove their files.
+	echo Find enabled services from MCscripts, prompt user to disable them and remove their files, and list services to be reenabled.
 	exit
 	;;
 esac
@@ -49,8 +49,9 @@ for file in "${units[@]}"; do
 	sudo rm -f "/etc/systemd/system/$file"
 done
 
+# Update list of services to be reenabled
 for x in "${!enabled[@]}"; do
-	# Replace timer with service and mcbe-getzip
+	# Replace mcbe-autoupdate timer with service and mcbe-getzip
 	if [[ "${enabled[x]}" =~ ^mcbe-autoupdate@.+\.timer$ ]]; then
 		# Trim off ${enabled[x]} after last .
 		instance=${enabled[x]%.*}
