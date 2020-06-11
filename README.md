@@ -30,16 +30,10 @@ for x in steve alex herobrine; do sudo su mc -s /bin/bash -c "echo whitelist add
 ```
 How to control systemd services:
 ```bash
-# Backup Minecraft Java Edition server
-sudo systemctl start mc-backup@MC
-# Stop Minecraft Java Edition server
-sudo systemctl stop mc@MC
-
 # Backup Minecraft Bedrock Edition server
-sudo systemctl start mcbe-backup@MCBE.service
+sudo systemctl start mcbe-backup@MCBE
 # Stop Minecraft Bedrock Edition server
 sudo systemctl stop mcbe@MCBE
-
 ```
 
 Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` says the last backup's location. Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh). [MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, JSON files, and PROPERTIES files. Other files will be removed.
@@ -66,7 +60,7 @@ sudo cp systemd/* /etc/systemd/system/
 Stop the Minecraft server.
 ```bash
 sudo mkdir ~mc/java
-# Move server directory
+# Move server directory (Replace "$server_dir" with Minecraft server directory)
 sudo mv "$server_dir" ~mc/java/MC
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
@@ -85,8 +79,9 @@ sudo systemctl enable mc-rmbackup@MC.service --now
 Stop the Minecraft server.
 ```bash
 sudo mkdir ~mc/bedrock
+
 # Do one of the following:
-# Move server directory (replace "$server_dir" with current location of Minecraft server files)
+# Move server directory (Replace "$server_dir" with Minecraft server directory)
 sudo mv "$server_dir" ~mc/bedrock/MCBE
 # OR
 # Make new server directory
