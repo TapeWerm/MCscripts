@@ -34,6 +34,12 @@ How to control systemd services:
 sudo systemctl start mc-backup@MC
 # Stop Minecraft Java Edition server
 sudo systemctl stop mc@MC
+
+# Backup Minecraft Bedrock Edition server
+sudo systemctl start mcbe-backup@MCBE.service
+# Stop Minecraft Bedrock Edition server
+sudo systemctl stop mcbe@MCBE
+
 ```
 
 Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` says the last backup's location. Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh). [MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, JSON files, and PROPERTIES files. Other files will be removed.
@@ -79,8 +85,10 @@ sudo systemctl enable mc-rmbackup@MC.service --now
 Stop the Minecraft server.
 ```bash
 sudo mkdir ~mc/bedrock
-# Move server directory or
+# Do one of the following:
+# Move server directory (replace "$server_dir" with current location of Minecraft server files)
 sudo mv "$server_dir" ~mc/bedrock/MCBE
+# OR
 # Make new server directory
 sudo su mc -s /bin/bash -c '~/MCBEgetZIP.sh'
 sudo ~mc/MCBEautoUpdate.sh ~mc/bedrock/MCBE
