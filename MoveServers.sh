@@ -8,7 +8,7 @@ temp_dir=/tmp/MoveServers
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo "Find Minecraft servers and their backups in ~mc and move them into the java/bedrock directory if they're not already there."
+	echo "Find Minecraft servers and their backups in ~mc and move them into the ~mc/java or ~mc/bedrock directory if they're not already there."
 	exit
 	;;
 esac
