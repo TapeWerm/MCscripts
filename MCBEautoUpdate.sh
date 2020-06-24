@@ -12,7 +12,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc SERVER_DIR."
+		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc SERVER_DIR."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-s, --service=SERVICE  service of Minecraft Bedrock Edition server'
