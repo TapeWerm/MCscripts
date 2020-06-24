@@ -52,12 +52,15 @@ if [ -n "$service" ]; then
 		exit 1
 	fi
 fi
+# Trim off $service before last @
+instance=${service##*@}
 
 if [ -n "$service" ]; then
 	if [ "$installed_ver" = fail ]; then
 		echo Previous update failed, rm "$server_dir/version" and try again
 		exit 1
 	elif [ "$installed_ver" != "$current_ver" ]; then
+		sudo systemctl start "mcbe-backup@$instance"
 		sudo systemctl stop "$service"
 		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo systemctl start "$service"' ERR
 		# MCBEupdate.sh reads y asking if you stopped the server
