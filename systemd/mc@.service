@@ -1,6 +1,6 @@
 [Unit]
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
-After=network.target
+After=%N.socket network.target
 BindsTo=%N.socket
 Description=Minecraft Java Edition server @ %i
 

@@ -60,6 +60,7 @@ if [ -n "$service" ]; then
 		echo Previous update failed, rm "$server_dir/version" and try again
 		exit 1
 	elif [ "$installed_ver" != "$current_ver" ]; then
+		trap 'echo fail > "$server_dir/version"' ERR
 		sudo systemctl start "mcbe-backup@$instance"
 		sudo systemctl stop "$service"
 		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo systemctl start "$service"' ERR

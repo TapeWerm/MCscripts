@@ -64,9 +64,9 @@ fi
 server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
-world_dir=$server_dir/worlds
-if [ ! -d "$world_dir/$world" ]; then
-	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
+worlds_dir=$server_dir/worlds
+if [ ! -d "$worlds_dir/$world" ]; then
+	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
 	exit 1
 fi
 temp_dir=/tmp/MCBEbackup/$(basename "$server_dir")
@@ -135,18 +135,18 @@ echo "$files" | while read -r line; do
 	file=${line%:*}
 	# https://bugs.mojang.com/browse/BDS-1085
 	# save query no longer gives path
-	if [ ! -f "$world_dir/$file" ]; then
+	if [ ! -f "$worlds_dir/$file" ]; then
 		# Trim off $line before first $world/
 		file=${file#$world/}
-		# There might be more than one $file in $world_dir
-		file=$(find "$world_dir" -name "$file" | head -n 1)
-		file=${file#$world_dir/}
+		# There might be more than one $file in $worlds_dir/$world
+		file=$(find "$worlds_dir/$world" -name "$file" | head -n 1)
+		file=${file#$worlds_dir/}
 	fi
 	dir=$(dirname "$file")
 	# Trim off $line before last :
 	length=${line##*:}
 	mkdir -p "$dir"
-	cp "$world_dir/$file" "$dir/"
+	cp "$worlds_dir/$file" "$dir/"
 	truncate --size="$length" "$file"
 done
 zip -r "$backup_zip" "$world"
