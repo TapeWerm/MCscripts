@@ -67,8 +67,7 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
-# Remove trailing slash
-server_dir=${1%/}
+server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 if [ ! -d "$server_dir/$world" ]; then

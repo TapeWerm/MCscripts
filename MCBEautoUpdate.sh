@@ -36,7 +36,7 @@ elif [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
-server_dir=$1
+server_dir=$(realpath "$1")
 # cat fails if there's no file $server_dir/version
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # There might be more than one ZIP in ~mc
