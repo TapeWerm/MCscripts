@@ -79,7 +79,7 @@ fi
 
 server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
-# docker_bedrockserver uses this file instead
+# docker_bedrockserver single world uses this file instead
 if [ -f "$server_dir/world.server.properties" ]; then
 	properties=$server_dir/world.server.properties
 fi
