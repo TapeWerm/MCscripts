@@ -58,7 +58,7 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
-		echo '-d, --docker                 tested with https://github.com/karlrees/docker_bedrockserver single world'
+		echo '-d, --docker                 docker run -d -it --name mc-server -e EULA=TRUE -p 19132:19132/udp -v SERVER_DIR:/data itzg/minecraft-bedrock-server'
 		echo
 		echo 'Backups are {SERVER_DIR}_Backups/{WORLD}_Backups/YEAR/MONTH/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
 		exit
@@ -79,10 +79,6 @@ fi
 
 server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
-# docker_bedrockserver single world uses this file instead
-if [ -f "$server_dir/world.server.properties" ]; then
-	properties=$server_dir/world.server.properties
-fi
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 worlds_dir=$server_dir/worlds
 if [ ! -d "$worlds_dir/$world" ]; then
