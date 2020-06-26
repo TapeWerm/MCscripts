@@ -41,12 +41,12 @@ while [ "$1"  != -- ]; do
 		docker=true
 		server_do() {
 			timestamp=$(date --iso-8601=seconds)
-			echo "$*" | socat EXEC:"docker attach $service",pty STDIN
+			echo "$*" | socat EXEC:"docker attach '$service'",pty STDIN
 		}
 		server_read() {
 			sleep 1
 			if [ -z "$timestamp" ]; then
-				timestamp=$(docker inspect minecraft | grep '^ *"StartedAt":' | cut -d '"' -f 4 -s)
+				timestamp=$(docker inspect "$service" | grep '^ *"StartedAt":' | cut -d '"' -f 4 -s)
 			fi
 			buffer=$(docker logs --since "$timestamp" "$service")
 		}
