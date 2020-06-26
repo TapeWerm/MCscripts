@@ -29,7 +29,7 @@ server_read() {
 	buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
 }
 
-args=$(getopt -l backup-dir:,help -o b:h -- "$@")
+args=$(getopt -l backup-dir:,docker,help -o b:dh -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -37,12 +37,28 @@ while [ "$1"  != -- ]; do
 		backup_dir=$2
 		shift 2
 		;;
+	--docker|-d)
+		docker=true
+		server_do() {
+			timestamp=$(date --iso-8601=seconds)
+			echo "$*" | socat EXEC:"docker attach $service",pty STDIN
+		}
+		server_read() {
+			sleep 1
+			if [ -z "$timestamp" ]; then
+				timestamp=$(docker inspect minecraft | grep '^ *"StartedAt":' | cut -d '"' -f 4 -s)
+			fi
+			buffer=$(docker logs --since "$timestamp" "$service")
+		}
+		shift 1
+		;;
 	--help|-h)
 		echo "$syntax"
 		echo Back up Minecraft Bedrock Edition server world running in service.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
+		echo '-d, --docker                 tested with https://github.com/karlrees/docker_bedrockserver'
 		echo
 		echo 'Backups are {SERVER_DIR}_Backups/{WORLD}_Backups/YEAR/MONTH/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
 		exit
@@ -63,6 +79,9 @@ fi
 
 server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
+if [ -f "$server_dir/world.server.properties" ]; then
+	properties=$server_dir/world.server.properties
+fi
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 worlds_dir=$server_dir/worlds
 if [ ! -d "$worlds_dir/$world" ]; then
@@ -72,10 +91,17 @@ fi
 temp_dir=/tmp/MCBEbackup/$(basename "$server_dir")
 
 service=$2
-status=$(systemctl show "$service" -p ActiveState --value)
-if [ "$status" != active ]; then
-	>&2 echo "Service $service not active"
-	exit 1
+if [ "$docker" = true ]; then
+	if ! docker ps --format="{{.Names}}" | grep -q "^$service$"; then
+		>&2 echo "Service $service not active"
+		exit 1
+	fi
+else
+	status=$(systemctl show "$service" -p ActiveState --value)
+	if [ "$status" != active ]; then
+		>&2 echo "Service $service not active"
+		exit 1
+	fi
 fi
 
 if [ -n "$backup_dir" ]; then
