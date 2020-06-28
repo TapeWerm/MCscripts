@@ -1,8 +1,8 @@
 [Unit]
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
 After=%N.socket network.target
-BindsTo=%N.socket
 Description=Minecraft Java Edition server @ %i
+Requires=%N.socket
 
 [Service]
 # which says script path

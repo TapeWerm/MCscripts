@@ -1,6 +1,6 @@
 [Unit]
 Before=%N.service
-BindsTo=%N.service
+PartOf=%N.service
 
 [Socket]
 ListenFIFO=%t/%N
