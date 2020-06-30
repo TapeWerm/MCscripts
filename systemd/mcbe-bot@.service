@@ -1,6 +1,7 @@
 [Unit]
 After=mcbe@%i.service network-online.target
 Description=Minecraft Bedrock Edition server IRC bot @ %i
+PartOf=mcbe@%i.service
 Requisite=mcbe@%i.service network-online.target
 
 [Service]
