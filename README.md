@@ -71,7 +71,7 @@ Copy and paste this block:
 ```bash
 sudo chmod +x ~mc/java/MC/start.bat
 sudo chown -R mc:nogroup ~mc/java
-sudo systemctl enable mc@MC.service mc-backup@MC.timer --now
+sudo systemctl enable mc@MC.socket mc@MC.service mc-backup@MC.timer --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
@@ -93,7 +93,7 @@ sudo ~mc/MCBEautoUpdate.sh ~mc/bedrock/MCBE
 Copy and paste this block:
 ```bash
 sudo chown -R mc:nogroup ~mc/bedrock
-sudo systemctl enable mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
+sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash

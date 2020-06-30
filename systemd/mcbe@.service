@@ -1,6 +1,6 @@
 [Unit]
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
-After=%N.socket network.target
+After=network.target
 BindsTo=%N.socket
 Description=Minecraft Bedrock Edition server @ %i
 

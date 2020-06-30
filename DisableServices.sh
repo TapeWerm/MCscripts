@@ -3,7 +3,7 @@
 # Exit if error
 set -e
 # mcbe-autoupdate@*.timer and mcbe-log@*.timer used to be in MCscripts
-services=(mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-autoupdate@*.timer mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-bot@*.timer mcbe-log@*.service mcbe-log@*.timer)
+services=(mc@*.socket mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.socket mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-autoupdate@*.timer mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-bot@*.timer mcbe-log@*.service mcbe-log@*.timer)
 units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate@.service mcbe-autoupdate@.timer mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
 syntax='Usage: DisableServices.sh'
 
@@ -63,10 +63,21 @@ for x in "${!enabled[@]}"; do
 		unset 'enabled[x]'
 	# If there's mcbe-bot service but no timer add timer
 	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.service$ ]]; then
-		# Trim off ${enabled[x]} after last .
 		instance=${enabled[x]%.*}
 		if ! echo "${enabled[*]}" | grep -q "$instance.timer"; then
 			enabled+=($instance.timer)
+		fi
+	# If there's mc service but no socket add socket
+	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
+		instance=${enabled[x]%.*}
+		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
+			enabled+=($instance.socket)
+		fi
+	# If there's mcbe service but no socket add socket
+	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
+		instance=${enabled[x]%.*}
+		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
+			enabled+=($instance.socket)
 		fi
 	fi
 done

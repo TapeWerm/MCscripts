@@ -1,9 +1,8 @@
-[Unit]
-Before=%N.service
-PartOf=%N.service
-
 [Socket]
 ListenFIFO=%t/%N
 RemoveOnStop=true
 SocketMode=600
 SocketUser=mc
+
+[Install]
+WantedBy=sockets.target
