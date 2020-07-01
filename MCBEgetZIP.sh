@@ -54,7 +54,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	wget --prefer-family=IPv4 "$url" -O ~/"$current_ver"
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	trap - ERR
-	if [ "$clobber" == true ]; then
+	if [ "$clobber" = true ]; then
 		echo "$installed_ver" | xargs -d '\n' rm -f
 	fi
 fi

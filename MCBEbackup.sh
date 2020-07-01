@@ -29,7 +29,7 @@ server_read() {
 	buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
 }
 
-args=$(getopt -l backup-dir:,help -o b:h -- "$@")
+args=$(getopt -l backup-dir:,docker,help -o b:dh -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -37,12 +37,28 @@ while [ "$1"  != -- ]; do
 		backup_dir=$2
 		shift 2
 		;;
+	--docker|-d)
+		docker=true
+		server_do() {
+			timestamp=$(date --iso-8601=seconds)
+			echo "$*" | socat EXEC:"docker attach '$service'",pty STDIN
+		}
+		server_read() {
+			sleep 1
+			if [ -z "$timestamp" ]; then
+				timestamp=$(docker inspect "$service" | grep '^ *"StartedAt":' | cut -d '"' -f 4 -s)
+			fi
+			buffer=$(docker logs --since "$timestamp" "$service")
+		}
+		shift 1
+		;;
 	--help|-h)
 		echo "$syntax"
 		echo Back up Minecraft Bedrock Edition server world running in service.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
+		echo '-d, --docker                 docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v SERVER_DIR:/data itzg/minecraft-bedrock-server'
 		echo
 		echo 'Backups are {SERVER_DIR}_Backups/{WORLD}_Backups/YEAR/MONTH/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
 		exit
@@ -64,18 +80,25 @@ fi
 server_dir=$(realpath "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
-world_dir=$server_dir/worlds
-if [ ! -d "$world_dir/$world" ]; then
-	>&2 echo "No world $world in $world_dir, check level-name in server.properties too"
+worlds_dir=$server_dir/worlds
+if [ ! -d "$worlds_dir/$world" ]; then
+	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
 	exit 1
 fi
 temp_dir=/tmp/MCBEbackup/$(basename "$server_dir")
 
 service=$2
-status=$(systemctl show "$service" -p ActiveState --value)
-if [ "$status" != active ]; then
-	>&2 echo "Service $service not active"
-	exit 1
+if [ "$docker" = true ]; then
+	if ! docker ps --format='{{.Names}}' | grep -q "^$service$"; then
+		>&2 echo "Container $service not up"
+		exit 1
+	fi
+else
+	status=$(systemctl show "$service" -p ActiveState --value)
+	if [ "$status" != active ]; then
+		>&2 echo "Service $service not active"
+		exit 1
+	fi
 fi
 
 if [ -n "$backup_dir" ]; then
@@ -135,18 +158,18 @@ echo "$files" | while read -r line; do
 	file=${line%:*}
 	# https://bugs.mojang.com/browse/BDS-1085
 	# save query no longer gives path
-	if [ ! -f "$world_dir/$file" ]; then
+	if [ ! -f "$worlds_dir/$file" ]; then
 		# Trim off $line before first $world/
 		file=${file#$world/}
-		# There might be more than one $file in $world_dir
-		file=$(find "$world_dir" -name "$file" | head -n 1)
-		file=${file#$world_dir/}
+		# There might be more than one $file in $worlds_dir/$world
+		file=$(find "$worlds_dir/$world" -name "$file" | head -n 1)
+		file=${file#$worlds_dir/}
 	fi
 	dir=$(dirname "$file")
 	# Trim off $line before last :
 	length=${line##*:}
 	mkdir -p "$dir"
-	cp "$world_dir/$file" "$dir/"
+	cp "$worlds_dir/$file" "$dir/"
 	truncate --size="$length" "$file"
 done
 zip -r "$backup_zip" "$world"

@@ -1,6 +1,7 @@
 [Unit]
 After=mc-backup@%i.service
 Description=Automatically remove Minecraft Java Edition server world backups more than 2-weeks-old @ %i
+Requisite=mc-backup@%i.service
 
 [Service]
 ExecStart=/usr/bin/find /opt/MC/backup_dir/java/%i_Backups -type f -mtime +13 -delete

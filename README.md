@@ -1,6 +1,8 @@
 # Description
 Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd units, bash scripts, and chat bots for backups, automatic updates, installation, and shutdown warnings
 
+**[MCBEbackup.sh](MCBEbackup.sh) also works with Docker**
+
 @@@ **Compatible with Ubuntu** @@@
 
 Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but no others. No automatic update scripts or chat bots for Java Edition.
@@ -42,7 +44,7 @@ Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` 
 # Setup
 Open Terminal:
 ```bash
-sudo apt install curl git wget zip
+sudo apt install curl git socat wget zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
@@ -144,7 +146,7 @@ sudo ./DisableServices.sh
 ```
 Update the services:
 ```bash
-sudo apt install curl git wget zip
+sudo apt install curl git socat wget zip
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s $ext_drive ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi

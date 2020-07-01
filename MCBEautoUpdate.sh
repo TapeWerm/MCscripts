@@ -12,7 +12,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, update and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc SERVER_DIR."
+		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server. If there's no service, make and chown mc SERVER_DIR."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-s, --service=SERVICE  service of Minecraft Bedrock Edition server'
@@ -36,7 +36,7 @@ elif [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
-server_dir=$1
+server_dir=$(realpath "$1")
 # cat fails if there's no file $server_dir/version
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # There might be more than one ZIP in ~mc
@@ -52,12 +52,16 @@ if [ -n "$service" ]; then
 		exit 1
 	fi
 fi
+# Trim off $service before last @
+instance=${service##*@}
 
 if [ -n "$service" ]; then
 	if [ "$installed_ver" = fail ]; then
 		echo Previous update failed, rm "$server_dir/version" and try again
 		exit 1
 	elif [ "$installed_ver" != "$current_ver" ]; then
+		trap 'echo fail > "$server_dir/version"' ERR
+		sudo systemctl start "mcbe-backup@$instance"
 		sudo systemctl stop "$service"
 		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo systemctl start "$service"' ERR
 		# MCBEupdate.sh reads y asking if you stopped the server
