@@ -9,6 +9,7 @@ Description=Minecraft Bedrock Edition server @ %i
 ExecReload=/bin/bash -c 'echo reload > %t/%N'
 ExecStart=/bin/bash -c 'LD_LIBRARY_PATH=. ./bedrock_server'
 ExecStop=/opt/MC/MCstop.sh %N
+KillMode=none
 # Thanks for the security agowa338
 PrivateUsers=true
 ProtectHome=true
