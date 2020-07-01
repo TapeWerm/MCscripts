@@ -61,12 +61,9 @@ for x in "${!enabled[@]}"; do
 	# Don't reenable removed timer
 	elif [[ "${enabled[x]}" =~ ^mcbe-log@.+\.timer$ ]]; then
 		unset 'enabled[x]'
-	# If there's mcbe-bot service but no timer add timer
-	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.service$ ]]; then
-		instance=${enabled[x]%.*}
-		if ! echo "${enabled[*]}" | grep -q "$instance.timer"; then
-			enabled+=($instance.timer)
-		fi
+	# Don't reenable removed timer
+	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.timer$ ]]; then
+		unset 'enabled[x]'
 	# If there's mc service but no socket add socket
 	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}

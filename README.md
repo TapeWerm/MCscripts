@@ -118,7 +118,7 @@ If NICK line is missing it defaults to MCBE_Bot. PRIVMSG lines are optional and 
 Copy and paste this block:
 ```bash
 exit
-sudo systemctl enable mcbe-bot@MCBE.service mcbe-bot@MCBE.timer mcbe-log@MCBE.service --now
+sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
 ```
 ## Bedrock Edition webhook bots setup
 If you want to post connect/disconnect messages to webhooks (Discord and Rocket Chat):

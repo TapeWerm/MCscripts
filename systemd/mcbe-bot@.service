@@ -1,8 +1,8 @@
 [Unit]
 After=mcbe@%i.service network-online.target
 Description=Minecraft Bedrock Edition server IRC bot @ %i
-PartOf=mcbe@%i.service
 Requisite=mcbe@%i.service network-online.target
+StartLimitIntervalSec=0
 
 [Service]
 ExecStart=/opt/MC/MCBE_Bot.sh -i %i_Bot
