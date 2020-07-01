@@ -58,12 +58,10 @@ join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
 # Follow log for unit $service 0 lines from bottom, no metadata
 journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
-		player=$(echo "$line" | sed -e 's/.* connected: \(.*\), xuid.*/\1/')
-		player=${player%,}
+		player=$(echo "$line" | cut -d ' ' -f 6- -s | cut -d , -f 1)
 		send "$player connected to $instance"
 	elif echo "$line" | grep -q 'Player disconnected'; then
-		player=$(echo "$line" | sed -e 's/.* disconnected: \(.*\), xuid.*/\1/')
-		player=${player%,}
+		player=$(echo "$line" | cut -d ' ' -f 6- -s | cut -d , -f 1)
 		send "$player disconnected from $instance"
 	fi
 done
