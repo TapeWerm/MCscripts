@@ -158,6 +158,11 @@ sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
 ```
+Use sed to edit services if you want:
+```bash
+# Change shutdown warning to 20 seconds
+sed -i 's/MCstop.sh/MCstop.sh -s 20/' systemd/mc@.service systemd/mcbe@.service
+```
 Reenable the services you use:
 ```bash
 sudo systemctl enable "$services" --now
