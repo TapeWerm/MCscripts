@@ -58,6 +58,10 @@ sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
 ```
+Change shutdown warning to 20 seconds if you want:
+```bash
+sudo sed -i 's/MCstop.sh/MCstop.sh -s 20/' /etc/systemd/system/mc@.service /etc/systemd/system/mcbe@.service
+```
 ## Java Edition setup
 Stop the Minecraft server.
 ```bash
@@ -71,7 +75,7 @@ Copy and paste this block:
 ```bash
 sudo chmod +x ~mc/java/MC/start.bat
 sudo chown -R mc:nogroup ~mc/java
-sudo systemctl enable mc@MC.service mc-backup@MC.timer --now
+sudo systemctl enable mc@MC.socket mc@MC.service mc-backup@MC.timer --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
@@ -93,14 +97,14 @@ sudo ~mc/MCBEautoUpdate.sh ~mc/bedrock/MCBE
 Copy and paste this block:
 ```bash
 sudo chown -R mc:nogroup ~mc/bedrock
-sudo systemctl enable mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
+sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
 ## Bedrock Edition IRC bot setup
-If you want to post connect/disconnect messages to IRC:
+If you want to post server logs to IRC:
 ```bash
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot
@@ -118,10 +122,10 @@ If NICK line is missing it defaults to MCBE_Bot. PRIVMSG lines are optional and 
 Copy and paste this block:
 ```bash
 exit
-sudo systemctl enable mcbe-bot@MCBE.service mcbe-bot@MCBE.timer mcbe-log@MCBE.service --now
+sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
 ```
 ## Bedrock Edition webhook bots setup
-If you want to post connect/disconnect messages to webhooks (Discord and Rocket Chat):
+If you want to post server logs to webhooks (Discord and Rocket Chat):
 ```bash
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot
@@ -157,6 +161,10 @@ Copy and paste this block:
 sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
+```
+Change shutdown warning to 20 seconds if you want:
+```bash
+sudo sed -i 's/MCstop.sh/MCstop.sh -s 20/' /etc/systemd/system/mc@.service /etc/systemd/system/mcbe@.service
 ```
 Reenable the services you use:
 ```bash

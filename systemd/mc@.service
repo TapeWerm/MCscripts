@@ -1,6 +1,6 @@
 [Unit]
 # Implicit needs are explicitly needed to survive shutdown till stop finishes
-After=%N.socket network.target
+After=network.target
 BindsTo=%N.socket
 Description=Minecraft Java Edition server @ %i
 
@@ -9,6 +9,8 @@ Description=Minecraft Java Edition server @ %i
 ExecReload=/bin/bash -c 'echo reload > %t/%N'
 ExecStart=/bin/bash -c './start.bat'
 ExecStop=/opt/MC/MCstop.sh %N
+# Wait for server stop to finish
+KillMode=none
 # Thanks for the security agowa338
 PrivateUsers=true
 ProtectHome=true
