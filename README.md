@@ -58,6 +58,10 @@ sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
 ```
+Change shutdown warning to 20 seconds if you want:
+```bash
+sudo sed -i 's/MCstop.sh/MCstop.sh -s 20/' /etc/systemd/system/mc@.service /etc/systemd/system/mcbe@.service
+```
 ## Java Edition setup
 Stop the Minecraft server.
 ```bash
@@ -158,10 +162,9 @@ sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
 ```
-Use sed to edit services if you want:
+Change shutdown warning to 20 seconds if you want:
 ```bash
-# Change shutdown warning to 20 seconds
-sed -i 's/MCstop.sh/MCstop.sh -s 20/' systemd/mc@.service systemd/mcbe@.service
+sudo sed -i 's/MCstop.sh/MCstop.sh -s 20/' /etc/systemd/system/mc@.service /etc/systemd/system/mcbe@.service
 ```
 Reenable the services you use:
 ```bash
