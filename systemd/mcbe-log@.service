@@ -6,7 +6,6 @@ Requisite=mcbe@%i.service
 
 [Service]
 ExecStart=/opt/MC/MCBElog.sh mcbe@%i
-ExecStop=/bin/sleep 3
 Restart=always
 Type=simple
 
