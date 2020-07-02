@@ -100,7 +100,7 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ```
 ## Bedrock Edition IRC bot setup
-If you want to post connect/disconnect messages to IRC:
+If you want to post server logs to IRC:
 ```bash
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot
@@ -121,7 +121,7 @@ exit
 sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
 ```
 ## Bedrock Edition webhook bots setup
-If you want to post connect/disconnect messages to webhooks (Discord and Rocket Chat):
+If you want to post server logs to webhooks (Discord and Rocket Chat):
 ```bash
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot

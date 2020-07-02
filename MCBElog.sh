@@ -29,7 +29,9 @@ send() {
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo 'Post Minecraft Bedrock Edition server connect/disconnect messages running in service to IRC and webhooks (Discord and Rocket Chat).'
+	echo 'Post Minecraft Bedrock Edition server logs running in service to IRC and webhooks (Discord and Rocket Chat).'
+	echo
+	echo Logs include server start/stop and player connect/disconnect/kicks.
 	exit
 	;;
 esac
@@ -64,5 +66,17 @@ journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	elif echo "$line" | grep -q 'Player disconnected'; then
 		player=$(echo "$line" | cut -d ' ' -f 6- -s | cut -d , -f 1)
 		send "$player disconnected from $instance"
+	elif echo "$line" | grep -q Kicked; then
+		player=$(echo "$line" | cut -d ' ' -f 2- -s | sed 's/ from the game:.*//')
+		reason=$(echo "$line" | cut -d "'" -f 2- -s)
+		# Trim off trailing ' from $reason
+		reason=${reason%"'"}
+		# Trim off leading space from $reason
+		reason=${reason#' '}
+		send "$player was kicked from $instance because $reason"
+	elif echo "$line" | grep -q 'Server started.'; then
+		send "Server $instance started"
+	elif echo "$line" | grep -q 'Stopping Minecraft Bedrock Edition server'; then
+		send "Server $instance stopping"
 	fi
 done

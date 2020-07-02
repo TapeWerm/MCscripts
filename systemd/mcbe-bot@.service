@@ -1,5 +1,6 @@
 [Unit]
-After=mcbe@%i.service network-online.target
+After=network-online.target
+Before=mcbe@%i.service
 Description=Minecraft Bedrock Edition server IRC bot @ %i
 Requisite=mcbe@%i.service network-online.target
 StartLimitIntervalSec=0

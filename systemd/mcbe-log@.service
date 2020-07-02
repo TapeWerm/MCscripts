@@ -1,6 +1,7 @@
 [Unit]
-After=mcbe@%i.service mcbe-bot@%i.service
-Description=Post Minecraft Bedrock Edition server connect/disconnect messages to chat @ %i
+After=mcbe-bot@%i.service
+Before=mcbe@%i.service
+Description=Post Minecraft Bedrock Edition server logs to chat @ %i
 Requisite=mcbe@%i.service
 
 [Service]
