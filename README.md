@@ -141,6 +141,23 @@ Copy and paste this block:
 exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
+
+## Overriding Unit Configuration
+If you want to make changes to unit files in such a way that they won't get overwritten when performing an update, use "systemctl edit $service" to create drop-in files to override specific settings. This creates a .conf file under "/etc/systemd/system/$service.d/".
+Note that for settings that are parsed as lists of commands (such as ExecStop), the value must first be cleared before being set.
+
+E.g, to change shutdown warning to 20 seconds:
+```bash
+sudo systemctl edit mcbe@MCBE.service
+```
+Add the following to the file:
+```bash
+[Service]
+ExecStop=
+ExecStop=/opt/MC/MCstop.sh -s 20 %N
+```
+After closing the editor the configuration will be reloaded and applied.
+
 ## Update MCscripts
 Disable the services you use and remove their files:
 ```bash
@@ -161,10 +178,6 @@ Copy and paste this block:
 sudo cp *.sh ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
-```
-Change shutdown warning to 20 seconds if you want:
-```bash
-sudo sed -i 's/MCstop.sh/MCstop.sh -s 20/' /etc/systemd/system/mc@.service /etc/systemd/system/mcbe@.service
 ```
 Reenable the services you use:
 ```bash
