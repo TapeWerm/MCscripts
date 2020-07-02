@@ -76,7 +76,7 @@ journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 		send "$player was kicked from $instance because $reason"
 	elif echo "$line" | grep -q 'Server started.'; then
 		send "Server $instance started"
-	elif echo "$line" | grep -q "Stopping $(systemctl show "$service" -p Description --value)"; then
+	elif echo "$line" | grep -q 'Server stop requested'; then
 		send "Server $instance stopping"
 	fi
 done
