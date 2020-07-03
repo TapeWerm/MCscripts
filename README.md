@@ -149,6 +149,8 @@ Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = <kbd>Ct
 ExecStop=
 ExecStop=/opt/MC/MCstop.sh -s 20 %N
 ```
+Other services you might want to edit:
+- [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur
 ## Update MCscripts
 Disable the services you use and remove their files:
 ```bash
