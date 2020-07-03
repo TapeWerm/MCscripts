@@ -14,6 +14,7 @@ Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup
   - [Bedrock Edition setup](#bedrock-edition-setup)
   - [Bedrock Edition IRC bot setup](#bedrock-edition-irc-bot-setup)
   - [Bedrock Edition webhook bots setup](#bedrock-edition-webhook-bots-setup)
+  - [Override systemd unit configuration](#override-systemd-unit-configuration)
   - [Update MCscripts](#update-mcscripts)
 # Notes
 How to send input to and read output from the server console:
