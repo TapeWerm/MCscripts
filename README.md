@@ -150,7 +150,8 @@ ExecStop=
 ExecStop=/opt/MC/MCstop.sh -s 20 %N
 ```
 Other services you might want to edit:
-- [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur
+- [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur (check time zone with `date`)
+- [mcbe-rmbackup@MCBE.service](systemd/mcbe-rmbackup@.service) - How many backups to keep
 ## Update MCscripts
 Disable the services you use and remove their files:
 ```bash
