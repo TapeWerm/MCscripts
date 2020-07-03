@@ -106,7 +106,7 @@ If you want to post server logs to IRC:
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot
 ```
-Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = Ctrl-G):
+Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 NICK $nick
 JOIN #chan $key
@@ -127,7 +127,7 @@ If you want to post server logs to webhooks (Discord and Rocket Chat):
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot
 ```
-Enter `nano ~/.MCBE_Bot/MCBE_BotWebhook.txt`, fill this in, and write out (^G = Ctrl-G):
+Enter `nano ~/.MCBE_Bot/MCBE_BotWebhook.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 $url
 $url
@@ -143,7 +143,7 @@ If you want to edit systemd units in a way that won't get overwritten when you u
 
 How to change mcbe@MCBE shutdown warning to 20 seconds:
 
-Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = Ctrl-G):
+Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 [Service]
 ExecStop=
