@@ -54,6 +54,7 @@ fi
 
 service=$1
 systemctl status "$service" > /dev/null
+main_pid=$(systemctl show "$service" -p MainPID --value)
 
 if [ -z "$seconds" ]; then
 	seconds=10
@@ -70,3 +71,5 @@ for x in {3..1}; do
 	fi
 done
 server_do stop
+# Follow /dev/null until $main_pid dies
+tail -f --pid "$main_pid" /dev/null

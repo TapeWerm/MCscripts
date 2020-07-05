@@ -17,13 +17,14 @@ send() {
 		# Escape \ while reading line from file
 		while read -r url; do
 			if echo "$url" | grep -Eq 'https://discord(app)?\.com'; then
-				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" "$url"
+				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" "$url" &
 			# Rocket Chat can be hosted by any domain
 			elif echo "$url" | grep -q 'https://rocket\.'; then
-				curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" "$url"
+				curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" "$url" &
 			fi
 		done < ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt"
 	fi
+	wait
 }
 
 case $1 in
@@ -35,7 +36,6 @@ case $1 in
 	exit
 	;;
 esac
-
 if [ "$#" -lt 1 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"

@@ -6,6 +6,7 @@ Requisite=mcbe@%i.service
 
 [Service]
 ExecStart=/opt/MC/MCBElog.sh mcbe@%i
+KillMode=process
 Restart=always
 Type=simple
 
