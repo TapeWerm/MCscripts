@@ -53,7 +53,11 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 service=$1
-systemctl status "$service" > /dev/null
+status=$(systemctl show "$service" -p ActiveState --value)
+if [ "$status" != active ]; then
+	echo "Service $service already stopped"
+	exit
+fi
 main_pid=$(systemctl show "$service" -p MainPID --value)
 
 if [ -z "$seconds" ]; then
