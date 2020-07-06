@@ -45,7 +45,7 @@ Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` 
 # Setup
 Open Terminal:
 ```bash
-sudo apt install curl git socat wget zip
+sudo apt install curl git procps socat wget zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
@@ -162,7 +162,7 @@ sudo ./DisableServices.sh
 ```
 Update the services:
 ```bash
-sudo apt install curl git socat wget zip
+sudo apt install curl git procps socat wget zip
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s $ext_drive ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
