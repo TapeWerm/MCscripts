@@ -58,7 +58,7 @@ instance=${service##*@}
 join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
 
 send "Server $instance starting"
-trap 'send "Server $instance stopping"; pkill -P $$' EXIT
+trap 'send "Server $instance stopping"; pkill -s $$' EXIT
 # Follow log for unit $service 0 lines from bottom, no metadata
 journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
