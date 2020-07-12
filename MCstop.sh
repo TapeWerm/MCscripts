@@ -54,7 +54,7 @@ fi
 
 service=$1
 status=$(systemctl show "$service" -p ActiveState --value)
-if [ "$status" != active ]; then
+if [ "$status" != deactivating ]; then
 	echo "Service $service already stopped"
 	exit
 fi
