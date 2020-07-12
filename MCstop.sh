@@ -53,12 +53,11 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 service=$1
-status=$(systemctl show "$service" -p ActiveState --value)
-if [ "$status" != deactivating ]; then
+main_pid=$(systemctl show "$service" -p MainPID --value)
+if [ "$main_pid" = 0 ]; then
 	echo "Service $service already stopped"
 	exit
 fi
-main_pid=$(systemctl show "$service" -p MainPID --value)
 
 if [ -z "$seconds" ]; then
 	seconds=10
