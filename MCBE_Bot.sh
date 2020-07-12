@@ -76,10 +76,12 @@ buffer=~/.MCBE_Bot/${instance}Buffer
 # Duplicate bots exit if $buffer is removed
 rm -f "$buffer"
 mkfifo "$buffer"
+chmod 600 "$buffer"
 ping_time=~/.MCBE_Bot/${instance}Ping
 touch "$ping_time"
 
 join_file=~/.MCBE_Bot/${instance}Join.txt
+chmod 600 "$join_file"
 join=$(grep -Ev '^[^ ]+:[0-9]+$' "$join_file")
 if ! server=$(grep -E '^[^ ]+:[0-9]+$' "$join_file"); then
 	echo "No server in $join_file"
