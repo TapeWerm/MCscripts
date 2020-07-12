@@ -5,15 +5,13 @@ syntax='Usage: MCBElog.sh SERVICE'
 send() {
 	status=$(systemctl show "mcbe-bot@$instance" -p ActiveState --value)
 	if [ "$status" = active ]; then
-		if [ -f "$join_file" ]; then
-			join=$(grep '^JOIN ' "$join_file")
-			chans=$(echo "$join" | cut -d ' ' -f 2 -s)
-			# Trim off $chans after first ,
-			chan=${chans%%,*}
-		fi
-		echo "PRIVMSG $chan :$*" >> ~mc/.MCBE_Bot/"${instance}_BotBuffer"
+		join=$(grep '^JOIN ' "$join_file")
+		chans=$(echo "$join" | cut -d ' ' -f 2 -s)
+		# Trim off $chans after first ,
+		chan=${chans%%,*}
+		echo "PRIVMSG $chan :$*" >> "$buffer"
 	fi
-	if [ -f ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt" ]; then
+	if [ -f "$webhook_file" ]; then
 		# Escape \ while reading line from file
 		while read -r url; do
 			if echo "$url" | grep -Eq 'https://discord(app)?\.com'; then
@@ -22,7 +20,7 @@ send() {
 			elif echo "$url" | grep -q 'https://rocket\.'; then
 				curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" "$url" &
 			fi
-		done < ~mc/.MCBE_Bot/"${instance}_BotWebhook.txt"
+		done < "$webhook_file"
 	fi
 	wait
 }
@@ -55,7 +53,10 @@ fi
 
 # Trim off $service before last @
 instance=${service##*@}
+buffer=~mc/.MCBE_Bot/${instance}_BotBuffer
 join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
+webhook_file=~mc/.MCBE_Bot/${instance}_BotWebhook.txt
+chmod -f 600 "$webhook_file"
 
 send "Server $instance starting"
 trap 'send "Server $instance stopping"; pkill -s $$' EXIT

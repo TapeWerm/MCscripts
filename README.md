@@ -128,6 +128,8 @@ If you want to post server logs to webhooks (Discord and Rocket Chat):
 ```bash
 sudo su mc -s /bin/bash
 mkdir -p ~/.MCBE_Bot
+touch ~/.MCBE_Bot/MCBE_BotWebhook.txt
+chmod 600 ~/.MCBE_Bot/MCBE_BotWebhook.txt
 ```
 Enter `nano ~/.MCBE_Bot/MCBE_BotWebhook.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
