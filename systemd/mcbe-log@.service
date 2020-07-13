@@ -3,6 +3,7 @@ After=mcbe@%i.service mcbe-bot@%i.service
 Description=Post Minecraft Bedrock Edition server logs to chat @ %i
 PartOf=mcbe-bot@%i.service
 Requisite=mcbe@%i.service
+StartLimitIntervalSec=0
 
 [Service]
 ExecStart=/opt/MC/MCBElog.sh mcbe@%i
