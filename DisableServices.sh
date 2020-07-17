@@ -24,7 +24,7 @@ instances=$(systemctl show "${services[@]}" -p Id --value | grep .)
 if [ -n "$instances" ]; then
 	while read -r instance; do
 		if [ "$(systemctl is-enabled "$instance" 2> /dev/null)" = enabled ]; then
-			enabled+=($instance)
+			enabled+=("$instance")
 		fi
 	# Bash process substitution
 	done < <(echo "$instances")
@@ -57,7 +57,7 @@ for x in "${!enabled[@]}"; do
 	if [[ "${enabled[x]}" =~ ^mcbe-autoupdate@.+\.timer$ ]]; then
 		# Trim off ${enabled[x]} after last .
 		instance=${enabled[x]%.*}
-		enabled+=($instance.service)
+		enabled+=("$instance.service")
 		getzip=true
 		unset 'enabled[x]'
 	# Don't reenable removed timer
@@ -70,18 +70,18 @@ for x in "${!enabled[@]}"; do
 	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}
 		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
-			enabled+=($instance.socket)
+			enabled+=("$instance.socket")
 		fi
 	# If there's mcbe service but no socket add socket
 	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}
 		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
-			enabled+=($instance.socket)
+			enabled+=("$instance.socket")
 		fi
 	fi
 done
 if [ "$getzip" = true ]; then
-	enabled+=(mcbe-getzip.timer)
+	enabled+=("mcbe-getzip.timer")
 fi
 echo @@@ To reenable services copy and paste this later: @@@
 echo "sudo systemctl enable ${enabled[*]} --now"

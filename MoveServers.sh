@@ -20,10 +20,10 @@ fi
 
 while read -r dir; do
 	if [ -f ~mc/"$dir"/server.jar ]; then
-		java+=($dir)
+		java+=("$dir")
 	fi
 	if [ -f ~mc/"$dir"/bedrock_server ]; then
-		bedrock+=($dir)
+		bedrock+=("$dir")
 	fi
 # Bash process substitution
 done < <(find ~mc -mindepth 1 -maxdepth 1 -type d ! -name '.*' -printf '%P\n')
