@@ -94,8 +94,7 @@ if [ "$docker" = true ]; then
 		exit 1
 	fi
 else
-	status=$(systemctl show "$service" -p ActiveState --value)
-	if [ "$status" != active ]; then
+	if ! systemctl is-active --quiet "$service"; then
 		>&2 echo "Service $service not active"
 		exit 1
 	fi

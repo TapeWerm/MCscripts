@@ -3,8 +3,7 @@
 syntax='Usage: MCBElog.sh SERVICE'
 
 send() {
-	status=$(systemctl show "mcbe-bot@$instance" -p ActiveState --value)
-	if [ "$status" = active ]; then
+	if systemctl is-active --quiet "mcbe-bot@$instance"; then
 		join=$(grep '^JOIN ' "$join_file")
 		chans=$(echo "$join" | cut -d ' ' -f 2 -s)
 		# Trim off $chans after first ,
@@ -45,8 +44,7 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 service=$1
-status=$(systemctl show "$service" -p ActiveState --value)
-if [ "$status" != active ]; then
+if ! systemctl is-active --quiet "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1
 fi
