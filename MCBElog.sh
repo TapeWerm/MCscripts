@@ -4,8 +4,7 @@ syntax='Usage: MCBElog.sh SERVICE'
 
 send() {
 	if systemctl is-active --quiet "mcbe-bot@$instance"; then
-		join=$(grep '^JOIN ' "$join_file")
-		chans=$(echo "$join" | cut -d ' ' -f 2 -s)
+		chans=$(grep '^JOIN ' "$join_file" | cut -d ' ' -f 2 -s)
 		# Trim off $chans after first ,
 		chan=${chans%%,*}
 		echo "PRIVMSG $chan :$*" >> "$buffer"
