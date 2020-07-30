@@ -1,7 +1,6 @@
 [Unit]
 After=mcbe-backup@%i.service
 Description=Automatically remove Minecraft Bedrock Edition server world backups more than 2-weeks-old @ %i
-Requisite=mcbe-backup@%i.service
 
 [Service]
 # Automatically remove Minecraft Bedrock Edition server world backups except the 14 newest ones @ %i

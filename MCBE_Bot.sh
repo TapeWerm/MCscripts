@@ -8,7 +8,7 @@ input() {
 	# $USER = `whoami` and is not set in cron
 	echo "USER $(whoami) $HOSTNAME $fqdn :The Mafia"
 	echo "NICK $nick"
-	grep -Ev '^NICK |^[^ ]+:[0-9]+$' "$join_file"
+	echo "$join"
 	# Last 10 lines of $buffer as IRC appends to it
 	tail -f "$buffer"
 }
@@ -87,8 +87,9 @@ if ! server=$(grep -E '^[^ ]+:[0-9]+$' "$join_file"); then
 	echo "No server in $join_file"
 	exit 1
 fi
-if grep -q '^NICK ' "$join_file"; then
-	nick=$(grep '^NICK ' "$join_file" | cut -d ' ' -f 2 -s)
+if echo "$join" | grep -q '^NICK '; then
+	nick=$(echo "$join" | grep '^NICK ' | cut -d ' ' -f 2 -s)
+	join=$(echo "$join" | grep -v '^NICK ')
 else
 	nick=$instance
 fi
