@@ -5,7 +5,7 @@ Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd unit
 
 @@@ **Compatible with Ubuntu** @@@
 
-Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but not others. Automatic update scripts and chat bots are not supported for Java Edition.
+Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but not others. No automatic update scripts nor chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
 - [Notes](#notes)
