@@ -17,19 +17,16 @@ Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup
   - [Override systemd unit configuration](#override-systemd-unit-configuration)
   - [Update MCscripts](#update-mcscripts)
 # Notes
-How to send input to and read output from the server console:
+How to run commands in the server console:
 ```bash
-# Send input to server console
-sudo su mc -s /bin/bash -c "echo $input > /run/$service"
-# Read output from server console
-systemctl status $service
+sudo ~mc/MCrunCmd.sh $service $command
 # Bedrock Dedicated Server example
-sudo su mc -s /bin/bash -c "echo save query > /run/mcbe@MCBE"
-systemctl status mcbe@MCBE
+sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
 How to add everyone to Bedrock Dedicated Server whitelist:
 ```bash
-for x in steve alex herobrine; do sudo su mc -s /bin/bash -c "echo whitelist add $x > /run/mcbe@MCBE"; done
+whitelist=$(for x in steve alex herobrine; do echo whitelist add "$x"; done)
+sudo ~mc/MCrunCmd.sh mcbe@MCBE "$whitelist"
 ```
 How to control systemd services:
 ```bash
@@ -176,7 +173,7 @@ sudo ./MoveServers.sh
 ```
 Copy and paste this block:
 ```bash
-sudo cp *.sh ~mc/
+sudo cp *.{sed,sh} ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
 ```

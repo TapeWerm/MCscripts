@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-scripts=(DisableServices.sh MCbackup.sh MCBEautoUpdate.sh MCBEbackup.sh MCBE_Bot.sh MCBEgetZIP.sh MCBElog.sh MCBEupdate.sh MCgetJAR.sh MCstop.sh MoveServers.sh)
+scripts=(DisableServices.sh MCbackup.sh MCBEautoUpdate.sh MCBEbackup.sh MCBE_Bot.sh MCBEgetZIP.sh MCBElog.sh MCBEupdate.sh MCcolor.sed MCgetJAR.sh MCrunCmd.sh MCstop.sh MoveServers.sh)
 services=(mc@*.socket mc@*.service mc-backup@*.timer mc-rmbackup@*.service mcbe@*.socket mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-autoupdate@*.timer mcbe-rmbackup@*.service mcbe-bot@*.service mcbe-bot@*.timer mcbe-log@*.service mcbe-log@*.timer)
 units=(mc-backup@.service mc-backup@.timer mcbe-autoupdate@.service mcbe-autoupdate@.timer mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket mc-rmbackup@.service mc@.service mc@.socket)
 syntax='Usage: DisableServices.sh'
