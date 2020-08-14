@@ -86,6 +86,8 @@ sudo mkdir ~mc/bedrock
 # Do one of the following:
 # Move server directory (Replace "$server_dir" with Minecraft server directory)
 sudo mv "$server_dir" ~mc/bedrock/MCBE
+# Convert DOS line endings to UNIX line endings
+for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
 # OR
 # Make new server directory
 sudo su mc -s /bin/bash -c '~/MCBEgetZIP.sh'

@@ -64,7 +64,7 @@ for pack_dir in *_packs; do
 		fi
 	done
 done
-for file in worlds *.json *.properties; do
+for file in worlds *.{json,properties}; do
 	cp -r "$backup_dir/$file" .
 done
 rm -r "$backup_dir"
