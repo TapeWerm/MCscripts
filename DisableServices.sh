@@ -25,16 +25,19 @@ if [ -n "$instances" ]; then
 	while read -r instance; do
 		if [ "$(systemctl is-enabled "$instance" 2> /dev/null)" = enabled ]; then
 			enabled+=("$instance")
+		elif [ "$(systemctl is-active "$instance" 2> /dev/null)" = active ]; then
+			active+=("$instance")
 		fi
 	# Bash process substitution
 	done < <(echo "$instances")
 fi
 
-if [ -z "${enabled[*]}" ]; then
+if [ -z "${enabled[*]}" ] && [ -z "${active[*]}" ]; then
 	echo No services enabled
 	exit
 fi
 echo "Enabled services: ${enabled[*]}"
+echo "Active but not enabled services: ${active[*]}"
 echo "Enter Y to disable services and remove their files (make sure people aren't playing first)"
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
@@ -44,6 +47,7 @@ if [ "$input" != y ]; then
 fi
 
 sudo systemctl disable "${enabled[@]}" --now
+sudo systemctl stop "${active[@]}"
 for file in "${scripts[@]}"; do
 	sudo rm -f ~mc/"$file"
 done
