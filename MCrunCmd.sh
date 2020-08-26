@@ -31,4 +31,8 @@ echo "$*" | sudo tee "/run/$service" > /dev/null
 sleep 1
 # Output of $service since $timestamp with no metadata
 buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
+if [ -z "$buffer" ]; then
+	echo "No output from service"
+	exit
+fi
 echo "$buffer" | "$dir/MCcolor.sed"
