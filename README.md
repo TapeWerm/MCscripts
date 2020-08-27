@@ -19,7 +19,7 @@ Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup
 # Notes
 How to run commands in the server console:
 ```bash
-sudo ~mc/MCrunCmd.sh $service $command
+sudo ~mc/MCrunCmd.sh SERVICE COMMAND...
 # Bedrock Dedicated Server example
 sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
@@ -47,7 +47,7 @@ git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
-# Example: sudo ln -s $ext_drive ~mc/backup_dir
+# Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
 sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
@@ -60,8 +60,8 @@ sudo cp systemd/* /etc/systemd/system/
 Stop the Minecraft server.
 ```bash
 sudo mkdir ~mc/java
-# Move server directory (Replace "$server_dir" with Minecraft server directory)
-sudo mv "$server_dir" ~mc/java/MC
+# Move server directory (Replace SERVER_DIR with Minecraft server directory)
+sudo mv SERVER_DIR ~mc/java/MC
 # Open server.jar with no GUI and 1024-2048 MB of RAM
 echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
 ```
@@ -81,8 +81,8 @@ Stop the Minecraft server.
 sudo mkdir ~mc/bedrock
 
 # Do one of the following:
-# Move server directory (Replace "$server_dir" with Minecraft server directory)
-sudo mv "$server_dir" ~mc/bedrock/MCBE
+# Move server directory (Replace SERVER_DIR with Minecraft server directory)
+sudo mv SERVER_DIR ~mc/bedrock/MCBE
 # OR
 # Make new server directory
 sudo su mc -s /bin/bash -c '~/MCBEgetZIP.sh'
@@ -147,7 +147,7 @@ exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
 ## Override systemd unit configuration
-If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `systemctl edit $service` to override specific options. Options that are a list, such as ExecStop, must first be reset by setting it to an empty string.
+If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `systemctl edit SERVICE` to override specific options. Options that are a list, such as ExecStop, must first be reset by setting it to an empty string.
 
 How to change mcbe@MCBE shutdown warning to 20 seconds:
 
@@ -161,6 +161,14 @@ Other services you might want to edit:
 - [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur (check time zone with `date`)
 - [mcbe-rmbackup@MCBE.service](systemd/mcbe-rmbackup@.service) - How many backups to keep
 - [mcbe-getzip.service](systemd/mcbe-getzip.service) - [MCBEgetZIP.sh](MCBEgetZIP.sh) --no-clobber
+
+How to restart mcbe@MCBE at 3 AM daily:
+
+Enter `sudo crontab -e`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+```
+# m h  dom mon dow   command
+0 3 * * * systemctl is-active --quiet mcbe@MCBE && systemctl restart mcbe@MCBE
+```
 ## Update MCscripts
 Disable the services you use and remove their files:
 ```bash
@@ -172,7 +180,7 @@ Update the services:
 ```bash
 sudo apt install curl git procps socat wget zip
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
-# Example: sudo ln -s $ext_drive ~mc/backup_dir
+# Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 sudo ./MoveServers.sh
 ```
@@ -184,5 +192,5 @@ sudo cp systemd/* /etc/systemd/system/
 ```
 Reenable the services you use:
 ```bash
-sudo systemctl enable "$services" --now
+sudo systemctl enable SERVICES --now
 ```
