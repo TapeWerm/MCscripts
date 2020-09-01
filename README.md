@@ -23,7 +23,7 @@ sudo ~mc/MCrunCmd.sh SERVICE COMMAND...
 # Bedrock Dedicated Server example
 sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
-How to see server output (Press <kbd>H</kbd> for help):
+How to see server output:
 ```bash
 journalctl -eu SERVICE | ~mc/MCcolor.sed
 ```
