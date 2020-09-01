@@ -25,7 +25,7 @@ sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
 How to see server output (Press <kbd>H</kbd> for help):
 ```bash
-journalctl -eu SERVICE
+journalctl -eu SERVICE | ~mc/MCcolor.sed
 ```
 How to add everyone to whitelist:
 ```bash
