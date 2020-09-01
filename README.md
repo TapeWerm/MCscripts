@@ -20,7 +20,7 @@ Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup
 How to run commands in the server console:
 ```bash
 sudo ~mc/MCrunCmd.sh SERVICE COMMAND...
-# Bedrock Dedicated Server example
+# Bedrock Edition server example
 sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
 How to see server output:
