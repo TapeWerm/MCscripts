@@ -23,10 +23,10 @@ sudo ~mc/MCrunCmd.sh SERVICE COMMAND...
 # Bedrock Dedicated Server example
 sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
-How to add everyone to Bedrock Dedicated Server whitelist:
+How to add everyone to whitelist:
 ```bash
 whitelist=$(for x in steve alex herobrine; do echo whitelist add "$x"; done)
-sudo ~mc/MCrunCmd.sh mcbe@MCBE "$whitelist"
+sudo ~mc/MCrunCmd.sh SERVICE "$whitelist"
 ```
 How to control systemd services:
 ```bash
