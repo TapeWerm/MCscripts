@@ -23,6 +23,10 @@ sudo ~mc/MCrunCmd.sh SERVICE COMMAND...
 # Bedrock Dedicated Server example
 sudo ~mc/MCrunCmd.sh mcbe@MCBE help 2
 ```
+How to see server output (Press <kbd>H</kbd> for help):
+```bash
+journalctl -eu SERVICE | ~mc/MCcolor.sed | less -r +G
+```
 How to add everyone to whitelist:
 ```bash
 whitelist=$(for x in steve alex herobrine; do echo whitelist add "$x"; done)
