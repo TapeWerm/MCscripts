@@ -56,7 +56,7 @@ sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
 ```bash
-sudo cp *.sh ~mc/
+sudo cp *.sh *.sed ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
 ```
