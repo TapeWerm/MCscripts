@@ -155,7 +155,7 @@ If you want to edit systemd units in a way that won't get overwritten when you u
 
 How to change mcbe@MCBE shutdown warning to 20 seconds:
 
-Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+1. Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 [Service]
 ExecStop=
@@ -168,24 +168,20 @@ Other services you might want to edit:
 
 How to restart mcbe@MCBE at 3 AM daily:
 
-Enter `sudo crontab -e`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+1. Enter `sudo crontab -e`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 # m h  dom mon dow   command
 0 3 * * * systemctl is-active --quiet mcbe@MCBE && systemctl restart mcbe@MCBE
 ```
 ## Update MCscripts
-Disable the services you use and remove their files:
-```bash
-cd MCscripts
-git pull origin master
-sudo ./DisableServices.sh
-```
-Update the services:
 ```bash
 sudo apt install curl git procps socat wget zip
+cd MCscripts
+git pull origin master
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
+sudo ./DisableServices.sh
 sudo ./MoveServers.sh
 ```
 Copy and paste this block:
@@ -193,8 +189,5 @@ Copy and paste this block:
 sudo cp *.{sed,sh} ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
-```
-Reenable the services you use:
-```bash
-sudo systemctl enable SERVICES --now
+sudo ./EnableServices.sh
 ```

@@ -10,7 +10,7 @@ syntax='Usage: DisableServices.sh'
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo Find enabled services from MCscripts, prompt user to disable them and remove their files, and list services to be reenabled.
+	echo 'Find enabled services from MCscripts, prompt user to disable them and remove their files, and list services in ~mc/disabled_services.txt.'
 	exit
 	;;
 esac
@@ -46,8 +46,14 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-sudo systemctl disable "${enabled[@]}" --now
-sudo systemctl stop "${active[@]}"
+echo "${enabled[*]}" | sudo tee ~mc/disabled_services.txt > /dev/null
+if [ -n "${enabled[*]}" ]; then
+	sudo systemctl disable "${enabled[@]}" --now
+fi
+if [ -n "${active[*]}" ]; then
+	sudo systemctl stop "${active[@]}"
+fi
+
 for file in "${scripts[@]}"; do
 	sudo rm -f ~mc/"$file"
 done
@@ -55,37 +61,4 @@ for file in "${units[@]}"; do
 	sudo rm -f "/etc/systemd/system/$file"
 done
 
-# Update list of services to be reenabled
-for x in "${!enabled[@]}"; do
-	# Replace mcbe-autoupdate timer with service and mcbe-getzip
-	if [[ "${enabled[x]}" =~ ^mcbe-autoupdate@.+\.timer$ ]]; then
-		# Trim off ${enabled[x]} after last .
-		instance=${enabled[x]%.*}
-		enabled+=("$instance.service")
-		getzip=true
-		unset 'enabled[x]'
-	# Don't reenable removed timer
-	elif [[ "${enabled[x]}" =~ ^mcbe-log@.+\.timer$ ]]; then
-		unset 'enabled[x]'
-	# Don't reenable removed timer
-	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.timer$ ]]; then
-		unset 'enabled[x]'
-	# If there's mc service but no socket add socket
-	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
-		instance=${enabled[x]%.*}
-		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
-			enabled+=("$instance.socket")
-		fi
-	# If there's mcbe service but no socket add socket
-	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
-		instance=${enabled[x]%.*}
-		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
-			enabled+=("$instance.socket")
-		fi
-	fi
-done
-if [ "$getzip" = true ]; then
-	enabled+=("mcbe-getzip.timer")
-fi
-echo @@@ To reenable services copy and paste this later: @@@
-echo "sudo systemctl enable ${enabled[*]} --now"
+echo '@@@ Disabled services are listed in ~mc/disabled_services.txt @@@'
