@@ -49,7 +49,7 @@ if [ -f "$backup_dir" ]; then
 fi
 mv "$server_dir" "$backup_dir"
 trap 'rm -rf "$server_dir"; mv "$backup_dir" "$server_dir"; echo fail > "$server_dir/version"' ERR
-unzip "$minecraft_zip" -d "$server_dir"
+unzip -q "$minecraft_zip" -d "$server_dir"
 
 cd "$server_dir"
 # Trim off $minecraft_zip after last .zip

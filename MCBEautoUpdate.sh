@@ -76,7 +76,7 @@ else
 	# Test extracting $minecraft_zip partially quietly
 	unzip -tq "$minecraft_zip"
 	trap 'sudo rm -rf "$server_dir"' ERR
-	sudo unzip "$minecraft_zip" -d "$server_dir"
+	sudo unzip -q "$minecraft_zip" -d "$server_dir"
 	echo "$current_ver" > "$server_dir/version"
 	sudo chown -R mc:nogroup "$server_dir"
 	echo "@@@ Don't forget to edit $server_dir/server.properties @@@"

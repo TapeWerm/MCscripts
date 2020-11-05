@@ -171,7 +171,7 @@ echo "$files" | while read -r line; do
 	cp "$worlds_dir/$file" "$dir/"
 	truncate --size="$length" "$file"
 done
-zip -r "$backup_zip" "$world"
+zip -rq "$backup_zip" "$world"
 echo "Backup is $backup_zip"
 rm -r "$world"
 server_do save resume
