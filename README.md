@@ -12,7 +12,6 @@ Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup
 - [Setup](#setup)
   - [Java Edition setup](#java-edition-setup)
   - [Bedrock Edition setup](#bedrock-edition-setup)
-  - [Bedrock Edition IRC bot setup](#bedrock-edition-irc-bot-setup)
   - [Bedrock Edition webhook bots setup](#bedrock-edition-webhook-bots-setup)
   - [Override systemd unit configuration](#override-systemd-unit-configuration)
   - [Update MCscripts](#update-mcscripts)
@@ -107,29 +106,6 @@ sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer 
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
 sudo systemctl enable mcbe-rmbackup@MCBE.service --now
-```
-## Bedrock Edition IRC bot setup
-If you want to post server logs to IRC:
-```bash
-sudo su mc -s /bin/bash
-mkdir -p ~/.MCBE_Bot
-touch ~/.MCBE_Bot/MCBE_BotJoin.txt
-chmod 600 ~/.MCBE_Bot/MCBE_BotJoin.txt
-```
-Enter `nano ~/.MCBE_Bot/MCBE_BotJoin.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
-```
-NICK $nick
-JOIN #chan $key
-PRIVMSG #chan :$msg
-...
-irc.domain.tld:$port
-```
-If NICK line is missing it defaults to MCBE_Bot. PRIVMSG lines are optional and can be used before JOIN to identify with NickServ.
-
-Copy and paste this block:
-```bash
-exit
-sudo systemctl enable mcbe-bot@MCBE.service mcbe-log@MCBE.service --now
 ```
 ## Bedrock Edition webhook bots setup
 If you want to post server logs to webhooks (Discord and Rocket Chat):

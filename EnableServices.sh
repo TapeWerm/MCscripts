@@ -37,6 +37,9 @@ for x in "${!enabled[@]}"; do
 	# Don't reenable removed timer
 	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.timer$ ]]; then
 		unset 'enabled[x]'
+	# Don't reenable removed service
+	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.service$ ]]; then
+		unset 'enabled[x]'
 	# If there's mc service but no socket add socket
 	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}

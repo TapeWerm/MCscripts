@@ -1,5 +1,5 @@
 [Unit]
-After=mcbe@%i.service mcbe-bot@%i.service
+After=mcbe@%i.service
 Description=Post Minecraft Bedrock Edition server logs to chat @ %i
 Requisite=mcbe@%i.service
 

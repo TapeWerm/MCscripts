@@ -3,13 +3,6 @@
 syntax='Usage: MCBElog.sh SERVICE'
 
 send() {
-	if systemctl is-active --quiet "mcbe-bot@$instance"; then
-		join=$(grep '^JOIN ' "$join_file")
-		chans=$(echo "$join" | cut -d ' ' -f 2 -s)
-		# Trim off $chans after first ,
-		chan=${chans%%,*}
-		echo "PRIVMSG $chan :$*" >> "$buffer"
-	fi
 	if [ -f "$webhook_file" ]; then
 		# Escape \ while reading line from file
 		while read -r url; do
@@ -27,7 +20,7 @@ send() {
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo 'Post Minecraft Bedrock Edition server logs running in service to IRC and webhooks (Discord and Rocket Chat).'
+	echo 'Post Minecraft Bedrock Edition server logs running in service to webhooks (Discord and Rocket Chat).'
 	echo
 	echo Logs include server start/stop and player connect/disconnect/kicks.
 	exit
@@ -51,8 +44,6 @@ fi
 
 # Trim off $service before last @
 instance=${service##*@}
-buffer=~mc/.MCBE_Bot/${instance}_BotBuffer
-join_file=~mc/.MCBE_Bot/${instance}_BotJoin.txt
 webhook_file=~mc/.MCBE_Bot/${instance}_BotWebhook.txt
 chmod -f 600 "$webhook_file"
 
