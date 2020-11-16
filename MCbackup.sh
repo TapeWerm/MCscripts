@@ -2,12 +2,13 @@
 
 # Exit if error
 set -e
+epoch=$(date +%s)
+thyme=$(date --date "@$epoch" +%H-%M)
+date=$(date --date "@$epoch" +%d)
+month=$(date --date "@$epoch" +%b)
+year=$(date --date "@$epoch" +%Y)
 syntax='Usage: MCbackup.sh [OPTION] ... SERVER_DIR SERVICE'
 # Filenames can't contain : on some filesystems
-thyme=$(date +%H-%M)
-date=$(date +%d)
-month=$(date +%b)
-year=$(date +%Y)
 
 server_do() {
 	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
