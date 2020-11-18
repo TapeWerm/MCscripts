@@ -61,8 +61,6 @@ journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	elif echo "$line" | grep -q Kicked; then
 		player=$(echo "$line" | sed 's/.*Kicked \(.*\) from the game.*/\1/')
 		reason=$(echo "$line" | sed "s/.*from the game: '\(.*\)'.*/\1/")
-		# Trim off trailing ' from $reason
-		reason=${reason%"'"}
 		# Trim off leading space from $reason
 		reason=${reason#' '}
 		send "$player was kicked from $instance because $reason"
