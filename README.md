@@ -5,7 +5,10 @@ Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd unit
 
 @@@ **Compatible with Ubuntu** @@@
 
-Ubuntu on Windows 10 does not support systemd (Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3)). You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but not others. No automatic update scripts nor chat bots for Java Edition.
+Ubuntu on Windows 10 does not support systemd.
+Try [my Ubuntu Server 18.04 Setup](https://gist.github.com/TapeWerm/d65ae4aeb6653b669e68b0fb25ec27f3).
+You can run [MCgetJAR.sh](MCgetJAR.sh), [MCBEgetZIP.sh](MCBEgetZIP.sh), and [MCBEupdate.sh](MCBEupdate.sh) without enabling the systemd units, but not others.
+No automatic update scripts nor chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
 - [Notes](#notes)
@@ -39,9 +42,15 @@ sudo systemctl start mcbe-backup@MCBE
 sudo systemctl stop mcbe@MCBE
 ```
 
-Backups are in ~mc by default. `systemctl status mc-backup@MC mcbe-backup@MCBE` says the last backup's location. Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh). [MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, JSON files, and PROPERTIES files. Other files will be removed.
+Backups are in ~mc by default.
+`systemctl status mc-backup@MC mcbe-backup@MCBE` says the last backup's location.
+Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh).
+[MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
+Other files will be removed.
 
-[PS4 and Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.minecraft.net/hc/en-us/articles/360035131651-Dedicated-Servers-for-Minecraft-on-Bedrock-) Try [jhead/phantom](https://github.com/jhead/phantom) to work around this on PS4 and Xbox One. Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/user/ProfessorValko/comments/9f438p/bedrock_dedicated_server_tutorial/).
+[PS4 and Xbox One can only connect on LAN, Nintendo Switch cannot connect at all.](https://help.minecraft.net/hc/en-us/articles/360035131651-Dedicated-Servers-for-Minecraft-on-Bedrock-)
+Try [jhead/phantom](https://github.com/jhead/phantom) to work around this on PS4 and Xbox One.
+Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/user/ProfessorValko/comments/9f438p/bedrock_dedicated_server_tutorial/).
 # Setup
 Open Terminal:
 ```bash
@@ -127,7 +136,8 @@ exit
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
 ## Override systemd unit configuration
-If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `systemctl edit SERVICE` to override specific options. Options that are a list, such as ExecStop, must first be reset by setting it to an empty string.
+If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `systemctl edit SERVICE` to override specific options.
+Options that are a list, such as ExecStop, must first be reset by setting it to an empty string.
 
 How to change mcbe@MCBE shutdown warning to 20 seconds:
 
