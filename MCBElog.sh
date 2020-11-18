@@ -53,14 +53,14 @@ trap 'send "Server $instance stopping"; pkill -s $$' EXIT
 journalctl -fu "$service" -n 0 -o cat | while read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
 		# Gamertags can have spaces as long as they're not leading/trailing/contiguous
-		player=$(echo "$line" | cut -d ' ' -f 6- -s | cut -d , -f 1)
+		player=$(echo "$line" | sed 's/.*Player connected: \(.*\),.*/\1/')
 		send "$player connected to $instance"
 	elif echo "$line" | grep -q 'Player disconnected'; then
-		player=$(echo "$line" | cut -d ' ' -f 6- -s | cut -d , -f 1)
+		player=$(echo "$line" | sed 's/.*Player disconnected: \(.*\),.*/\1/')
 		send "$player disconnected from $instance"
 	elif echo "$line" | grep -q Kicked; then
-		player=$(echo "$line" | cut -d ' ' -f 2- -s | sed 's/ from the game:.*//')
-		reason=$(echo "$line" | cut -d "'" -f 2- -s)
+		player=$(echo "$line" | sed 's/.*Kicked \(.*\) from the game.*/\1/')
+		reason=$(echo "$line" | sed "s/.*from the game: '\(.*\)'.*/\1/")
 		# Trim off trailing ' from $reason
 		reason=${reason%"'"}
 		# Trim off leading space from $reason
