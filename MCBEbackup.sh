@@ -146,7 +146,8 @@ done
 # grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
-files=$(echo "$buffer" | grep -Eo "$world[^:]+:[0-9]+")
+# journald LineMax splits lines so delete newlines
+files=$(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
 
 mkdir -p "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
