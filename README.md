@@ -36,14 +36,17 @@ sudo ~mc/MCrunCmd.sh SERVICE "$whitelist"
 ```
 How to control systemd services:
 ```bash
+# See Minecraft Bedrock Edition server status
+systemctl status mcbe@MCBE
 # Backup Minecraft Bedrock Edition server
 sudo systemctl start mcbe-backup@MCBE
+# See backup's location
+journalctl -u mcbe-backup@MCBE -t MCBEbackup.sh -n 1 -o cat
 # Stop Minecraft Bedrock Edition server
 sudo systemctl stop mcbe@MCBE
 ```
 
 Backups are in ~mc by default.
-`systemctl status mc-backup@MC mcbe-backup@MCBE` says the last backup's location.
 Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZIP.sh).
 [MCBEupdate.sh](MCBEupdate.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
 Other files will be removed.
