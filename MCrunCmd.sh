@@ -32,7 +32,7 @@ sleep 1
 # Output of $service since $timestamp with no metadata
 buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
 if [ -z "$buffer" ]; then
-	echo "No output from service"
+	echo "No output from service after 1 second"
 	exit
 fi
 echo "$buffer" | "$dir/MCcolor.sed"
