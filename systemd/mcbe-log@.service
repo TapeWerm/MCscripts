@@ -1,9 +1,11 @@
 [Unit]
-After=mcbe@%i.service
+After=mcbe@%i.service network-online.target
 Description=Post Minecraft Bedrock Edition server logs to chat @ %i
 Requisite=mcbe@%i.service
 
 [Service]
+# DNS check
+ExecStartPre=/bin/bash -c 'until host minecraft.net; do sleep 1; done'
 ExecStart=/opt/MC/MCBElog.sh mcbe@%i
 KillMode=process
 Restart=always
