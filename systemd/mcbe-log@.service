@@ -5,7 +5,7 @@ Requisite=mcbe@%i.service
 
 [Service]
 # DNS check
-ExecStartPre=/bin/bash -c 'until host minecraft.net; do sleep 1; done'
+ExecStartPre=/bin/bash -c 'until host minecraft.net > /dev/null; do sleep 1; done'
 ExecStart=/opt/MC/MCBElog.sh mcbe@%i
 KillMode=process
 Restart=always
