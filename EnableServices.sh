@@ -17,7 +17,10 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-enabled=($(cat ~mc/disabled_services.txt))
+disabled=$(cat ~mc/disabled_services.txt)
+for x in $disabled; do
+	enabled+=("$x")
+done
 if [ -z "${enabled[*]}" ]; then
 	echo No services to reenable
 	exit
