@@ -53,6 +53,9 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 service=$1
+if [ -z "$MAINPID" ]; then
+	MAINPID=$(systemctl show "$service" -p MainPID --value)
+fi
 if [ "$MAINPID" = 0 ]; then
 	echo "Service $service already stopped"
 	exit
