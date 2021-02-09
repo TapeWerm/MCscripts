@@ -53,7 +53,7 @@ Outdated bedrock-server ZIPs in ~mc will be removed by [MCBEgetZIP.sh](MCBEgetZI
 Other files will be removed.
 
 [PlayStation and Xbox can only connect on LAN with subscription, Nintendo Switch cannot connect at all.](https://help.minecraft.net/hc/en-us/articles/360035131651-Dedicated-Servers-for-Minecraft-on-Bedrock-)
-Try [jhead/phantom](https://github.com/jhead/phantom) to work around this on PS4 and Xbox One.
+Try [jhead/phantom](https://github.com/jhead/phantom) to work around this on PlayStation and Xbox.
 Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/user/ProfessorValko/comments/9f438p/bedrock_dedicated_server_tutorial/).
 # Setup
 Open Terminal:
