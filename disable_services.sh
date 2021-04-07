@@ -4,9 +4,10 @@
 set -e
 # List includes current and past services
 scripts=(DisableServices.sh EnableServices.sh MCBE_Bot.sh MCBEautoUpdate.sh MCBEbackup.sh MCBEgetZIP.sh MCBElog.sh MCBEupdate.sh MCbackup.sh MCcolor.sed MCgetJAR.sh MCrunCmd.sh MCstop.sh MoveServers.sh)
+scripts+=(disable_services.sh enable_services.sh mc_backup.sh mc_cmd.sh mc_getjar.sh mc_stop.sh mcbe_autoupdate.sh mcbe_backup.sh mcbe_getzip.sh mcbe_log.sh mcbe_update.sh move_servers.sh)
 services=(mc-backup@*.timer mc-rmbackup@*.service mc@*.service mc@*.socket mcbe-autoupdate@*.service mcbe-autoupdate@*.timer mcbe-backup@*.timer mcbe-bot@*.service mcbe-bot@*.timer mcbe-getzip.timer mcbe-log@*.service mcbe-log@*.timer mcbe-rmbackup@*.service mcbe@*.service mcbe@*.socket)
 units=(mc-backup@.service mc-backup@.timer mc-rmbackup@.service mc@.service mc@.socket mcbe-autoupdate@.service mcbe-autoupdate@.timer mcbe-backup@.service mcbe-backup@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-log@.timer mcbe-rmbackup@.service mcbe@.service mcbe@.socket)
-syntax='Usage: DisableServices.sh'
+syntax='Usage: disable_services.sh'
 
 case $1 in
 --help|-h)

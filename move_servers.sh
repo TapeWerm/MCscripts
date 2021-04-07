@@ -2,8 +2,8 @@
 
 # Exit if error
 set -e
-syntax='Usage: MoveServers.sh'
-temp_dir=/tmp/MoveServers
+syntax='Usage: move_servers.sh'
+temp_dir=/tmp/move_servers
 
 case $1 in
 --help|-h)
@@ -34,7 +34,7 @@ if [ -z "${java[*]}" ] && [ -z "${bedrock[*]}" ]; then
 fi
 echo "Java servers to move: ${java[*]}"
 echo "Bedrock servers to move: ${bedrock[*]}"
-echo "Enter Y if you stopped the servers to move (DisableServices.sh stops them)"
+echo "Enter Y if you stopped the servers to move (disable_services.sh stops them)"
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

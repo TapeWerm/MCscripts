@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-syntax='Usage: MCstop.sh [OPTION] ... SERVICE'
+syntax='Usage: mc_stop.sh [OPTION] ... SERVICE'
 
 server_do() {
 	echo "$*" > "/run/$service"

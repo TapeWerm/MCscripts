@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-syntax='Usage: MCBEupdate.sh SERVER_DIR MINECRAFT_ZIP`'
+syntax='Usage: mcbe_update.sh SERVER_DIR MINECRAFT_ZIP`'
 
 case $1 in
 --help|-h)
@@ -24,7 +24,7 @@ elif [ "$#" -gt 2 ]; then
 fi
 
 server_dir=$(realpath "$1")
-backup_dir=/tmp/MCBEupdate/$(basename "$server_dir")
+backup_dir=/tmp/mcbe_update/$(basename "$server_dir")
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then

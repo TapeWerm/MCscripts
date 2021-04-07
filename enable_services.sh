@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-syntax='Usage: EnableServices.sh'
+syntax='Usage: enable_services.sh'
 
 case $1 in
 --help|-h)
@@ -59,6 +59,39 @@ for x in "${!enabled[@]}"; do
 done
 if [ "$getzip" = true ]; then
 	enabled+=("mcbe-getzip.timer")
+fi
+# Update systemd overrides
+for x in "${!enabled[@]}"; do
+	override=/etc/systemd/system/${enabled[x]}.d/override.conf
+	if [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
+		if [ -f "$override" ]; then
+			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		fi
+	elif [[ "${enabled[x]}" =~ ^mc-backup@.+\.service$ ]]; then
+		if [ -f "$override" ]; then
+			sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
+		fi
+	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
+		if [ -f "$override" ]; then
+			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		fi
+	elif [[ "${enabled[x]}" =~ ^mcbe-backup@.+\.service$ ]]; then
+		if [ -f "$override" ]; then
+			sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+		fi
+	elif [ "${enabled[x]}" = mcbe-getzip@.service ]; then
+		if [ -f "$override" ]; then
+			sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+		fi
+	fi
+done
+# Move webhooks for mcbe-log
+if [ -d ~mc/.MCBE_Bot ]; then
+	for file in $(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null || true); do
+		# Trim off $file after last suffix
+		sudo mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
+	done
+	sudo mv ~mc/.MCBE_Bot ~mc/.mcbe_log
 fi
 # Dependency jobs will fail until dependencies finish starting
 sudo systemctl enable "${enabled[@]}" --now || true

@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-syntax='Usage: MCgetJAR.sh'
+syntax='Usage: mc_getjar.sh'
 
 case $1 in
 --help|-h)

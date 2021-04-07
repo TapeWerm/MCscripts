@@ -4,7 +4,7 @@
 set -e
 # $0 is the path
 dir=$(dirname "$0")
-syntax='Usage: MCrunCmd.sh SERVICE COMMAND...'
+syntax='Usage: mc_cmd.sh SERVICE COMMAND...'
 
 case $1 in
 --help|-h)
@@ -35,4 +35,4 @@ if [ -z "$buffer" ]; then
 	echo "No output from service after 1 second"
 	exit
 fi
-echo "$buffer" | "$dir/MCcolor.sed"
+echo "$buffer" | "$dir/mc_color.sed"
