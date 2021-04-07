@@ -79,7 +79,8 @@ sudo mkdir ~mc/java
 # Move server directory (Replace SERVER_DIR with Minecraft server directory)
 sudo mv SERVER_DIR ~mc/java/MC
 # Open server.jar with no GUI and 1024-2048 MB of RAM
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
+echo chmod +x server.jar | sudo tee ~mc/java/MC/start.bat
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee -a ~mc/java/MC/start.bat
 ```
 Copy and paste this block:
 ```bash
