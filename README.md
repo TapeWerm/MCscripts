@@ -47,7 +47,7 @@ journalctl -u mcbe-backup@MCBE -t mcbe_backup.sh -n 1 -o cat
 sudo systemctl stop mcbe@MCBE
 ```
 
-Backups are in ~mc by default.
+Backups are in ~mc/backup_dir.
 Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.sh](mcbe_getzip.sh).
 [mcbe_update.sh](mcbe_update.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
 Other files will be removed.
