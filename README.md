@@ -1,5 +1,5 @@
 # Description
-Minecraft Java Edition and Bedrock Dedicated Server (BDS for short) systemd units, bash scripts, and chat bots for backups, automatic updates, installation, and shutdown warnings
+Minecraft Java Edition and Bedrock Dedicated Server systemd units, bash scripts, and chat bots for backups, automatic updates, installation, and shutdown warnings
 
 **[mcbe_backup.sh](mcbe_backup.sh) also works with Docker**
 
