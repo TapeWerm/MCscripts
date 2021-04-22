@@ -45,7 +45,7 @@ fi
 # Trim off $service before last @
 instance=${service##*@}
 webhook_file=~mc/.mcbe_log/${instance}_webhook.txt
-chmod -f 600 "$webhook_file"
+chmod 600 "$webhook_file"
 
 send "Server $instance starting"
 trap 'send "Server $instance stopping"; pkill -s $$' EXIT
