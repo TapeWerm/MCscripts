@@ -62,7 +62,7 @@ if [ -n "$service" ]; then
 		trap 'echo fail > "$server_dir/version"' ERR
 		sudo systemctl start "mcbe-backup@$instance"
 		sudo systemctl stop "$service"
-		trap 'sudo chown -R mc:nogroup "$server_dir"; sudo systemctl start "$service"' ERR
+		trap 'sudo systemctl start "$service"' ERR
 		# mcbe_update.sh reads y asking if you stopped the server
 		echo y | sudo "$dir/mcbe_update.sh" "$server_dir" "$minecraft_zip"
 		sudo chown -R mc:nogroup "$server_dir"
