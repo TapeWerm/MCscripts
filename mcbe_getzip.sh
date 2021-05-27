@@ -3,7 +3,7 @@
 # Exit if error
 set -e
 clobber=true
-syntax='Usage: mcbe_getzip.sh [OPTION] ...'
+syntax='Usage: mcbe_getzip.sh [OPTION]...'
 
 args=$(getopt -l help,no-clobber -o hn -- "$@")
 eval set -- "$args"

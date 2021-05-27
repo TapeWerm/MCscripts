@@ -7,7 +7,7 @@ thyme=$(date --date "@$epoch" +%H-%M)
 date=$(date --date "@$epoch" +%d)
 month=$(date --date "@$epoch" +%m)
 year=$(date --date "@$epoch" +%Y)
-syntax='Usage: mcbe_backup.sh [OPTION] ... SERVER_DIR SERVICE'
+syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 # Filenames can't contain : on some filesystems
 
 server_do() {

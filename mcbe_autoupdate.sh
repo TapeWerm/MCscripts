@@ -4,7 +4,7 @@
 set -e
 # $0 is this script
 dir=$(dirname "$0")
-syntax='Usage: mcbe_autoupdate.sh [OPTION] ... SERVER_DIR'
+syntax='Usage: mcbe_autoupdate.sh [OPTION]... SERVER_DIR'
 
 args=$(getopt -l help,service: -o hs: -- "$@")
 eval set -- "$args"
