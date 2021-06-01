@@ -118,12 +118,11 @@ server_do save-off
 trap 'server_do save-on' ERR
 # Pause and save the server
 server_do save-all flush
-timeout=0
+timeout=$(date -d '1 minute' +%s)
 unset buffer
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 until echo "$buffer" | grep -q 'Saved the game'; do
-	# 1 minute timeout because server_read sleeps 1 second
-	if [ "$timeout" = 60 ]; then
+	if [ "$(date +%s)" -ge "$timeout" ]; then
 		server_do save resume
 		>&2 echo save query timeout
 		exit 1
