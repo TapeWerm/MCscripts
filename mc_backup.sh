@@ -28,7 +28,7 @@ countdown() {
 # Read until $wanted_output is read
 server_read() {
 	# Wait for output
-	sleep 0.1
+	sleep 1
 	if [ -z "$timestamp" ]; then
 		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3 -s)
 	fi
@@ -128,7 +128,6 @@ until echo "$buffer" | grep -q 'Saved the game'; do
 		exit 1
 	fi
 	server_read
-	timeout=$(( ++timeout ))
 done
 
 # zip restores path of directory given to it ($world), not just the directory itself

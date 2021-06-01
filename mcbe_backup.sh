@@ -22,7 +22,7 @@ server_do() {
 # Read until $wanted_output is read
 server_read() {
 	# Wait for output
-	sleep 0.1
+	sleep 1
 	if [ -z "$timestamp" ]; then
 		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3 -s)
 	fi
@@ -45,7 +45,7 @@ while [ "$1"  != -- ]; do
 			echo "$*" | socat EXEC:"docker attach '$service'",pty STDIN
 		}
 		server_read() {
-			sleep 0.1
+			sleep 1
 			if [ -z "$timestamp" ]; then
 				timestamp=$(docker inspect "$service" | grep '^ *"StartedAt":' | cut -d '"' -f 4 -s)
 			fi
@@ -125,9 +125,9 @@ fi
 # Prepare backup
 server_do save hold
 trap 'server_do save resume' ERR
-# Wait 0.1 seconds for Minecraft Bedrock Edition command to avoid infinite loop
-# Only unplayably slow servers take more than 0.1 seconds to run a command
-sleep 0.1
+# Wait 1 second for Minecraft Bedrock Edition command to avoid infinite loop
+# Only unplayably slow servers take more than 1 second to run a command
+sleep 1
 timeout=$(date -d '1 minute' +%s)
 unset buffer
 # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
