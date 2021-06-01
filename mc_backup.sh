@@ -28,7 +28,7 @@ countdown() {
 # Read until $wanted_output is read
 server_read() {
 	# Wait for output
-	sleep 1
+	sleep 0.1
 	if [ -z "$timestamp" ]; then
 		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3 -s)
 	fi
