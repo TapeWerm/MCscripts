@@ -4,9 +4,9 @@ Description=Automatically remove Minecraft Bedrock Edition server world backups 
 
 [Service]
 # Automatically remove Minecraft Bedrock Edition server world backups except the 14 newest ones @ %i
-# ExecStart=/bin/bash -c "find /opt/MC/backup_dir/bedrock/%i_Backups -type f | xargs -0d '\n' ls -t | tail -n +15 | xargs -0d '\n' rm -f"
-ExecStart=/usr/bin/find /opt/MC/backup_dir/bedrock/%i_Backups -type f -mtime +13 -delete
-ExecStartPost=/usr/bin/find /opt/MC/backup_dir/bedrock/%i_Backups -type d -empty -delete
+# ExecStart=/bin/bash -c "find /opt/MC/backup_dir/bedrock/%i_backups -type f | xargs -0d '\n' ls -t | tail -n +15 | xargs -0d '\n' rm -f"
+ExecStart=/usr/bin/find /opt/MC/backup_dir/bedrock/%i_backups -type f -mtime +13 -delete
+ExecStartPost=/usr/bin/find /opt/MC/backup_dir/bedrock/%i_backups -type d -empty -delete
 Type=oneshot
 
 [Install]
