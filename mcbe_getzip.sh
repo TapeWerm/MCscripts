@@ -31,7 +31,7 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-webpage=$(wget --prefer-family=IPv4 -nv https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
+webpage=$(wget --user-agent MCscripts --prefer-family=IPv4 -nv https://www.minecraft.net/en-us/download/server/bedrock/ -O -)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
 current_ver=$(basename "$url")
 # ls fails if there's no match
@@ -51,7 +51,7 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	fi
 
 	trap 'rm -f ~/"$current_ver"' ERR
-	wget --prefer-family=IPv4 -nv "$url" -O ~/"$current_ver"
+	wget --user-agent MCscripts --prefer-family=IPv4 -nv "$url" -O ~/"$current_ver"
 	# Do not remove $current_ver if wget succeeded, below fails will repeat
 	trap - ERR
 	if [ "$clobber" = true ]; then
