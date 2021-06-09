@@ -3,12 +3,12 @@
 # Exit if error
 set -e
 epoch=$(date +%s)
-thyme=$(date --date "@$epoch" +%H-%M)
+# Filenames can't contain : on some filesystems
+minute=$(date --date "@$epoch" +%H-%M)
 date=$(date --date "@$epoch" +%d)
 month=$(date --date "@$epoch" +%m)
 year=$(date --date "@$epoch" +%Y)
 syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
-# Filenames can't contain : on some filesystems
 
 server_do() {
 	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
@@ -109,7 +109,7 @@ fi
 backup_dir=$backup_dir/bedrock/$(basename "$server_dir")_backups/${world}_backups/$year/$month
 # Make directory and parents quietly
 mkdir -p "$backup_dir"
-backup_zip=$backup_dir/${date}_$thyme.zip
+backup_zip=$backup_dir/${date}_$minute.zip
 
 server_read
 # If save was held
