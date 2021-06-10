@@ -1,5 +1,5 @@
 [Unit]
-Description=Automatically download Minecraft Bedrock Edition server ZIP hourly
+Description=Automatically download Minecraft Bedrock Edition server ZIP every 2 hours
 
 [Timer]
 OnCalendar=0/2:00:00
