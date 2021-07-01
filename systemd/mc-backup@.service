@@ -5,5 +5,4 @@ Requisite=mc@%i.service
 
 [Service]
 ExecStart=/opt/MC/mc_backup.sh -b /opt/MC/backup_dir /opt/MC/java/%i mc@%i
-KillMode=none
 Type=oneshot

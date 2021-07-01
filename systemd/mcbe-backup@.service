@@ -1,10 +1,8 @@
 [Unit]
 After=mcbe@%i.service
-Before=mcbe-autoupdate@%i.service
 Description=Back up Minecraft Bedrock Edition server world @ %i
 Requisite=mcbe@%i.service
 
 [Service]
 ExecStart=/opt/MC/mcbe_backup.sh -b /opt/MC/backup_dir /opt/MC/bedrock/%i mcbe@%i
-KillMode=none
 Type=oneshot
