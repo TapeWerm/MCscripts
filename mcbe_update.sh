@@ -55,16 +55,20 @@ cd "$server_dir"
 # Trim off $minecraft_zip after last .zip
 basename "${minecraft_zip%.zip}" > version
 for pack_dir in *_packs; do
-	packs=$(ls "$backup_dir/$pack_dir")
-	# Escape \ while reading line from $packs
-	echo "$packs" | while read -r pack; do
-		# Don't clobber 1st party packs
-		if [ ! -d "$pack_dir/$pack" ]; then
-			cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"
-		fi
-	done
+	if [ -d "$backup_dir/$pack_dir" ]; then
+		packs=$(ls "$backup_dir/$pack_dir")
+		# Escape \ while reading line from $packs
+		echo "$packs" | while read -r pack; do
+			# Don't clobber 1st party packs
+			if [ ! -d "$pack_dir/$pack" ]; then
+				cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"
+			fi
+		done
+	fi
 done
 for file in worlds *.{json,properties}; do
-	cp -r "$backup_dir/$file" .
+	if [ -f "$backup_dir/$file" ]; then
+		cp -r "$backup_dir/$file" .
+	fi
 done
 rm -r "$backup_dir"
