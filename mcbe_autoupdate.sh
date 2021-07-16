@@ -59,7 +59,7 @@ if [ -n "$service" ]; then
 	elif [ "$installed_ver" != "$current_ver" ]; then
 		trap 'echo fail > "$server_dir/version"' ERR
 		sudo systemctl start "mcbe-backup@$instance"
-		sudo systemctl stop "$service" "$service.socket"
+		sudo systemctl stop "$service.socket"
 		trap 'sudo systemctl start "$service"' ERR
 		# mcbe_update.sh reads y asking if you stopped the server
 		sudo su mc -s /bin/bash -c "echo y | ~/mcbe_update.sh $server_dir $minecraft_zip"
