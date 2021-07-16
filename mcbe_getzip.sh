@@ -50,10 +50,9 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 		exit 1
 	fi
 
-	trap 'rm -f ~/"$current_ver"' ERR
-	wget --user-agent MCscripts --prefer-family=IPv4 -nv "$url" -O ~/"$current_ver"
-	# Do not remove $current_ver if wget succeeded, below fails will repeat
-	trap - ERR
+	wget --user-agent MCscripts --prefer-family=IPv4 -nv "$url" -O ~/"$current_ver".part
+	trap '' SIGTERM
+	mv ~/"$current_ver".part ~/"$current_ver"
 	if [ "$clobber" = true ]; then
 		echo "$installed_ver" | xargs -d '\n' rm -f
 	fi

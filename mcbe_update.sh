@@ -24,7 +24,8 @@ elif [ "$#" -gt 2 ]; then
 fi
 
 server_dir=$(realpath "$1")
-backup_dir=/tmp/mcbe_update/$(basename "$server_dir")
+new_dir=$server_dir.new
+old_dir=$server_dir.old
 
 minecraft_zip=$(realpath "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
@@ -42,33 +43,33 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-mkdir -p "$(dirname "$backup_dir")"
-if [ -f "$backup_dir" ]; then
-	>&2 echo "Backup dir $backup_dir already exists, check and remove it"
-	exit 1
-fi
-mv "$server_dir" "$backup_dir"
-trap 'rm -rf "$server_dir"; mv "$backup_dir" "$server_dir"; echo fail > "$server_dir/version"' ERR
-unzip -q "$minecraft_zip" -d "$server_dir"
+rm -rf "$new_dir"
+trap 'rm -rf "$new_dir"; echo fail > "$server_dir/version"' ERR
+unzip -q "$minecraft_zip" -d "$new_dir"
 
-cd "$server_dir"
+cd "$new_dir"
 # Trim off $minecraft_zip after last .zip
 basename "${minecraft_zip%.zip}" > version
 for pack_dir in *_packs; do
-	if [ -d "$backup_dir/$pack_dir" ]; then
-		packs=$(ls "$backup_dir/$pack_dir")
+	if [ -d "$server_dir/$pack_dir" ]; then
+		packs=$(ls "$server_dir/$pack_dir")
 		# Escape \ while reading line from $packs
 		echo "$packs" | while read -r pack; do
 			# Don't clobber 1st party packs
 			if [ ! -d "$pack_dir/$pack" ]; then
-				cp -r "$backup_dir/$pack_dir/$pack" "$pack_dir/"
+				cp -r "$server_dir/$pack_dir/$pack" "$pack_dir/"
 			fi
 		done
 	fi
 done
 for file in worlds *.{json,properties}; do
-	if [ -f "$backup_dir/$file" ]; then
-		cp -r "$backup_dir/$file" .
+	if [ -f "$server_dir/$file" ]; then
+		cp -r "$server_dir/$file" .
 	fi
 done
-rm -r "$backup_dir"
+
+rm -rf "$old_dir"
+trap '' SIGTERM
+mv "$server_dir" "$old_dir"
+mv "$new_dir" "$server_dir"
+rm -rf "$old_dir"

@@ -4,7 +4,6 @@ Description=Automatically update Minecraft Bedrock Edition server @ %i
 
 [Service]
 ExecStart=/opt/MC/mcbe_autoupdate.sh -s mcbe@%i /opt/MC/bedrock/%i
-KillMode=none
 Type=oneshot
 
 [Install]

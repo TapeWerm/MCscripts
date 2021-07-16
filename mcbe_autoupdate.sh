@@ -2,8 +2,6 @@
 
 # Exit if error
 set -e
-# $0 is this script
-dir=$(dirname "$0")
 syntax='Usage: mcbe_autoupdate.sh [OPTION]... SERVER_DIR'
 
 args=$(getopt -l help,service: -o hs: -- "$@")
@@ -64,8 +62,7 @@ if [ -n "$service" ]; then
 		sudo systemctl stop "$service" "$service.socket"
 		trap 'sudo systemctl start "$service"' ERR
 		# mcbe_update.sh reads y asking if you stopped the server
-		echo y | sudo "$dir/mcbe_update.sh" "$server_dir" "$minecraft_zip"
-		sudo chown -R mc:nogroup "$server_dir"
+		sudo su mc -s /bin/bash -c "echo y | ~/mcbe_update.sh $server_dir $minecraft_zip"
 		sudo systemctl start "$service"
 	fi
 else
