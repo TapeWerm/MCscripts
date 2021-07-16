@@ -63,7 +63,7 @@ for pack_dir in *_packs; do
 	fi
 done
 for file in worlds *.{json,properties}; do
-	if [ -f "$server_dir/$file" ]; then
+	if [ -e "$server_dir/$file" ]; then
 		cp -r "$server_dir/$file" .
 	fi
 done
