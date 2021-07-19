@@ -58,7 +58,7 @@ Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/
 # Setup
 Open Terminal:
 ```bash
-sudo apt install curl git procps socat wget zip
+sudo apt install curl git procps socat zip
 git clone https://github.com/TapeWerm/MCscripts.git
 cd MCscripts
 sudo adduser --home /opt/MC --system mc
@@ -168,7 +168,7 @@ How to restart mcbe@MCBE at 3 AM daily:
 ```
 ## Update MCscripts
 ```bash
-sudo apt install curl git procps socat wget zip
+sudo apt install curl git procps socat zip
 cd MCscripts
 git pull origin master
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on

@@ -17,7 +17,7 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-webpage=$(wget --user-agent MCscripts --prefer-family=IPv4 -nv https://www.minecraft.net/en-us/download/server/ -O -)
+webpage=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
 url=$(echo "$webpage" | grep -Eo 'https://[^ ]+server\.jar' | head -n 1)
-wget --user-agent MCscripts --prefer-family=IPv4 -nv "$url"
+curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -O
 chmod +x server.jar
