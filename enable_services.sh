@@ -71,6 +71,10 @@ for x in "${!enabled[@]}"; do
 		if [ -f "$override" ]; then
 			sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
 		fi
+	elif [[ "${enabled[x]}" =~ ^mc-rmbackup@.+\.service$ ]]; then
+		if [ -f "$override" ]; then
+			sed -i 's/%i_Backups/%i_backups/g' "$override"
+		fi
 	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
 			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
@@ -78,6 +82,10 @@ for x in "${!enabled[@]}"; do
 	elif [[ "${enabled[x]}" =~ ^mcbe-backup@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
 			sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+		fi
+	elif [[ "${enabled[x]}" =~ ^mcbe-rmbackup@.+\.service$ ]]; then
+		if [ -f "$override" ]; then
+			sed -i 's/%i_Backups/%i_backups/g' "$override"
 		fi
 	elif [ "${enabled[x]}" = mcbe-getzip@.service ]; then
 		if [ -f "$override" ]; then
