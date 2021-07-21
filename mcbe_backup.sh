@@ -61,7 +61,7 @@ while [ "$1"  != -- ]; do
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
 		echo '-d, --docker                 docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v SERVER_DIR:/data itzg/minecraft-bedrock-server'
 		echo
-		echo 'Backups are {SERVER_DIR}_backups/{WORLD}_backups/YYYY/MM/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
+		echo 'Backups are bedrock_backups/SERVER_DIR/WORLD/YYYY/MM/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
 		exit
 		;;
 	esac
@@ -106,7 +106,7 @@ if [ -n "$backup_dir" ]; then
 else
 	backup_dir=~
 fi
-backup_dir=$backup_dir/bedrock/$(basename "$server_dir")_backups/${world}_backups/$year/$month
+backup_dir=$backup_dir/bedrock_backups/$(basename "$server_dir")/$world/$year/$month
 # Make directory and parents quietly
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
