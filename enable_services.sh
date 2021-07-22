@@ -97,10 +97,10 @@ for x in "${!enabled[@]}"; do
 done
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
-	for file in $(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null || true); do
+	while read -r file; do
 		# Trim off $file after last suffix
 		sudo mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
-	done
+	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null || true)
 	sudo mv ~mc/.MCBE_Bot ~mc/.mcbe_log
 fi
 # Dependency jobs will fail until dependencies finish starting
