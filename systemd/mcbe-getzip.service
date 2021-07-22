@@ -7,5 +7,6 @@ Description=Automatically download Minecraft Bedrock Edition server ZIP
 ExecStartPre=/bin/bash -c 'until ping -c 1 minecraft.net &> /dev/null; do sleep 1; done'
 # mcbe_getzip.sh may read y asking if you agree to the EULA
 ExecStart=/bin/bash -c 'echo y | /opt/MC/mcbe_getzip.sh'
+KillMode=mixed
 Type=oneshot
 User=mc

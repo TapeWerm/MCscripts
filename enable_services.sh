@@ -97,7 +97,7 @@ for x in "${!enabled[@]}"; do
 done
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
-	for file in $(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null || true); do
+	for file in $(shopt -s nullglob; echo ~mc/.MCBE_Bot/*_BotWebhook.txt); do
 		# Trim off $file after last suffix
 		sudo mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
 	done
