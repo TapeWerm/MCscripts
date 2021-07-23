@@ -67,7 +67,7 @@ if [ -n "$service" ]; then
 	fi
 else
 	if [ -d "$server_dir" ]; then
-		>&2 echo "Server dir $server_dir already exists"
+		>&2 echo "Server directory $server_dir already exists"
 		exit 1
 	fi
 	# Test extracting $minecraft_zip partially quietly
