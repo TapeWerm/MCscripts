@@ -176,6 +176,7 @@ git pull origin master
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 sudo ./disable_services.sh
 sudo ./move_servers.sh
+sudo ./move_backups.sh
 ```
 Copy and paste this block:
 ```bash
