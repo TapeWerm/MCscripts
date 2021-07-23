@@ -7,7 +7,9 @@ syntax='Usage: move_backups.sh'
 case $1 in
 --help|-h)
 	echo "$syntax"
-	echo "Find Minecraft backups in ~mc/backup_dir and update their paths."
+	echo 'Find Minecraft backups in ~mc/backup_dir and update their paths.'
+	echo
+	echo Run move_servers.sh before running move_backup.sh.
 	exit
 	;;
 esac
