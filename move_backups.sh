@@ -4,6 +4,16 @@
 set -e
 syntax='Usage: move_backups.sh'
 
+# Merge directory $1 into directory $2
+merge_dirs() {
+	while read -r file; do
+		dir=$(dirname "$file")
+		sudo mkdir -p "$2/$dir"
+		sudo mv -n "$1/$file" "$2/$file"
+	done < <(find "$1" -type f -printf '%P\n')
+	sudo find "$1" -type d -empty -delete
+}
+
 case $1 in
 --help|-h)
 	echo "$syntax"
@@ -47,13 +57,9 @@ else
 				# Trim off $world_backups after last suffix
 				world=$(basename "${world_backups%_Backups}")
 				backup_dir=~mc/backup_dir/java/${server}_backups/${world}_backups
-				while read -r file; do
-					dir=$(dirname "$file")
-					sudo mkdir -p "$backup_dir/$dir"
-					sudo mv -n "$world_backups/$file" "$backup_dir/$file"
-				done < <(find "$world_backups" -type f -printf '%P\n')
+				merge_dirs "$world_backups" "$backup_dir"
 			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null || true)
-			sudo find "$server_backups" -type d -empty -delete
+			sudo rmdir "$server_backups"
 		fi
 	done < <(ls -d ~mc/backup_dir/java/*_Backups 2> /dev/null || true)
 fi
@@ -68,13 +74,9 @@ while read -r server_backups; do
 			# Trim off $world_backups after last suffix
 			world=$(basename "${world_backups%_backups}")
 			backup_dir=~mc/backup_dir/java_backups/$server/$world
-			while read -r file; do
-				dir=$(dirname "$file")
-				sudo mkdir -p "$backup_dir/$dir"
-				sudo mv -n "$world_backups/$file" "$backup_dir/$file"
-			done < <(find "$world_backups" -type f -printf '%P\n')
+			merge_dirs "$world_backups" "$backup_dir"
 		done < <(ls -d "$server_backups"/*_backups 2> /dev/null || true)
-		sudo find "$server_backups" -type d -empty -delete
+		sudo rmdir "$server_backups"
 	fi
 done < <(ls -d ~mc/backup_dir/java/*_backups 2> /dev/null || true)
 if [ ! ~mc/backup_dir -ef ~mc ] && [ -d ~mc/backup_dir/java ]; then
@@ -109,13 +111,9 @@ else
 				# Trim off $world_backups after last suffix
 				world=$(basename "${world_backups%_Backups}")
 				backup_dir=~mc/backup_dir/bedrock/${server}_backups/${world}_backups
-				while read -r file; do
-					dir=$(dirname "$file")
-					sudo mkdir -p "$backup_dir/$dir"
-					sudo mv -n "$world_backups/$file" "$backup_dir/$file"
-				done < <(find "$world_backups" -type f -printf '%P\n')
+				merge_dirs "$world_backups" "$backup_dir"
 			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null || true)
-			sudo find "$server_backups" -type d -empty -delete
+			sudo rmdir "$server_backups"
 		fi
 	done < <(ls -d ~mc/backup_dir/bedrock/*_Backups 2> /dev/null || true)
 fi
@@ -130,13 +128,9 @@ while read -r server_backups; do
 			# Trim off $world_backups after last suffix
 			world=$(basename "${world_backups%_backups}")
 			backup_dir=~mc/backup_dir/bedrock_backups/$server/$world
-			while read -r file; do
-				dir=$(dirname "$file")
-				sudo mkdir -p "$backup_dir/$dir"
-				sudo mv -n "$world_backups/$file" "$backup_dir/$file"
-			done < <(find "$world_backups" -type f -printf '%P\n')
+			merge_dirs "$world_backups" "$backup_dir"
 		done < <(ls -d "$server_backups"/*_backups 2> /dev/null || true)
-		sudo find "$server_backups" -type d -empty -delete
+		sudo rmdir "$server_backups"
 	fi
 done < <(ls -d ~mc/backup_dir/bedrock/*_backups 2> /dev/null || true)
 if [ ! ~mc/backup_dir -ef ~mc ] && [ -d ~mc/backup_dir/bedrock ]; then
