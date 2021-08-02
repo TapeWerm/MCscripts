@@ -103,5 +103,17 @@ if [ -d ~mc/.MCBE_Bot ]; then
 	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null || true)
 	sudo mv ~mc/.MCBE_Bot ~mc/.mcbe_log
 fi
-# Dependency jobs will fail until dependencies finish starting
-sudo systemctl enable "${enabled[@]}" --now || true
+# Enable dependencies first
+for x in "${!enabled[@]}"; do
+	if [[ "${enabled[x]}" =~ ^mc@.+\.socket$|^mcbe@.+\.socket$ ]]; then
+		sudo systemctl enable "${enabled[x]}" --now
+		unset 'enabled[x]'
+	fi
+done
+for x in "${!enabled[@]}"; do
+	if [[ "${enabled[x]}" =~ ^mc@.+\.service$|^mcbe@.+\.service$ ]]; then
+		sudo systemctl enable "${enabled[x]}" --now
+		unset 'enabled[x]'
+	fi
+done
+sudo systemctl enable "${enabled[@]}" --now
