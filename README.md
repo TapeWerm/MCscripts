@@ -1,5 +1,5 @@
 # Description
-Minecraft Java Edition and Bedrock Dedicated Server systemd units and scripts for backups, automatic updates, and posting logs to chat bots
+Minecraft Java and Bedrock Dedicated Server systemd units and scripts for backups, automatic updates, and posting logs to chat bots
 
 **[mcbe_backup.sh](mcbe_backup.sh) also works with Docker**
 
