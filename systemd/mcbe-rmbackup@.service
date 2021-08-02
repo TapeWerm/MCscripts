@@ -1,5 +1,6 @@
 [Unit]
 After=mcbe-backup@%i.service
+ConditionPathExists=/opt/MC/backup_dir/bedrock_backups/%i
 Description=Automatically remove Minecraft Bedrock Edition server world backups more than 2-weeks-old @ %i
 
 [Service]
