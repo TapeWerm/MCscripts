@@ -58,9 +58,10 @@ Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/
 # Setup
 Open Terminal:
 ```bash
-sudo apt install curl git procps socat zip
-git clone https://github.com/TapeWerm/MCscripts.git
-cd MCscripts
+sudo apt install curl procps socat zip
+curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -O
+unzip master.zip
+cd MCscripts-master
 sudo adduser --home /opt/MC --system mc
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
@@ -168,9 +169,11 @@ How to restart mcbe@MCBE at 3 AM daily:
 ```
 ## Update MCscripts
 ```bash
-sudo apt install curl git procps socat zip
-cd MCscripts
-git pull origin master
+sudo apt install curl procps socat zip
+curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -O
+rm -rf MCscripts-master
+unzip master.zip
+cd MCscripts-master
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
