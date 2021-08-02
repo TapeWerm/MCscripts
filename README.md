@@ -1,5 +1,5 @@
 # Description
-Minecraft Java Edition and Bedrock Dedicated Server systemd units and scripts for installation, backups, automatic updates, and posting logs to chat bots
+Minecraft Java Edition and Bedrock Dedicated Server systemd units and scripts for backups, automatic updates, and posting logs to chat bots
 
 **[mcbe_backup.sh](mcbe_backup.sh) also works with Docker**
 
@@ -8,7 +8,7 @@ Minecraft Java Edition and Bedrock Dedicated Server systemd units and scripts fo
 Ubuntu on Windows 10 does not support systemd.
 Try [Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server).
 You can run [mc_getjar.sh](mc_getjar.sh), [mcbe_getzip.sh](mcbe_getzip.sh), and [mcbe_update.sh](mcbe_update.sh) without enabling the systemd units, but not others.
-No automatic update scripts nor chat bots for Java Edition.
+No automatic updates nor chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
 - [Notes](#notes)
