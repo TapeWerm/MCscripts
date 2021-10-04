@@ -126,7 +126,7 @@ sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 If you want to post server logs to webhooks (Discord and Rocket Chat):
 ```bash
 sudo su mc -s /bin/bash
-mkdir -p ~/.mcbe_log
+mkdir ~/.mcbe_log
 touch ~/.mcbe_log/MCBE_webhook.txt
 chmod 600 ~/.mcbe_log/MCBE_webhook.txt
 ```
