@@ -51,7 +51,7 @@ while [ "$1"  != -- ]; do
 			fi
 			buffer=$(docker logs --since "$timestamp" "$service")
 		}
-		shift 1
+		shift
 		;;
 	--help|-h)
 		echo "$syntax"
