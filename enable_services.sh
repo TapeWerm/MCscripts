@@ -75,6 +75,7 @@ for x in "${!enabled[@]}"; do
 		if [ -f "$override" ]; then
 			sed -i 's/%i_Backups/%i_backups/g' "$override"
 			sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
+			sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
 		fi
 	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
@@ -88,6 +89,7 @@ for x in "${!enabled[@]}"; do
 		if [ -f "$override" ]; then
 			sed -i 's/%i_Backups/%i_backups/g' "$override"
 			sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
+			sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
 		fi
 	elif [ "${enabled[x]}" = mcbe-getzip@.service ]; then
 		if [ -f "$override" ]; then

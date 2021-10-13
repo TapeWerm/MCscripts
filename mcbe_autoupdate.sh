@@ -38,8 +38,11 @@ server_dir=$(realpath "$1")
 # cat fails if there's no file $server_dir/version
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 # There might be more than one ZIP in ~mc
-# ls fails if there's no match
-minecraft_zip=$(find ~mc/bedrock-server-*\.zip 2> /dev/null | xargs -0d '\n' ls -t | head -n 1 || true)
+minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
+if [ -z "$minecraft_zip" ]; then
+	>&2 echo 'No bedrock-server ZIP found in ~mc'
+	exit 1
+fi
 # Trim off $minecraft_zip after last .zip
 current_ver=$(basename "${minecraft_zip%.zip}")
 

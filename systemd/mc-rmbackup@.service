@@ -5,7 +5,7 @@ Description=Automatically remove Minecraft Java Edition server world backups mor
 
 [Service]
 # Automatically remove Minecraft Java Edition server world backups except the 14 newest ones @ %i
-# ExecStart=/bin/bash -c "find /opt/MC/backup_dir/java_backups/%i -type f | xargs -0d '\n' ls -t | tail -n +15 | xargs -0d '\n' rm -f"
+# ExecStart=/bin/bash -c "find /opt/MC/backup_dir/java_backups/%i -type f | xargs -0rd '\n' ls -t | tail -n +15 | xargs -0d '\n' rm -f"
 ExecStart=/usr/bin/find /opt/MC/backup_dir/java_backups/%i -type f -mtime +13 -delete
 ExecStartPost=/usr/bin/find /opt/MC/backup_dir/java_backups/%i -type d -empty -delete
 Type=oneshot
