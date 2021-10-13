@@ -93,14 +93,11 @@ mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
 
 server_read
-# If save was off
-if [ -n "$buffer" ]; then
-	# The last line that matches either is the current save state
-	state=$(echo "$buffer" | grep -E 'Automatic saving is now (disabled|enabled)' | tail -n 1)
-	if echo "$state" | grep -q 'Automatic saving is now disabled'; then
-		>&2 echo Save off, is a backup in progress?
-		exit 1
-	fi
+# The last line that matches either is the current save state
+state=$(echo "$buffer" | grep -E 'Automatic saving is now (disabled|enabled)' | tail -n 1)
+if echo "$state" | grep -q 'Automatic saving is now disabled'; then
+	>&2 echo Save off, is a backup in progress?
+	exit 1
 fi
 
 countdown 10 seconds

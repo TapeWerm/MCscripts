@@ -112,14 +112,11 @@ mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
 
 server_read
-# If save was held
-if [ -n "$buffer" ]; then
-	# The last line that matches either is the current save state
-	state=$(echo "$buffer" | grep -E 'Saving|Changes to the level are resumed' | tail -n 1)
-	if echo "$state" | grep -q 'Saving'; then
-		>&2 echo Save held, is a backup in progress?
-		exit 1
-	fi
+# The last line that matches either is the current save state
+state=$(echo "$buffer" | grep -E 'Saving|Changes to the level are resumed' | tail -n 1)
+if echo "$state" | grep -q 'Saving'; then
+	>&2 echo Save held, is a backup in progress?
+	exit 1
 fi
 
 # Prepare backup
