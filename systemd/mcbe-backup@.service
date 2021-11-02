@@ -5,5 +5,4 @@ Requisite=mcbe@%i.service
 
 [Service]
 ExecStart=/opt/MC/mcbe_backup.sh -b /opt/MC/backup_dir /opt/MC/bedrock/%i mcbe@%i
-ExecStartPost=/usr/bin/chown -R mc:nogroup /opt/MC/backup_dir/bedrock_backups
 Type=oneshot

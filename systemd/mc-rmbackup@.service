@@ -9,7 +9,6 @@ Description=Automatically remove Minecraft Java Edition server world backups mor
 ExecStart=/usr/bin/find /opt/MC/backup_dir/java_backups/%i -type f -mtime +13 -delete
 ExecStartPost=/usr/bin/find /opt/MC/backup_dir/java_backups/%i -type d -empty -delete
 Type=oneshot
-User=mc
 
 [Install]
 # Start after mc-backup@%i.service

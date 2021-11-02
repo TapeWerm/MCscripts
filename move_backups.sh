@@ -83,6 +83,8 @@ if [ ! ~mc/backup_dir -ef ~mc ] && [ -d ~mc/backup_dir/java ]; then
 	sudo rmdir ~mc/backup_dir/java
 fi
 
+sudo chown -Rf root:root ~mc/backup_dir/java_backups || true
+
 # If ~mc/backup_dir is case insensitive, rename directories
 if [ -d ~mc/backup_dir/bedrock ] && [ ~mc/backup_dir/bedrock -ef ~mc/backup_dir/Bedrock ]; then
 	while read -r server_backups; do
@@ -136,3 +138,5 @@ done < <(ls -d ~mc/backup_dir/bedrock/*_backups 2> /dev/null || true)
 if [ ! ~mc/backup_dir -ef ~mc ] && [ -d ~mc/backup_dir/bedrock ]; then
 	sudo rmdir ~mc/backup_dir/bedrock
 fi
+
+sudo chown -Rf root:root ~mc/backup_dir/bedrock_backups || true

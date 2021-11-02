@@ -9,7 +9,6 @@ Description=Automatically remove Minecraft Bedrock Edition server world backups 
 ExecStart=/usr/bin/find /opt/MC/backup_dir/bedrock_backups/%i -type f -mtime +13 -delete
 ExecStartPost=/usr/bin/find /opt/MC/backup_dir/bedrock_backups/%i -type d -empty -delete
 Type=oneshot
-User=mc
 
 [Install]
 # Start after mcbe-backup@%i.service
