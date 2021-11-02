@@ -5,4 +5,5 @@ Requisite=mc@%i.service
 
 [Service]
 ExecStart=/opt/MC/mc_backup.sh -b /opt/MC/backup_dir /opt/MC/java/%i mc@%i
+ExecStartPost=/usr/bin/chown -R mc:nogroup /opt/MC/backup_dir/java_backups
 Type=oneshot
