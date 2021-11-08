@@ -165,7 +165,7 @@ How to restart mcbe@MCBE at 3 AM daily:
 1. Enter `sudo crontab -e`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 # m h  dom mon dow   command
-0 3 * * * systemctl is-active --quiet mcbe@MCBE && systemctl restart mcbe@MCBE
+0 3 * * * systemctl try-restart mcbe@MCBE
 ```
 ## Update MCscripts
 ```bash
