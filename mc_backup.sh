@@ -94,7 +94,7 @@ backup_zip=$backup_dir/${date}_$minute.zip
 
 server_read
 # The last line that matches either is the current save state
-state=$(echo "$buffer" | grep -v '<.*>' | grep -E 'Automatic saving is now (disabled|enabled)' | tail -n 1)
+state=$(echo "$buffer" | grep -Ev '<.+>' | grep -E 'Automatic saving is now (disabled|enabled)' | tail -n 1)
 if echo "$state" | grep -q 'Automatic saving is now disabled'; then
 	>&2 echo Save off, is a backup in progress?
 	exit 1
@@ -118,7 +118,7 @@ server_do save-all flush
 timeout=$(date -d '1 minute' +%s)
 unset buffer
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
-until echo "$buffer" | grep -v '<.*>' | grep -q 'Saved the game'; do
+until echo "$buffer" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
 		server_do save resume
 		>&2 echo save query timeout
