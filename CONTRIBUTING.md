@@ -6,5 +6,5 @@ You can also test modified scripts through `time` to see how runtime is affected
 ```bash
 # Good: echo 1 | cut -d ' ' -f 2 -s
 # Bad:  echo 1 | cut -d ' ' -f 2
-git grep -E 'cut.*-f ([2-9]|[1-9][0-9]+)' | grep -Ev '\-s|^CONTRIBUTING.md:'
+git grep -E 'cut (.* )?-[^- ]*f' | grep -Ev -- '-s|^CONTRIBUTING.md:'
 ```
