@@ -77,7 +77,7 @@ else
 	unzip -tq "$minecraft_zip"
 	trap 'sudo rm -rf "$server_dir"' ERR
 	sudo unzip -q "$minecraft_zip" -d "$server_dir"
-	echo "$current_ver" > "$server_dir/version"
+	echo "$current_ver" | sudo tee "$server_dir/version"
 	sudo chown -R mc:nogroup "$server_dir"
 	echo "@@@ Don't forget to edit $server_dir/server.properties @@@"
 fi
