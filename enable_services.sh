@@ -65,35 +65,35 @@ for x in "${!enabled[@]}"; do
 	override=/etc/systemd/system/${enabled[x]}.d/override.conf
 	if [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
-			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+			sudo sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
 		fi
 	elif [[ "${enabled[x]}" =~ ^mc-backup@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
-			sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
+			sudo sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
 		fi
 	elif [[ "${enabled[x]}" =~ ^mc-rmbackup@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
-			sed -i 's/%i_Backups/%i_backups/g' "$override"
-			sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
-			sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+			sudo sed -i 's/%i_Backups/%i_backups/g' "$override"
+			sudo sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
+			sudo sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
 		fi
 	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
-			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+			sudo sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
 		fi
 	elif [[ "${enabled[x]}" =~ ^mcbe-backup@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
-			sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+			sudo sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
 		fi
 	elif [[ "${enabled[x]}" =~ ^mcbe-rmbackup@.+\.service$ ]]; then
 		if [ -f "$override" ]; then
-			sed -i 's/%i_Backups/%i_backups/g' "$override"
-			sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
-			sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+			sudo sed -i 's/%i_Backups/%i_backups/g' "$override"
+			sudo sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
+			sudo sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
 		fi
 	elif [ "${enabled[x]}" = mcbe-getzip@.service ]; then
 		if [ -f "$override" ]; then
-			sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+			sudo sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
 		fi
 	fi
 done
