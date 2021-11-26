@@ -59,9 +59,9 @@ Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/
 Open Terminal:
 ```bash
 sudo apt install curl procps socat zip
-curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -O
-unzip master.zip
-cd MCscripts-master
+curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
+unzip /tmp/master.zip -d /tmp
+cd /tmp/MCscripts-master
 sudo adduser --home /opt/MC --system mc
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
@@ -80,8 +80,7 @@ sudo mkdir ~mc/java
 # Move server directory (Replace SERVER_DIR with Minecraft server directory)
 sudo mv SERVER_DIR ~mc/java/MC
 # Open server.jar with no GUI and 1024-2048 MB of RAM
-echo chmod +x server.jar | sudo tee ~mc/java/MC/start.bat
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee -a ~mc/java/MC/start.bat
+echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
 ```
 Copy and paste this block:
 ```bash
@@ -170,19 +169,19 @@ How to restart mcbe@MCBE at 3 AM daily:
 ## Update MCscripts
 ```bash
 sudo apt install curl procps socat zip
-curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -O
-rm -rf MCscripts-master
-unzip master.zip
-cd MCscripts-master
+curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
+rm -rf /tmp/MCscripts-master
+unzip /tmp/master.zip -d /tmp
+cd /tmp/MCscripts-master
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
 if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 sudo ./disable_services.sh
 sudo ./move_servers.sh
-sudo ./move_backups.sh
 ```
 Copy and paste this block:
 ```bash
+sudo ./move_backups.sh
 sudo cp *.{sed,sh} ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
