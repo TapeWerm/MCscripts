@@ -57,10 +57,10 @@ instance=${service##*@}
 
 if [ -n "$service" ]; then
 	if [ "$installed_ver" = fail ]; then
-		echo Previous update failed, rm "$server_dir/version" and try again
+		echo "Previous update failed, rm $server_dir/version and try again"
 		exit 1
 	elif [ "$installed_ver" != "$current_ver" ]; then
-		trap 'echo fail > "$server_dir/version"' ERR
+		trap 'echo fail | sudo tee "$server_dir/version"' ERR
 		sudo systemctl start "mcbe-backup@$instance"
 		sudo systemctl stop "$service.socket"
 		trap 'sudo systemctl start "$service"' ERR
