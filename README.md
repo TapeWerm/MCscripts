@@ -169,13 +169,13 @@ How to restart mcbe@MCBE at 3 AM daily:
 ## Update MCscripts
 ```bash
 sudo apt install curl procps socat zip
+# I recommend replacing the 1st argument to ln with an external drive to dump backups on
+# Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
+if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 rm -rf /tmp/MCscripts-master
 unzip /tmp/master.zip -d /tmp
 cd /tmp/MCscripts-master
-# I recommend replacing the 1st argument to ln with an external drive to dump backups on
-# Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
-if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 sudo ./disable_services.sh
 sudo ./move_servers.sh
 ```
