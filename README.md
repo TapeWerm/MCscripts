@@ -59,9 +59,6 @@ Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/
 Open Terminal:
 ```bash
 sudo apt install curl procps socat zip
-curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
-unzip /tmp/master.zip -d /tmp
-cd /tmp/MCscripts-master
 sudo adduser --home /opt/MC --system mc
 # I recommend replacing the 1st argument to ln with an external drive to dump backups on
 # Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
@@ -69,6 +66,9 @@ sudo ln -s ~mc ~mc/backup_dir
 ```
 Copy and paste this block:
 ```bash
+curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
+unzip /tmp/master.zip -d /tmp
+cd /tmp/MCscripts-master
 sudo cp *.{sed,sh} ~mc/
 sudo chown -h mc:nogroup ~mc/*
 sudo cp systemd/* /etc/systemd/system/
@@ -85,7 +85,7 @@ echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start
 Copy and paste this block:
 ```bash
 sudo chmod +x ~mc/java/MC/start.bat
-sudo chown -R mc:nogroup ~mc/java
+sudo chown -R mc:nogroup ~mc/java/MC
 sudo systemctl enable mc@MC.socket mc@MC.service mc-backup@MC.timer --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
@@ -108,13 +108,13 @@ sudo ~mc/mcbe_autoupdate.sh ~mc/bedrock/MCBE
 If you moved a server directory from Windows:
 ```bash
 sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
-sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE ~mc/bedrock-server-*.zip
+sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE "$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)"
 # Convert DOS line endings to UNIX line endings
 for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
 ```
 Copy and paste this block:
 ```bash
-sudo chown -R mc:nogroup ~mc/bedrock
+sudo chown -R mc:nogroup ~mc/bedrock/MCBE
 sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
