@@ -109,7 +109,7 @@ Do one of the following:
      # Convert DOS line endings to UNIX line endings
      for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
      ```
-- Make server directory:
+- Make new server directory:
   1. Copy and paste this block:
      ```bash
      sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
