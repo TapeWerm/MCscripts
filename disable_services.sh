@@ -70,19 +70,19 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-echo "${enabled[*]}" | sudo tee ~mc/disabled_services.txt > /dev/null
+echo "${enabled[*]}" > ~mc/disabled_services.txt
 if [ -n "${enabled[*]}" ]; then
-	sudo systemctl disable "${enabled[@]}" --now
+	systemctl disable "${enabled[@]}" --now
 fi
 if [ -n "${active[*]}" ]; then
-	sudo systemctl stop "${active[@]}"
+	systemctl stop "${active[@]}"
 fi
 
 for file in "${scripts[@]}"; do
-	sudo rm -f ~mc/"$file"
+	rm -f ~mc/"$file"
 done
 for file in "${units[@]}"; do
-	sudo rm -f "/etc/systemd/system/$file"
+	rm -f "/etc/systemd/system/$file"
 done
 
 echo '@@@ Disabled services are listed in ~mc/disabled_services.txt @@@'

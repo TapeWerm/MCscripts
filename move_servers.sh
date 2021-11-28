@@ -51,41 +51,41 @@ fi
 mkdir -p "$temp_dir"
 # If $server is named java or bedrock, it will collide with the java/bedrock directory unless you move it
 for server in "${java[@]}"; do
-	sudo mv ~mc/"$server" "$temp_dir/"
+	mv ~mc/"$server" "$temp_dir/"
 done
 for server in "${bedrock[@]}"; do
-	sudo mv ~mc/"$server" "$temp_dir/"
+	mv ~mc/"$server" "$temp_dir/"
 done
 
 if [ -n "${java[*]}" ]; then
-	sudo mkdir -p ~mc/java
-	sudo chown mc:nogroup ~mc/java
+	mkdir -p ~mc/java
+	chown mc:nogroup ~mc/java
 	if [ ! ~mc/backup_dir -ef ~mc ]; then
-		sudo mkdir -p ~mc/backup_dir/java
+		mkdir -p ~mc/backup_dir/java
 		# Some file systems do not have owners
-		sudo chown -f mc:nogroup ~mc/backup_dir/java || true
+		chown -f mc:nogroup ~mc/backup_dir/java || true
 	fi
 fi
 for server in "${java[@]}"; do
-	sudo mv "$temp_dir/$server" ~mc/java/
+	mv "$temp_dir/$server" ~mc/java/
 	if [ -d ~mc/backup_dir/"$server"_Backups ]; then
-		sudo mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/java/
+		mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/java/
 	fi
 done
 
 if [ -n "${bedrock[*]}" ]; then
-	sudo mkdir -p ~mc/bedrock
-	sudo chown mc:nogroup ~mc/bedrock
+	mkdir -p ~mc/bedrock
+	chown mc:nogroup ~mc/bedrock
 	if [ ! ~mc/backup_dir -ef ~mc ]; then
-		sudo mkdir -p ~mc/backup_dir/bedrock
+		mkdir -p ~mc/backup_dir/bedrock
 		# Some file systems do not have owners
-		sudo chown -f mc:nogroup ~mc/backup_dir/bedrock || true
+		chown -f mc:nogroup ~mc/backup_dir/bedrock || true
 	fi
 fi
 for server in "${bedrock[@]}"; do
-	sudo mv "$temp_dir/$server" ~mc/bedrock/
+	mv "$temp_dir/$server" ~mc/bedrock/
 	if [ -d ~mc/backup_dir/"$server"_Backups ]; then
-		sudo mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/bedrock/
+		mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/bedrock/
 	fi
 done
 

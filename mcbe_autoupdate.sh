@@ -60,13 +60,13 @@ if [ -n "$service" ]; then
 		echo "Previous update failed, rm $server_dir/version and try again"
 		exit 1
 	elif [ "$installed_ver" != "$current_ver" ]; then
-		trap 'echo fail | sudo tee "$server_dir/version" > /dev/null' ERR
-		sudo systemctl start "mcbe-backup@$instance"
-		sudo systemctl stop "$service.socket"
-		trap 'sudo systemctl start "$service"' ERR
+		trap 'echo fail > "$server_dir/version"' ERR
+		systemctl start "mcbe-backup@$instance"
+		systemctl stop "$service.socket"
+		trap 'systemctl start "$service"' ERR
 		# mcbe_update.sh reads y asking if you stopped the server
-		sudo su mc -s /bin/bash -c "echo y | ~/mcbe_update.sh $server_dir $minecraft_zip"
-		sudo systemctl start "$service"
+		su mc -s /bin/bash -c "echo y | ~/mcbe_update.sh $server_dir $minecraft_zip"
+		systemctl start "$service"
 	fi
 else
 	if [ -d "$server_dir" ]; then
@@ -75,9 +75,9 @@ else
 	fi
 	# Test extracting $minecraft_zip partially quietly
 	unzip -tq "$minecraft_zip"
-	trap 'sudo rm -rf "$server_dir"' ERR
-	sudo unzip -q "$minecraft_zip" -d "$server_dir"
-	echo "$current_ver" | sudo tee "$server_dir/version" > /dev/null
-	sudo chown -R mc:nogroup "$server_dir"
+	trap 'rm -rf "$server_dir"' ERR
+	unzip -q "$minecraft_zip" -d "$server_dir"
+	echo "$current_ver" > "$server_dir/version"
+	chown -R mc:nogroup "$server_dir"
 	echo "@@@ Don't forget to edit $server_dir/server.properties @@@"
 fi

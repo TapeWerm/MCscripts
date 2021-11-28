@@ -33,7 +33,7 @@ if ! systemctl is-active --quiet "$service"; then
 fi
 
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-echo "$*" | sudo tee "/run/$service" > /dev/null
+echo "$*" > "/run/$service"
 sleep 1
 # Output of $service since $timestamp with no metadata
 buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
