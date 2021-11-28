@@ -79,8 +79,7 @@ Stop the Minecraft server.
 sudo mkdir ~mc/java
 # Move server directory (Replace SERVER_DIR with Minecraft server directory)
 sudo mv SERVER_DIR ~mc/java/MC
-# Open server.jar with no GUI and 1024-2048MB of RAM
-echo java -Xms1024M -Xmx2048M -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
+echo java -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
 ```
 Copy and paste this block:
 ```bash
@@ -93,25 +92,29 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 sudo systemctl enable mc-rmbackup@MC.service --now
 ```
 ## Bedrock Edition setup
-Stop the Minecraft server.
 ```bash
 sudo mkdir ~mc/bedrock
-
-# Do one of the following:
-# Move server directory (Replace SERVER_DIR with Minecraft server directory)
-sudo mv SERVER_DIR ~mc/bedrock/MCBE
-# OR
-# Make new server directory
-sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
-sudo ~mc/mcbe_autoupdate.sh ~mc/bedrock/MCBE
 ```
-If you moved a server directory from Windows:
-```bash
-sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
-sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE "$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)"
-# Convert DOS line endings to UNIX line endings
-for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
-```
+Do one of the following:
+- Move server directory:
+  1. Stop the Minecraft server.
+  2. ```bash
+     # Move server directory (Replace SERVER_DIR with Minecraft server directory)
+     sudo mv SERVER_DIR ~mc/bedrock/MCBE
+     ```
+  3. If you moved a server directory from Windows:
+     ```bash
+     sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
+     sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE "$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)"
+     # Convert DOS line endings to UNIX line endings
+     for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
+     ```
+- Make server directory:
+  1. Copy and paste this block:
+     ```bash
+     sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
+     sudo ~mc/mcbe_autoupdate.sh ~mc/bedrock/MCBE
+     ```
 Copy and paste this block:
 ```bash
 sudo chown -R mc:nogroup ~mc/bedrock/MCBE
@@ -147,11 +150,11 @@ Options that are a list, such as ExecStop, must first be reset by setting it to 
 How to change mcbe@MCBE shutdown warning to 20 seconds:
 
 1. Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
-```
-[Service]
-ExecStop=
-ExecStop=/opt/MC/mc_stop.sh -s 20 %N
-```
+   ```
+   [Service]
+   ExecStop=
+   ExecStop=/opt/MC/mc_stop.sh -s 20 %N
+   ```
 2. If you want to revert the edit enter `sudo systemctl revert mcbe@MCBE`
 
 Other services you might want to edit:
@@ -162,10 +165,10 @@ Other services you might want to edit:
 How to restart mcbe@MCBE at 3 AM daily:
 
 1. Enter `sudo crontab -e`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
-```
-# m h  dom mon dow   command
-0 3 * * * systemctl try-restart mcbe@MCBE
-```
+   ```
+   # m h  dom mon dow   command
+   0 3 * * * systemctl try-restart mcbe@MCBE
+   ```
 ## Update MCscripts
 ```bash
 sudo apt install curl procps socat zip
