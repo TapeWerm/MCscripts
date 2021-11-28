@@ -4,13 +4,19 @@
 set -e
 syntax='Usage: mc_getjar.sh'
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo Download the JAR of the current version.
-	exit
-	;;
-esac
+args=$(getopt -l help -o h -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo Download the JAR of the current version.
+		exit
+		;;
+	esac
+done
+shift
+
 if [ "$#" -gt 0 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"

@@ -6,13 +6,19 @@ set -e
 dir=$(dirname "$0")
 syntax='Usage: mc_cmd.sh SERVICE COMMAND...'
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo "Run command in the server console of Minecraft Java Edition or Bedrock Edition server running in service."
-	exit
-	;;
-esac
+args=$(getopt -l help -o h -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo "Run command in the server console of Minecraft Java Edition or Bedrock Edition server running in service."
+		exit
+		;;
+	esac
+done
+shift
+
 if [ "$#" -lt 2 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"

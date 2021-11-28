@@ -17,15 +17,21 @@ send() {
 	wait
 }
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo 'Post Minecraft Bedrock Edition server logs running in service to webhooks (Discord and Rocket Chat).'
-	echo
-	echo Logs include server start/stop and player connect/disconnect/kicks.
-	exit
-	;;
-esac
+args=$(getopt -l help -o h -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo 'Post Minecraft Bedrock Edition server logs running in service to webhooks (Discord and Rocket Chat).'
+		echo
+		echo Logs include server start/stop and player connect/disconnect/kicks.
+		exit
+		;;
+	esac
+done
+shift
+
 if [ "$#" -lt 1 ]; then
 	>&2 echo Not enough arguments
 	>&2 echo "$syntax"

@@ -25,13 +25,19 @@ units+=(mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-ge
 # Removed units
 units+=(mcbe-autoupdate@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-log@.timer)
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo 'Find enabled services from MCscripts, prompt user to disable them and remove their files, and list services in ~mc/disabled_services.txt.'
-	exit
-	;;
-esac
+args=$(getopt -l help -o h -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo 'Find enabled services from MCscripts, prompt user to disable them and remove their files, and list services in ~mc/disabled_services.txt.'
+		exit
+		;;
+	esac
+done
+shift
+
 if [ "$#" -gt 0 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"

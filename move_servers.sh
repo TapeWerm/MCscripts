@@ -5,13 +5,19 @@ set -e
 syntax='Usage: move_servers.sh'
 temp_dir=/tmp/move_servers
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo "Find Minecraft servers and their backups in ~mc and move them into the ~mc/java or ~mc/bedrock directory if they're not already there."
-	exit
-	;;
-esac
+args=$(getopt -l help -o h -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo "Find Minecraft servers and their backups in ~mc and move them into the ~mc/java or ~mc/bedrock directory if they're not already there."
+		exit
+		;;
+	esac
+done
+shift
+
 if [ "$#" -gt 0 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"

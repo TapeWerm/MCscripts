@@ -14,15 +14,21 @@ merge_dirs() {
 	sudo find "$1" -type d -empty -delete
 }
 
-case $1 in
---help|-h)
-	echo "$syntax"
-	echo 'Find Minecraft backups in ~mc/backup_dir and update their paths.'
-	echo
-	echo Run move_servers.sh before running move_backup.sh.
-	exit
-	;;
-esac
+args=$(getopt -l help -o h -- "$@")
+eval set -- "$args"
+while [ "$1"  != -- ]; do
+	case $1 in
+	--help|-h)
+		echo "$syntax"
+		echo 'Find Minecraft backups in ~mc/backup_dir and update their paths.'
+		echo
+		echo Run move_servers.sh before running move_backup.sh.
+		exit
+		;;
+	esac
+done
+shift
+
 if [ "$#" -gt 0 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"
