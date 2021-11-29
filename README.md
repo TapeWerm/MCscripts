@@ -136,7 +136,7 @@ sudo touch ~mc/.mcbe_log/MCBE_webhook.txt
 sudo chown -R mc:nogroup ~mc/.mcbe_log
 sudo chmod 600 ~mc/.mcbe_log/MCBE_webhook.txt
 ```
-Enter `sudo nano ~/.mcbe_log/MCBE_webhook.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+Enter `sudo nano ~mc/.mcbe_log/MCBE_webhook.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 $url
 $url
