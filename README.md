@@ -67,7 +67,7 @@ sudo /tmp/MCscripts-master/install.sh
 If you want to change where backups are stored:
 ```bash
 # Replace EXT_DRIVE with external drive
-sudo ln -snf ~mc ~mc/backup_dir
+sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ```
 ## Java Edition setup
 Do one of the following:
@@ -162,7 +162,7 @@ sudo /tmp/MCscripts-master/install.sh --update
 If you want to change where backups are stored:
 ```bash
 # Replace EXT_DRIVE with external drive
-sudo ln -snf ~mc ~mc/backup_dir
+sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ```
 ## Remove MCscripts
 Server directories and backups in ~mc will remain.
