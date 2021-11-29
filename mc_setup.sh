@@ -54,8 +54,12 @@ if [ -n "$import" ]; then
 	mv "$import" "$server_dir"
 	trap 'mv "$server_dir" "$import"' ERR
 else
+	if [ -d "$server_dir" ]; then
+		>&2 echo "Server directory $server_dir already exists"
+		exit 1
+	fi
+	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
-	trap 'rm -r "$server_dir"' ERR
 	cd "$server_dir"
 	~mc/mc_getjar.sh
 	# Minecraft Java Edition makes eula.txt on first run

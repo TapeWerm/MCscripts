@@ -41,8 +41,17 @@ if [ "$instance" != "$(systemd-escape "$instance")" ]; then
 fi
 server_dir=~mc/bedrock/$instance
 
-mkdir -p ~mc/bedrock
 su mc -s /bin/bash -c '~mc/mcbe_getzip.sh'
+# There might be more than one ZIP in ~mc
+minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
+if [ -z "$minecraft_zip" ]; then
+	>&2 echo 'No bedrock-server ZIP found in ~mc'
+	exit 1
+fi
+# Trim off $minecraft_zip after last .zip
+current_ver=$(basename "${minecraft_zip%.zip}")
+
+mkdir -p ~mc/bedrock
 if [ -n "$import" ]; then
 	echo "Enter Y if you stopped the server to import"
 	read -r input
@@ -54,8 +63,6 @@ if [ -n "$import" ]; then
 
 	mv "$import" "$server_dir"
 	trap 'mv "$server_dir" "$import"' ERR
-	# There might be more than one ZIP in ~mc
-	minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
 	# mcbe_update.sh reads y asking if you stopped the server
 	echo y | ~mc/mcbe_update.sh "$server_dir" "$minecraft_zip"
 	# Convert DOS line endings to UNIX line endings
@@ -64,5 +71,15 @@ if [ -n "$import" ]; then
 	done
 	chown -R mc:nogroup "$server_dir"
 else
-	~mc/mcbe_autoupdate.sh "$server_dir"
+	if [ -d "$server_dir" ]; then
+		>&2 echo "Server directory $server_dir already exists"
+		exit 1
+	fi
+	# Test extracting $minecraft_zip partially quietly
+	unzip -tq "$minecraft_zip"
+	trap 'rm -rf "$server_dir"' ERR
+	unzip -q "$minecraft_zip" -d "$server_dir"
+	echo "$current_ver" > "$server_dir/version"
+	chown -R mc:nogroup "$server_dir"
+	echo "@@@ Don't forget to edit $server_dir/server.properties @@@"
 fi
