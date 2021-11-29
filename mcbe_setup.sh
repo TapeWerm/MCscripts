@@ -42,6 +42,7 @@ fi
 server_dir=~mc/bedrock/$instance
 
 mkdir -p ~mc/bedrock
+su mc -s /bin/bash -c '~mc/mcbe_getzip.sh'
 if [ -n "$import" ]; then
 	echo "Enter Y if you stopped the server to import"
 	read -r input
@@ -53,7 +54,6 @@ if [ -n "$import" ]; then
 
 	mv "$import" "$server_dir"
 	trap 'mv "$server_dir" "$import"' ERR
-	systemctl start mcbe-getzip
 	# There might be more than one ZIP in ~mc
 	minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
 	# mcbe_update.sh reads y asking if you stopped the server
@@ -64,6 +64,5 @@ if [ -n "$import" ]; then
 	done
 	chown -R mc:nogroup "$server_dir"
 else
-	su mc -s /bin/bash -c '~mc/mcbe_getzip.sh'
 	~mc/mcbe_autoupdate.sh "$server_dir"
 fi
