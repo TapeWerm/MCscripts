@@ -18,6 +18,7 @@ No automatic updates nor chat bots for Java Edition.
   - [Bedrock Edition webhook bots setup](#bedrock-edition-webhook-bots-setup)
   - [Override systemd unit configuration](#override-systemd-unit-configuration)
   - [Update MCscripts](#update-mcscripts)
+  - [Remove MCscripts](#remove-mcscripts)
 # Notes
 How to run commands in the server console:
 ```bash
@@ -162,4 +163,9 @@ If you want to change where backups are stored:
 ```bash
 # Replace EXT_DRIVE with external drive
 sudo ln -snf ~mc ~mc/backup_dir
+```
+## Remove MCscripts
+Server directories and backups in ~mc will remain.
+```bash
+sudo ~mc/disable_services.sh
 ```
