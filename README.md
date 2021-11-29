@@ -59,32 +59,28 @@ Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/
 Open Terminal:
 ```bash
 sudo apt install curl procps socat zip
-sudo adduser --home /opt/MC --system mc
-# I recommend replacing the 1st argument to ln with an external drive to dump backups on
-# Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
-sudo ln -s ~mc ~mc/backup_dir
-```
-Copy and paste this block:
-```bash
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 unzip /tmp/master.zip -d /tmp
-cd /tmp/MCscripts-master
-sudo cp *.{sed,sh} ~mc/
-sudo chown -h mc:nogroup ~mc/*
-sudo cp systemd/* /etc/systemd/system/
+sudo /tmp/MCscripts-master/install.sh
+```
+If you want to change where backups are stored:
+```bash
+# Replace EXT_DRIVE with external drive
+sudo ln -snf ~mc ~mc/backup_dir
 ```
 ## Java Edition setup
-Stop the Minecraft server.
+Do one of the following:
+- Import server directory:
+  ```bash
+  # Replace SERVER_DIR with Minecraft server directory
+  sudo ~mc/mc_setup.sh --import SERVER_DIR MC
+  ```
+- Make new server directory:
+  ```bash
+  sudo ~mc/mc_setup.sh MC
+  ```
+  Enter `sudo nano ~mc/java/MC/eula.txt`, fill it in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>).
 ```bash
-sudo mkdir ~mc/java
-# Move server directory (Replace SERVER_DIR with Minecraft server directory)
-sudo mv SERVER_DIR ~mc/java/MC
-echo java -jar server.jar nogui | sudo tee ~mc/java/MC/start.bat
-```
-Copy and paste this block:
-```bash
-sudo chmod +x ~mc/java/MC/start.bat
-sudo chown -R mc:nogroup ~mc/java/MC
 sudo systemctl enable mc@MC.socket mc@MC.service mc-backup@MC.timer --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
@@ -92,37 +88,19 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 sudo systemctl enable mc-rmbackup@MC.service --now
 ```
 ## Bedrock Edition setup
-```bash
-sudo mkdir ~mc/bedrock
-```
 Do one of the following:
-- Move server directory:
-  1. Stop the Minecraft server.
-  2. ```bash
-     # Move server directory (Replace SERVER_DIR with Minecraft server directory)
-     sudo mv SERVER_DIR ~mc/bedrock/MCBE
-     ```
-  3. If you moved a server directory from Windows:
-     ```bash
-     sudo systemctl start mcbe-getzip
-     # There might be more than one ZIP in ~mc
-     minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
-     # mcbe_update.sh reads y asking if you stopped the server
-     echo y | sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE "$minecraft_zip"
-     # Convert DOS line endings to UNIX line endings
-     for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
-     ```
-  4. ```bash
-     sudo chown -R mc:nogroup ~mc/bedrock/MCBE
-     ```
+- Import server directory:
+  ```bash
+  # Replace SERVER_DIR with Minecraft server directory
+  sudo ~mc/mcbe_setup.sh --import SERVER_DIR MCBE
+  ```
 - Make new server directory:
-  1. Copy and paste this block:
-     ```bash
-     sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
-     sudo ~mc/mcbe_autoupdate.sh ~mc/bedrock/MCBE
-     ```
+  ```bash
+  sudo ~mc/mcbe_setup.sh MCBE
+  ```
 ```bash
-sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
+sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer --now
+sudo systemctl enable mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
@@ -175,21 +153,13 @@ How to restart mcbe@MCBE at 3 AM daily:
 ## Update MCscripts
 ```bash
 sudo apt install curl procps socat zip
-# I recommend replacing the 1st argument to ln with an external drive to dump backups on
-# Example: sudo ln -s EXT_DRIVE ~mc/backup_dir
-if [ ! -d ~mc/backup_dir ]; then sudo ln -s ~mc ~mc/backup_dir; fi
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 rm -rf /tmp/MCscripts-master
 unzip /tmp/master.zip -d /tmp
-cd /tmp/MCscripts-master
-sudo ./disable_services.sh
-sudo ./move_servers.sh
+sudo /tmp/MCscripts-master/install.sh --update
 ```
-Copy and paste this block:
+If you want to change where backups are stored:
 ```bash
-sudo ./move_backups.sh
-sudo cp *.{sed,sh} ~mc/
-sudo chown -h mc:nogroup ~mc/*
-sudo cp systemd/* /etc/systemd/system/
-sudo ./enable_services.sh
+# Replace EXT_DRIVE with external drive
+sudo ln -snf ~mc ~mc/backup_dir
 ```
