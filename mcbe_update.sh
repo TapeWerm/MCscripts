@@ -45,7 +45,7 @@ fi
 # Test extracting $minecraft_zip partially quietly
 unzip -tq "$minecraft_zip"
 
-echo "Enter Y if you backed up and stopped the server you're updating"
+echo "Enter Y if you backed up and stopped the server to update"
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

@@ -105,9 +105,15 @@ Do one of the following:
   3. If you moved a server directory from Windows:
      ```bash
      sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
-     sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE "$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)"
+     # There might be more than one ZIP in ~mc
+     minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
+     # mcbe_update.sh reads y asking if you stopped the server
+     echo y | sudo ~mc/mcbe_update.sh ~mc/bedrock/MCBE "$minecraft_zip"
      # Convert DOS line endings to UNIX line endings
      for file in ~mc/bedrock/MCBE/*.{json,properties}; do sudo sed -i s/$'\r'$// "$file"; done
+     ```
+  4. ```bash
+     sudo chown -R mc:nogroup ~mc/bedrock/MCBE
      ```
 - Make new server directory:
   1. Copy and paste this block:
@@ -115,9 +121,7 @@ Do one of the following:
      sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
      sudo ~mc/mcbe_autoupdate.sh ~mc/bedrock/MCBE
      ```
-Copy and paste this block:
 ```bash
-sudo chown -R mc:nogroup ~mc/bedrock/MCBE
 sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
