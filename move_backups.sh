@@ -20,7 +20,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo 'Find Minecraft backups in ~mc/backup_dir and update their paths.'
+		echo 'Find Minecraft Java Edition or Bedrock Edition backups in ~mc/backup_dir and update their paths.'
 		echo
 		echo Run move_servers.sh before running move_backup.sh.
 		exit

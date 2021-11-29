@@ -11,7 +11,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo "Find Minecraft servers and their backups in ~mc and move them into the ~mc/java or ~mc/bedrock directory if they're not already there."
+		echo "Find Minecraft Java Edition or Bedrock Edition servers and their backups in ~mc and move them into the ~mc/java or ~mc/bedrock directory if they're not already there."
 		exit
 		;;
 	esac

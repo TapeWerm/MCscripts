@@ -10,7 +10,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo Download the JAR of the current version.
+		echo Download the JAR of the current version of Minecraft Java Edition server.
 		exit
 		;;
 	esac

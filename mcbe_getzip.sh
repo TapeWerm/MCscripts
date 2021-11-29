@@ -11,7 +11,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo "If the ZIP of the current version isn't in ~, download it, and remove outdated ZIPs in ~."
+		echo "If the ZIP of the current version of Minecraft Bedrock Edition server isn't in ~, download it, and remove outdated ZIPs in ~."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo "-n, --no-clobber  don't remove outdated ZIPs in ~"
