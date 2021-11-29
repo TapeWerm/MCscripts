@@ -104,7 +104,7 @@ Do one of the following:
      ```
   3. If you moved a server directory from Windows:
      ```bash
-     sudo su mc -s /bin/bash -c '~/mcbe_getzip.sh'
+     sudo systemctl start mcbe-getzip
      # There might be more than one ZIP in ~mc
      minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
      # mcbe_update.sh reads y asking if you stopped the server
