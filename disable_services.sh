@@ -31,7 +31,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo 'Find enabled services from MCscripts, prompt user to disable them and remove their files, and list services in ~mc/disabled_services.txt.'
+		echo 'Find enabled services from MCscripts, disable them, remove their files, and list services in ~mc/disabled_services.txt.'
 		exit
 		;;
 	esac
@@ -59,15 +59,6 @@ fi
 if [ -z "${enabled[*]}" ] && [ -z "${active[*]}" ]; then
 	echo No services enabled
 	exit
-fi
-echo "Enabled services: ${enabled[*]}"
-echo "Active but not enabled services: ${active[*]}"
-echo "Enter Y to disable services and remove their files (make sure people aren't playing first)"
-read -r input
-input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
-if [ "$input" != y ]; then
-	>&2 echo "$input != y"
-	exit 1
 fi
 
 echo "${enabled[*]}" > ~mc/disabled_services.txt
