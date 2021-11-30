@@ -60,23 +60,24 @@ unzip -q "$minecraft_zip" -d "$new_dir"
 cd "$new_dir"
 # Trim off $minecraft_zip after last .zip
 basename "${minecraft_zip%.zip}" > version
-for pack_dir in *_packs; do
+cp -r "$server_dir/worlds" .
+
+while read -r file; do
+	if [ -f "$server_dir/$file" ]; then
+		cp "$server_dir/$file" .
+	fi
+done < <(ls -- *.{json,properties} 2> /dev/null || true)
+
+while read -r pack_dir; do
 	if [ -d "$server_dir/$pack_dir" ]; then
-		packs=$(ls "$server_dir/$pack_dir")
-		# Escape \ while reading line from $packs
-		echo "$packs" | while read -r pack; do
+		while read -r pack; do
 			# Don't clobber 1st party packs
 			if [ ! -d "$pack_dir/$pack" ]; then
 				cp -r "$server_dir/$pack_dir/$pack" "$pack_dir/"
 			fi
-		done
+		done < <(ls "$server_dir/$pack_dir")
 	fi
-done
-for file in worlds *.{json,properties}; do
-	if [ -e "$server_dir/$file" ]; then
-		cp -r "$server_dir/$file" .
-	fi
-done
+done < <(ls -d -- *_packs 2> /dev/null || true)
 
 rm -rf "$old_dir"
 trap '' SIGTERM
