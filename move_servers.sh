@@ -31,7 +31,6 @@ while read -r dir; do
 	if [ -f ~mc/"$dir"/bedrock_server ]; then
 		bedrock+=("$dir")
 	fi
-# Bash process substitution
 done < <(find ~mc -mindepth 1 -maxdepth 1 -type d ! -name '.*' -printf '%P\n')
 
 if [ -z "${java[*]}" ] && [ -z "${bedrock[*]}" ]; then
