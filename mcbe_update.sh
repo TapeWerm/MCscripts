@@ -66,7 +66,7 @@ while read -r file; do
 	if [ -f "$server_dir/$file" ]; then
 		cp "$server_dir/$file" .
 	fi
-done < <(ls -- *.{json,properties} 2> /dev/null || true)
+done < <(ls -- *.{json,properties} 2> /dev/null)
 
 while read -r pack_dir; do
 	if [ -d "$server_dir/$pack_dir" ]; then
@@ -77,7 +77,7 @@ while read -r pack_dir; do
 			fi
 		done < <(ls "$server_dir/$pack_dir")
 	fi
-done < <(ls -d -- *_packs 2> /dev/null || true)
+done < <(ls -d -- *_packs 2> /dev/null)
 
 rm -rf "$old_dir"
 trap '' SIGTERM

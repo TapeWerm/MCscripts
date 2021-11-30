@@ -68,7 +68,7 @@ if [ -n "$import" ]; then
 	# Convert DOS line endings to UNIX line endings
 	while read -r file; do
 		sed -i s/$'\r'$// "$file"
-	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null || true)
+	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
 	chown -R mc:nogroup "$server_dir"
 else
 	if [ -d "$server_dir" ]; then

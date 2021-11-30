@@ -47,11 +47,11 @@ if [ -d ~mc/backup_dir/java ] && [ ~mc/backup_dir/java -ef ~mc/backup_dir/Java ]
 				world=$(basename "${world_backups%_Backups}")
 				mv "$server_backups/${world}_Backups" "$server_backups/${world}_Backups.old"
 				mv "$server_backups/${world}_Backups.old" "$server_backups/${world}_backups"
-			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null || true)
+			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null)
 			mv ~mc/backup_dir/java/"$server"_Backups ~mc/backup_dir/java/"$server"_Backups.old
 			mv ~mc/backup_dir/java/"$server"_Backups.old ~mc/backup_dir/java/"$server"_backups
 		fi
-	done < <(ls -d ~mc/backup_dir/java/*_Backups 2> /dev/null || true)
+	done < <(ls -d ~mc/backup_dir/java/*_Backups 2> /dev/null)
 # Else move from $server_Backups to $server_backups
 else
 	while read -r server_backups; do
@@ -64,10 +64,10 @@ else
 				world=$(basename "${world_backups%_Backups}")
 				backup_dir=~mc/backup_dir/java/${server}_backups/${world}_backups
 				merge_dirs "$world_backups" "$backup_dir"
-			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null || true)
+			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null)
 			rmdir "$server_backups"
 		fi
-	done < <(ls -d ~mc/backup_dir/java/*_Backups 2> /dev/null || true)
+	done < <(ls -d ~mc/backup_dir/java/*_Backups 2> /dev/null)
 fi
 
 # Move from java to java_backups
@@ -81,10 +81,10 @@ while read -r server_backups; do
 			world=$(basename "${world_backups%_backups}")
 			backup_dir=~mc/backup_dir/java_backups/$server/$world
 			merge_dirs "$world_backups" "$backup_dir"
-		done < <(ls -d "$server_backups"/*_backups 2> /dev/null || true)
+		done < <(ls -d "$server_backups"/*_backups 2> /dev/null)
 		rmdir "$server_backups"
 	fi
-done < <(ls -d ~mc/backup_dir/java/*_backups 2> /dev/null || true)
+done < <(ls -d ~mc/backup_dir/java/*_backups 2> /dev/null)
 if [ ! ~mc/backup_dir -ef ~mc ] && [ -d ~mc/backup_dir/java ]; then
 	rmdir ~mc/backup_dir/java
 fi
@@ -103,11 +103,11 @@ if [ -d ~mc/backup_dir/bedrock ] && [ ~mc/backup_dir/bedrock -ef ~mc/backup_dir/
 				world=$(basename "${world_backups%_Backups}")
 				mv "$server_backups/${world}_Backups" "$server_backups/${world}_Backups.old"
 				mv "$server_backups/${world}_Backups.old" "$server_backups/${world}_backups"
-			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null || true)
+			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null)
 			mv ~mc/backup_dir/bedrock/"$server"_Backups ~mc/backup_dir/bedrock/"$server"_Backups.old
 			mv ~mc/backup_dir/bedrock/"$server"_Backups.old ~mc/backup_dir/bedrock/"$server"_backups
 		fi
-	done < <(ls -d ~mc/backup_dir/bedrock/*_Backups 2> /dev/null || true)
+	done < <(ls -d ~mc/backup_dir/bedrock/*_Backups 2> /dev/null)
 # Else move from $server_Backups to $server_backups
 else
 	while read -r server_backups; do
@@ -120,10 +120,10 @@ else
 				world=$(basename "${world_backups%_Backups}")
 				backup_dir=~mc/backup_dir/bedrock/${server}_backups/${world}_backups
 				merge_dirs "$world_backups" "$backup_dir"
-			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null || true)
+			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null)
 			rmdir "$server_backups"
 		fi
-	done < <(ls -d ~mc/backup_dir/bedrock/*_Backups 2> /dev/null || true)
+	done < <(ls -d ~mc/backup_dir/bedrock/*_Backups 2> /dev/null)
 fi
 
 # Move from bedrock to bedrock_backups
@@ -137,10 +137,10 @@ while read -r server_backups; do
 			world=$(basename "${world_backups%_backups}")
 			backup_dir=~mc/backup_dir/bedrock_backups/$server/$world
 			merge_dirs "$world_backups" "$backup_dir"
-		done < <(ls -d "$server_backups"/*_backups 2> /dev/null || true)
+		done < <(ls -d "$server_backups"/*_backups 2> /dev/null)
 		rmdir "$server_backups"
 	fi
-done < <(ls -d ~mc/backup_dir/bedrock/*_backups 2> /dev/null || true)
+done < <(ls -d ~mc/backup_dir/bedrock/*_backups 2> /dev/null)
 if [ ! ~mc/backup_dir -ef ~mc ] && [ -d ~mc/backup_dir/bedrock ]; then
 	rmdir ~mc/backup_dir/bedrock
 fi

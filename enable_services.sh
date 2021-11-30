@@ -108,7 +108,7 @@ if [ -d ~mc/.MCBE_Bot ]; then
 	while read -r file; do
 		# Trim off $file after last suffix
 		mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
-	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null || true)
+	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null)
 	mv ~mc/.MCBE_Bot ~mc/.mcbe_log
 fi
 # Enable dependencies first
