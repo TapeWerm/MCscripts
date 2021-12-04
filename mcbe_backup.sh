@@ -113,7 +113,7 @@ backup_zip=$backup_dir/${date}_$minute.zip
 
 server_read
 # The last line that matches either is the current save state
-state=$(echo "$buffer" | grep -E 'Saving|Changes to the level are resumed' | tail -n 1)
+state=$(echo "$buffer" | grep -E 'Saving|Changes to the (level|world) are resumed' | tail -n 1)
 if echo "$state" | grep -q 'Saving'; then
 	>&2 echo Save held, is a backup in progress?
 	exit 1
