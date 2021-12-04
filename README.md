@@ -23,7 +23,7 @@ No automatic updates nor chat bots for Java Edition.
 How to run commands in the server console:
 ```bash
 sudo ~mc/mc_cmd.sh SERVICE COMMAND...
-# Bedrock Edition server example
+# Minecraft Bedrock Edition server example
 sudo ~mc/mc_cmd.sh mcbe@MCBE help 2
 ```
 How to see server output:
