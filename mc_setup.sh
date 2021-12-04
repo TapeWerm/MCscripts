@@ -55,7 +55,7 @@ if [ -n "$import" ]; then
 	trap 'mv "$server_dir" "$import"' ERR
 	# Convert DOS line endings to UNIX line endings
 	while read -r file; do
-		if grep -q $'\r' "$file"; then
+		if grep -q $'\r'$ "$file"; then
 			sed -i s/$'\r'$// "$file"
 		fi
 	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)

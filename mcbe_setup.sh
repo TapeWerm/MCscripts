@@ -67,7 +67,7 @@ if [ -n "$import" ]; then
 	echo y | ~mc/mcbe_update.sh "$server_dir" "$minecraft_zip"
 	# Convert DOS line endings to UNIX line endings
 	while read -r file; do
-		if grep -q $'\r' "$file"; then
+		if grep -q $'\r'$ "$file"; then
 			sed -i s/$'\r'$// "$file"
 		fi
 	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
