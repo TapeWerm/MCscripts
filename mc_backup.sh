@@ -15,12 +15,6 @@ server_do() {
 	echo "$*" > "/run/$service"
 }
 
-countdown() {
-	warning="Server stopping in $*"
-	server_do say "$warning"
-	echo "$warning"
-}
-
 # Set $buffer to output of $service after $timestamp set by server_do
 # If $timestamp doesn't exist set it to when $service started
 # $buffer may not have output from server_do first try
@@ -92,24 +86,6 @@ backup_dir=$backup_dir/java_backups/$(basename "$server_dir")/$world/$year/$mont
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
 
-server_read
-# The last line that matches either is the current save state
-state=$(echo "$buffer" | grep -Ev '<.+>' | grep -E 'Automatic saving is now (disabled|enabled)' | tail -n 1)
-if echo "$state" | grep -q 'Automatic saving is now disabled'; then
-	>&2 echo Save off, is a backup in progress?
-	exit 1
-fi
-
-countdown 10 seconds
-sleep 7
-countdown 3 seconds
-sleep 1
-countdown 2 seconds
-sleep 1
-countdown 1 second
-sleep 1
-server_do say Darnit
-
 # Disable autosave
 server_do save-off
 trap 'server_do save-on' ERR
@@ -133,4 +109,3 @@ trap 'server_do save-on; rm -f "$backup_zip"' ERR
 zip -rq "$backup_zip" "$world"
 echo "Backup is $backup_zip"
 server_do save-on
-server_do say "Well that's better now, isn't it?"

@@ -111,14 +111,6 @@ backup_dir=$backup_dir/bedrock_backups/$(basename "$server_dir")/$world/$year/$m
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
 
-server_read
-# The last line that matches either is the current save state
-state=$(echo "$buffer" | grep -E 'Saving|Changes to the (level|world) are resumed' | tail -n 1)
-if echo "$state" | grep -q 'Saving'; then
-	>&2 echo Save held, is a backup in progress?
-	exit 1
-fi
-
 # Prepare backup
 server_do save hold
 trap 'server_do save resume' ERR
