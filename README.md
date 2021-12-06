@@ -167,6 +167,6 @@ sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ## Remove MCscripts
 ```bash
 sudo ~mc/disable_services.sh
-sudo deluser --remove-home --backup-to /opt --system mc
-sudo rmdir /opt/MC
+sudo deluser --system mc
+sudo mv /opt/MC /opt/MC.old
 ```
