@@ -165,7 +165,8 @@ If you want to change where backups are stored:
 sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ```
 ## Remove MCscripts
-Server directories and backups in ~mc will remain.
 ```bash
 sudo ~mc/disable_services.sh
+sudo deluser --remove-home --backup-to /opt --system mc
+sudo rmdir /opt/MC
 ```

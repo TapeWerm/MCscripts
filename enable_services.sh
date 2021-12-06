@@ -27,10 +27,6 @@ disabled=$(cat ~mc/disabled_services.txt)
 for x in $disabled; do
 	enabled+=("$x")
 done
-if [ -z "${enabled[*]}" ]; then
-	echo No services to reenable
-	exit
-fi
 # Update list of services to be reenabled
 for x in "${!enabled[@]}"; do
 	# Replace mcbe-autoupdate timer with service and mcbe-getzip
@@ -67,42 +63,31 @@ if [ "$getzip" = true ]; then
 	enabled+=("mcbe-getzip.timer")
 fi
 # Update systemd overrides
-for x in "${!enabled[@]}"; do
-	override=/etc/systemd/system/${enabled[x]}.d/override.conf
-	if [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
-		if [ -f "$override" ]; then
-			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-		fi
-	elif [[ "${enabled[x]}" =~ ^mc-backup@.+\.service$ ]]; then
-		if [ -f "$override" ]; then
-			sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
-		fi
-	elif [[ "${enabled[x]}" =~ ^mc-rmbackup@.+\.service$ ]]; then
-		if [ -f "$override" ]; then
-			sed -i 's/%i_Backups/%i_backups/g' "$override"
-			sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
-			sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-		fi
-	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
-		if [ -f "$override" ]; then
-			sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-		fi
-	elif [[ "${enabled[x]}" =~ ^mcbe-backup@.+\.service$ ]]; then
-		if [ -f "$override" ]; then
-			sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
-		fi
-	elif [[ "${enabled[x]}" =~ ^mcbe-rmbackup@.+\.service$ ]]; then
-		if [ -f "$override" ]; then
-			sed -i 's/%i_Backups/%i_backups/g' "$override"
-			sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
-			sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-		fi
-	elif [ "${enabled[x]}" = mcbe-getzip@.service ]; then
-		if [ -f "$override" ]; then
-			sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
-		fi
-	fi
-done
+while read -r override; do
+	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+done < <(ls /etc/systemd/system/mc@*.service.d/override.conf 2> /dev/null)
+while read -r override; do
+	sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
+done < <(ls /etc/systemd/system/mc-backup@*.service.d/override.conf 2> /dev/null)
+while read -r override; do
+	sed -i 's/%i_Backups/%i_backups/g' "$override"
+	sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
+	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+done < <(ls /etc/systemd/system/mc-rmbackup@*.service.d/override.conf 2> /dev/null)
+while read -r override; do
+	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+done < <(ls /etc/systemd/system/mcbe@*.service.d/override.conf 2> /dev/null)
+while read -r override; do
+	sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+done < <(ls /etc/systemd/system/mcbe-backup@*.service.d/override.conf 2> /dev/null)
+while read -r override; do
+	sed -i 's/%i_Backups/%i_backups/g' "$override"
+	sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
+	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+done < <(ls /etc/systemd/system/mcbe-rmbackup@*.service.d/override.conf 2> /dev/null)
+while read -r override; do
+	sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+done < <(ls /etc/systemd/system/mcbe-getzip.service.d/override.conf 2> /dev/null)
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
 	while read -r file; do
@@ -124,4 +109,6 @@ for x in "${!enabled[@]}"; do
 		unset 'enabled[x]'
 	fi
 done
-systemctl enable "${enabled[@]}" --now
+if [ -n "${enabled[*]}" ]; then
+	systemctl enable "${enabled[@]}" --now
+fi
