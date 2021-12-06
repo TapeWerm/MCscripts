@@ -110,7 +110,7 @@ sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ## Bedrock Edition webhook bots setup
 If you want to post server logs to webhooks (Discord and Rocket Chat):
 ```bash
-sudo mkdir ~mc/.mcbe_log
+sudo mkdir -p ~mc/.mcbe_log
 sudo touch ~mc/.mcbe_log/MCBE_webhook.txt
 sudo chown -R mc:nogroup ~mc/.mcbe_log
 sudo chmod 600 ~mc/.mcbe_log/MCBE_webhook.txt
@@ -168,5 +168,5 @@ sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ```bash
 sudo ~mc/disable_services.sh
 sudo deluser --system mc
-sudo mv -T /opt/MC /opt/MC.old
+sudo mv -T --backup=numbered /opt/MC /opt/MC.old
 ```
