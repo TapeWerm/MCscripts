@@ -168,5 +168,5 @@ sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ```bash
 sudo ~mc/disable_services.sh
 sudo deluser --system mc
-sudo mv /opt/MC /opt/MC.old
+sudo mv -T /opt/MC /opt/MC.old
 ```
