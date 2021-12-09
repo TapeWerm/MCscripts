@@ -121,7 +121,6 @@ $url
 $url
 ...
 ```
-Copy and paste this block:
 ```bash
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
