@@ -4,7 +4,6 @@
 set -e
 dir=$(dirname "$0")
 syntax='Usage: install.sh [OPTION]...'
-update=false
 
 args=$(getopt -l help,update -o hu -- "$@")
 eval set -- "$args"
@@ -15,11 +14,10 @@ while [ "$1"  != -- ]; do
 		echo 'Install or update MCscripts.'
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-u, --update  update MCscripts'
+		echo '-u, --update  deprecated flag'
 		exit
 		;;
 	--update|-u)
-		update=true
 		shift
 		;;
 	esac
@@ -38,21 +36,16 @@ if [ "$dir" = ~mc ]; then
 fi
 
 cd "$dir"
-if [ "$update" = false ]; then
+if ! id -u mc &> /dev/null; then
 	adduser --home /opt/MC --system mc
-	ln -s ~mc ~mc/backup_dir
-	cp -- *.{sed,sh} ~mc/
-	chown -h mc:nogroup ~mc/*
-	cp systemd/* /etc/systemd/system/
-else
-	if [ ! -d ~mc/backup_dir ]; then
-		ln -s ~mc ~mc/backup_dir
-	fi
-	./disable_services.sh
-	echo y | ./move_servers.sh
-	./move_backups.sh
-	cp -- *.{sed,sh} ~mc/
-	chown -h mc:nogroup ~mc/*
-	cp systemd/* /etc/systemd/system/
-	./enable_services.sh
 fi
+if [ ! -d ~mc/backup_dir ]; then
+	ln -s ~mc ~mc/backup_dir
+fi
+./disable_services.sh
+echo y | ./move_servers.sh
+./move_backups.sh
+cp -- *.{sed,sh} ~mc/
+chown -h mc:nogroup ~mc/*
+cp systemd/* /etc/systemd/system/
+./enable_services.sh

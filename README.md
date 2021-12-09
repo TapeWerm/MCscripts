@@ -156,7 +156,7 @@ sudo apt install curl procps socat zip
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 rm -rf /tmp/MCscripts-master
 unzip /tmp/master.zip -d /tmp
-sudo /tmp/MCscripts-master/install.sh --update
+sudo /tmp/MCscripts-master/install.sh
 ```
 If you want to change where backups are stored:
 ```bash
