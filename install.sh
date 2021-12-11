@@ -49,3 +49,4 @@ cp -- *.{sed,sh} ~mc/
 chown -h mc:nogroup ~mc/*
 cp systemd/* /etc/systemd/system/
 ./enable_services.sh
+echo @@@ https://www.minecraft.net/en-us/article/important-message--security-vulnerability-java-edition @@@
