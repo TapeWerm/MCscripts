@@ -48,5 +48,7 @@ echo y | ./move_servers.sh
 cp -- *.{sed,sh} ~mc/
 chown -h mc:nogroup ~mc/*
 cp systemd/* /etc/systemd/system/
+systemctl daemon-reload
 ./enable_services.sh
-echo @@@ https://www.minecraft.net/en-us/article/important-message--security-vulnerability-java-edition @@@
+echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@
+echo @@@ https://www.creeperhost.net/wiki/link/118#bkmrk-how-to-install-the-p-1 @@@
