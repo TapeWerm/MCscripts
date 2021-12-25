@@ -47,6 +47,10 @@ journalctl -u mcbe-backup@MCBE -t mcbe_backup.sh -n 1 -o cat
 # Stop Minecraft Bedrock Edition server
 sudo systemctl stop mcbe@MCBE
 ```
+How to see MCscripts commit hash:
+```bash
+unzip -z /tmp/master.zip | tail -n +2
+```
 
 Backups are in ~mc/backup_dir.
 Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.sh](mcbe_getzip.sh).
