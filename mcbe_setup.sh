@@ -61,8 +61,8 @@ if [ -n "$import" ]; then
 		exit 1
 	fi
 
-	mv "$import" "$server_dir"
-	trap 'mv "$server_dir" "$import"' ERR
+	trap 'rm -rf "$server_dir"' ERR
+	cp -r "$import" "$server_dir"
 	# mcbe_update.sh reads y asking if you stopped the server
 	echo y | ~mc/mcbe_update.sh "$server_dir" "$minecraft_zip"
 	# Convert DOS line endings to UNIX line endings
@@ -72,6 +72,8 @@ if [ -n "$import" ]; then
 		fi
 	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
 	chown -R mc:nogroup "$server_dir"
+	trap - ERR
+	rm -r "$import"
 else
 	if [ -d "$server_dir" ]; then
 		>&2 echo "Server directory $server_dir already exists"

@@ -51,14 +51,19 @@ if [ -n "$import" ]; then
 		exit 1
 	fi
 
-	mv "$import" "$server_dir"
-	trap 'mv "$server_dir" "$import"' ERR
+	trap 'rm -rf "$server_dir"' ERR
+	cp -r "$import" "$server_dir"
 	# Convert DOS line endings to UNIX line endings
 	while read -r file; do
 		if grep -q $'\r'$ "$file"; then
 			sed -i s/$'\r'$// "$file"
 		fi
 	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
+	echo java -jar server.jar nogui > "$server_dir/start.bat"
+	chmod +x "$server_dir/start.bat"
+	chown -R mc:nogroup "$server_dir"
+	trap - ERR
+	rm -r "$import"
 else
 	if [ -d "$server_dir" ]; then
 		>&2 echo "Server directory $server_dir already exists"
@@ -70,7 +75,7 @@ else
 	~mc/mc_getjar.sh
 	# Minecraft Java Edition makes eula.txt on first run
 	java -jar server.jar nogui || true
+	echo java -jar server.jar nogui > "$server_dir/start.bat"
+	chmod +x "$server_dir/start.bat"
+	chown -R mc:nogroup "$server_dir"
 fi
-echo java -jar server.jar nogui > "$server_dir/start.bat"
-chmod +x "$server_dir/start.bat"
-chown -R mc:nogroup "$server_dir"
