@@ -42,6 +42,7 @@ fi
 server_dir=~mc/java/$instance
 
 mkdir -p ~mc/java
+chown mc:nogroup ~mc/java
 if [ -n "$import" ]; then
 	echo "Enter Y if you stopped the server to import"
 	read -r input

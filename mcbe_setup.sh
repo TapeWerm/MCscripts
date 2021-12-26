@@ -52,6 +52,7 @@ fi
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 mkdir -p ~mc/bedrock
+chown mc:nogroup ~mc/bedrock
 if [ -n "$import" ]; then
 	echo "Enter Y if you stopped the server to import"
 	read -r input
