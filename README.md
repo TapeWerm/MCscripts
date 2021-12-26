@@ -63,7 +63,6 @@ Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/
 # Setup
 Open Terminal:
 ```bash
-sudo apt install curl procps socat zip
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 unzip /tmp/master.zip -d /tmp
 sudo /tmp/MCscripts-master/install.sh
@@ -156,7 +155,6 @@ How to restart mcbe@MCBE at 3 AM daily:
    ```
 ## Update MCscripts
 ```bash
-sudo apt install curl procps socat zip
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 rm -rf /tmp/MCscripts-master
 unzip /tmp/master.zip -d /tmp

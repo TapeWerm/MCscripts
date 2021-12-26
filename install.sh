@@ -36,6 +36,10 @@ if [ "$dir" = ~mc ]; then
 fi
 
 cd "$dir"
+if command -v apt-get &> /dev/null; then
+	apt-get update
+	apt-get install -y curl html-xml-utils socat zip
+fi
 if ! id -u mc &> /dev/null; then
 	adduser --home /opt/MC --system mc
 fi

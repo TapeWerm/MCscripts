@@ -32,7 +32,8 @@ if [ "$#" -gt 0 ]; then
 fi
 
 webpage=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)
-url=$(echo "$webpage" | grep -Eo 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
+urls=$(echo "$webpage" | hxnormalize -x | hxselect -s '\n' -c 'a::attr(href)')
+url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
 current_ver=$(basename "$url")
 # ls fails if there's no match
 installed_ver=$(ls ~/bedrock-server-*.zip 2> /dev/null || true)
