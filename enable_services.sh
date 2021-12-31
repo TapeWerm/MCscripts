@@ -65,29 +65,29 @@ fi
 # Update systemd overrides
 while read -r override; do
 	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-done < <(ls /etc/systemd/system/mc@*.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mc@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
-done < <(ls /etc/systemd/system/mc-backup@*.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mc-backup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/%i_Backups/%i_backups/g' "$override"
 	sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
 	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-done < <(ls /etc/systemd/system/mc-rmbackup@*.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mc-rmbackup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-done < <(ls /etc/systemd/system/mcbe@*.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mcbe@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
-done < <(ls /etc/systemd/system/mcbe-backup@*.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mcbe-backup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/%i_Backups/%i_backups/g' "$override"
 	sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
 	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-done < <(ls /etc/systemd/system/mcbe-rmbackup@*.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
-done < <(ls /etc/systemd/system/mcbe-getzip.service.d/override.conf 2> /dev/null)
+done < <(ls /etc/systemd/system/mcbe-getzip.service.d/*.conf 2> /dev/null)
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
 	while read -r file; do
