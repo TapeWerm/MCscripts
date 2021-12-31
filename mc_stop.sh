@@ -70,7 +70,7 @@ if [ "$seconds" -gt 3 ]; then
 	sleep $((seconds - 3))
 fi
 for x in {3..1}; do
-	if [ "$seconds" -gt $((x - 1)) ]; then
+	if [ "$seconds" -ge "$x" ]; then
 		countdown "$x seconds"
 		sleep 1
 	fi
