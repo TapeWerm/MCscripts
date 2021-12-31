@@ -40,7 +40,7 @@ while [ "$1"  != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo Back up Minecraft Java Edition server world running in service.
+		echo Back up Minecraft Java Edition server running in service.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
