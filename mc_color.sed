@@ -5,7 +5,7 @@
 
 # Example: journalctl -u mcbe@MCBE | ./mc_color.sed | less -r +G
 
-# Minecraft colors: https://minecraft.gamepedia.com/Formatting_codes
+# Minecraft colors: https://minecraft.fandom.com/wiki/Formatting_codes
 # ANSI colors:      https://en.wikipedia.org/wiki/ANSI_escape_code
 
 # Black
