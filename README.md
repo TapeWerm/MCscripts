@@ -31,10 +31,10 @@ How to see server output:
 # Press H for help
 journalctl -u SERVICE | ~mc/mc_color.sed | less -r +G
 ```
-How to add everyone to whitelist:
+How to add everyone to allowlist:
 ```bash
-whitelist=$(for x in steve alex herobrine; do echo whitelist add "$x"; done)
-sudo ~mc/mc_cmd.sh SERVICE "$whitelist"
+allowlist=$(for x in steve alex herobrine; do echo allowlist add "$x"; done)
+sudo ~mc/mc_cmd.sh SERVICE "$allowlist"
 ```
 How to control systemd services:
 ```bash

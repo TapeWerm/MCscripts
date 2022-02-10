@@ -57,27 +57,25 @@ rm -rf "$new_dir"
 trap 'rm -rf "$new_dir"; echo fail > "$server_dir/version"' ERR
 unzip -q "$minecraft_zip" -d "$new_dir"
 
-cd "$new_dir"
 # Trim off $minecraft_zip after last .zip
-basename "${minecraft_zip%.zip}" > version
-cp -r "$server_dir/worlds" .
+basename "${minecraft_zip%.zip}" > "$new_dir/version"
+cp -r "$server_dir/worlds" "$new_dir/"
 
 while read -r file; do
-	if [ -f "$server_dir/$file" ]; then
-		cp "$server_dir/$file" .
-	fi
-done < <(ls -- *.{json,properties} 2> /dev/null)
+	file=$(basename "$file")
+	cp "$server_dir/$file" "$new_dir/"
+done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
 
 while read -r pack_dir; do
-	if [ -d "$server_dir/$pack_dir" ]; then
-		while read -r pack; do
-			# Don't clobber 1st party packs
-			if [ ! -d "$pack_dir/$pack" ]; then
-				cp -r "$server_dir/$pack_dir/$pack" "$pack_dir/"
-			fi
-		done < <(ls "$server_dir/$pack_dir")
-	fi
-done < <(ls -d -- *_packs 2> /dev/null)
+	pack_dir=$(basename "$pack_dir")
+	mkdir -p "$new_dir/$pack_dir"
+	while read -r pack; do
+		# Don't clobber 1st party packs
+		if [ ! -d "$new_dir/$pack_dir/$pack" ]; then
+			cp -r "$server_dir/$pack_dir/$pack" "$new_dir/$pack_dir/"
+		fi
+	done < <(ls "$server_dir/$pack_dir")
+done < <(ls -d "$server_dir"/*_packs 2> /dev/null)
 
 rm -rf "$old_dir"
 trap '' SIGTERM
