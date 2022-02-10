@@ -55,4 +55,4 @@ cp systemd/* /etc/systemd/system/
 systemctl daemon-reload
 ./enable_services.sh
 echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@
-echo @@@ https://www.creeperhost.net/wiki/link/118#bkmrk-how-to-install-the-p-1 @@@
+echo @@@ https://www.creeperhost.net/blog/mitigating-cve/ @@@
