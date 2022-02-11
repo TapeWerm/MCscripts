@@ -35,7 +35,6 @@ if [ "$dir" = ~mc ]; then
 	exit 1
 fi
 
-cd "$dir"
 if command -v apt-get &> /dev/null; then
 	apt-get update
 	apt-get install -y curl html-xml-utils socat zip
@@ -46,13 +45,13 @@ fi
 if [ ! -d ~mc/backup_dir ]; then
 	ln -s ~mc ~mc/backup_dir
 fi
-./disable_services.sh
-echo y | ./move_servers.sh
-./move_backups.sh
-cp -- *.{sed,sh} ~mc/
+"$dir/disable_services.sh"
+echo y | "$dir/move_servers.sh"
+"$dir/move_backups.sh"
+cp "$dir"/*.{sed,sh} ~mc/
 chown -h mc:nogroup ~mc/*
-cp systemd/* /etc/systemd/system/
+cp "$dir"/systemd/* /etc/systemd/system/
 systemctl daemon-reload
-./enable_services.sh
+"$dir/enable_services.sh"
 echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@
 echo @@@ https://www.creeperhost.net/blog/mitigating-cve/ @@@
