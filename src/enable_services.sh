@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+services_file=/opt/MCscripts/disabled_services.txt
 syntax='Usage: enable_services.sh'
 
 args=$(getopt -l help -o h -- "$@")
@@ -10,7 +11,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo 'Read /opt/MCscripts/disabled_services.txt, update list of services to be reenabled, and enable them.'
+		echo "Read $services_file, update list of services to be reenabled, and enable them."
 		exit
 		;;
 	esac
@@ -23,7 +24,7 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-disabled=$(cat /opt/MCscripts/disabled_services.txt)
+disabled=$(cat "$services_file")
 for x in $disabled; do
 	enabled+=("$x")
 done

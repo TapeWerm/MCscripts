@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+services_file=/opt/MCscripts/disabled_services.txt
 syntax='Usage: disable_services.sh'
 
 # Current scripts
@@ -31,7 +32,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo 'Find enabled services from MCscripts, disable them, remove their files, and list services in /opt/MCscripts/disabled_services.txt.'
+		echo "Find enabled services from MCscripts, disable them, remove their files, and list services in $services_file"
 		exit
 		;;
 	esac
@@ -52,7 +53,7 @@ while read -r instance; do
 	fi
 done < <(systemctl show "${services[@]}" -p Id --value | grep .)
 
-echo "${enabled[*]}" > /opt/MCscripts/disabled_services.txt
+echo "${enabled[*]}" > "$services_file"
 if [ -n "${enabled[*]}" ]; then
 	systemctl disable "${enabled[@]}" --now
 fi
@@ -67,4 +68,4 @@ for file in "${units[@]}"; do
 	rm -f "/etc/systemd/system/$file"
 done
 
-echo '@@@ Disabled services are listed in /opt/MCscripts/disabled_services.txt @@@'
+echo "@@@ Disabled services are listed in $services_file @@@"
