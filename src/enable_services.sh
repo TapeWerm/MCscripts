@@ -106,6 +106,10 @@ fi
 if [ -d ~mc/.mcbe_log ]; then
 	mv ~mc/.mcbe_log /opt/MCscripts/
 fi
+if [ -d /opt/MCscripts/.mcbe_log ]; then
+	chown -R root:root /opt/MCscripts/.mcbe_log
+	chmod 600 /opt/MCscripts/.mcbe_log/*
+fi
 # Enable dependencies first
 for x in "${!enabled[@]}"; do
 	if [[ "${enabled[x]}" =~ ^mc@.+\.socket$|^mcbe@.+\.socket$ ]]; then
