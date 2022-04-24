@@ -50,11 +50,11 @@ if [ ! -L /opt/MCscripts/backup_dir ]; then
 		ln -s ~mc /opt/MCscripts/backup_dir
 	fi
 fi
+chown -h root:root /opt/MCscripts/backup_dir
 "$dir/disable_services.sh"
 echo y | "$dir/move_servers.sh"
 "$dir/move_backups.sh"
 cp "$dir"/*.{sed,sh} /opt/MCscripts/
-chown -h mc:nogroup ~mc/*
 cp "$dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
 "$dir/enable_services.sh"

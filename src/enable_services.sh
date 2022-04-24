@@ -74,6 +74,7 @@ done < <(ls /etc/systemd/system/mc-backup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/%i_Backups/%i_backups/g' "$override"
 	sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
+	sed -i 's|MC/backup_dir|MCscripts/backup_dir/%i|g' "$override"
 	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
 done < <(ls /etc/systemd/system/mc-rmbackup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
@@ -87,6 +88,7 @@ done < <(ls /etc/systemd/system/mcbe-backup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/%i_Backups/%i_backups/g' "$override"
 	sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
+	sed -i 's|MC/backup_dir|MCscripts/backup_dir/%i|g' "$override"
 	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
 done < <(ls /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
