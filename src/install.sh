@@ -30,12 +30,10 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-case $dir in
-~mc|/opt/MCscripts/bin)
+if [ "$dir" = /opt/MCscripts ]; then
 	>&2 echo "install.sh cannot be ran inside $dir"
 	exit 1
-	;;
-esac
+fi
 
 if command -v apt-get &> /dev/null; then
 	apt-get update
