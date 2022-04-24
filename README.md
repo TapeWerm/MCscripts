@@ -1,13 +1,13 @@
 # Description
 Minecraft Java and Bedrock Dedicated Server systemd units and scripts for backups, automatic updates, and posting logs to chat bots
 
-**[mcbe_backup.sh](mcbe_backup.sh) also works with Docker**
+**[mcbe_backup.sh](src/mcbe_backup.sh) also works with Docker**
 
 @@@ **Compatible with Ubuntu** @@@
 
 Ubuntu on Windows 10 does not support systemd.
 Try [Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server).
-You can run [mc_getjar.sh](mc_getjar.sh), [mcbe_getzip.sh](mcbe_getzip.sh), and [mcbe_update.sh](mcbe_update.sh) without enabling the systemd units, but not others.
+You can run [mc_getjar.sh](src/mc_getjar.sh), [mcbe_getzip.sh](src/mcbe_getzip.sh), and [mcbe_update.sh](src/mcbe_update.sh) without enabling the systemd units, but not others.
 No automatic updates nor chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
@@ -22,19 +22,19 @@ No automatic updates nor chat bots for Java Edition.
 # Notes
 How to run commands in the server console:
 ```bash
-sudo ~mc/mc_cmd.sh SERVICE COMMAND...
+sudo /opt/MCscripts/mc_cmd.sh SERVICE COMMAND...
 # Minecraft Bedrock Edition server example
-sudo ~mc/mc_cmd.sh mcbe@MCBE help 2
+sudo /opt/MCscripts/mc_cmd.sh mcbe@MCBE help 2
 ```
 How to see server output:
 ```bash
 # Press H for help
-journalctl -u SERVICE | ~mc/mc_color.sed | less -r +G
+journalctl -u SERVICE | /opt/MCscripts/mc_color.sed | less -r +G
 ```
 How to add everyone to allowlist:
 ```bash
 allowlist=$(for x in steve alex herobrine; do echo allowlist add "$x"; done)
-sudo ~mc/mc_cmd.sh SERVICE "$allowlist"
+sudo /opt/MCscripts/mc_cmd.sh SERVICE "$allowlist"
 ```
 How to control systemd services:
 ```bash
@@ -53,8 +53,8 @@ unzip -z /tmp/master.zip | tail -n +2
 ```
 
 Backups are in ~mc/backup_dir.
-Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.sh](mcbe_getzip.sh).
-[mcbe_update.sh](mcbe_update.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
+Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.sh](src/mcbe_getzip.sh).
+[mcbe_update.sh](src/mcbe_update.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
 Other files will be removed.
 
 [PlayStation and Xbox can only connect on LAN with subscription, Nintendo Switch cannot connect at all.](https://help.minecraft.net/hc/en-us/articles/4408873961869-Minecraft-Dedicated-and-Featured-Servers-FAQ-)
@@ -64,7 +64,7 @@ Open Terminal:
 ```bash
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 unzip /tmp/master.zip -d /tmp
-sudo /tmp/MCscripts-master/install.sh
+sudo /tmp/MCscripts-master/src/install.sh
 ```
 If you want to change where backups are stored:
 ```bash
@@ -76,11 +76,11 @@ Do one of the following:
 - Import server directory:
   ```bash
   # Replace SERVER_DIR with Minecraft server directory
-  sudo ~mc/mc_setup.sh --import SERVER_DIR MC
+  sudo /opt/MCscripts/mc_setup.sh --import SERVER_DIR MC
   ```
 - Make new server directory:
   ```bash
-  sudo ~mc/mc_setup.sh MC
+  sudo /opt/MCscripts/mc_setup.sh MC
   ```
   Enter `sudo nano ~mc/java/MC/eula.txt`, fill it in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>).
 ```bash
@@ -95,11 +95,11 @@ Do one of the following:
 - Import server directory:
   ```bash
   # Replace SERVER_DIR with Minecraft server directory
-  sudo ~mc/mcbe_setup.sh --import SERVER_DIR MCBE
+  sudo /opt/MCscripts/mcbe_setup.sh --import SERVER_DIR MCBE
   ```
 - Make new server directory:
   ```bash
-  sudo ~mc/mcbe_setup.sh MCBE
+  sudo /opt/MCscripts/mcbe_setup.sh MCBE
   ```
 ```bash
 sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer --now
@@ -136,14 +136,14 @@ How to change mcbe@MCBE shutdown warning to 20 seconds:
    ```
    [Service]
    ExecStop=
-   ExecStop=/opt/MC/mc_stop.sh -s 20 %N
+   ExecStop=/opt/MCscripts/mc_stop.sh -s 20 %N
    ```
 2. If you want to revert the edit enter `sudo systemctl revert mcbe@MCBE`
 
 Other services you might want to edit:
 - [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur (check time zone with `date`)
 - [mcbe-rmbackup@MCBE.service](systemd/mcbe-rmbackup@.service) - How many backups to keep
-- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.sh](mcbe_getzip.sh) --no-clobber
+- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.sh](src/mcbe_getzip.sh) --no-clobber
 
 How to restart mcbe@MCBE at 3 AM daily:
 
@@ -157,7 +157,7 @@ How to restart mcbe@MCBE at 3 AM daily:
 curl -L https://github.com/TapeWerm/MCscripts/archive/refs/heads/master.zip -o /tmp/master.zip
 rm -rf /tmp/MCscripts-master
 unzip /tmp/master.zip -d /tmp
-sudo /tmp/MCscripts-master/install.sh
+sudo /tmp/MCscripts-master/src/install.sh
 ```
 If you want to change where backups are stored:
 ```bash
@@ -166,7 +166,7 @@ sudo ln -snf EXT_DRIVE ~mc/backup_dir
 ```
 ## Remove MCscripts
 ```bash
-sudo ~mc/disable_services.sh
+sudo /opt/MCscripts/disable_services.sh
 sudo deluser --system mc
 sudo mv -T --backup=numbered /opt/MC /opt/MC.old
 ```

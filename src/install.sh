@@ -30,10 +30,12 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-if [ "$dir" = ~mc ]; then
-	>&2 echo 'install.sh cannot be ran inside ~mc'
+case $dir in
+~mc|/opt/MCscripts/bin)
+	>&2 echo "install.sh cannot be ran inside $dir"
 	exit 1
-fi
+	;;
+esac
 
 if command -v apt-get &> /dev/null; then
 	apt-get update
@@ -42,15 +44,16 @@ fi
 if ! id -u mc &> /dev/null; then
 	adduser --home /opt/MC --system mc
 fi
+mkdir -p /opt/MCscripts
 if [ ! -d ~mc/backup_dir ]; then
 	ln -s ~mc ~mc/backup_dir
 fi
 "$dir/disable_services.sh"
 echo y | "$dir/move_servers.sh"
 "$dir/move_backups.sh"
-cp "$dir"/*.{sed,sh} ~mc/
+cp "$dir"/*.{sed,sh} /opt/MCscripts/
 chown -h mc:nogroup ~mc/*
-cp "$dir"/systemd/* /etc/systemd/system/
+cp "$dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
 "$dir/enable_services.sh"
 echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@

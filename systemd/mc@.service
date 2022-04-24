@@ -8,7 +8,7 @@ Description=Minecraft Java Edition server @ %i
 # which says script path
 ExecReload=/bin/bash -c 'echo reload > %t/%N'
 ExecStart=/bin/bash -c './start.bat'
-ExecStop=/opt/MC/mc_stop.sh %N
+ExecStop=/opt/MCscripts/mc_stop.sh %N
 # Thanks for the security agowa338
 PrivateUsers=true
 ProtectHome=true

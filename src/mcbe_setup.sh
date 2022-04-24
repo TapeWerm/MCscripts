@@ -41,7 +41,7 @@ if [ "$instance" != "$(systemd-escape "$instance")" ]; then
 fi
 server_dir=~mc/bedrock/$instance
 
-su mc -s /bin/bash -c '~mc/mcbe_getzip.sh'
+su mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
 # There might be more than one ZIP in ~mc
 minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
 if [ -z "$minecraft_zip" ]; then
@@ -65,7 +65,7 @@ if [ -n "$import" ]; then
 	trap 'rm -rf "$server_dir"' ERR
 	cp -r "$import" "$server_dir"
 	# mcbe_update.sh reads y asking if you stopped the server
-	echo y | ~mc/mcbe_update.sh "$server_dir" "$minecraft_zip"
+	echo y | /opt/MCscripts/mcbe_update.sh "$server_dir" "$minecraft_zip"
 	# Convert DOS line endings to UNIX line endings
 	while read -r file; do
 		if grep -q $'\r'$ "$file"; then

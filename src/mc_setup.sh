@@ -73,7 +73,7 @@ else
 	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
 	cd "$server_dir"
-	~mc/mc_getjar.sh
+	/opt/MCscripts/mc_getjar.sh
 	# Minecraft Java Edition makes eula.txt on first run
 	java -jar server.jar nogui || true
 	echo java -jar server.jar nogui > "$server_dir/start.bat"

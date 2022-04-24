@@ -2,8 +2,6 @@
 
 # Exit if error
 set -e
-# $0 is the path
-dir=$(dirname "$0")
 syntax='Usage: mc_cmd.sh SERVICE COMMAND...'
 
 args=$(getopt -l help -o h -- "$@")
@@ -41,4 +39,4 @@ if [ -z "$buffer" ]; then
 	echo "No output from service after 1 second"
 	exit
 fi
-echo "$buffer" | "$dir/mc_color.sed"
+echo "$buffer" | /opt/MCscripts/mc_color.sed

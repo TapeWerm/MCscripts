@@ -61,7 +61,7 @@ if [ -n "${active[*]}" ]; then
 fi
 
 for file in "${scripts[@]}"; do
-	rm -f ~mc/"$file"
+	rm -f {~mc,/opt/MCscripts}/"$file"
 done
 for file in "${units[@]}"; do
 	rm -f "/etc/systemd/system/$file"

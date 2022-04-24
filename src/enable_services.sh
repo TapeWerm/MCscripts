@@ -65,9 +65,11 @@ fi
 # Update systemd overrides
 while read -r override; do
 	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+	sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh' "$override"
 done < <(ls /etc/systemd/system/mc@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
+	sed -i 's|MC/mc_backup\.sh|MCscripts/mc_backup\.sh' "$override"
 done < <(ls /etc/systemd/system/mc-backup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/%i_Backups/%i_backups/g' "$override"
@@ -76,9 +78,11 @@ while read -r override; do
 done < <(ls /etc/systemd/system/mc-rmbackup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+	sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh' "$override"
 done < <(ls /etc/systemd/system/mcbe@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+	sed -i 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh' "$override"
 done < <(ls /etc/systemd/system/mcbe-backup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/%i_Backups/%i_backups/g' "$override"
@@ -87,6 +91,7 @@ while read -r override; do
 done < <(ls /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf 2> /dev/null)
 while read -r override; do
 	sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+	sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh' "$override"
 done < <(ls /etc/systemd/system/mcbe-getzip.service.d/*.conf 2> /dev/null)
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
