@@ -108,7 +108,6 @@ if [ -d ~mc/.mcbe_log ]; then
 fi
 if [ -d /opt/MCscripts/.mcbe_log ]; then
 	chown -R root:root /opt/MCscripts/.mcbe_log
-	chmod 600 /opt/MCscripts/.mcbe_log/*
 fi
 # Enable dependencies first
 for x in "${!enabled[@]}"; do
