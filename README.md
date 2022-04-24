@@ -52,7 +52,7 @@ How to see MCscripts commit hash:
 unzip -z /tmp/master.zip | tail -n +2
 ```
 
-Backups are in ~mc/backup_dir.
+Backups are in /opt/MCscripts/backup_dir.
 Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.sh](src/mcbe_getzip.sh).
 [mcbe_update.sh](src/mcbe_update.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
 Other files will be removed.
@@ -69,7 +69,7 @@ sudo /tmp/MCscripts-master/src/install.sh
 If you want to change where backups are stored:
 ```bash
 # Replace EXT_DRIVE with external drive
-sudo ln -snf EXT_DRIVE ~mc/backup_dir
+sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ```
 ## Java Edition setup
 Do one of the following:
@@ -112,12 +112,11 @@ sudo systemctl enable mcbe-rmbackup@MCBE.service --now
 ## Bedrock Edition webhook bots setup
 If you want to post server logs to webhooks (Discord and Rocket Chat):
 ```bash
-sudo mkdir -p ~mc/.mcbe_log
-sudo touch ~mc/.mcbe_log/MCBE_webhook.txt
-sudo chown -R mc:nogroup ~mc/.mcbe_log
-sudo chmod 600 ~mc/.mcbe_log/MCBE_webhook.txt
+sudo mkdir -p /opt/MCscripts/.mcbe_log
+sudo touch /opt/MCscripts/.mcbe_log/MCBE_webhook.txt
+sudo chmod 600 /opt/MCscripts/.mcbe_log/MCBE_webhook.txt
 ```
-Enter `sudo nano ~mc/.mcbe_log/MCBE_webhook.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+Enter `sudo nano /opt/MCscripts/.mcbe_log/MCBE_webhook.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
 ```
 $url
 $url
@@ -162,7 +161,7 @@ sudo /tmp/MCscripts-master/src/install.sh
 If you want to change where backups are stored:
 ```bash
 # Replace EXT_DRIVE with external drive
-sudo ln -snf EXT_DRIVE ~mc/backup_dir
+sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ```
 ## Remove MCscripts
 ```bash

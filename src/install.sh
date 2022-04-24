@@ -43,8 +43,12 @@ if ! id -u mc &> /dev/null; then
 	adduser --home /opt/MC --system mc
 fi
 mkdir -p /opt/MCscripts
-if [ ! -d ~mc/backup_dir ]; then
-	ln -s ~mc ~mc/backup_dir
+if [ ! -L /opt/MCscripts/backup_dir ]; then
+	if [ -L ~mc/backup_dir ]; then
+		mv ~mc/backup_dir /opt/MCscripts/
+	else
+		ln -s ~mc /opt/MCscripts/backup_dir
+	fi
 fi
 "$dir/disable_services.sh"
 echo y | "$dir/move_servers.sh"

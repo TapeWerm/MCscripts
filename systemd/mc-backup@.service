@@ -4,5 +4,5 @@ Description=Back up Minecraft Java Edition server world @ %i
 Requisite=mc@%i.service
 
 [Service]
-ExecStart=/opt/MCscripts/mc_backup.sh -b /opt/MC/backup_dir /opt/MC/java/%i mc@%i
+ExecStart=/opt/MCscripts/mc_backup.sh -b /opt/MCscripts/backup_dir /opt/MC/java/%i mc@%i
 Type=oneshot

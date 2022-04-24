@@ -49,7 +49,8 @@ fi
 
 # Trim off $service before last @
 instance=${service##*@}
-webhook_file=~mc/.mcbe_log/${instance}_webhook.txt
+webhook_file=/opt/MCscripts/.mcbe_log/${instance}_webhook.txt
+chown root:root "$webhook_file"
 chmod 600 "$webhook_file"
 
 send "Server $instance starting"

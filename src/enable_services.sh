@@ -10,7 +10,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo 'Read ~mc/disabled_services.txt, update list of services to be reenabled, and enable them.'
+		echo 'Read /opt/MCscripts/disabled_services.txt, update list of services to be reenabled, and enable them.'
 		exit
 		;;
 	esac
@@ -23,7 +23,7 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-disabled=$(cat ~mc/disabled_services.txt)
+disabled=$(cat /opt/MCscripts/disabled_services.txt)
 for x in $disabled; do
 	enabled+=("$x")
 done
@@ -100,6 +100,9 @@ if [ -d ~mc/.MCBE_Bot ]; then
 		mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
 	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null)
 	mv ~mc/.MCBE_Bot ~mc/.mcbe_log
+fi
+if [ -d ~mc/.mcbe_log ]; then
+	mv ~mc/.mcbe_log /opt/MCscripts/
 fi
 # Enable dependencies first
 for x in "${!enabled[@]}"; do

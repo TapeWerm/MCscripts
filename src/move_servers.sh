@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+backup_dir=/opt/MCscripts/backup_dir
 syntax='Usage: move_servers.sh'
 temp_dir=/tmp/move_servers
 
@@ -59,32 +60,32 @@ done
 if [ -n "${java[*]}" ]; then
 	mkdir -p ~mc/java
 	chown mc:nogroup ~mc/java
-	if [ ! ~mc/backup_dir -ef ~mc ]; then
-		mkdir -p ~mc/backup_dir/java
+	if [ ! "$backup_dir" -ef ~mc ]; then
+		mkdir -p "$backup_dir/java"
 		# Some file systems do not have owners
-		chown -f mc:nogroup ~mc/backup_dir/java || true
+		chown -f mc:nogroup "$backup_dir/java" || true
 	fi
 fi
 for server in "${java[@]}"; do
 	mv "$temp_dir/$server" ~mc/java/
-	if [ -d ~mc/backup_dir/"$server"_Backups ]; then
-		mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/java/
+	if [ -d "$backup_dir/$server"_Backups ]; then
+		mv "$backup_dir/$server"_Backups "$backup_dir/java/"
 	fi
 done
 
 if [ -n "${bedrock[*]}" ]; then
 	mkdir -p ~mc/bedrock
 	chown mc:nogroup ~mc/bedrock
-	if [ ! ~mc/backup_dir -ef ~mc ]; then
-		mkdir -p ~mc/backup_dir/bedrock
+	if [ ! "$backup_dir" -ef ~mc ]; then
+		mkdir -p "$backup_dir/bedrock"
 		# Some file systems do not have owners
-		chown -f mc:nogroup ~mc/backup_dir/bedrock || true
+		chown -f mc:nogroup "$backup_dir/bedrock" || true
 	fi
 fi
 for server in "${bedrock[@]}"; do
 	mv "$temp_dir/$server" ~mc/bedrock/
-	if [ -d ~mc/backup_dir/"$server"_Backups ]; then
-		mv ~mc/backup_dir/"$server"_Backups ~mc/backup_dir/bedrock/
+	if [ -d "$backup_dir/$server"_Backups ]; then
+		mv "$backup_dir/$server"_Backups "$backup_dir/bedrock/"
 	fi
 done
 
