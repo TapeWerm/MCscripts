@@ -40,7 +40,7 @@ fi
 if [ -d "$backup_dir/java" ] && [ "$backup_dir/java" -ef "$backup_dir/Java" ]; then
 	while read -r server_backups; do
 		# If $server_backups doesn't have an executable
-		if [ ! -f "$server_backups"/server.jar ]; then
+		if [ ! -f "$server_backups/server.jar" ]; then
 			# Trim off $server_backups after last suffix
 			server=$(basename "${server_backups%_Backups}")
 			while read -r world_backups; do
@@ -49,15 +49,15 @@ if [ -d "$backup_dir/java" ] && [ "$backup_dir/java" -ef "$backup_dir/Java" ]; t
 				mv "$server_backups/${world}_Backups" "$server_backups/${world}_Backups.old"
 				mv "$server_backups/${world}_Backups.old" "$server_backups/${world}_backups"
 			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null)
-			mv "$backup_dir/java/$server"_Backups "$backup_dir/java/$server"_Backups.old
-			mv "$backup_dir/java/$server"_Backups.old "$backup_dir/java/$server"_backups
+			mv "$backup_dir/java/${server}_Backups" "$backup_dir/java/${server}_Backups.old"
+			mv "$backup_dir/java/${server}_Backups.old" "$backup_dir/java/${server}_backups"
 		fi
 	done < <(ls -d "$backup_dir"/java/*_Backups 2> /dev/null)
 # Else move from $server_Backups to $server_backups
 else
 	while read -r server_backups; do
 		# If $server_backups doesn't have an executable
-		if [ ! -f "$server_backups"/server.jar ]; then
+		if [ ! -f "$server_backups/server.jar" ]; then
 			# Trim off $server_backups after last suffix
 			server=$(basename "${server_backups%_Backups}")
 			while read -r world_backups; do
@@ -74,7 +74,7 @@ fi
 # Move from java to java_backups
 while read -r server_backups; do
 	# If $server_backups doesn't have an executable
-	if [ ! -f "$server_backups"/server.jar ]; then
+	if [ ! -f "$server_backups/server.jar" ]; then
 		# Trim off $server_backups after last suffix
 		server=$(basename "${server_backups%_backups}")
 		while read -r world_backups; do
@@ -96,7 +96,7 @@ chown -Rf root:root "$backup_dir/java_backups" || true
 if [ -d "$backup_dir/bedrock" ] && [ "$backup_dir/bedrock" -ef "$backup_dir/Bedrock" ]; then
 	while read -r server_backups; do
 		# If $server_backups doesn't have an executable
-		if [ ! -f "$server_backups"/bedrock_server ]; then
+		if [ ! -f "$server_backups/bedrock_server" ]; then
 			# Trim off $server_backups after last suffix
 			server=$(basename "${server_backups%_Backups}")
 			while read -r world_backups; do
@@ -105,15 +105,15 @@ if [ -d "$backup_dir/bedrock" ] && [ "$backup_dir/bedrock" -ef "$backup_dir/Bedr
 				mv "$server_backups/${world}_Backups" "$server_backups/${world}_Backups.old"
 				mv "$server_backups/${world}_Backups.old" "$server_backups/${world}_backups"
 			done < <(ls -d "$server_backups"/*_Backups 2> /dev/null)
-			mv "$backup_dir/bedrock/$server"_Backups "$backup_dir/bedrock/$server"_Backups.old
-			mv "$backup_dir/bedrock/$server"_Backups.old "$backup_dir/bedrock/$server"_backups
+			mv "$backup_dir/bedrock/${server}_Backups" "$backup_dir/bedrock/${server}_Backups.old"
+			mv "$backup_dir/bedrock/${server}_Backups.old" "$backup_dir/bedrock/${server}_backups"
 		fi
 	done < <(ls -d "$backup_dir"/bedrock/*_Backups 2> /dev/null)
 # Else move from $server_Backups to $server_backups
 else
 	while read -r server_backups; do
 		# If $server_backups doesn't have an executable
-		if [ ! -f "$server_backups"/bedrock_server ]; then
+		if [ ! -f "$server_backups/bedrock_server" ]; then
 			# Trim off $server_backups after last suffix
 			server=$(basename "${server_backups%_Backups}")
 			while read -r world_backups; do
@@ -130,7 +130,7 @@ fi
 # Move from bedrock to bedrock_backups
 while read -r server_backups; do
 	# If $server_backups doesn't have an executable
-	if [ ! -f "$server_backups"/bedrock_server ]; then
+	if [ ! -f "$server_backups/bedrock_server" ]; then
 		# Trim off $server_backups after last suffix
 		server=$(basename "${server_backups%_backups}")
 		while read -r world_backups; do
