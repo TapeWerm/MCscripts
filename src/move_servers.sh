@@ -62,8 +62,6 @@ if [ -n "${java[*]}" ]; then
 	chown mc:nogroup ~mc/java
 	if [ ! "$backup_dir" -ef ~mc ]; then
 		mkdir -p "$backup_dir/java"
-		# Some file systems do not have owners
-		chown -f mc:nogroup "$backup_dir/java" || true
 	fi
 fi
 for server in "${java[@]}"; do
@@ -78,8 +76,6 @@ if [ -n "${bedrock[*]}" ]; then
 	chown mc:nogroup ~mc/bedrock
 	if [ ! "$backup_dir" -ef ~mc ]; then
 		mkdir -p "$backup_dir/bedrock"
-		# Some file systems do not have owners
-		chown -f mc:nogroup "$backup_dir/bedrock" || true
 	fi
 fi
 for server in "${bedrock[@]}"; do
