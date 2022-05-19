@@ -47,7 +47,7 @@ if [ ! -L /opt/MCscripts/backup_dir ]; then
 	if [ -L ~mc/backup_dir ]; then
 		mv ~mc/backup_dir /opt/MCscripts/
 	else
-		ln -s ~mc /opt/MCscripts/backup_dir
+		ln -s /opt/MCscripts /opt/MCscripts/backup_dir
 	fi
 fi
 chown -h root:root /opt/MCscripts/backup_dir
