@@ -47,6 +47,12 @@ journalctl -u mcbe-backup@MCBE -t mcbe_backup.sh -n 1 -o cat
 # Stop Minecraft Bedrock Edition server
 sudo systemctl stop mcbe@MCBE
 ```
+How to restore backup for Minecraft Bedrock Edition server:
+```bash
+sudo systemctl stop mcbe@MCBE
+sudo /opt/MCscripts/mcbe_restore.sh ~mc/bedrock/MCBE BACKUP
+sudo systemctl start mcbe@MCBE
+```
 How to see MCscripts commit hash:
 ```bash
 unzip -z /tmp/master.zip | tail -n +2
