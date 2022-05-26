@@ -53,6 +53,15 @@ sudo systemctl stop mcbe@MCBE
 sudo /opt/MCscripts/mcbe_restore.sh ~mc/bedrock/MCBE BACKUP
 sudo systemctl start mcbe@MCBE
 ```
+How to roll back from Minecraft Bedrock Edition 1.19.10 beta to 1.18.33:
+```bash
+sudo systemctl disable mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
+sudo systemctl stop mcbe@MCBE
+sudo su mc -s /bin/bash -c "/opt/MCscripts/mcbe_getzip.sh -u 'https://minecraft.azureedge.net/bin-linux/bedrock-server-1.18.33.02.zip'"
+sudo su mc -s /bin/bash -c '/opt/MCscripts/mcbe_update.sh ~/bedrock/MCBE ~/bedrock-server-1.18.33.02.zip'
+sudo /opt/MCscripts/mcbe_restore.sh ~mc/bedrock/MCBE BACKUP
+sudo systemctl start mcbe@MCBE
+```
 How to see MCscripts commit hash:
 ```bash
 unzip -z /tmp/master.zip | tail -n +2
