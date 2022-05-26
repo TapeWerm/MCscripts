@@ -11,7 +11,7 @@ while [ "$1"  != -- ]; do
 	--help|-h)
 		echo "$syntax"
 		echo Download the JAR of the current version of Minecraft Java Edition server.
-
+		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-u, --url  server JAR URL'
 		exit
