@@ -5,7 +5,7 @@ set -e
 clobber=true
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
 
-args=$(getopt -l help,no-clobber -o hn -- "$@")
+args=$(getopt -l help,no-clobber,url: -o hnu: -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -15,11 +15,16 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo "-n, --no-clobber  don't remove outdated ZIPs in ~"
+		echo '-u, --url         server ZIP URL'
 		exit
 		;;
 	--no-clobber|-n)
 		clobber=false
 		shift
+		;;
+	--url|-u)
+		url=$2
+		shift 2
 		;;
 	esac
 done
@@ -31,10 +36,12 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)
-webpage=$(echo "$webpage_raw" | hxnormalize -x)
-urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
-url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
+if [ -z "$url" ]; then
+	webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)
+	webpage=$(echo "$webpage_raw" | hxnormalize -x)
+	urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
+	url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
+fi
 current_ver=$(basename "$url")
 # ls fails if there's no match
 installed_ver=$(ls ~/bedrock-server-*.zip 2> /dev/null || true)
