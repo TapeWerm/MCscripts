@@ -14,7 +14,7 @@ How to roll back from Minecraft Bedrock Edition 1.19.10 beta to 1.18.33:
 ```bash
 sudo systemctl disable mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
 sudo systemctl stop mcbe@MCBE
-sudo su mc -s /bin/bash -c "/opt/MCscripts/mcbe_getzip.sh -u 'https://minecraft.azureedge.net/bin-linux/bedrock-server-1.18.33.02.zip'"
+sudo su mc -s /bin/bash -c 'curl -L https://minecraft.azureedge.net/bin-linux/bedrock-server-1.18.33.02.zip -o ~/bedrock-server-1.18.33.02.zip'
 sudo su mc -s /bin/bash -c '/opt/MCscripts/mcbe_update.sh ~/bedrock/MCBE ~/bedrock-server-1.18.33.02.zip'
 # Replace BACKUP with pre update backup
 sudo /opt/MCscripts/mcbe_restore.sh ~mc/bedrock/MCBE BACKUP

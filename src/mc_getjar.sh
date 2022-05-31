@@ -13,12 +13,12 @@ while [ "$1"  != -- ]; do
 		echo Download the JAR of the current version of Minecraft Java Edition server.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-u, --url  server JAR URL'
+		echo '-u, --url  deprecated flag'
 		exit
 		;;
 	--url|-u)
-		url=$2
-		shift 2
+		>&2 echo "$1 flag is deprecated"
+		exit 1
 		;;
 	esac
 done
@@ -30,12 +30,10 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-if [ -z "$url" ]; then
-	webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
-	webpage=$(echo "$webpage_raw" | hxnormalize -x)
-	urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
-	url=$(echo "$urls" | grep -E 'https://[^ ]+server\.jar' | head -n 1)
-fi
+webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
+webpage=$(echo "$webpage_raw" | hxnormalize -x)
+urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
+url=$(echo "$urls" | grep -E 'https://[^ ]+server\.jar' | head -n 1)
 
 echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
 # Does prompting the EULA seem so official that it violates the EULA?
