@@ -2,23 +2,16 @@
 
 # Exit if error
 set -e
-syntax='Usage: mc_getjar.sh [OPTION]...'
+syntax='Usage: mc_getjar.sh'
 
-args=$(getopt -l help,url: -o hu: -- "$@")
+args=$(getopt -l help -o h -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
 		echo Download the JAR of the current version of Minecraft Java Edition server.
-		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-u, --url  deprecated flag'
 		exit
-		;;
-	--url|-u)
-		>&2 echo "$1 flag is deprecated"
-		exit 1
 		;;
 	esac
 done

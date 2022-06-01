@@ -5,7 +5,7 @@ set -e
 clobber=true
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
 
-args=$(getopt -l help,no-clobber,url: -o hnu: -- "$@")
+args=$(getopt -l help,no-clobber -o hn -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -15,16 +15,11 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo "-n, --no-clobber  don't remove outdated ZIPs in ~"
-		echo '-u, --url         deprecated flag'
 		exit
 		;;
 	--no-clobber|-n)
 		clobber=false
 		shift
-		;;
-	--url|-u)
-		>&2 echo "$1 flag is deprecated"
-		exit 1
 		;;
 	esac
 done
