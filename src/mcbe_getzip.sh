@@ -3,9 +3,10 @@
 # Exit if error
 set -e
 clobber=true
+preview=false
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
 
-args=$(getopt -l help,no-clobber -o hn -- "$@")
+args=$(getopt -l help,no-clobber,preview -o hnp -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -15,10 +16,15 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo "-n, --no-clobber  don't remove outdated ZIPs in ~"
+		echo "-p, --preview     download preview instead of the current version"
 		exit
 		;;
 	--no-clobber|-n)
 		clobber=false
+		shift
+		;;
+	--preview|-p)
+		preview=true
 		shift
 		;;
 	esac
@@ -34,7 +40,11 @@ fi
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
 urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
-url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
+if [ "$preview" = false ]; then
+	url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip' | head -n 1)
+else
+	url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip' | head -n 1)
+fi
 current_ver=$(basename "$url")
 # ls fails if there's no match
 installed_ver=$(ls ~/bedrock-server-*.zip 2> /dev/null || true)
