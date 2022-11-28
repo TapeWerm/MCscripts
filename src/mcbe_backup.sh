@@ -148,10 +148,10 @@ echo "$files" | while read -r line; do
 	# save query no longer gives path
 	if [ ! -f "$worlds_dir/$file" ]; then
 		# Trim off $line before first $world/
-		file=${file#$world/}
+		file=${file#"$world"/}
 		# There might be more than one $file in $worlds_dir/$world
 		file=$(find "$worlds_dir/$world" -name "$file" | head -n 1)
-		file=${file#$worlds_dir/}
+		file=${file#"$worlds_dir"/}
 	fi
 	dir=$(dirname "$file")
 	# Trim off $line before last :
