@@ -5,7 +5,7 @@ Requisite=mcbe@%i.service
 
 [Service]
 # DNS check
-ExecStartPre=/bin/bash -c 'until ping -c 1 google-public-dns-a.google.com &> /dev/null; do sleep 1; done'
+ExecStartPre=/bin/bash -c 'until ping -c 1 google.com &> /dev/null; do sleep 1; done'
 ExecStart=/opt/MCscripts/mcbe_log.sh mcbe@%i
 KillMode=mixed
 Restart=always
