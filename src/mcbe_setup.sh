@@ -40,6 +40,10 @@ if [ "$instance" != "$(systemd-escape "$instance")" ]; then
 	exit 1
 fi
 server_dir=~mc/bedrock/$instance
+if [ -d "$server_dir" ]; then
+	>&2 echo "Server directory $server_dir already exists"
+	exit 1
+fi
 
 su mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
 # There might be more than one ZIP in ~mc
@@ -76,10 +80,6 @@ if [ -n "$import" ]; then
 	trap - ERR
 	rm -r "$import"
 else
-	if [ -d "$server_dir" ]; then
-		>&2 echo "Server directory $server_dir already exists"
-		exit 1
-	fi
 	# Test extracting $minecraft_zip partially quietly
 	unzip -tq "$minecraft_zip"
 	trap 'rm -rf "$server_dir"' ERR

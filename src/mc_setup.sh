@@ -40,6 +40,10 @@ if [ "$instance" != "$(systemd-escape "$instance")" ]; then
 	exit 1
 fi
 server_dir=~mc/java/$instance
+if [ -d "$server_dir" ]; then
+	>&2 echo "Server directory $server_dir already exists"
+	exit 1
+fi
 
 mkdir -p ~mc/java
 chown mc:nogroup ~mc/java
@@ -66,10 +70,6 @@ if [ -n "$import" ]; then
 	trap - ERR
 	rm -r "$import"
 else
-	if [ -d "$server_dir" ]; then
-		>&2 echo "Server directory $server_dir already exists"
-		exit 1
-	fi
 	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
 	cd "$server_dir"
