@@ -104,11 +104,11 @@ if [ -d ~mc/.MCBE_Bot ]; then
 	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null)
 	mv ~mc/.MCBE_Bot ~mc/.mcbe_log
 fi
-if [ -d ~mc/.mcbe_log ]; then
-	mv ~mc/.mcbe_log /opt/MCscripts/
-fi
 if [ -d /opt/MCscripts/.mcbe_log ]; then
-	chown -R root:root /opt/MCscripts/.mcbe_log
+	mv /opt/MCscripts/.mcbe_log ~mc/
+fi
+if [ -d ~mc/.mcbe_log ]; then
+	chown -R mc:nogroup ~mc/.mcbe_log
 fi
 # Enable dependencies first
 for x in "${!enabled[@]}"; do
