@@ -10,24 +10,19 @@ month=$(date --date "@$epoch" +%m)
 year=$(date --date "@$epoch" +%Y)
 syntax='Usage: mc_backup.sh [OPTION]... SERVER_DIR SERVICE'
 
+# Print time in YYYY-MM-DD HH:MM:SS format for server_read
+# echo "$*" to $service input
 server_do() {
-	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+	date '+%Y-%m-%d %H:%M:%S'
 	echo "$*" > "/run/$service"
 }
 
-# Set $buffer to output of $service after $timestamp set by server_do
-# If $timestamp doesn't exist set it to when $service started
-# $buffer may not have output from server_do first try
-# unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
-# Read until $wanted_output is read
+# Print output of $service after time $1 printed by server_do
 server_read() {
 	# Wait for output
 	sleep 1
-	if [ -z "$timestamp" ]; then
-		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3 -s)
-	fi
-	# Output of $service since $timestamp with no metadata
-	buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
+	# Output of $service since $1 with no metadata
+	journalctl -u "$service" -S "${1:?}" -o cat
 }
 
 args=$(getopt -l backup-dir:,help -o b:h -- "$@")
@@ -87,25 +82,24 @@ mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
 
 # Disable autosave
-server_do save-off
-trap 'server_do save-on' ERR
+server_do save-off > /dev/null
+trap 'server_do save-on > /dev/null' ERR
 # Pause and save the server
-server_do save-all flush
+query_time=$(server_do save-all flush)
 timeout=$(date -d '1 minute' +%s)
-unset buffer
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
-until echo "$buffer" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
+until echo "$query" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
-		server_do save resume
+		server_do save resume > /dev/null
 		>&2 echo save query timeout
 		exit 1
 	fi
-	server_read
+	query=$(server_read "$query_time")
 done
 
 # zip restores path of directory given to it ($world), not just the directory itself
 cd "$server_dir"
-trap 'server_do save-on; rm -f "$backup_zip"' ERR
+trap 'server_do save-on > /dev/null; rm -f "$backup_zip"' ERR
 zip -rq "$backup_zip" "$world"
 echo "Backup is $backup_zip"
-server_do save-on
+server_do save-on > /dev/null

@@ -10,24 +10,19 @@ month=$(date --date "@$epoch" +%m)
 year=$(date --date "@$epoch" +%Y)
 syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 
+# Print time in YYYY-MM-DD HH:MM:SS format for server_read
+# echo "$*" to $service input
 server_do() {
-	timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+	date '+%Y-%m-%d %H:%M:%S'
 	echo "$*" > "/run/$service"
 }
 
-# Set $buffer to output of $service after $timestamp set by server_do
-# If $timestamp doesn't exist set it to when $service started
-# $buffer may not have output from server_do first try
-# unset buffer; until echo "$buffer" | grep -q "$wanted_output"; do server_read; done
-# Read until $wanted_output is read
+# Print output of $service after time $1 printed by server_do
 server_read() {
 	# Wait for output
 	sleep 1
-	if [ -z "$timestamp" ]; then
-		timestamp=$(systemctl show "$service" -p ActiveEnterTimestamp --value | cut -d ' ' -f 2-3 -s)
-	fi
-	# Output of $service since $timestamp with no metadata
-	buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
+	# Output of $service since $1 with no metadata
+	journalctl -u "$service" -S "${1:?}" -o cat
 }
 
 args=$(getopt -l backup-dir:,docker,help -o b:dh -- "$@")
@@ -41,15 +36,12 @@ while [ "$1"  != -- ]; do
 	--docker|-d)
 		docker=true
 		server_do() {
-			timestamp=$(date --iso-8601=seconds)
+			date --iso-8601=seconds
 			echo "$*" | socat EXEC:"docker attach '$service'",pty STDIN
 		}
 		server_read() {
 			sleep 1
-			if [ -z "$timestamp" ]; then
-				timestamp=$(docker inspect "$service" | grep '^ *"StartedAt":' | cut -d '"' -f 4 -s)
-			fi
-			buffer=$(docker logs --since "$timestamp" "$service")
+			docker logs --since "${1:?}" "$service"
 		}
 		shift
 		;;
@@ -112,35 +104,34 @@ mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
 
 # Prepare backup
-server_do save hold
-trap 'server_do save resume' ERR
+server_do save hold > /dev/null
+trap 'server_do save resume > /dev/null' ERR
 # Wait 1 second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than 1 second to run a command
 sleep 1
 timeout=$(date -d '1 minute' +%s)
-unset buffer
 # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
-until echo "$buffer" | grep -q 'Data saved'; do
+until echo "$query" | grep -q 'Data saved'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
-		server_do save resume
+		server_do save resume > /dev/null
 		>&2 echo save query timeout
 		exit 1
 	fi
 	# Check if backup is ready
-	server_do save query
-	server_read
+	query_time=$(server_do save query)
+	query=$(server_read "$query_time")
 done
 # grep only matching strings from line
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 # journald LineMax splits lines so delete newlines
-files=$(echo "$buffer" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
+files=$(echo "$query" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
 
 mkdir -p "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 cd "$temp_dir"
 rm -rf "$world"
-trap 'server_do save resume; rm -rf "$world"; rm -f "$backup_zip"' ERR
+trap 'server_do save resume > /dev/null; rm -rf "$world"; rm -f "$backup_zip"' ERR
 echo "$files" | while read -r line; do
 	# Trim off $line after last :
 	file=${line%:*}
@@ -163,4 +154,4 @@ done
 zip -rq "$backup_zip" "$world"
 echo "Backup is $backup_zip"
 rm -r "$world"
-server_do save resume
+server_do save resume > /dev/null
