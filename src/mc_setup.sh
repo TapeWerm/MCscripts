@@ -44,6 +44,10 @@ if [ -d "$server_dir" ]; then
 	>&2 echo "Server directory $server_dir already exists"
 	exit 1
 fi
+if ! command -v java &> /dev/null; then
+	>&2 echo "No command java"
+	exit 1
+fi
 
 mkdir -p ~mc/java
 chown mc:nogroup ~mc/java

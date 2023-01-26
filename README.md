@@ -80,6 +80,8 @@ If you want to change where backups are stored:
 sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ```
 ## Java Edition setup
+Bring your own Java or `sudo apt update && sudo apt install default-jre-headless`.
+
 Do one of the following:
 - Import server directory:
   ```bash
