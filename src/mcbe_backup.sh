@@ -53,7 +53,7 @@ while [ "$1"  != -- ]; do
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
 		echo '-d, --docker                 docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v SERVER_DIR:/data itzg/minecraft-bedrock-server'
 		echo
-		echo 'Backups are bedrock_backups/SERVER_DIR/WORLD/YYYY/MM/{DATE}_HOUR-MINUTE.zip in BACKUP_DIR.'
+		echo 'Backups are bedrock_backups/SERVER_DIR/WORLD/YYYY/MM/DD_HH-MM.zip in BACKUP_DIR.'
 		exit
 		;;
 	esac
