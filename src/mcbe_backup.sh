@@ -2,12 +2,12 @@
 
 # Exit if error
 set -e
-epoch=$(date +%s)
+backup_time=$(date +%s)
 # Filenames can't contain : on some filesystems
-minute=$(date --date "@$epoch" +%H-%M)
-date=$(date --date "@$epoch" +%d)
-month=$(date --date "@$epoch" +%m)
-year=$(date --date "@$epoch" +%Y)
+minute=$(date --date "@$backup_time" +%H-%M)
+date=$(date --date "@$backup_time" +%d)
+month=$(date --date "@$backup_time" +%m)
+year=$(date --date "@$backup_time" +%Y)
 syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 
 # Print time in YYYY-MM-DD HH:MM:SS format for server_read
