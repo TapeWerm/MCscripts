@@ -38,6 +38,7 @@ fi
 if command -v apt-get &> /dev/null; then
 	apt-get update
 	apt-get install -y curl html-xml-utils socat zip
+	apt-get install -y python3-docker python3-systemd
 fi
 if ! id -u mc &> /dev/null; then
 	adduser --home /opt/MC --system mc
@@ -54,7 +55,7 @@ chown -h root:root /opt/MCscripts/backup_dir
 "$dir/disable_services.sh"
 echo y | "$dir/move_servers.sh"
 "$dir/move_backups.sh"
-cp "$dir"/*.{sed,sh} /opt/MCscripts/
+cp "$dir"/*.{py,sed,sh} /opt/MCscripts/
 cp "$dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
 "$dir/enable_services.sh"
