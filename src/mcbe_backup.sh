@@ -13,16 +13,25 @@ syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 # Print time in YYYY-MM-DD HH:MM:SS format for server_read
 # echo "$*" to $service input
 server_do() {
-	date '+%Y-%m-%d %H:%M:%S'
-	echo "$*" > "/run/$service"
+	if [ "$docker" = true ]; then
+		date --iso-8601=seconds
+		echo "$*" | socat EXEC:"docker attach '$service'",pty STDIN
+	else
+		date '+%Y-%m-%d %H:%M:%S'
+		echo "$*" > "/run/$service"
+	fi
 }
 
 # Print output of $service after time $1 printed by server_do
 server_read() {
 	# Wait for output
 	sleep 1
-	# Output of $service since $1 with no metadata
-	journalctl -u "$service" -S "${1:?}" -o cat
+	if [ "$docker" = true ]; then
+		docker logs --since "${1:?}" "$service"
+	else
+		# Output of $service since $1 with no metadata
+		journalctl -u "$service" -S "${1:?}" -o cat
+	fi
 }
 
 args=$(getopt -l backup-dir:,docker,help -o b:dh -- "$@")
@@ -35,14 +44,6 @@ while [ "$1"  != -- ]; do
 		;;
 	--docker|-d)
 		docker=true
-		server_do() {
-			date --iso-8601=seconds
-			echo "$*" | socat EXEC:"docker attach '$service'",pty STDIN
-		}
-		server_read() {
-			sleep 1
-			docker logs --since "${1:?}" "$service"
-		}
 		shift
 		;;
 	--help|-h)
