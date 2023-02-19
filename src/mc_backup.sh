@@ -83,7 +83,7 @@ backup_zip=$backup_dir/${date}_$minute.zip
 
 # Disable autosave
 server_do save-off > /dev/null
-trap 'server_do save-on > /dev/null' ERR
+trap 'server_do save-on > /dev/null' EXIT
 # Pause and save the server
 query_time=$(server_do save-all flush)
 timeout=$(date -d '1 minute' +%s)
@@ -99,7 +99,6 @@ done
 
 # zip restores path of directory given to it ($world), not just the directory itself
 cd "$server_dir"
-trap 'server_do save-on > /dev/null; rm -f "$backup_zip"' ERR
+trap 'rm -f "$backup_zip"' ERR
 zip -rq "$backup_zip" "$world"
 echo "Backup is $backup_zip"
-server_do save-on > /dev/null

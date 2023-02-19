@@ -106,7 +106,7 @@ backup_zip=$backup_dir/${date}_$minute.zip
 
 # Prepare backup
 server_do save hold > /dev/null
-trap 'server_do save resume > /dev/null' ERR
+trap 'server_do save resume > /dev/null' EXIT
 # Wait 1 second for Minecraft Bedrock Edition command to avoid infinite loop
 # Only unplayably slow servers take more than 1 second to run a command
 sleep 1
@@ -132,7 +132,8 @@ mkdir -p "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 cd "$temp_dir"
 rm -rf "$world"
-trap 'server_do save resume > /dev/null; rm -rf "$world"; rm -f "$backup_zip"' ERR
+trap 'rm -f "$backup_zip"' ERR
+trap 'rm -rf "$world"; server_do save resume > /dev/null' EXIT
 echo "$files" | while read -r line; do
 	# Trim off $line after last :
 	file=${line%:*}
@@ -154,5 +155,3 @@ echo "$files" | while read -r line; do
 done
 zip -rq "$backup_zip" "$world"
 echo "Backup is $backup_zip"
-rm -r "$world"
-server_do save resume > /dev/null
