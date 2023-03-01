@@ -90,7 +90,6 @@ timeout=$(date -d '1 minute' +%s)
 # Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
 until echo "$query" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
-		server_do save resume > /dev/null
 		>&2 echo save query timeout
 		exit 1
 	fi
