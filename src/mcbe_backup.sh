@@ -15,7 +15,7 @@ syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 server_do() {
 	if [ "$docker" = true ]; then
 		date --iso-8601=seconds
-		echo "$*" | socat EXEC:"docker attach -- $service",pty STDIN
+		echo "$*" | socat EXEC:"docker attach $service",pty STDIN
 	else
 		date '+%Y-%m-%d %H:%M:%S'
 		echo "$*" > "/run/$service"
