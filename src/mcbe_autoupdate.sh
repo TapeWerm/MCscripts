@@ -54,9 +54,8 @@ if [ "$installed_ver" = fail ]; then
 elif [ "$installed_ver" != "$current_ver" ]; then
 	trap 'echo fail > "$server_dir/version"' ERR
 	systemctl start "mcbe-backup@$instance"
+	trap 'systemctl start "$service"' EXIT
 	systemctl stop "$service.socket"
-	trap 'systemctl start "$service"' ERR
 	# mcbe_update.sh reads y asking if you stopped the server
 	runuser -l mc -s /bin/bash -c "echo y | $(printf '/opt/MCscripts/mcbe_update.sh %q %q' "$server_dir" "$minecraft_zip")"
-	systemctl start "$service"
 fi
