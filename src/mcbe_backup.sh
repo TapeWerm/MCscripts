@@ -84,7 +84,7 @@ temp_dir=/tmp/mcbe_backup/$(basename "$server_dir")
 service=$2
 if [ "$docker" = true ]; then
 	if ! docker ps --format '{{.Names}}' | grep -q "^$service$"; then
-		>&2 echo "Container $service not up"
+		>&2 echo "Container $service not running"
 		exit 1
 	fi
 else
