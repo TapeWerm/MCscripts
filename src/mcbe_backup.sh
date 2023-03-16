@@ -14,10 +14,10 @@ syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 # echo "$*" to $service input
 server_do() {
 	if [ "$docker" = true ]; then
-		date --iso-8601=seconds
 		# Escape '][(){}’:,!\"\n' for socat address specifications
 		local no_escape
 		no_escape=$(echo "$service" | sed 's/\([][(){}’:,!\"]\)/\\\\\\\1/g')
+		date --iso-8601=seconds
 		echo "$*" | socat EXEC:"docker attach $no_escape",pty STDIN
 	else
 		date '+%Y-%m-%d %H:%M:%S'
