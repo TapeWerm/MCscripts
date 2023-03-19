@@ -42,7 +42,7 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 service=$1
-if ! systemctl is-active --quiet "$service"; then
+if ! systemctl is-active --quiet -- "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1
 fi

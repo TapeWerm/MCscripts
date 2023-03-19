@@ -74,7 +74,7 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
-server_dir=$(realpath "$1")
+server_dir=$(realpath -- "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 worlds_dir=$server_dir/worlds
@@ -91,14 +91,14 @@ if [ "$docker" = true ]; then
 		exit 1
 	fi
 else
-	if ! systemctl is-active --quiet "$service"; then
+	if ! systemctl is-active --quiet -- "$service"; then
 		>&2 echo "Service $service not active"
 		exit 1
 	fi
 fi
 
 if [ -n "$backup_dir" ]; then
-	backup_dir=$(realpath "$backup_dir")
+	backup_dir=$(realpath -- "$backup_dir")
 else
 	backup_dir=~
 fi

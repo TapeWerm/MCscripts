@@ -17,7 +17,7 @@ while [ "$1"  != -- ]; do
 		exit
 		;;
 	--import|-i)
-		import=$(realpath "$2")
+		import=$2
 		shift 2
 		;;
 	esac
@@ -35,7 +35,7 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 instance=$1
-if [ "$instance" != "$(systemd-escape "$instance")" ]; then
+if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
 	>&2 echo INSTANCE should be indentical to systemd-escape INSTANCE
 	exit 1
 fi
@@ -44,6 +44,11 @@ if [ -d "$server_dir" ]; then
 	>&2 echo "Server directory $server_dir already exists"
 	exit 1
 fi
+
+if [ -n "$import" ]; then
+	import=$(realpath -- "$import")
+fi
+
 if ! command -v java &> /dev/null; then
 	>&2 echo "No command java"
 	exit 1

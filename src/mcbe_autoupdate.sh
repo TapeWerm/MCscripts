@@ -27,12 +27,12 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
-server_dir=$(realpath "$1")
+server_dir=$(realpath -- "$1")
 # cat fails if there's no file $server_dir/version
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 
 service=$2
-if ! systemctl is-active --quiet "$service"; then
+if ! systemctl is-active --quiet -- "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1
 fi

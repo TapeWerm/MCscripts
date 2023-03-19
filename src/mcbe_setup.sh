@@ -17,7 +17,7 @@ while [ "$1"  != -- ]; do
 		exit
 		;;
 	--import|-i)
-		import=$(realpath "$2")
+		import=$2
 		shift 2
 		;;
 	esac
@@ -35,7 +35,7 @@ elif [ "$#" -gt 1 ]; then
 fi
 
 instance=$1
-if [ "$instance" != "$(systemd-escape "$instance")" ]; then
+if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
 	>&2 echo INSTANCE should be indentical to systemd-escape INSTANCE
 	exit 1
 fi
@@ -45,7 +45,11 @@ if [ -d "$server_dir" ]; then
 	exit 1
 fi
 
-su mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
+if [ -n "$import" ]; then
+	import=$(realpath -- "$import")
+fi
+
+runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
 # There might be more than one ZIP in ~mc
 minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
 if [ -z "$minecraft_zip" ]; then

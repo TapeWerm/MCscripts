@@ -57,7 +57,7 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
-server_dir=$(realpath "$1")
+server_dir=$(realpath -- "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 if [ ! -d "$server_dir/$world" ]; then
@@ -66,13 +66,13 @@ if [ ! -d "$server_dir/$world" ]; then
 fi
 
 service=$2
-if ! systemctl is-active --quiet "$service"; then
+if ! systemctl is-active --quiet -- "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1
 fi
 
 if [ -n "$backup_dir" ]; then
-	backup_dir=$(realpath "$backup_dir")
+	backup_dir=$(realpath -- "$backup_dir")
 else
 	backup_dir=~
 fi

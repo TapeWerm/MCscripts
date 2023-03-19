@@ -27,11 +27,11 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
-server_dir=$(realpath "$1")
+server_dir=$(realpath -- "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
 
-backup=$(realpath "$2")
+backup=$(realpath -- "$2")
 # Test extracting $backup partially quietly
 unzip -tq "$backup"
 

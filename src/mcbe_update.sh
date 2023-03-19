@@ -29,7 +29,7 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
-server_dir=$(realpath "$1")
+server_dir=$(realpath -- "$1")
 if [ ! -f "$server_dir/bedrock_server" ] && [ ! -f "$server_dir/bedrock_server.exe" ]; then
 	>&2 echo SERVER_DIR should have file bedrock_server or bedrock_server.exe
 	exit 1
@@ -37,7 +37,7 @@ fi
 new_dir=$server_dir.new
 old_dir=$server_dir.old
 
-minecraft_zip=$(realpath "$2")
+minecraft_zip=$(realpath -- "$2")
 if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
 	>&2 echo MINECRAFT_ZIP cannot be in SERVER_DIR
 	exit 1
