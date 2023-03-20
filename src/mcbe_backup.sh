@@ -77,6 +77,7 @@ fi
 server_dir=$(realpath -- "$1")
 properties=$server_dir/server.properties
 world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
+world=$(basename -- "$world")
 worlds_dir=$server_dir/worlds
 if [ ! -d "$worlds_dir/$world" ]; then
 	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
@@ -128,14 +129,14 @@ done
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 # journald LineMax splits lines so delete newlines
-files=$(echo "$query" | tr -d '\n' | grep -Eo "$world[^:]+:[0-9]+")
+files=$(echo "$query" | tr -d '\n' | grep -Eo -- "$world[^:]+:[0-9]+")
 
 mkdir -p "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
 cd "$temp_dir"
-rm -rf "$world"
+rm -rf -- "$world"
 trap 'rm -f "$backup_zip"' ERR
-trap 'rm -rf "$world"; server_do save resume > /dev/null' EXIT
+trap 'rm -rf -- "$world"; server_do save resume > /dev/null' EXIT
 echo "$files" | while read -r line; do
 	# Trim off $line after last :
 	file=${line%:*}
@@ -148,12 +149,12 @@ echo "$files" | while read -r line; do
 		file=$(find "$worlds_dir/$world" -name "$file" | head -n 1)
 		file=${file#"$worlds_dir"/}
 	fi
-	dir=$(dirname "$file")
+	dir=$(dirname -- "$file")
 	# Trim off $line before last :
 	length=${line##*:}
-	mkdir -p "$dir"
-	cp "$worlds_dir/$file" "$dir/"
-	truncate --size="$length" "$file"
+	mkdir -p -- "$dir"
+	cp -- "$worlds_dir/$file" "$dir/"
+	truncate --size="$length" -- "$file"
 done
-zip -rq "$backup_zip" "$world"
+zip -rq "$backup_zip" -- "$world"
 echo "Backup is $backup_zip"
