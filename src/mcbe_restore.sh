@@ -29,7 +29,7 @@ fi
 
 server_dir=$(realpath -- "$1")
 properties=$server_dir/server.properties
-world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
+world=$(basename -- "$(grep ^level-name= "$properties" | cut -d = -f 2- -s)")
 worlds_dir=$server_dir/worlds
 
 backup=$(realpath -- "$2")
