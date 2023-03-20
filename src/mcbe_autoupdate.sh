@@ -57,5 +57,5 @@ elif [ "$installed_ver" != "$current_ver" ]; then
 	trap 'systemctl start "$service"' EXIT
 	systemctl stop "$service.socket"
 	# mcbe_update.sh reads y asking if you stopped the server
-	runuser -l mc -s /bin/bash -c "echo y | $(printf '/opt/MCscripts/mcbe_update.sh %q %q' "$server_dir" "$minecraft_zip")"
+	runuser -l mc -s /bin/bash -c "echo y | $(printf '/opt/MCscripts/mcbe_update.sh -- %q %q' "$server_dir" "$minecraft_zip")"
 fi

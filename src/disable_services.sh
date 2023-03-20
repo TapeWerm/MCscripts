@@ -46,9 +46,9 @@ if [ "$#" -gt 0 ]; then
 fi
 
 while read -r instance; do
-	if [ "$(systemctl is-enabled "$instance" 2> /dev/null)" = enabled ]; then
+	if systemctl is-enabled --quiet "$instance"; then
 		enabled+=("$instance")
-	elif [ "$(systemctl is-active "$instance" 2> /dev/null)" = active ]; then
+	elif systemctl is-active --quiet "$instance"; then
 		active+=("$instance")
 	fi
 done < <(systemctl show "${services[@]}" -p Id --value | grep .)
