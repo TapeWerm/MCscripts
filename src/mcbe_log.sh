@@ -4,6 +4,7 @@ syntax='Usage: mcbe_log.sh SERVICE'
 
 send() {
 	if [ -f "$webhook_file" ]; then
+		local url
 		while read -r url; do
 			if echo "$url" | grep -Eq 'https://discord(app)?\.com'; then
 				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" -sS "$url" &

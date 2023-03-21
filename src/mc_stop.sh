@@ -7,6 +7,7 @@ server_do() {
 }
 
 countdown() {
+	local warning
 	warning="Server stopping in $*"
 	server_do say "$warning"
 	echo "$warning"

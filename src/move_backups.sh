@@ -7,12 +7,17 @@ syntax='Usage: move_backups.sh'
 
 # Merge directory $1 into directory $2
 merge_dirs() {
+	local src
+	src=$(realpath -- "$1")
+	local dest
+	dest=$(realpath -- "$2")
+	local file
 	while read -r file; do
-		dir=$(dirname "$file")
-		mkdir -p "$2/$dir"
-		mv -n "$1/$file" "$2/$file"
-	done < <(find "$1" -type f -printf '%P\n')
-	find "$1" -type d -empty -delete
+		dir=$(dirname -- "$file")
+		mkdir -p "$dest/$dir"
+		mv -n "$src/$file" "$dest/$file"
+	done < <(find "$src" -type f -printf '%P\n')
+	find "$src" -type d -empty -delete
 }
 
 args=$(getopt -l help -o h -- "$@")
