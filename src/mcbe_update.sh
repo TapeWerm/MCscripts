@@ -68,16 +68,16 @@ for file in "$server_dir"/*.{json,properties}; do
 	fi
 done
 
-for pack_dir in "$server_dir"/*_packs; do
-	if [ -d "$pack_dir" ]; then
-		pack_dir=$(basename "$pack_dir")
-		mkdir -p "$new_dir/$pack_dir"
-		for pack in "$server_dir/$pack_dir"/*; do
+for packs_dir in "$server_dir"/*_packs; do
+	if [ -d "$packs_dir" ]; then
+		packs_dir=$(basename "$packs_dir")
+		mkdir -p "$new_dir/$packs_dir"
+		for pack in "$server_dir/$packs_dir"/*; do
 			if [ -d "$pack" ]; then
 				pack=$(basename "$pack")
 				# Don't clobber 1st party packs
-				if [ ! -d "$new_dir/$pack_dir/$pack" ]; then
-					cp -r "$server_dir/$pack_dir/$pack" "$new_dir/$pack_dir/"
+				if [ ! -d "$new_dir/$packs_dir/$pack" ]; then
+					cp -r "$server_dir/$packs_dir/$pack" "$new_dir/$packs_dir/"
 				fi
 			fi
 		done

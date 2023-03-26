@@ -25,14 +25,17 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-while read -r dir; do
-	if [ -f ~mc/"$dir"/server.jar ]; then
-		java+=("$dir")
+for dir in ~mc/*; do
+	if [ -d "$dir" ]; then
+		dir=$(basename "$dir")
+		if [ -f ~mc/"$dir"/server.jar ]; then
+			java+=("$dir")
+		fi
+		if [ -f ~mc/"$dir"/bedrock_server ]; then
+			bedrock+=("$dir")
+		fi
 	fi
-	if [ -f ~mc/"$dir"/bedrock_server ]; then
-		bedrock+=("$dir")
-	fi
-done < <(find ~mc -mindepth 1 -maxdepth 1 -type d -printf '%P\n')
+done
 
 if [ -z "${java[*]}" ] && [ -z "${bedrock[*]}" ]; then
 	echo No servers to move

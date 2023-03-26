@@ -56,7 +56,7 @@ chmod 600 "$webhook_file"
 send "Server $instance starting"
 trap 'send "Server $instance stopping"; pkill -s $$' EXIT
 # Follow log for unit $service 0 lines from bottom, no metadata
-journalctl -fu "$service" -n 0 -o cat | while read -r line; do
+journalctl -fu "$service" -n 0 -o cat | while IFS='' read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
 		# Gamertags can have spaces as long as they're not leading/trailing/contiguous
 		player=$(echo "$line" | sed 's/.*Player connected: \(.*\),.*/\1/')

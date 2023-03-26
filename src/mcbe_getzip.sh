@@ -46,11 +46,12 @@ else
 	url=$(echo "$urls" | grep -E 'https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip' | head -n 1)
 fi
 current_ver=$(basename "$url")
-# ls fails if there's no match
-installed_ver=$(ls ~/bedrock-server-*.zip 2> /dev/null || true)
+if ls ~/bedrock-server-*.zip &> /dev/null; then
+	installed_ver=(~/bedrock-server-*.zip)
+fi
 
 # There might be more than one ZIP in ~
-if ! echo "$installed_ver" | grep -q "$current_ver"; then
+if ! echo "${installed_ver[*]}" | grep -q "$current_ver"; then
 	echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
 	# Does prompting the EULA seem so official that it violates the EULA?
 	echo Minecraft End User License Agreement: https://minecraft.net/terms
@@ -66,6 +67,6 @@ if ! echo "$installed_ver" | grep -q "$current_ver"; then
 	trap '' SIGTERM
 	mv ~/"$current_ver".part ~/"$current_ver"
 	if [ "$clobber" = true ]; then
-		echo "$installed_ver" | xargs -d '\n' rm -f
+		rm -f "${installed_ver[@]}"
 	fi
 fi
