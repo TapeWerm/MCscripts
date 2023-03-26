@@ -61,21 +61,28 @@ unzip -q "$minecraft_zip" -d "$new_dir"
 basename "${minecraft_zip%.zip}" > "$new_dir/version"
 cp -r "$server_dir/worlds" "$new_dir/"
 
-while read -r file; do
-	file=$(basename "$file")
-	cp "$server_dir/$file" "$new_dir/"
-done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
+for file in "$server_dir"/*.{json,properties}; do
+	if [ -f "$file" ]; then
+		file=$(basename "$file")
+		cp "$server_dir/$file" "$new_dir/"
+	fi
+done
 
-while read -r pack_dir; do
-	pack_dir=$(basename "$pack_dir")
-	mkdir -p "$new_dir/$pack_dir"
-	while read -r pack; do
-		# Don't clobber 1st party packs
-		if [ ! -d "$new_dir/$pack_dir/$pack" ]; then
-			cp -r "$server_dir/$pack_dir/$pack" "$new_dir/$pack_dir/"
-		fi
-	done < <(ls "$server_dir/$pack_dir")
-done < <(ls -d "$server_dir"/*_packs 2> /dev/null)
+for pack_dir in "$server_dir"/*_packs; do
+	if [ -d "$pack_dir" ]; then
+		pack_dir=$(basename "$pack_dir")
+		mkdir -p "$new_dir/$pack_dir"
+		for pack in "$server_dir/$pack_dir"/*; do
+			if [ -d "$pack" ]; then
+				pack=$(basename "$pack")
+				# Don't clobber 1st party packs
+				if [ ! -d "$new_dir/$pack_dir/$pack" ]; then
+					cp -r "$server_dir/$pack_dir/$pack" "$new_dir/$pack_dir/"
+				fi
+			fi
+		done
+	fi
+done
 
 rm -rf "$old_dir"
 trap '' SIGTERM

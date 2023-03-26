@@ -64,44 +64,60 @@ if [ "$getzip" = true ]; then
 	enabled+=("mcbe-getzip.timer")
 fi
 # Update systemd overrides
-while read -r override; do
-	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-	sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
-done < <(ls /etc/systemd/system/mc@*.service.d/*.conf 2> /dev/null)
-while read -r override; do
-	sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
-	sed -i 's|MC/mc_backup\.sh|MCscripts/mc_backup\.sh|g' "$override"
-done < <(ls /etc/systemd/system/mc-backup@*.service.d/*.conf 2> /dev/null)
-while read -r override; do
-	sed -i 's/%i_Backups/%i_backups/g' "$override"
-	sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
-	sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
-	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-done < <(ls /etc/systemd/system/mc-rmbackup@*.service.d/*.conf 2> /dev/null)
-while read -r override; do
-	sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-	sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
-done < <(ls /etc/systemd/system/mcbe@*.service.d/*.conf 2> /dev/null)
-while read -r override; do
-	sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
-	sed -i 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh|g' "$override"
-done < <(ls /etc/systemd/system/mcbe-backup@*.service.d/*.conf 2> /dev/null)
-while read -r override; do
-	sed -i 's/%i_Backups/%i_backups/g' "$override"
-	sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
-	sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
-	sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-done < <(ls /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf 2> /dev/null)
-while read -r override; do
-	sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
-	sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
-done < <(ls /etc/systemd/system/mcbe-getzip.service.d/*.conf 2> /dev/null)
+for override in /etc/systemd/system/mc@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+	fi
+done
+for override in /etc/systemd/system/mc-backup@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
+		sed -i 's|MC/mc_backup\.sh|MCscripts/mc_backup\.sh|g' "$override"
+	fi
+done
+for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/%i_Backups/%i_backups/g' "$override"
+		sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
+		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
+		sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+	fi
+done
+for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+	fi
+done
+for override in /etc/systemd/system/mcbe-backup@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+		sed -i 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh|g' "$override"
+	fi
+done
+for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/%i_Backups/%i_backups/g' "$override"
+		sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
+		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
+		sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+	fi
+done
+for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+		sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
+	fi
+done
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
-	while read -r file; do
-		# Trim off $file after last suffix
-		mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
-	done < <(ls ~mc/.MCBE_Bot/*_BotWebhook.txt 2> /dev/null)
+	for file in ~mc/.MCBE_Bot/*_BotWebhook.txt; do
+		if [ -f "$file" ]; then
+			# Trim off $file after last suffix
+			mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
+		fi
+	done
 	mv ~mc/.MCBE_Bot ~mc/.mcbe_log
 fi
 if [ -d /opt/MCscripts/.mcbe_log ]; then

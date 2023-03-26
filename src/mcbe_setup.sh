@@ -75,11 +75,13 @@ if [ -n "$import" ]; then
 	# mcbe_update.sh reads y asking if you stopped the server
 	echo y | /opt/MCscripts/mcbe_update.sh "$server_dir" "$minecraft_zip"
 	# Convert DOS line endings to UNIX line endings
-	while read -r file; do
-		if grep -q $'\r'$ "$file"; then
-			sed -i s/$'\r'$// "$file"
+	for file in "$server_dir"/*.{json,properties}; do
+		if [ -f "$file" ]; then
+			if grep -q $'\r'$ "$file"; then
+				sed -i s/$'\r'$// "$file"
+			fi
 		fi
-	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
+	done
 	chown -R mc:nogroup "$server_dir"
 	trap - ERR
 	rm -r "$import"

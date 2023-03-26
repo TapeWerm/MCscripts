@@ -68,11 +68,13 @@ if [ -n "$import" ]; then
 	trap 'rm -rf "$server_dir"' ERR
 	cp -r "$import" "$server_dir"
 	# Convert DOS line endings to UNIX line endings
-	while read -r file; do
-		if grep -q $'\r'$ "$file"; then
-			sed -i s/$'\r'$// "$file"
+	for file in "$server_dir"/*.{json,properties}; do
+		if [ -f "$file" ]; then
+			if grep -q $'\r'$ "$file"; then
+				sed -i s/$'\r'$// "$file"
+			fi
 		fi
-	done < <(ls "$server_dir"/*.{json,properties} 2> /dev/null)
+	done
 	echo java -jar server.jar nogui > "$server_dir/start.bat"
 	chmod +x "$server_dir/start.bat"
 	chown -R mc:nogroup "$server_dir"
