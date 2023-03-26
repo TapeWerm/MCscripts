@@ -136,7 +136,7 @@ cd "$temp_dir"
 rm -rf -- "$world"
 trap 'rm -f "$backup_zip"' ERR
 trap 'rm -rf -- "$world"; server_do save resume > /dev/null' EXIT
-echo "$files" | while read -r line; do
+echo "$files" | while IFS='' read -r line; do
 	# Trim off $line after last :
 	file=${line%:*}
 	# https://bugs.mojang.com/browse/BDS-1085

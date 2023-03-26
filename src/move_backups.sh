@@ -12,13 +12,13 @@ merge_dirs() {
 	local dest
 	dest=$(realpath -- "$2")
 	local file
-	while IFS='' read -rd '' file; do
+	find "$src" -type f -print0 | while IFS='' read -rd '' file; do
 		# Trim off $file before first $src/
 		file=${file#"$src"/}
 		dir=$(dirname -- "$file")
 		mkdir -p "$dest/$dir"
 		mv -n "$src/$file" "$dest/$file"
-	done < <(find "$src" -type f -print0)
+	done
 	find "$src" -type d -empty -delete
 }
 
