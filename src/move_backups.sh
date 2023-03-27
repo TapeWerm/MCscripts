@@ -11,7 +11,6 @@ merge_dirs() {
 	src=$(realpath -- "$1")
 	local dest
 	dest=$(realpath -- "$2")
-	local file
 	find "$src" -type f -print0 | while IFS='' read -rd '' file; do
 		# Trim off $file before first $src/
 		file=${file#"$src"/}
