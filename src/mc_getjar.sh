@@ -26,7 +26,7 @@ fi
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
 urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
-url=$(echo "$urls" | grep -E 'https://[^ ]+server\.jar' | head -n 1)
+url=$(echo "$urls" | grep -E '^https://[^ ]+server\.jar$' | head -n 1)
 
 echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
 # Does prompting the EULA seem so official that it violates the EULA?

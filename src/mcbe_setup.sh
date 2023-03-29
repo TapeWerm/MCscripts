@@ -3,8 +3,9 @@
 # Exit if error
 set -e
 syntax='Usage: mcbe_setup.sh [OPTION]... INSTANCE'
+version=current
 
-args=$(getopt -l help,import: -o hi: -- "$@")
+args=$(getopt -l help,import:,preview -o hi:p -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -14,11 +15,16 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-i, --import=SERVER_DIR  server directory to import'
+		echo '-p, --preview            use preview instead of current version'
 		exit
 		;;
 	--import|-i)
 		import=$2
 		shift 2
+		;;
+	--preview|-p)
+		version=preview
+		shift
 		;;
 	esac
 done
@@ -50,8 +56,10 @@ if [ -n "$import" ]; then
 fi
 
 runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
-# There might be more than one ZIP in ~mc
-minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
+zips_dir=~mc/bedrock_zips
+if [ -h "$zips_dir/$version" ]; then
+	minecraft_zip=$(basename "$(realpath "$zips_dir/$version")")
+fi
 if [ -z "$minecraft_zip" ]; then
 	>&2 echo 'No bedrock-server ZIP found in ~mc'
 	exit 1

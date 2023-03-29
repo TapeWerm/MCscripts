@@ -2,16 +2,24 @@
 
 # Exit if error
 set -e
-syntax='Usage: mcbe_autoupdate.sh SERVER_DIR SERVICE'
+syntax='Usage: mcbe_autoupdate.sh [OPTION]... SERVER_DIR SERVICE'
+version=current
 
-args=$(getopt -l help -o h -- "$@")
+args=$(getopt -l help,preview -o hp -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
 		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server."
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '-p, --preview  update to preview instead of current version'
 		exit
+		;;
+	--preview|-p)
+		version=preview
+		shift
 		;;
 	esac
 done
@@ -39,8 +47,10 @@ fi
 # Trim off $service before last @
 instance=${service##*@}
 
-# There might be more than one ZIP in ~mc
-minecraft_zip=$(find ~mc/bedrock-server-*.zip 2> /dev/null | xargs -0rd '\n' ls -t | head -n 1)
+zips_dir=~mc/bedrock_zips
+if [ -h "$zips_dir/$version" ]; then
+	minecraft_zip=$(basename "$(realpath "$zips_dir/$version")")
+fi
 if [ -z "$minecraft_zip" ]; then
 	>&2 echo 'No bedrock-server ZIP found in ~mc'
 	exit 1

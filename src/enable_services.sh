@@ -126,6 +126,17 @@ fi
 if [ -d ~mc/.mcbe_log ]; then
 	chown -R mc:nogroup ~mc/.mcbe_log
 fi
+# Move bedrock ZIPs
+zips_dir=~mc/bedrock_zips
+if [ ! -d "$zips_dir" ]; then
+	mkdir "$zips_dir"
+	chown mc:nogroup "$zips_dir"
+	for zip in ~mc/bedrock-server-*.zip; do
+		if [ -f "$zip" ]; then
+			mv "$zip" "$zips_dir/"
+		fi
+	done
+fi
 # Enable dependencies first
 for x in "${!enabled[@]}"; do
 	if [[ "${enabled[x]}" =~ ^mc@.+\.socket$|^mcbe@.+\.socket$ ]]; then

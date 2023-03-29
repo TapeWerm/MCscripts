@@ -6,10 +6,10 @@ send() {
 	if [ -f "$webhook_file" ]; then
 		local url
 		while read -r url; do
-			if echo "$url" | grep -Eq 'https://discord(app)?\.com'; then
+			if echo "$url" | grep -Eq '^https://discord(app)?\.com'; then
 				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" -sS "$url" &
 			# Rocket Chat can be hosted by any domain
-			elif echo "$url" | grep -q 'https://rocket\.'; then
+			elif echo "$url" | grep -q '^https://rocket\.'; then
 				curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" -sS "$url" &
 			fi
 		done < "$webhook_file"
