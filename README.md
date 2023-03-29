@@ -153,7 +153,7 @@ How to change mcbe@MCBE shutdown warning to 20 seconds:
 Other services you might want to edit:
 - [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur (check time zone with `date`)
 - [mcbe-rmbackup@MCBE.service](systemd/mcbe-rmbackup@.service) - How many backups to keep
-- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.sh](src/mcbe_getzip.sh) --no-clobber --both
+- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.sh](src/mcbe_getzip.sh) --no-clobber
 - [mcbe-autoupdate@MCBE.service](systemd/mcbe-autoupdate@.service) - [mcbe_autoupdate.sh](src/mcbe_autoupdate.sh) --preview
 
 How to restart mcbe@MCBE at 3 AM daily:
