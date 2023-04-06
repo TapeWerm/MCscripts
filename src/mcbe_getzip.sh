@@ -8,6 +8,7 @@ eula=false
 preview=false
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
 
+# Set $eula to true after eula_check
 eula_check() {
 	if [ "$eula" = false ]; then
 		echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
