@@ -21,7 +21,6 @@ eula_check() {
 			>&2 echo "$input != y"
 			exit 1
 		fi
-		eula=true
 	fi
 }
 
@@ -97,6 +96,7 @@ for version in "${versions[@]}"; do
 
 	if [ ! -f "$zips_dir/$current_ver" ]; then
 		eula_check
+		eula=true
 		curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -o "$zips_dir/$current_ver.part"
 		mv "$zips_dir/$current_ver.part" "$zips_dir/$current_ver"
 	fi
