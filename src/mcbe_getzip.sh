@@ -103,7 +103,7 @@ for version in "${versions[@]}"; do
 		mv "$zips_dir/$current_ver.part" "$zips_dir/$current_ver"
 	fi
 	if [ "$installed_ver" != "$current_ver" ]; then
-		ln -snf "$zips_dir/$current_ver" "$zips_dir/$version"
+		ln -sf "$zips_dir/$current_ver" "$zips_dir/$version"
 	fi
 done
 if [ "$clobber" = true ]; then
