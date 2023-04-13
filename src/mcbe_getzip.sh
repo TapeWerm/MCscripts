@@ -91,6 +91,7 @@ for version in "${versions[@]}"; do
 		;;
 	esac
 	current_ver=$(basename "$url")
+	# Symlink to current/preview zip
 	if [ -h "$zips_dir/$version" ]; then
 		installed_ver=$(basename "$(realpath "$zips_dir/$version")")
 	fi

@@ -85,7 +85,5 @@ for packs_dir in "$server_dir"/*_packs; do
 done
 
 rm -rf "$old_dir"
-trap '' SIGTERM
+trap 'mv "$new_dir" "$server_dir"; rm -rf "$old_dir"' EXIT
 mv "$server_dir" "$old_dir"
-mv "$new_dir" "$server_dir"
-rm -rf "$old_dir"
