@@ -64,7 +64,7 @@ try:
         shutil.copy2(file, pathlib.Path(NEW_DIR, file.name))
 
     for packs_dir in SERVER_DIR.glob("*_packs"):
-        packs_dir.mkdir(parents=True, exist_ok=True)
+        packs_dir.mkdir(exist_ok=True)
         for pack in packs_dir.iterdir():
             # Don't clobber 1st party packs
             if not pathlib.Path(NEW_DIR, packs_dir.name, pack.name).is_dir():
