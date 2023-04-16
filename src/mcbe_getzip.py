@@ -113,7 +113,8 @@ for version in VERSIONS:
             pathlib.Path(ZIPS_DIR, CURRENT_VER)
         )
     if INSTALLED_VER != CURRENT_VER:
-        pathlib.Path(ZIPS_DIR, version).unlink(missing_ok=True)
+        if pathlib.Path(ZIPS_DIR, version).is_symlink():
+            pathlib.Path(ZIPS_DIR, version).unlink()
         pathlib.Path(ZIPS_DIR, version).symlink_to(pathlib.Path(ZIPS_DIR, CURRENT_VER))
 if not ARGS.no_clobber:
     for zipfile in ZIPS_DIR.glob("bedrock-server-*.zip"):

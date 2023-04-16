@@ -38,7 +38,7 @@ new_dir=$server_dir.new
 old_dir=$server_dir.old
 
 minecraft_zip=$(realpath -- "$2")
-if [ -n "$(find "$server_dir" -wholename "$minecraft_zip")" ]; then
+if [ -n "$(find "$server_dir" -path "$minecraft_zip")" ]; then
 	>&2 echo MINECRAFT_ZIP cannot be in SERVER_DIR
 	exit 1
 fi
