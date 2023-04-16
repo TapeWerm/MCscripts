@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import time
+import zipfile
 
 import docker
 import systemd.journal
@@ -161,7 +162,11 @@ try:
             DIR.mkdir(parents=True, exist_ok=True)
             shutil.copy2(pathlib.Path(WORLDS_DIR, FILE), DIR)
             os.truncate(FILE, LENGTH)
-        subprocess.run(["zip", "-rq", BACKUP_ZIP, "--", WORLD], check=True)
+        with zipfile.ZipFile(
+            BACKUP_ZIP, "w", compression=zipfile.ZIP_DEFLATED
+        ) as BACKUP_ZIPFILE:
+            for world_file in pathlib.Path(WORLD).glob("**/*"):
+                BACKUP_ZIPFILE.write(world_file)
     except:
         BACKUP_ZIP.unlink()
         raise
