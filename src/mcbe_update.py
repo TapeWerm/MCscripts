@@ -41,9 +41,9 @@ OLD_DIR = SERVER_DIR.with_name(SERVER_DIR.name + ".old")
 MINECRAFT_ZIP = ARGS.MINECRAFT_ZIP.resolve()
 if SERVER_DIR in MINECRAFT_ZIP.parents:
     sys.exit("MINECRAFT_ZIP cannot be in SERVER_DIR")
-MINECRAFT_ZIPFILE = zipfile.ZipFile(MINECRAFT_ZIP, "r")
-if MINECRAFT_ZIPFILE.testzip():
-    sys.exit("MINECRAFT_ZIP test failed")
+with zipfile.ZipFile(MINECRAFT_ZIP, "r") as MINECRAFT_ZIPFILE:
+    if MINECRAFT_ZIPFILE.testzip():
+        sys.exit("MINECRAFT_ZIP test failed")
 
 print("Enter Y if you backed up and stopped the server to update")
 if input().lower() != "y":
@@ -51,7 +51,8 @@ if input().lower() != "y":
 
 shutil.rmtree(NEW_DIR, ignore_errors=True)
 try:
-    MINECRAFT_ZIPFILE.extractall(NEW_DIR)
+    with zipfile.ZipFile(MINECRAFT_ZIP, "r") as MINECRAFT_ZIPFILE:
+        MINECRAFT_ZIPFILE.extractall(NEW_DIR)
 
     pathlib.Path(NEW_DIR, "version").write_text(
         MINECRAFT_ZIP.stem + "\n", encoding="utf-8"

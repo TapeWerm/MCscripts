@@ -59,8 +59,7 @@ runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
 zips_dir=~mc/bedrock_zips
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
-fi
-if [ -z "$minecraft_zip" ]; then
+else
 	>&2 echo 'No bedrock-server ZIP found in ~mc'
 	exit 1
 fi
