@@ -79,5 +79,5 @@ try:
         shutil.rmtree(OLD_DIR, ignore_errors=True)
 except:
     shutil.rmtree(NEW_DIR, ignore_errors=True)
-    pathlib.Path(SERVER_DIR, "version").write_text("fail" + "\n", encoding="utf-8")
+    pathlib.Path(SERVER_DIR, "version").write_text("fail\n", encoding="utf-8")
     raise
