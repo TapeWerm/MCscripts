@@ -53,7 +53,8 @@ elif [ "$#" -gt 1 ]; then
 	exit 1
 fi
 
-service=$1
+# Trim off $1 after last .service
+service=${1%.service}
 if [ -z "$MAINPID" ]; then
 	MAINPID=$(systemctl show -p MainPID --value -- "$service")
 fi

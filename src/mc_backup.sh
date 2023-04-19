@@ -65,7 +65,8 @@ if [ ! -d "$server_dir/$world" ]; then
 	exit 1
 fi
 
-service=$2
+# Trim off $2 after last .service
+service=${2%.service}
 if ! systemctl is-active --quiet -- "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1

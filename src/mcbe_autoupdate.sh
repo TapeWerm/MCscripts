@@ -39,7 +39,8 @@ server_dir=$(realpath -- "$1")
 # cat fails if there's no file $server_dir/version
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
 
-service=$2
+# Trim off $2 after last .service
+service=${2%.service}
 if ! systemctl is-active --quiet -- "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1

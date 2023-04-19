@@ -42,7 +42,7 @@ if pathlib.Path(SERVER_DIR, "version").is_file():
 else:
     INSTALLED_VER = None
 
-SERVICE = ARGS.SERVICE
+SERVICE = ARGS.SERVICE.removesuffix(".service")
 if subprocess.run(
     ["systemctl", "is-active", "--quiet", "--", SERVICE], check=False
 ).returncode:

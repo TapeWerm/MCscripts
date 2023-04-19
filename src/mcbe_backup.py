@@ -102,7 +102,7 @@ if not pathlib.Path(WORLDS_DIR, WORLD).is_dir():
     )
 TEMP_DIR = pathlib.Path("/tmp/mcbe_backup", SERVER_DIR.name)
 
-SERVICE = ARGS.SERVICE
+SERVICE = ARGS.SERVICE.removesuffix(".service")
 if ARGS.docker:
     CLIENT = docker.from_env()
     CONTAINER = CLIENT.containers.get("SERVICE")

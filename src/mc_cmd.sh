@@ -23,7 +23,8 @@ if [ "$#" -lt 2 ]; then
 	exit 1
 fi
 
-service=$1
+# Trim off $1 after last .service
+service=${1%.service}
 shift
 if ! systemctl is-active --quiet -- "$service"; then
 	>&2 echo "Service $service not active"
