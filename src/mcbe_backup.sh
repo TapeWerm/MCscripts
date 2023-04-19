@@ -84,14 +84,15 @@ if [ ! -d "$worlds_dir/$world" ]; then
 fi
 temp_dir=/tmp/mcbe_backup/$(basename "$server_dir")
 
-# Trim off $2 after last .service
-service=${2%.service}
 if [ "$docker" = true ]; then
+	service=$2
 	if ! docker ps --format '{{.Names}}' | grep -q "^$service$"; then
 		>&2 echo "Container $service not running"
 		exit 1
 	fi
 else
+	# Trim off $2 after last .service
+	service=${2%.service}
 	if ! systemctl is-active --quiet -- "$service"; then
 		>&2 echo "Service $service not active"
 		exit 1

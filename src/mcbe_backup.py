@@ -102,13 +102,14 @@ if not pathlib.Path(WORLDS_DIR, WORLD).is_dir():
     )
 TEMP_DIR = pathlib.Path("/tmp/mcbe_backup", SERVER_DIR.name)
 
-SERVICE = ARGS.SERVICE.removesuffix(".service")
 if ARGS.docker:
+    SERVICE = ARGS.SERVICE
     CLIENT = docker.from_env()
     CONTAINER = CLIENT.containers.get("SERVICE")
     if CONTAINER.status != "running":
         sys.exit(f"Container {SERVICE} not running")
 else:
+    SERVICE = ARGS.SERVICE.removesuffix(".service")
     if subprocess.run(
         ["systemctl", "is-active", "--quiet", "--", SERVICE], check=False
     ).returncode:
