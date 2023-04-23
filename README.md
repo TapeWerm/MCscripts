@@ -5,7 +5,7 @@ Minecraft Java and Bedrock Dedicated Server systemd units and scripts for backup
 
 @@@ **Compatible with Ubuntu** @@@
 
-Ubuntu on Windows 10 does not support systemd.
+Ubuntu on Windows Subsystem for Linux does not support systemctl poweroff.
 Try [Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server).
 You can run [mc_getjar.sh](src/mc_getjar.sh), [mcbe_getzip.sh](src/mcbe_getzip.sh), and [mcbe_update.sh](src/mcbe_update.sh) without enabling the systemd units, but not others.
 No automatic updates nor chat bots for Java Edition.
