@@ -47,7 +47,7 @@ if subprocess.run(
     ["systemctl", "is-active", "--quiet", "--", SERVICE], check=False
 ).returncode:
     sys.exit(f"Service {SERVICE} not active")
-# Trim off $service before last @
+# Trim off SERVICE before last @
 INSTANCE = SERVICE.split("@")[-1]
 
 ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
