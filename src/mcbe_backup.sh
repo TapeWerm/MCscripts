@@ -141,15 +141,6 @@ trap 'rm -rf -- "$world"; server_do save resume > /dev/null' EXIT
 echo "$files" | while IFS='' read -r line; do
 	# Trim off $line after last :
 	file=${line%:*}
-	# https://bugs.mojang.com/browse/BDS-1085
-	# save query no longer gives path
-	if [ ! -f "$worlds_dir/$file" ]; then
-		# Trim off $line before first $world/
-		file=${file#"$world"/}
-		# There might be more than one $file in $worlds_dir/$world
-		file=$(find "$worlds_dir/$world" -name "$file" | head -n 1)
-		file=${file#"$worlds_dir"/}
-	fi
 	dir=$(dirname -- "$file")
 	# Trim off $line before last :
 	length=${line##*:}
