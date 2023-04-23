@@ -74,15 +74,15 @@ ZIPS_DIR.mkdir(parents=True, exist_ok=True)
 
 for version in VERSIONS:
     if version == "current":
-        for link in urls:
-            url = re.match(r"^https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip$", link)
+        for url in urls:
+            url = re.match(r"^https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip$", url)
             if url:
                 url = url.string
                 break
     elif version == "preview":
-        for link in urls:
+        for url in urls:
             url = re.match(
-                r"^https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip$", link
+                r"^https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip$", url
             )
             if url:
                 url = url.string
