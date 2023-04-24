@@ -31,7 +31,7 @@ def send(msg: str):
                 )
                 post_res.raise_for_status()
                 continue
-			# Rocket Chat can be hosted by any domain
+            # Rocket Chat can be hosted by any domain
             match = re.match(r"^https://rocket\.", url)
             if match:
                 post_res = requests.post(
