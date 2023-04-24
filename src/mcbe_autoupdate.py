@@ -16,15 +16,15 @@ PARSER = argparse.ArgumentParser(
         update, and restart service of Minecraft Bedrock Edition server."
 )
 PARSER.add_argument(
+    "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
+)
+PARSER.add_argument("SERVICE", type=str, help="systemd service")
+PARSER.add_argument(
     "-p",
     "--preview",
     action="store_true",
     help="update to preview instead of current version",
 )
-PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
-)
-PARSER.add_argument("SERVICE", type=str, help="systemd service")
 ARGS = PARSER.parse_args()
 
 if ARGS.preview:
