@@ -8,7 +8,7 @@ server_do() {
 
 countdown() {
 	local warning
-	warning="Server stopping in $*"
+	warning="Server stopping in $1 seconds"
 	server_do say "$warning"
 	echo "$warning"
 }
@@ -68,12 +68,12 @@ if [ -z "$seconds" ]; then
 fi
 
 if [ "$seconds" -gt 3 ]; then
-	countdown "$seconds seconds"
+	countdown "$seconds"
 	sleep $((seconds - 3))
 fi
 for x in {3..1}; do
 	if [ "$seconds" -ge "$x" ]; then
-		countdown "$x seconds"
+		countdown "$x"
 		sleep 1
 	fi
 done
