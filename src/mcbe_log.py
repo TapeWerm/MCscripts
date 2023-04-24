@@ -51,7 +51,9 @@ PARSER = argparse.ArgumentParser(
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
 ARGS = PARSER.parse_args()
 
-SERVICE = ARGS.SERVICE.removesuffix(".service")
+SERVICE = ARGS.SERVICE
+if SERVICE.endswith(".service"):
+    SERVICE = SERVICE[: -len(".service")]
 if subprocess.run(
     ["systemctl", "is-active", "--quiet", "--", SERVICE], check=False
 ).returncode:
@@ -85,10 +87,10 @@ try:
                 send(f"{player} disconnected from {INSTANCE}")
             elif "Kicked" in line:
                 player = re.sub(r".*Kicked (.*) from the game.*", r"\1", line)
+                reason = re.sub(r".*from the game: '(.*)'.*", r"\1", line)
                 # Trim off leading space from REASON
-                reason = re.sub(r".*from the game: '(.*)'.*", r"\1", line).removeprefix(
-                    " "
-                )
+                if reason.startswith(" "):
+                    reason = reason[len(" ") :]
                 send(f"{player} was kicked from {INSTANCE} because {reason}")
 finally:
     send(f"Server {INSTANCE} stopping")

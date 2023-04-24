@@ -109,7 +109,9 @@ if ARGS.docker:
     if CONTAINER.status != "running":
         sys.exit(f"Container {SERVICE} not running")
 else:
-    SERVICE = ARGS.SERVICE.removesuffix(".service")
+    SERVICE = ARGS.SERVICE
+    if SERVICE.endswith(".service"):
+        SERVICE = SERVICE[: -len(".service")]
     if subprocess.run(
         ["systemctl", "is-active", "--quiet", "--", SERVICE], check=False
     ).returncode:
