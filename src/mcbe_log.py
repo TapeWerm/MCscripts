@@ -88,7 +88,7 @@ try:
             elif "Kicked" in line:
                 player = re.sub(r".*Kicked (.*) from the game.*", r"\1", line)
                 reason = re.sub(r".*from the game: '(.*)'.*", r"\1", line)
-                # Trim off leading space from REASON
+                # Trim off leading space from reason
                 if reason.startswith(" "):
                     reason = reason[len(" ") :]
                 send(f"{player} was kicked from {INSTANCE} because {reason}")
