@@ -8,8 +8,6 @@ Requisite=mcbe@%i.service
 ExecStartPre=/bin/bash -c 'until ping -c 1 google.com &> /dev/null; do sleep 1; done'
 ExecStart=/opt/MCscripts/mcbe_log.sh mcbe@%i
 KillMode=mixed
-# Python 3 doesn't handle SIGTERM
-# KillSignal=SIGINT
 Restart=always
 SupplementaryGroups=systemd-journal
 Type=simple

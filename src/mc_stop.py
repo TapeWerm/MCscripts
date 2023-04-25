@@ -25,7 +25,7 @@ def countdown(seconds: int):
     """
     warning = f"Server stopping in {seconds} seconds"
     server_do(f"say {warning}")
-    print(warning)
+    print(warning, flush=True)
 
 
 PARSER = argparse.ArgumentParser(

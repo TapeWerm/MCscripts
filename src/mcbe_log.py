@@ -9,6 +9,7 @@ import os
 import pathlib
 import re
 import select
+import signal
 import subprocess
 import sys
 
@@ -72,6 +73,7 @@ journal.get_previous()
 journal.process()
 poll = select.poll()
 poll.register(journal, journal.get_events())
+signal.signal(signal.SIGTERM, lambda signalnum, currentframe: sys.exit())
 try:
     # Follow log for unit SERVICE
     while poll.poll():
@@ -79,7 +81,8 @@ try:
         for entry in journal:
             line = entry["MESSAGE"]
             if "Player connected" in line:
-                # Gamertags can have spaces as long as they're not leading/trailing/contiguous
+                # Gamertags can have spaces as long as they're not leading/trailing/
+                # contiguous
                 player = re.sub(r".*Player connected: (.*),.*", r"\1", line)
                 send(f"{player} connected to {INSTANCE}")
             elif "Player disconnected" in line:
