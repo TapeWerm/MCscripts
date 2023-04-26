@@ -9,7 +9,7 @@ syntax='Usage: disable_services.sh'
 scripts=(mc_backup.sh mc_cmd.sh mc_color.sed mc_getjar.sh mc_restore.sh mc_setup.sh mc_stop.sh)
 scripts+=(mc_stop.py)
 scripts+=(mcbe_autoupdate.sh mcbe_backup.sh mcbe_getzip.sh mcbe_log.sh mcbe_restore.sh mcbe_setup.sh mcbe_update.sh)
-scripts+=(mcbe_autoupdate.py mcbe_backup.py mcbe_getzip.py mcbe_log.py mcbe_update.py)
+scripts+=(mcbe_autoupdate.py mcbe_backup.py mcbe_getzip.py mcbe_log.py mcbe_setup.py mcbe_update.py)
 scripts+=(disable_services.sh enable_services.sh install.sh move_backups.sh move_servers.sh)
 # Removed scripts
 scripts+=(MCbackup.sh MCcolor.sed MCgetJAR.sh MCrunCmd.sh MCstop.sh)
