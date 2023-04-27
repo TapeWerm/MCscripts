@@ -6,7 +6,6 @@ Ubuntu and vice versa if you convert line endings.
 """
 
 import argparse
-import itertools
 import pathlib
 import shutil
 import zipfile
@@ -59,9 +58,7 @@ try:
     )
     shutil.copytree(pathlib.Path(SERVER_DIR, "worlds"), pathlib.Path(NEW_DIR, "worlds"))
 
-    for file in itertools.chain(
-        SERVER_DIR.glob("*.json"), SERVER_DIR.glob("*.properties")
-    ):
+    for file in list(SERVER_DIR.glob("*.json")) + list(SERVER_DIR.glob("*.properties")):
         shutil.copy2(file, pathlib.Path(NEW_DIR, file.name))
 
     for packs_dir in SERVER_DIR.glob("*_packs"):

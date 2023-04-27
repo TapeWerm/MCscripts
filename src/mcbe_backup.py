@@ -168,7 +168,7 @@ try:
         with zipfile.ZipFile(
             BACKUP_ZIP, "w", compression=zipfile.ZIP_DEFLATED
         ) as BACKUP_ZIPFILE:
-            for world_file in pathlib.Path(WORLD).glob("**/*"):
+            for world_file in [pathlib.Path(WORLD)] + list(pathlib.Path(WORLD).rglob("*")):
                 BACKUP_ZIPFILE.write(world_file)
     except:
         BACKUP_ZIP.unlink()

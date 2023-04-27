@@ -70,9 +70,7 @@ if [ -n "$import" ]; then
 	# Convert DOS line endings to UNIX line endings
 	for file in "$server_dir"/*.{json,properties}; do
 		if [ -f "$file" ]; then
-			if grep -q $'\r'$ "$file"; then
-				sed -i s/$'\r'$// "$file"
-			fi
+			sed -i s/$'\r'$// "$file"
 		fi
 	done
 	echo java -jar server.jar nogui > "$server_dir/start.bat"
