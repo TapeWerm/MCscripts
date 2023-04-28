@@ -43,6 +43,7 @@ else:
     INSTALLED_VER = None
 
 SERVICE = ARGS.SERVICE
+# Trim off SERVICE after last .service
 if SERVICE.endswith(".service"):
     SERVICE = SERVICE[: -len(".service")]
 if subprocess.run(
@@ -66,6 +67,7 @@ elif INSTALLED_VER != CURRENT_VER:
         subprocess.run(["systemctl", "start", f"mcbe-backup@{INSTANCE}"], check=True)
         try:
             subprocess.run(["systemctl", "stop", f"{SERVICE}.socket"], check=True)
+            # mcbe_update.py reads y asking if you stopped the server
             subprocess.run(
                 [
                     "runuser",

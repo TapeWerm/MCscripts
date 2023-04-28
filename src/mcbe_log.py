@@ -53,6 +53,7 @@ PARSER.add_argument("SERVICE", type=str, help="systemd service")
 ARGS = PARSER.parse_args()
 
 SERVICE = ARGS.SERVICE
+# Trim off SERVICE after last .service
 if SERVICE.endswith(".service"):
     SERVICE = SERVICE[: -len(".service")]
 if subprocess.run(
@@ -92,7 +93,7 @@ try:
                 reason = re.sub(r".*from the game: '(.*)'.*", r"\1", line)
                 # Trim off leading space from reason
                 if reason.startswith(" "):
-                    reason = reason[len(" ") :]
+                    reason = reason[1:]
                 send(f"{player} was kicked from {INSTANCE} because {reason}")
 finally:
     send(f"Server {INSTANCE} stopping")

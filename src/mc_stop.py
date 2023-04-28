@@ -44,6 +44,7 @@ PARSER.add_argument(
 ARGS = PARSER.parse_args()
 
 SERVICE = ARGS.SERVICE
+# Trim off SERVICE after last .service
 if SERVICE.endswith(".service"):
     SERVICE = SERVICE[: -len(".service")]
 if "MAINPID" in os.environ:

@@ -110,6 +110,7 @@ if ARGS.docker:
         sys.exit(f"Container {SERVICE} not running")
 else:
     SERVICE = ARGS.SERVICE
+    # Trim off SERVICE after last .service
     if SERVICE.endswith(".service"):
         SERVICE = SERVICE[: -len(".service")]
     if subprocess.run(
