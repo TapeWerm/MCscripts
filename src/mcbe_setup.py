@@ -54,7 +54,7 @@ else:
     VERSION = "current"
 
 subprocess.run(
-    ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mcbe_getzip.sh"],
+    ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mcbe_getzip.py"],
     check=True,
 )
 ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
