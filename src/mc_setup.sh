@@ -13,7 +13,7 @@ while [ "$1"  != -- ]; do
 		echo 'Make new Minecraft Java Edition server in ~mc/java/INSTANCE or import SERVER_DIR.'
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-i, --import=SERVER_DIR  server directory to import'
+		echo '-i, --import=SERVER_DIR  minecraft java edition server directory to import'
 		exit
 		;;
 	--import|-i)

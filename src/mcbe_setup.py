@@ -23,7 +23,7 @@ PARSER.add_argument(
     type=pathlib.Path,
     dest="import_dir",
     metavar="SERVER_DIR",
-    help="server directory to import",
+    help="minecraft bedrock edition server directory to import",
 )
 PARSER.add_argument(
     "-p",

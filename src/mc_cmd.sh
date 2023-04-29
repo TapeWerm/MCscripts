@@ -31,13 +31,13 @@ if ! systemctl is-active --quiet -- "$service"; then
 	exit 1
 fi
 
-timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+cmd_time=$(date '+%Y-%m-%d %H:%M:%S')
 echo "$*" > "/run/$service"
 sleep 1
-# Output of $service since $timestamp with no metadata
-buffer=$(journalctl -u "$service" -S "$timestamp" -o cat)
-if [ -z "$buffer" ]; then
+# Output of $service since $cmd_time with no metadata
+output=$(journalctl -u "$service" -S "$cmd_time" -o cat)
+if [ -z "$output" ]; then
 	echo "No output from service after 1 second"
 	exit
 fi
-echo "$buffer" | /opt/MCscripts/mc_color.sed
+echo "$output" | /opt/MCscripts/mc_color.sed

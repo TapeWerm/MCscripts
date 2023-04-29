@@ -14,7 +14,7 @@ while [ "$1"  != -- ]; do
 		echo 'Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE or import SERVER_DIR.'
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-i, --import=SERVER_DIR  server directory to import'
+		echo '-i, --import=SERVER_DIR  minecraft bedrock edition server directory to import'
 		echo '-p, --preview            use preview instead of current version'
 		exit
 		;;
