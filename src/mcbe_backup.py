@@ -173,7 +173,8 @@ try:
             ):
                 BACKUP_ZIPFILE.write(world_file)
     except:
-        BACKUP_ZIP.unlink()
+        if BACKUP_ZIP.is_file():
+            BACKUP_ZIP.unlink()
         raise
     finally:
         shutil.rmtree(WORLD, ignore_errors=True)
