@@ -42,7 +42,7 @@ if SERVER_DIR in MINECRAFT_ZIP.parents:
     sys.exit("MINECRAFT_ZIP cannot be in SERVER_DIR")
 with zipfile.ZipFile(MINECRAFT_ZIP, "r") as MINECRAFT_ZIPFILE:
     if MINECRAFT_ZIPFILE.testzip():
-        sys.exit("MINECRAFT_ZIP test failed")
+        sys.exit("MINECRAFT_ZIPFILE test failed")
 
 print("Enter Y if you backed up and stopped the server to update")
 if input().lower() != "y":

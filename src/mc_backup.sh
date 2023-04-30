@@ -88,7 +88,7 @@ trap 'server_do save-on > /dev/null' EXIT
 # Pause and save the server
 query_time=$(server_do save-all flush)
 timeout=$(date -d '1 minute' +%s)
-# Minecraft says [HH:MM:SS] [Server thread/INFO]: Saved the game
+# Minecraft Java Edition says [HH:MM:SS] [Server thread/INFO]: Saved the game
 until echo "$query" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
 		>&2 echo save query timeout

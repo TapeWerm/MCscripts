@@ -34,7 +34,7 @@ WORLDS_DIR = pathlib.Path(SERVER_DIR, "worlds")
 BACKUP = ARGS.BACKUP.resolve()
 with zipfile.ZipFile(BACKUP, "r") as BACKUP_ZIPFILE:
     if BACKUP_ZIPFILE.testzip():
-        sys.exit("MINECRAFT_ZIP test failed")
+        sys.exit("BACKUP_ZIPFILE test failed")
 
 print("Enter Y if you stopped the server to restore")
 if input().lower() != "y":

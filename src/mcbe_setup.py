@@ -104,7 +104,7 @@ if ARGS.import_dir:
 else:
     with zipfile.ZipFile(MINECRAFT_ZIP, "r") as MINECRAFT_ZIPFILE:
         if MINECRAFT_ZIPFILE.testzip():
-            sys.exit("MINECRAFT_ZIP test failed")
+            sys.exit("MINECRAFT_ZIPFILE test failed")
         try:
             MINECRAFT_ZIPFILE.extractall(SERVER_DIR)
             pathlib.Path(SERVER_DIR, "version").write_text(

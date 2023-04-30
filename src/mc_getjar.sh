@@ -39,4 +39,5 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -O
+curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -o server.jar.part
+mv server.jar.part server.jar
