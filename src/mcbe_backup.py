@@ -102,14 +102,13 @@ if not pathlib.Path(WORLDS_DIR, WORLD).is_dir():
     )
 TEMP_DIR = pathlib.Path("/tmp/mcbe_backup", SERVER_DIR.name)
 
+SERVICE = ARGS.SERVICE
 if ARGS.docker:
-    SERVICE = ARGS.SERVICE
     CLIENT = docker.from_env()
     CONTAINER = CLIENT.containers.get("SERVICE")
     if CONTAINER.status != "running":
         sys.exit(f"Container {SERVICE} not running")
 else:
-    SERVICE = ARGS.SERVICE
     # Trim off SERVICE after last .service
     if SERVICE.endswith(".service"):
         SERVICE = SERVICE[: -len(".service")]
@@ -169,7 +168,9 @@ try:
         with zipfile.ZipFile(
             BACKUP_ZIP, "w", compression=zipfile.ZIP_DEFLATED
         ) as BACKUP_ZIPFILE:
-            for world_file in [pathlib.Path(WORLD)] + list(pathlib.Path(WORLD).rglob("*")):
+            for world_file in [pathlib.Path(WORLD)] + list(
+                pathlib.Path(WORLD).rglob("*")
+            ):
                 BACKUP_ZIPFILE.write(world_file)
     except:
         BACKUP_ZIP.unlink()
