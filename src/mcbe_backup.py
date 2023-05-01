@@ -105,7 +105,7 @@ TEMP_DIR = pathlib.Path("/tmp/mcbe_backup", SERVER_DIR.name)
 SERVICE = ARGS.SERVICE
 if ARGS.docker:
     CLIENT = docker.from_env()
-    CONTAINER = CLIENT.containers.get("SERVICE")
+    CONTAINER = CLIENT.containers.get(SERVICE)
     if CONTAINER.status != "running":
         sys.exit(f"Container {SERVICE} not running")
 else:
