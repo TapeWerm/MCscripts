@@ -107,7 +107,7 @@ try:
         QUERY = server_read(query_time)
         # Filter out chat
         QUERY = os.linesep.join(
-            [x for x in QUERY.split(os.linesep) if not re.findall("<.+>", x)]
+            [line for line in QUERY.split(os.linesep) if not re.findall("<.+>", line)]
         )
 
     # zip restores path of directory given to it (WORLD), not just the directory itself
@@ -121,7 +121,8 @@ try:
             ):
                 backup_zipfile.write(world_file)
     except:
-        BACKUP_ZIP.unlink()
+        if BACKUP_ZIP.is_file():
+            BACKUP_ZIP.unlink()
         raise
 finally:
     server_do("save-on")
