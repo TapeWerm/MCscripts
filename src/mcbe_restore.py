@@ -32,17 +32,17 @@ with pathlib.Path(SERVER_DIR, "server.properties").open(
 WORLDS_DIR = pathlib.Path(SERVER_DIR, "worlds")
 
 BACKUP = ARGS.BACKUP.resolve()
-with zipfile.ZipFile(BACKUP, "r") as BACKUP_ZIPFILE:
-    if BACKUP_ZIPFILE.testzip():
-        sys.exit("BACKUP_ZIPFILE test failed")
+with zipfile.ZipFile(BACKUP, "r") as backup_zipfile:
+    if backup_zipfile.testzip():
+        sys.exit("backup_zipfile test failed")
 
 print("Enter Y if you stopped the server to restore")
 if input().lower() != "y":
     sys.exit("input != y")
 
 shutil.rmtree(pathlib.Path(WORLDS_DIR, WORLD), ignore_errors=True)
-with zipfile.ZipFile(BACKUP, "r") as BACKUP_ZIPFILE:
-    BACKUP_ZIPFILE.extractall(WORLDS_DIR)
+with zipfile.ZipFile(BACKUP, "r") as backup_zipfile:
+    backup_zipfile.extractall(WORLDS_DIR)
 for file in [pathlib.Path(WORLDS_DIR, WORLD)] + list(
     pathlib.Path(WORLDS_DIR, WORLD).rglob("*")
 ):

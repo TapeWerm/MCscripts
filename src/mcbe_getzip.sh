@@ -72,11 +72,12 @@ else
 	versions=(current)
 fi
 
+zips_dir=~/bedrock_zips
+mkdir -p "$zips_dir"
+
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
 urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
-zips_dir=~/bedrock_zips
-mkdir -p "$zips_dir"
 
 for version in "${versions[@]}"; do
 	case $version in

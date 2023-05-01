@@ -58,7 +58,7 @@ def server_read(cmd_time: datetime.datetime) -> str:
     journal = systemd.journal.Reader()
     journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
     journal.seek_realtime(cmd_time)
-    return os.linesep.join([x["MESSAGE"] for x in journal])
+    return os.linesep.join([entry["MESSAGE"] for entry in journal])
 
 
 PARSER = argparse.ArgumentParser(
@@ -118,19 +118,19 @@ else:
         sys.exit(f"Service {SERVICE} not active")
 
 if ARGS.backup_dir:
-    backup_dir = ARGS.backup_dir.resolve()
+    BACKUP_DIR = ARGS.backup_dir.resolve()
 else:
-    backup_dir = pathlib.Path.home()
-backup_dir = pathlib.Path(
-    backup_dir,
+    BACKUP_DIR = pathlib.Path.home()
+BACKUP_DIR = pathlib.Path(
+    BACKUP_DIR,
     "bedrock_backups",
     SERVER_DIR.name,
     WORLD,
     BACKUP_TIME.strftime("%Y"),
     BACKUP_TIME.strftime("%m"),
 )
-backup_dir.mkdir(parents=True, exist_ok=True)
-BACKUP_ZIP = pathlib.Path(backup_dir, BACKUP_TIME.strftime("%d_%H-%M.zip"))
+BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+BACKUP_ZIP = pathlib.Path(BACKUP_DIR, BACKUP_TIME.strftime("%d_%H-%M.zip"))
 
 # Prepare backup
 server_do("save hold")
@@ -138,40 +138,40 @@ try:
     # Wait 1 second for Minecraft Bedrock Edition command to avoid infinite loop
     # Only unplayably slow servers take more than 1 second to run a command
     time.sleep(1)
-    TIMEOUT = datetime.datetime.now().astimezone() + datetime.timedelta(minutes=1)
+    timeout = datetime.datetime.now().astimezone() + datetime.timedelta(minutes=1)
     QUERY = ""
     # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
     while "Data saved" not in QUERY:
-        if datetime.datetime.now().astimezone() >= TIMEOUT:
+        if datetime.datetime.now().astimezone() >= timeout:
             sys.exit("save query timeout")
         query_time = server_do("save query")
         QUERY = server_read(query_time)
     # {WORLD}not :...:#...
-    # Minecraft Bedrock Edition says FILE:BYTES, FILE:BYTES, ...
+    # Minecraft Bedrock Edition says file:bytes, file:bytes, ...
     # journald LineMax splits lines so delete newlines
-    FILES = re.findall(f"{WORLD}[^:]+:[0-9]+", QUERY.replace(os.linesep, ""))
+    files = re.findall(f"{WORLD}[^:]+:[0-9]+", QUERY.replace(os.linesep, ""))
 
     TEMP_DIR.mkdir(parents=True, exist_ok=True)
     # zip restores path of directory given to it (WORLD), not just the directory itself
     os.chdir(TEMP_DIR)
     shutil.rmtree(WORLD, ignore_errors=True)
     try:
-        for line in FILES:
+        for line in files:
             # Trim off line after last :
-            FILE = pathlib.Path(":".join(line.split(":")[:-1]))
-            DIR = FILE.parent
+            file = pathlib.Path(":".join(line.split(":")[:-1]))
+            directory = file.parent
             # Trim off line before last :
-            LENGTH = int(line.split(":")[-1])
-            DIR.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(pathlib.Path(WORLDS_DIR, FILE), DIR)
-            os.truncate(FILE, LENGTH)
+            length = int(line.split(":")[-1])
+            directory.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(pathlib.Path(WORLDS_DIR, file), directory)
+            os.truncate(file, length)
         with zipfile.ZipFile(
             BACKUP_ZIP, "w", compression=zipfile.ZIP_DEFLATED
-        ) as BACKUP_ZIPFILE:
+        ) as backup_zipfile:
             for world_file in [pathlib.Path(WORLD)] + list(
                 pathlib.Path(WORLD).rglob("*")
             ):
-                BACKUP_ZIPFILE.write(world_file)
+                backup_zipfile.write(world_file)
     except:
         if BACKUP_ZIP.is_file():
             BACKUP_ZIP.unlink()

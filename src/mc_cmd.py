@@ -36,15 +36,15 @@ if subprocess.run(
 ).returncode:
     sys.exit(f"Service {SERVICE} not active")
 
-CMD_TIME = datetime.datetime.now().astimezone()
+cmd_time = datetime.datetime.now().astimezone()
 pathlib.Path("/run", SERVICE).write_text(
     " ".join(ARGS.COMMAND) + "\n", encoding="utf-8"
 )
 time.sleep(1)
-JOURNAL = systemd.journal.Reader()
-JOURNAL.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
-JOURNAL.seek_realtime(CMD_TIME)
-OUTPUT = os.linesep.join([x["MESSAGE"] for x in JOURNAL])
+journal = systemd.journal.Reader()
+journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
+journal.seek_realtime(cmd_time)
+OUTPUT = os.linesep.join([entry["MESSAGE"] for entry in journal])
 if not OUTPUT:
     print("No output from service after 1 second")
     sys.exit()

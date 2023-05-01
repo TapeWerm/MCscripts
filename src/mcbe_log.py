@@ -67,18 +67,18 @@ WEBHOOK_FILE = pathlib.Path(pathlib.Path.home(), ".mcbe_log", f"{INSTANCE}_webho
 WEBHOOK_FILE.chmod(0o600)
 
 send(f"Server {INSTANCE} starting")
-JOURNAL = systemd.journal.Reader()
-JOURNAL.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
-JOURNAL.seek_tail()
-JOURNAL.get_previous()
-POLL = select.poll()
-POLL.register(JOURNAL, JOURNAL.get_events())
+journal = systemd.journal.Reader()
+journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
+journal.seek_tail()
+journal.get_previous()
+poll = select.poll()
+poll.register(journal, journal.get_events())
 signal.signal(signal.SIGTERM, lambda signalnum, currentframe: sys.exit())
 try:
     # Follow log for unit SERVICE
-    while POLL.poll():
-        JOURNAL.process()
-        for entry in JOURNAL:
+    while poll.poll():
+        journal.process()
+        for entry in journal:
             line = entry["MESSAGE"]
             if "Player connected" in line:
                 # Gamertags can have spaces as long as they're not leading/trailing/

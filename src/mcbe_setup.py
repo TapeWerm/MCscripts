@@ -102,11 +102,11 @@ if ARGS.import_dir:
         raise
     shutil.rmtree(IMPORT_DIR)
 else:
-    with zipfile.ZipFile(MINECRAFT_ZIP, "r") as MINECRAFT_ZIPFILE:
-        if MINECRAFT_ZIPFILE.testzip():
-            sys.exit("MINECRAFT_ZIPFILE test failed")
+    with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
+        if minecraft_zipfile.testzip():
+            sys.exit("minecraft_zipfile test failed")
         try:
-            MINECRAFT_ZIPFILE.extractall(SERVER_DIR)
+            minecraft_zipfile.extractall(SERVER_DIR)
             pathlib.Path(SERVER_DIR, "version").write_text(
                 CURRENT_VER + "\n", encoding="utf-8"
             )

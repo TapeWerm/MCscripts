@@ -57,6 +57,9 @@ elif ARGS.preview:
 else:
     VERSIONS = ("current",)
 
+ZIPS_DIR = pathlib.Path(pathlib.Path.home(), "bedrock_zips")
+ZIPS_DIR.mkdir(parents=True, exist_ok=True)
+
 webpage_res = requests.get(
     "https://www.minecraft.net/en-us/download/server/bedrock",
     headers={
@@ -69,8 +72,6 @@ webpage_res.raise_for_status()
 webpage = bs4.BeautifulSoup(webpage_res.text, "html.parser")
 urls = [link.get("href") for link in webpage.find_all("a")]
 urls = [link for link in urls if link]
-ZIPS_DIR = pathlib.Path(pathlib.Path.home(), "bedrock_zips")
-ZIPS_DIR.mkdir(parents=True, exist_ok=True)
 
 for version in VERSIONS:
     if version == "current":
@@ -89,14 +90,14 @@ for version in VERSIONS:
                 break
     else:
         continue
-    CURRENT_VER = pathlib.Path(url).name
+    current_ver = pathlib.Path(url).name
     # Symlink to current/preview zip
     if pathlib.Path(ZIPS_DIR, version).is_symlink():
         INSTALLED_VER = pathlib.Path(ZIPS_DIR, version).resolve().name
     else:
         INSTALLED_VER = None
 
-    if not pathlib.Path(ZIPS_DIR, CURRENT_VER).is_file():
+    if not pathlib.Path(ZIPS_DIR, current_ver).is_file():
         eula_check()
         EULA = True
         zip_res = requests.get(
@@ -108,14 +109,14 @@ for version in VERSIONS:
             timeout=60,
         )
         zip_res.raise_for_status()
-        pathlib.Path(ZIPS_DIR, CURRENT_VER + ".part").write_bytes(zip_res.content)
-        pathlib.Path(ZIPS_DIR, CURRENT_VER + ".part").rename(
-            pathlib.Path(ZIPS_DIR, CURRENT_VER)
+        pathlib.Path(ZIPS_DIR, current_ver + ".part").write_bytes(zip_res.content)
+        pathlib.Path(ZIPS_DIR, current_ver + ".part").rename(
+            pathlib.Path(ZIPS_DIR, current_ver)
         )
-    if INSTALLED_VER != CURRENT_VER:
+    if INSTALLED_VER != current_ver:
         if pathlib.Path(ZIPS_DIR, version).is_symlink():
             pathlib.Path(ZIPS_DIR, version).unlink()
-        pathlib.Path(ZIPS_DIR, version).symlink_to(pathlib.Path(ZIPS_DIR, CURRENT_VER))
+        pathlib.Path(ZIPS_DIR, version).symlink_to(pathlib.Path(ZIPS_DIR, current_ver))
 if not ARGS.no_clobber:
     for zipfile in ZIPS_DIR.glob("bedrock-server-*.zip"):
         if not zipfile.samefile(
