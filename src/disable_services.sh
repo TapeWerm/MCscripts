@@ -7,7 +7,7 @@ syntax='Usage: disable_services.sh'
 
 # Current scripts
 scripts=(mc_backup.sh mc_cmd.sh mc_getjar.sh mc_restore.sh mc_setup.sh mc_stop.sh)
-scripts+=(mc_backup.py mc_cmd.py mc_stop.py)
+scripts+=(mc_backup.py mc_cmd.py mc_getjar.py mc_stop.py)
 scripts+=(mc_color.sed)
 scripts+=(mcbe_autoupdate.sh mcbe_backup.sh mcbe_getzip.sh mcbe_log.sh mcbe_restore.sh mcbe_setup.sh mcbe_update.sh)
 scripts+=(mcbe_autoupdate.py mcbe_backup.py mcbe_getzip.py mcbe_log.py mcbe_restore.py mcbe_setup.py mcbe_update.py)
