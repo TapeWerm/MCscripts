@@ -76,15 +76,9 @@ else:
     try:
         SERVER_DIR.mkdir()
         os.chdir(SERVER_DIR)
-        subprocess.run(
-            ["/opt/MCscripts/mc_getjar.py"],
-            check=True,
-        )
+        subprocess.run(["/opt/MCscripts/mc_getjar.py"], check=True)
         # Minecraft Java Edition makes eula.txt on first run
-        subprocess.run(
-            ["java", "-jar", "server.jar", "nogui"],
-            check=False,
-        )
+        subprocess.run(["java", "-jar", "server.jar", "nogui"], check=False)
         pathlib.Path(SERVER_DIR, "start.bat").write_text(
             "java -jar server.jar nogui", encoding="utf-8"
         )
