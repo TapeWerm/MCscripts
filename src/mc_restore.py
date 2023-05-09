@@ -4,7 +4,6 @@ Restore backup for Minecraft Java Edition server.
 """
 
 import argparse
-import os
 import pathlib
 import shutil
 import sys
@@ -16,9 +15,7 @@ PARSER = argparse.ArgumentParser(
 PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft java edition server directory"
 )
-PARSER.add_argument(
-    "BACKUP", type=pathlib.Path, help="minecraft java edition backup"
-)
+PARSER.add_argument("BACKUP", type=pathlib.Path, help="minecraft java edition backup")
 ARGS = PARSER.parse_args()
 
 SERVER_DIR = ARGS.SERVER_DIR.resolve()
@@ -27,7 +24,7 @@ with pathlib.Path(SERVER_DIR, "server.properties").open(
 ) as properties:
     for line in properties:
         if line.startswith("level-name="):
-            WORLD = pathlib.Path("=".join(line.split("=")[1:]).rstrip(os.linesep)).name
+            WORLD = pathlib.Path("=".join(line.split("=")[1:]).rstrip("\n")).name
             break
 
 BACKUP = ARGS.BACKUP.resolve()

@@ -51,6 +51,6 @@ if not OUTPUT:
 subprocess.run(
     ["/opt/MCscripts/mc_color.sed"],
     check=True,
-    input=OUTPUT + os.linesep,
+    input=OUTPUT + "\n",
     encoding="utf-8",
 )

@@ -62,7 +62,7 @@ with pathlib.Path(SERVER_DIR, "server.properties").open(
 ) as properties:
     for line in properties:
         if line.startswith("level-name="):
-            WORLD = pathlib.Path("=".join(line.split("=")[1:]).rstrip(os.linesep)).name
+            WORLD = pathlib.Path("=".join(line.split("=")[1:]).rstrip("\n")).name
             break
 if not pathlib.Path(SERVER_DIR, WORLD).is_dir():
     sys.exit(

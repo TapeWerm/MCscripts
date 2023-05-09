@@ -31,7 +31,7 @@ if INSTANCE != subprocess.run(
     check=True,
     stdout=subprocess.PIPE,
     encoding="utf-8",
-).stdout.rstrip(os.linesep):
+).stdout.rstrip("\n"):
     sys.exit("INSTANCE should be indentical to systemd-escape INSTANCE")
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java", INSTANCE))
 if SERVER_DIR.is_dir():

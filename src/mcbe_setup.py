@@ -4,7 +4,6 @@ Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE or import SERV
 """
 
 import argparse
-import os
 import pathlib
 import shlex
 import shutil
@@ -39,7 +38,7 @@ if INSTANCE != subprocess.run(
     check=True,
     stdout=subprocess.PIPE,
     encoding="utf-8",
-).stdout.rstrip(os.linesep):
+).stdout.rstrip("\n"):
     sys.exit("INSTANCE should be indentical to systemd-escape INSTANCE")
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock", INSTANCE))
 if SERVER_DIR.is_dir():
