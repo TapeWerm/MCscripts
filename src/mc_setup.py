@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Make new Minecraft Java Edition server in ~mc/java/INSTANCE or import SERVER_DIR.
-"""
+"""Make new Minecraft Java Edition server in ~mc/java/INSTANCE or import SERVER_DIR."""
 
 import argparse
 import os

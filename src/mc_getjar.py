@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Download the JAR of the current version of Minecraft Java Edition server.
-"""
+"""Download the JAR of the current version of Minecraft Java Edition server."""
 
 import argparse
 import pathlib

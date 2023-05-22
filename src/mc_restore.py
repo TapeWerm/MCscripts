@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Restore backup for Minecraft Java Edition server.
-"""
+"""Restore backup for Minecraft Java Edition server."""
 
 import argparse
 import pathlib
