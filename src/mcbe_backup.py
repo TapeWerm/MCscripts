@@ -100,7 +100,10 @@ if not pathlib.Path(WORLDS_DIR, WORLD).is_dir():
     sys.exit(
         f"No world {WORLD} in {WORLDS_DIR}, check level-name in server.properties too"
     )
-TEMP_DIR = pathlib.Path("/tmp/mcbe_backup", SERVER_DIR.name)
+if ARGS.docker:
+    TEMP_DIR = pathlib.Path("/tmp/docker_mcbe_backup", SERVER_DIR.parent.name)
+else:
+    TEMP_DIR = pathlib.Path("/tmp/mcbe_backup", SERVER_DIR.name)
 
 SERVICE = ARGS.SERVICE
 if ARGS.docker:
@@ -121,14 +124,24 @@ if ARGS.backup_dir:
     BACKUP_DIR = ARGS.backup_dir.resolve()
 else:
     BACKUP_DIR = pathlib.Path.home()
-BACKUP_DIR = pathlib.Path(
-    BACKUP_DIR,
-    "bedrock_backups",
-    SERVER_DIR.name,
-    WORLD,
-    BACKUP_TIME.strftime("%Y"),
-    BACKUP_TIME.strftime("%m"),
-)
+if ARGS.docker:
+    BACKUP_DIR = pathlib.Path(
+        BACKUP_DIR,
+        "docker_bedrock_backups",
+        SERVER_DIR.parent.name,
+        WORLD,
+        BACKUP_TIME.strftime("%Y"),
+        BACKUP_TIME.strftime("%m"),
+    )
+else:
+    BACKUP_DIR = pathlib.Path(
+        BACKUP_DIR,
+        "bedrock_backups",
+        SERVER_DIR.name,
+        WORLD,
+        BACKUP_TIME.strftime("%Y"),
+        BACKUP_TIME.strftime("%m"),
+    )
 BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 BACKUP_ZIP = pathlib.Path(BACKUP_DIR, BACKUP_TIME.strftime("%d_%H-%M.zip"))
 

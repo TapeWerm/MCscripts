@@ -82,7 +82,11 @@ if [ ! -d "$worlds_dir/$world" ]; then
 	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
 	exit 1
 fi
-temp_dir=/tmp/mcbe_backup/$(basename "$server_dir")
+if [ "$docker" = true ]; then
+	temp_dir=/tmp/docker_mcbe_backup/$(basename "$(dirname "$server_dir")")
+else
+	temp_dir=/tmp/mcbe_backup/$(basename "$server_dir")
+fi
 
 if [ "$docker" = true ]; then
 	service=$2
@@ -104,7 +108,11 @@ if [ -n "$backup_dir" ]; then
 else
 	backup_dir=~
 fi
-backup_dir=$backup_dir/bedrock_backups/$(basename "$server_dir")/$world/$year/$month
+if [ "$docker" = true ]; then
+	backup_dir=$backup_dir/docker_bedrock_backups/$(basename "$(dirname "$server_dir")")/$world/$year/$month
+else
+	backup_dir=$backup_dir/bedrock_backups/$(basename "$server_dir")/$world/$year/$month
+fi
 # Make directory and parents quietly
 mkdir -p "$backup_dir"
 backup_zip=$backup_dir/${date}_$minute.zip
