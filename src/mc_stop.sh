@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Exit if error
+set -e
 syntax='Usage: mc_stop.sh [OPTION]... SERVICE'
 
 server_do() {

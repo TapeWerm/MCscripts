@@ -25,22 +25,20 @@ def send(msg: str):
         for url in WEBHOOK_FILE.read_text(encoding="utf-8").split(os.linesep):
             match = re.match(r"^https://discord(app)?\.com", url)
             if match:
-                post_res = requests.post(
+                requests.post(
                     match.string,
                     json={"content": msg},
                     timeout=60,
                 )
-                post_res.raise_for_status()
                 continue
             # Rocket Chat can be hosted by any domain
             match = re.match(r"^https://rocket\.", url)
             if match:
-                post_res = requests.post(
+                requests.post(
                     match.string,
                     json={"text": msg},
                     timeout=60,
                 )
-                post_res.raise_for_status()
                 continue
 
 
