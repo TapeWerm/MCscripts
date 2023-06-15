@@ -61,7 +61,7 @@ else:
 CURRENT_VER = MINECRAFT_ZIP.stem
 
 if INSTALLED_VER == "fail":
-    sys.exit("Previous update failed, rm $server_dir/version and try again")
+    sys.exit(f"Previous update failed, rm {SERVER_DIR}/version and try again")
 elif INSTALLED_VER != CURRENT_VER:
     try:
         subprocess.run(["systemctl", "start", f"mcbe-backup@{INSTANCE}"], check=True)
