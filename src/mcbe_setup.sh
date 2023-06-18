@@ -84,7 +84,7 @@ if [ -n "$import" ]; then
 	# Convert DOS line endings to UNIX line endings
 	for file in "$server_dir"/*.{json,properties}; do
 		if [ -f "$file" ]; then
-			sed -i s/$'\r'$// "$file"
+			sed -i 's/\r$//' "$file"
 		fi
 	done
 	chown -R mc:nogroup "$server_dir"
