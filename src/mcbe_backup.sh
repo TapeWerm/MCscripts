@@ -16,6 +16,7 @@ server_do() {
 	if [ "$docker" = true ]; then
 		# Escape '][(){}‘’:,!\"\n' for socat address specifications
 		local no_escape
+		# shellcheck disable=SC2001,SC1112
 		no_escape=$(echo "$service" | sed 's/\([][(){}‘’:,!\"]\)/\\\\\\\1/g')
 		date --iso-8601=seconds
 		echo "$*" | socat EXEC:"docker attach -- $no_escape",pty STDIN
@@ -143,6 +144,7 @@ done
 # ${world}not :...:#...
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 # journald LineMax splits lines so delete newlines
+# shellcheck disable=SC1087
 files=$(echo "$query" | tr -d '\n' | grep -Eo -- "$world[^:]+:[0-9]+")
 
 mkdir -p "$temp_dir"
