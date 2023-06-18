@@ -77,8 +77,9 @@ fi
 
 server_dir=$(realpath -- "$1")
 properties=$server_dir/server.properties
-world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s | sed 's/\r$//')
-world=$(basename -- "$world")
+world=$(grep ^level-name= "$properties" | cut -d = -f 2- -s)
+# Trim off $world after last carriage return
+world=$(basename -- "${world%$'\r'}")
 if [ -z "$world" ]; then
 	>&2 echo 'No level-name in server.properties'
 	exit 1
