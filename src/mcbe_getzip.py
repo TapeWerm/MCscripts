@@ -12,25 +12,6 @@ import sys
 import bs4
 import requests
 
-EULA = False
-
-
-def eula_check():
-    """
-    Please set EULA to True after eula_check
-    """
-    if not EULA:
-        print(
-            "Enter Y if you agree to the Minecraft End User License Agreement and",
-            "Privacy Policy",
-        )
-        # Does prompting the EULA seem so official that it violates the EULA?
-        print("Minecraft End User License Agreement: https://minecraft.net/terms")
-        print("Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839")
-        if input().lower() != "y":
-            sys.exit("input != y")
-
-
 PARSER = argparse.ArgumentParser(
     description="If the ZIP of the current version of Minecraft Bedrock Edition server\
         isn't in ~, download it, and remove outdated ZIPs in ~."
@@ -73,6 +54,15 @@ webpage = bs4.BeautifulSoup(webpage_res.text, "html.parser")
 urls = [link.get("href") for link in webpage.find_all("a")]
 urls = [link for link in urls if link]
 
+print(
+    "Enter Y if you agree to the Minecraft End User License Agreement and Privacy",
+    "Policy",
+)
+# Does prompting the EULA seem so official that it violates the EULA?
+print("Minecraft End User License Agreement: https://minecraft.net/terms")
+print("Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839")
+if input().lower() != "y":
+    sys.exit("input != y")
 for version in VERSIONS:
     if version == "current":
         for url in urls:
@@ -98,8 +88,6 @@ for version in VERSIONS:
         INSTALLED_VER = None
 
     if not pathlib.Path(ZIPS_DIR, current_ver).is_file():
-        eula_check()
-        EULA = True
         zip_res = requests.get(
             url,
             headers={

@@ -4,26 +4,8 @@
 set -e
 both=false
 clobber=true
-eula=false
 preview=false
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
-
-# Please set $eula to true after eula_check
-eula_check() {
-	if [ "$eula" = false ]; then
-		echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
-		# Does prompting the EULA seem so official that it violates the EULA?
-		echo Minecraft End User License Agreement: https://minecraft.net/terms
-		echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
-		local input
-		read -r input
-		input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
-		if [ "$input" != y ]; then
-			>&2 echo "$input != y"
-			exit 1
-		fi
-	fi
-}
 
 args=$(getopt -l both,help,no-clobber,preview -o bhnp -- "$@")
 eval set -- "$args"
@@ -79,6 +61,16 @@ webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
 urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
 
+echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
+# Does prompting the EULA seem so official that it violates the EULA?
+echo Minecraft End User License Agreement: https://minecraft.net/terms
+echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
+read -r input
+input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+if [ "$input" != y ]; then
+	>&2 echo "$input != y"
+	exit 1
+fi
 for version in "${versions[@]}"; do
 	case $version in
 	current)
@@ -98,8 +90,6 @@ for version in "${versions[@]}"; do
 	fi
 
 	if [ ! -f "$zips_dir/$current_ver" ]; then
-		eula_check
-		eula=true
 		curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -o "$zips_dir/$current_ver.part"
 		mv "$zips_dir/$current_ver.part" "$zips_dir/$current_ver"
 	fi
