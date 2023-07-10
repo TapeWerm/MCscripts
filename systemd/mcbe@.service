@@ -5,10 +5,11 @@ BindsTo=%N.socket
 Description=Minecraft Bedrock Edition server @ %i
 
 [Service]
+Environment=LD_LIBRARY_PATH=.
 # which says script path
 ExecReload=/bin/bash -c 'echo reload > %t/%N'
 ExecStartPre=/bin/bash -c 'chmod +x bedrock_server'
-ExecStart=/bin/bash -c 'LD_LIBRARY_PATH=. ./bedrock_server'
+ExecStart=/opt/MC/bedrock/%i/bedrock_server
 ExecStop=/opt/MCscripts/mc_stop.sh %N
 # Thanks for the security agowa338
 PrivateUsers=true
