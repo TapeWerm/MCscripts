@@ -31,11 +31,12 @@ if ! systemctl is-active --quiet -- "$service"; then
 	exit 1
 fi
 
-cmd_time=$(date '+%Y-%m-%d %H:%M:%S')
+cmd_cursor=$(journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat)
+cmd_cursor=$(echo "$cmd_cursor" | cut -d ' ' -f 3- -s)
 echo "$*" > "/run/$service"
 sleep 1
-# Output of $service since $cmd_time with no metadata
-output=$(journalctl -u "$service" -S "$cmd_time" -o cat)
+# Output of $service since $cmd_cursor with no metadata
+output=$(journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "$cmd_cursor" -o cat)
 if [ -z "$output" ]; then
 	echo "No output from service after 1 second"
 	exit

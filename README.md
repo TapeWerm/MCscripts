@@ -43,7 +43,7 @@ systemctl status mcbe@MCBE
 # Backup Minecraft Bedrock Edition server
 sudo systemctl start mcbe-backup@MCBE
 # See backup's location
-journalctl -u mcbe-backup@MCBE -t mcbe_backup.sh -n 1 -o cat
+journalctl _SYSTEMD_UNIT=mcbe-backup@MCBE.service -n 1 -o cat
 # Check for Minecraft Bedrock Edition server updates
 sudo systemctl start mcbe-getzip
 # Stop Minecraft Bedrock Edition server

@@ -5,7 +5,6 @@ running in service.
 """
 
 import argparse
-import datetime
 import os
 import pathlib
 import subprocess
@@ -36,14 +35,16 @@ if subprocess.run(
 ).returncode:
     sys.exit(f"Service {SERVICE} not active")
 
-cmd_time = datetime.datetime.now().astimezone()
+journal = systemd.journal.Reader()
+journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
+journal.seek_tail()
+cmd_cursor = journal.get_previous()["__CURSOR"]
 pathlib.Path("/run", SERVICE).write_text(
     " ".join(ARGS.COMMAND) + "\n", encoding="utf-8"
 )
 time.sleep(1)
-journal = systemd.journal.Reader()
-journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
-journal.seek_realtime(cmd_time)
+journal.seek_cursor(cmd_cursor)
+journal.get_next()
 OUTPUT = os.linesep.join([entry["MESSAGE"] for entry in journal])
 if not OUTPUT:
     print("No output from service after 1 second")

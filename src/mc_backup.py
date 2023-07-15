@@ -16,26 +16,30 @@ import systemd.journal
 BACKUP_TIME = datetime.datetime.now().astimezone()
 
 
-def server_do(cmd: str) -> datetime.datetime:
+def server_do(cmd: str) -> str:
     """
     :param cmd: Write to SERVICE input
-    :return: Time for server_read
+    :return: systemd cursor for server_read
     """
-    cmd_time = datetime.datetime.now().astimezone()
+    journal = systemd.journal.Reader()
+    journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
+    journal.seek_tail()
+    cmd_cursor = journal.get_previous()["__CURSOR"]
     pathlib.Path("/run", SERVICE).write_text(cmd + "\n", encoding="utf-8")
-    return cmd_time
+    return cmd_cursor
 
 
-def server_read(cmd_time: datetime.datetime) -> str:
+def server_read(cmd_cursor: str) -> str:
     """
-    :param cmd_time: Returned by server_do
-    :return: Output of SERVICE after cmd_time
+    :param cmd_cursor: Returned by server_do
+    :return: Output of SERVICE after cmd_cursor
     """
     # Wait for output
     time.sleep(1)
     journal = systemd.journal.Reader()
     journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
-    journal.seek_realtime(cmd_time)
+    journal.seek_cursor(cmd_cursor)
+    journal.get_next()
     return os.linesep.join([entry["MESSAGE"] for entry in journal])
 
 
@@ -101,14 +105,14 @@ BACKUP_ZIP = pathlib.Path(BACKUP_DIR, BACKUP_TIME.strftime("%d_%H-%M.zip"))
 server_do("save-off")
 try:
     # Pause and save the server
-    query_time = server_do("save-all flush")
+    query_cursor = server_do("save-all flush")
     timeout = datetime.datetime.now().astimezone() + datetime.timedelta(minutes=1)
     QUERY = ""
     # Minecraft Java Edition says [HH:MM:SS] [Server thread/INFO]: Saved the game
     while "Saved the game" not in QUERY:
         if datetime.datetime.now().astimezone() >= timeout:
             sys.exit("save query timeout")
-        QUERY = server_read(query_time)
+        QUERY = server_read(query_cursor)
         # Filter out chat
         QUERY = os.linesep.join(
             [line for line in QUERY.split(os.linesep) if not re.findall("<.+>", line)]

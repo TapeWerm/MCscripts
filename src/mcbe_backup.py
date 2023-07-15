@@ -18,15 +18,15 @@ import systemd.journal
 BACKUP_TIME = datetime.datetime.now().astimezone()
 
 
-def server_do(cmd: str) -> datetime.datetime:
+def server_do(cmd: str) -> str | datetime.datetime:
     """
     :param cmd: Write to SERVICE input
-    :return: Time for server_read
+    :return: systemd cursor or time for server_read
     """
     if ARGS.docker:
         # Escape "][(){}‘’:,!\\\"\\n" for socat address specifications
         no_escape = re.sub(r"([][(){}‘’:,!\\\"])", r"\\\\\\\1", SERVICE)
-        cmd_time = datetime.datetime.now().astimezone()
+        cmd_cursor = datetime.datetime.now().astimezone()
         subprocess.run(
             ["socat", f"EXEC:docker attach -- {no_escape},pty", "STDIN"],
             check=True,
@@ -34,22 +34,25 @@ def server_do(cmd: str) -> datetime.datetime:
             encoding="utf-8",
         )
     else:
-        cmd_time = datetime.datetime.now().astimezone()
+        journal = systemd.journal.Reader()
+        journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
+        journal.seek_tail()
+        cmd_cursor = journal.get_previous()["__CURSOR"]
         pathlib.Path("/run", SERVICE).write_text(cmd + "\n", encoding="utf-8")
-    return cmd_time
+    return cmd_cursor
 
 
-def server_read(cmd_time: datetime.datetime) -> str:
+def server_read(cmd_cursor: str | datetime.datetime) -> str:
     """
-    :param cmd_time: Returned by server_do
-    :return: Output of SERVICE after cmd_time
+    :param cmd_cursor: Returned by server_do
+    :return: Output of SERVICE after cmd_cursor
     """
     # Wait for output
     time.sleep(1)
     if ARGS.docker:
         return (
             CONTAINER.logs(
-                since=cmd_time.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+                since=cmd_cursor.astimezone(datetime.timezone.utc).replace(tzinfo=None)
             )
             .decode("utf-8")
             .replace("\r\n", "\n")
@@ -57,7 +60,8 @@ def server_read(cmd_time: datetime.datetime) -> str:
         )
     journal = systemd.journal.Reader()
     journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
-    journal.seek_realtime(cmd_time)
+    journal.seek_cursor(cmd_cursor)
+    journal.get_next()
     return os.linesep.join([entry["MESSAGE"] for entry in journal])
 
 
@@ -161,8 +165,8 @@ try:
     while "Data saved" not in QUERY:
         if datetime.datetime.now().astimezone() >= timeout:
             sys.exit("save query timeout")
-        query_time = server_do("save query")
-        QUERY = server_read(query_time)
+        query_cursor = server_do("save query")
+        QUERY = server_read(query_cursor)
     # {WORLD}not :...:#...
     # Minecraft Bedrock Edition says file:bytes, file:bytes, ...
     # journald LineMax splits lines so delete newlines

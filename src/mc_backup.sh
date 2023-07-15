@@ -10,19 +10,19 @@ month=$(date --date "@$backup_time" +%m)
 year=$(date --date "@$backup_time" +%Y)
 syntax='Usage: mc_backup.sh [OPTION]... SERVER_DIR SERVICE'
 
-# Print time in YYYY-MM-DD HH:MM:SS format for server_read
+# Print systemd cursor for server_read
 # echo "$*" to $service input
 server_do() {
-	date '+%Y-%m-%d %H:%M:%S'
+	journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat | cut -d ' ' -f 3- -s
 	echo "$*" > "/run/$service"
 }
 
-# Print output of $service after time $1 printed by server_do
+# Print output of $service after $1 printed by server_do
 server_read() {
 	# Wait for output
 	sleep 1
 	# Output of $service since $1 with no metadata
-	journalctl -u "$service" -S "${1:?}" -o cat
+	journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "${1:?}" -o cat
 }
 
 args=$(getopt -l backup-dir:,help -o b:h -- "$@")
@@ -92,7 +92,7 @@ backup_zip=$backup_dir/${date}_$minute.zip
 server_do save-off > /dev/null
 trap 'server_do save-on > /dev/null' EXIT
 # Pause and save the server
-query_time=$(server_do save-all flush)
+query_cursor=$(server_do save-all flush)
 timeout=$(date -d '1 minute' +%s)
 # Minecraft Java Edition says [HH:MM:SS] [Server thread/INFO]: Saved the game
 until echo "$query" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
@@ -100,7 +100,7 @@ until echo "$query" | grep -Ev '<.+>' | grep -q 'Saved the game'; do
 		>&2 echo save query timeout
 		exit 1
 	fi
-	query=$(server_read "$query_time")
+	query=$(server_read "$query_cursor")
 done
 
 # zip restores path of directory given to it ($world), not just the directory itself

@@ -10,7 +10,7 @@ month=$(date --date "@$backup_time" +%m)
 year=$(date --date "@$backup_time" +%Y)
 syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 
-# Print time in YYYY-MM-DD HH:MM:SS format for server_read
+# Print systemd cursor or ISO 8601 time for server_read
 # echo "$*" to $service input
 server_do() {
 	if [ "$docker" = true ]; then
@@ -18,15 +18,15 @@ server_do() {
 		local no_escape
 		# shellcheck disable=SC2001,SC1112
 		no_escape=$(echo "$service" | sed 's/\([][(){}‘’:,!\"]\)/\\\\\\\1/g')
-		date --iso-8601=seconds
+		date --iso-8601=ns
 		echo "$*" | socat EXEC:"docker attach -- $no_escape",pty STDIN
 	else
-		date '+%Y-%m-%d %H:%M:%S'
+		journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat | cut -d ' ' -f 3- -s
 		echo "$*" > "/run/$service"
 	fi
 }
 
-# Print output of $service after time $1 printed by server_do
+# Print output of $service after $1 printed by server_do
 server_read() {
 	# Wait for output
 	sleep 1
@@ -34,7 +34,7 @@ server_read() {
 		docker logs --since "${1:?}" "$service"
 	else
 		# Output of $service since $1 with no metadata
-		journalctl -u "$service" -S "${1:?}" -o cat
+		journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "${1:?}" -o cat
 	fi
 }
 
@@ -138,8 +138,8 @@ until echo "$query" | grep -q 'Data saved'; do
 		exit 1
 	fi
 	# Check if backup is ready
-	query_time=$(server_do save query)
-	query=$(server_read "$query_time")
+	query_cursor=$(server_do save query)
+	query=$(server_read "$query_cursor")
 done
 # grep only matching strings from line
 # ${world}not :...:#...
