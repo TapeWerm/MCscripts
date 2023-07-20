@@ -156,16 +156,15 @@ BACKUP_ZIP = pathlib.Path(BACKUP_DIR, BACKUP_TIME.strftime("%d_%H-%M.zip"))
 # Prepare backup
 server_do("save hold")
 try:
-    # Wait 1 second for Minecraft Bedrock Edition command to avoid infinite loop
-    # Only unplayably slow servers take more than 1 second to run a command
     time.sleep(1)
+    query_cursor = server_do("save query")
+    QUERY = server_read(query_cursor)
     timeout = datetime.datetime.now().astimezone() + datetime.timedelta(minutes=1)
-    QUERY = ""
-    # Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
-    while "Data saved" not in QUERY:
+    while "Data saved. Files are now ready to be copied." not in QUERY:
         if datetime.datetime.now().astimezone() >= timeout:
             sys.exit("save query timeout")
-        query_cursor = server_do("save query")
+        if "A previous save has not been completed." in QUERY:
+            query_cursor = server_do("save query")
         QUERY = server_read(query_cursor)
     # {WORLD}not :...:#...
     # Minecraft Bedrock Edition says file:bytes, file:bytes, ...

@@ -127,18 +127,18 @@ backup_zip=$backup_dir/${date}_$minute.zip
 # Prepare backup
 server_do save hold > /dev/null
 trap 'server_do save resume > /dev/null' EXIT
-# Wait 1 second for Minecraft Bedrock Edition command to avoid infinite loop
-# Only unplayably slow servers take more than 1 second to run a command
 sleep 1
+query_cursor=$(server_do save query)
+query=$(server_read "$query_cursor")
 timeout=$(date -d '1 minute' +%s)
-# Minecraft Bedrock Edition says Data saved. Files are now ready to be copied.
-until echo "$query" | grep -q 'Data saved'; do
+until echo "$query" | grep -q 'Data saved. Files are now ready to be copied.'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
 		>&2 echo save query timeout
 		exit 1
 	fi
-	# Check if backup is ready
-	query_cursor=$(server_do save query)
+	if echo "$query" | grep -q 'A previous save has not been completed.'; then
+		query_cursor=$(server_do save query)
+	fi
 	query=$(server_read "$query_cursor")
 done
 # grep only matching strings from line
