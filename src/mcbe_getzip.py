@@ -52,7 +52,7 @@ webpage_res = requests.get(
 webpage_res.raise_for_status()
 webpage = bs4.BeautifulSoup(webpage_res.text, "html.parser")
 urls = [link.get("href") for link in webpage.find_all("a")]
-urls = [link for link in urls if link]
+urls = [url for url in urls if url]
 
 print(
     "Enter Y if you agree to the Minecraft End User License Agreement and Privacy",
