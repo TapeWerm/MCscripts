@@ -2,16 +2,24 @@
 
 # Exit if error
 set -e
-syntax='Usage: mc_getjar.sh'
+clobber=true
+syntax='Usage: mc_getjar.sh [OPTION]...'
 
-args=$(getopt -l help -o h -- "$@")
+args=$(getopt -l help,no-clobber -o hn -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo Download the JAR of the current version of Minecraft Java Edition server.
+		echo "If the JAR of the current version of Minecraft Java Edition server isn't in ~, download it, and remove outdated JARs in ~."
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo "-n, --no-clobber  don't remove outdated JARs in ~"
 		exit
+		;;
+	--no-clobber|-n)
+		clobber=false
+		shift
 		;;
 	esac
 done
@@ -23,10 +31,11 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
+jars_dir=~/java_jars
+mkdir -p "$jars_dir"
+
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
-urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
-url=$(echo "$urls" | grep -E '^https://[^ ]+server\.jar$' | head -n 1)
 
 echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
 # Does prompting the EULA seem so official that it violates the EULA?
@@ -38,6 +47,33 @@ if [ "$input" != y ]; then
 	>&2 echo "$input != y"
 	exit 1
 fi
+while IFS='' read -rd '' link; do
+	url=$(echo "$link" | hxselect -c 'a::attr(href)')
+	if [ -z "$url" ]; then
+		continue
+	fi
+	if echo "$url" | grep -Eq '^https://[^ ]+server\.jar$'; then
+		current_ver=$(echo "$link" | hxselect -c 'a')
+		current_ver=$(basename -- "$current_ver")
+		break
+	fi
+done < <(echo "$webpage" | hxselect -s '\000' 'a')
+# Symlink to current jar
+if [ -h "$jars_dir/current" ]; then
+	installed_ver=$(basename "$(realpath "$jars_dir/current")")
+fi
 
-curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -o server.jar.part
-mv server.jar.part server.jar
+if [ ! -f "$jars_dir/$current_ver" ]; then
+	curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS "$url" -o "$jars_dir/$current_ver.part"
+	mv "$jars_dir/$current_ver.part" "$jars_dir/$current_ver"
+fi
+if [ "$installed_ver" != "$current_ver" ]; then
+	ln -sf "$jars_dir/$current_ver" "$jars_dir/current"
+fi
+if [ "$clobber" = true ]; then
+	for jar in "$jars_dir"/minecraft_server.*.jar; do
+		if [ -f "$jar" ] && [ ! "$jar" -ef "$jars_dir/current" ]; then
+			rm "$jar"
+		fi
+	done
+fi

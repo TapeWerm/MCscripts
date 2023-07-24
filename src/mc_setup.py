@@ -71,10 +71,17 @@ if ARGS.import_dir:
         raise
     shutil.rmtree(IMPORT_DIR)
 else:
+    subprocess.run(
+        ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mc_getjar.py"],
+        check=True,
+    )
+    JARS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java_jars"))
     try:
         SERVER_DIR.mkdir()
+        shutil.copy2(
+            pathlib.Path(JARS_DIR, "current"), pathlib.Path(SERVER_DIR, "server.jar")
+        )
         os.chdir(SERVER_DIR)
-        subprocess.run(["/opt/MCscripts/mc_getjar.py"], check=True)
         # Minecraft Java Edition makes eula.txt on first run
         subprocess.run(["java", "-jar", "server.jar", "nogui"], check=False)
         pathlib.Path(SERVER_DIR, "start.bat").write_text(

@@ -79,10 +79,12 @@ if [ -n "$import" ]; then
 	trap - ERR
 	rm -r "$import"
 else
+	runuser -l mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.sh'
+	jars_dir=~mc/java_jars
 	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
+	cp "$jars_dir/current" "$server_dir/server.jar"
 	cd "$server_dir"
-	/opt/MCscripts/mc_getjar.sh
 	# Minecraft Java Edition makes eula.txt on first run
 	java -jar server.jar nogui || true
 	echo java -jar server.jar nogui > "$server_dir/start.bat"
