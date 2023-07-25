@@ -36,6 +36,9 @@ mkdir -p "$jars_dir"
 
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
+while IFS='' read -rd '' link; do
+	links+=("$link")
+done < <(echo "$webpage" | hxselect -s '\000' 'a')
 
 echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
 # Does prompting the EULA seem so official that it violates the EULA?
@@ -47,7 +50,7 @@ if [ "$input" != y ]; then
 	>&2 echo "$input != y"
 	exit 1
 fi
-while IFS='' read -rd '' link; do
+for link in "${links[@]}"; do
 	url=$(echo "$link" | hxselect -c 'a::attr(href)')
 	if [ -z "$url" ]; then
 		continue
@@ -57,7 +60,7 @@ while IFS='' read -rd '' link; do
 		current_ver=$(basename -- "$current_ver")
 		break
 	fi
-done < <(echo "$webpage" | hxselect -s '\000' 'a')
+done
 # Symlink to current jar
 if [ -h "$jars_dir/current" ]; then
 	installed_ver=$(basename "$(realpath "$jars_dir/current")")
