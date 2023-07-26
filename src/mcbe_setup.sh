@@ -79,8 +79,6 @@ if [ -n "$import" ]; then
 
 	trap 'rm -rf "$server_dir"' ERR
 	cp -r "$import" "$server_dir"
-	# mcbe_update.sh reads y asking if you stopped the server
-	runuser -l mc -s /bin/bash -c "$(printf 'echo y | /opt/MCscripts/mcbe_update.sh -- %q %q' "$server_dir" "$minecraft_zip")"
 	# Convert DOS line endings to UNIX line endings
 	for file in "$server_dir"/*.{json,properties}; do
 		if [ -f "$file" ]; then
@@ -88,6 +86,8 @@ if [ -n "$import" ]; then
 		fi
 	done
 	chown -R mc:nogroup "$server_dir"
+	# mcbe_update.sh reads y asking if you stopped the server
+	runuser -l mc -s /bin/bash -c "$(printf 'echo y | /opt/MCscripts/mcbe_update.sh -- %q %q' "$server_dir" "$minecraft_zip")"
 	trap - ERR
 	rm -r "$import"
 else

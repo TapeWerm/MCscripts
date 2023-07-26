@@ -72,6 +72,15 @@ if ARGS.import_dir:
 
     try:
         shutil.copytree(IMPORT_DIR, SERVER_DIR)
+        # Convert DOS line endings to UNIX line endings
+        for file in list(SERVER_DIR.glob("*.json")) + list(
+            SERVER_DIR.glob("*.properties")
+        ):
+            file.write_text(
+                file.read_text(encoding="utf-8").replace("\r\n", "\n"), encoding="utf-8"
+            )
+        for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
+            shutil.chown(file, "mc", "nogroup")
         # mcbe_update.py reads y asking if you stopped the server
         subprocess.run(
             [
@@ -87,15 +96,6 @@ if ARGS.import_dir:
             ],
             check=True,
         )
-        # Convert DOS line endings to UNIX line endings
-        for file in list(SERVER_DIR.glob("*.json")) + list(
-            SERVER_DIR.glob("*.properties")
-        ):
-            file.write_text(
-                file.read_text(encoding="utf-8").replace("\r\n", "\n"), encoding="utf-8"
-            )
-        for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-            shutil.chown(file, "mc", "nogroup")
     except:
         shutil.rmtree(SERVER_DIR, ignore_errors=True)
         raise
