@@ -65,18 +65,18 @@ if input().lower() != "y":
     sys.exit("input != y")
 for version in VERSIONS:
     if version == "current":
-        for url in urls:
-            url = re.match(r"^https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip$", url)
-            if url:
-                url = url.string
+        for urlx in urls:
+            urlx = re.match(r"^https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip$", urlx)
+            if urlx:
+                url = urlx.string
                 break
     elif version == "preview":
-        for url in urls:
-            url = re.match(
-                r"^https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip$", url
+        for urlx in urls:
+            urlx = re.match(
+                r"^https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip$", urlx
             )
-            if url:
-                url = url.string
+            if urlx:
+                url = urlx.string
                 break
     else:
         continue
