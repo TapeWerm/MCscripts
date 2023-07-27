@@ -67,7 +67,10 @@ if ARGS.import_dir:
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
             shutil.chown(file, "mc", "nogroup")
     except:
-        shutil.rmtree(SERVER_DIR, ignore_errors=True)
+        try:
+            shutil.rmtree(SERVER_DIR)
+        except FileNotFoundError:
+            pass
         raise
     shutil.rmtree(IMPORT_DIR)
 else:
@@ -94,5 +97,8 @@ else:
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
             shutil.chown(file, "mc", "nogroup")
     except:
-        shutil.rmtree(SERVER_DIR, ignore_errors=True)
+        try:
+            shutil.rmtree(SERVER_DIR)
+        except FileNotFoundError:
+            pass
         raise

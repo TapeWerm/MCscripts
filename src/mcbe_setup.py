@@ -97,7 +97,10 @@ if ARGS.import_dir:
             check=True,
         )
     except:
-        shutil.rmtree(SERVER_DIR, ignore_errors=True)
+        try:
+            shutil.rmtree(SERVER_DIR)
+        except FileNotFoundError:
+            pass
         raise
     shutil.rmtree(IMPORT_DIR)
 else:
@@ -116,5 +119,8 @@ else:
                 f"{pathlib.Path(SERVER_DIR, 'server.properties')} @@@",
             )
         except:
-            shutil.rmtree(SERVER_DIR, ignore_errors=True)
+            try:
+                shutil.rmtree(SERVER_DIR)
+            except FileNotFoundError:
+                pass
             raise

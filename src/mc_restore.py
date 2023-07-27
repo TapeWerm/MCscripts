@@ -38,7 +38,10 @@ print("Enter Y if you stopped the server to restore")
 if input().lower() != "y":
     sys.exit("input != y")
 
-shutil.rmtree(pathlib.Path(SERVER_DIR, WORLD), ignore_errors=True)
+try:
+    shutil.rmtree(pathlib.Path(SERVER_DIR, WORLD))
+except FileNotFoundError:
+    pass
 with zipfile.ZipFile(BACKUP, "r") as backup_zipfile:
     backup_zipfile.extractall(SERVER_DIR)
 for file in [pathlib.Path(SERVER_DIR, WORLD)] + list(

@@ -174,7 +174,10 @@ try:
     TEMP_DIR.mkdir(parents=True, exist_ok=True)
     # zip restores path of directory given to it (WORLD), not just the directory itself
     os.chdir(TEMP_DIR)
-    shutil.rmtree(WORLD, ignore_errors=True)
+    try:
+        shutil.rmtree(WORLD)
+    except FileNotFoundError:
+        pass
     try:
         for line in files:
             # Trim off line after last :
@@ -197,7 +200,10 @@ try:
             BACKUP_ZIP.unlink()
         raise
     finally:
-        shutil.rmtree(WORLD, ignore_errors=True)
+        try:
+            shutil.rmtree(WORLD)
+        except FileNotFoundError:
+            pass
 finally:
     server_do("save resume")
 print(f"Backup is {BACKUP_ZIP}")

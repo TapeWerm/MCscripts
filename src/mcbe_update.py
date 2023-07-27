@@ -48,7 +48,10 @@ print("Enter Y if you backed up and stopped the server to update")
 if input().lower() != "y":
     sys.exit("input != y")
 
-shutil.rmtree(NEW_DIR, ignore_errors=True)
+try:
+    shutil.rmtree(NEW_DIR)
+except FileNotFoundError:
+    pass
 try:
     with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
         minecraft_zipfile.extractall(NEW_DIR)
@@ -68,13 +71,22 @@ try:
             if not pathlib.Path(NEW_DIR, packs_dir.name, pack.name).is_dir():
                 shutil.copytree(pack, pathlib.Path(NEW_DIR, packs_dir.name, pack.name))
 
-    shutil.rmtree(OLD_DIR, ignore_errors=True)
+    try:
+        shutil.rmtree(OLD_DIR)
+    except FileNotFoundError:
+        pass
     try:
         SERVER_DIR.rename(OLD_DIR)
     finally:
         NEW_DIR.rename(SERVER_DIR)
-        shutil.rmtree(OLD_DIR, ignore_errors=True)
+        try:
+            shutil.rmtree(OLD_DIR)
+        except FileNotFoundError:
+            pass
 except:
-    shutil.rmtree(NEW_DIR, ignore_errors=True)
+    try:
+        shutil.rmtree(NEW_DIR)
+    except FileNotFoundError:
+        pass
     pathlib.Path(SERVER_DIR, "version").write_text("fail\n", encoding="utf-8")
     raise
