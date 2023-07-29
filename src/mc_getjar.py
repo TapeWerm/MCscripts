@@ -12,6 +12,8 @@ import sys
 import bs4
 import requests
 
+JARS_DIR = pathlib.Path(pathlib.Path.home(), "java_jars")
+
 PARSER = argparse.ArgumentParser(
     description="If the JAR of the current version of Minecraft Java Edition server\
         isn't in ~, download it, and remove outdated JARs in ~."
@@ -21,7 +23,6 @@ PARSER.add_argument(
 )
 ARGS = PARSER.parse_args()
 
-JARS_DIR = pathlib.Path(pathlib.Path.home(), "java_jars")
 JARS_DIR.mkdir(parents=True, exist_ok=True)
 
 webpage_res = requests.get(

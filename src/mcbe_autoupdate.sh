@@ -4,6 +4,7 @@
 set -e
 syntax='Usage: mcbe_autoupdate.sh [OPTION]... SERVER_DIR SERVICE'
 version=current
+zips_dir=~mc/bedrock_zips
 
 args=$(getopt -l help,preview -o hp -- "$@")
 eval set -- "$args"
@@ -48,7 +49,6 @@ fi
 # Trim off $service before last @
 instance=${service##*@}
 
-zips_dir=~mc/bedrock_zips
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
 else

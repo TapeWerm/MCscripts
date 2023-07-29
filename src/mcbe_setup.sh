@@ -4,6 +4,7 @@
 set -e
 syntax='Usage: mcbe_setup.sh [OPTION]... INSTANCE'
 version=current
+zips_dir=~mc/bedrock_zips
 
 args=$(getopt -l help,import:,preview -o hi:p -- "$@")
 eval set -- "$args"
@@ -56,7 +57,6 @@ if [ -n "$import" ]; then
 fi
 
 runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
-zips_dir=~mc/bedrock_zips
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
 else

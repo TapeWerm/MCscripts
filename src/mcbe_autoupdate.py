@@ -11,6 +11,8 @@ import shlex
 import subprocess
 import sys
 
+ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
+
 PARSER = argparse.ArgumentParser(
     description="If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up,\
         update, and restart service of Minecraft Bedrock Edition server."
@@ -53,7 +55,6 @@ if subprocess.run(
 # Trim off SERVICE before last @
 INSTANCE = SERVICE.split("@")[-1]
 
-ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()
 else:

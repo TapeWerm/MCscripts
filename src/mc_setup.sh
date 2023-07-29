@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+jars_dir=~mc/java_jars
 syntax='Usage: mc_setup.sh [OPTION]... INSTANCE'
 
 args=$(getopt -l help,import: -o hi: -- "$@")
@@ -80,7 +81,6 @@ if [ -n "$import" ]; then
 	rm -r "$import"
 else
 	runuser -l mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.sh'
-	jars_dir=~mc/java_jars
 	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
 	cp "$jars_dir/current" "$server_dir/server.jar"

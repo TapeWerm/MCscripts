@@ -3,6 +3,7 @@
 # Exit if error
 set -e
 clobber=true
+jars_dir=~/java_jars
 syntax='Usage: mc_getjar.sh [OPTION]...'
 
 args=$(getopt -l help,no-clobber -o hn -- "$@")
@@ -31,7 +32,6 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-jars_dir=~/java_jars
 mkdir -p "$jars_dir"
 
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)

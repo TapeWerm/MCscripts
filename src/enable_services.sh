@@ -4,6 +4,7 @@
 set -e
 services_file=/opt/MCscripts/disabled_services.txt
 syntax='Usage: enable_services.sh'
+zips_dir=~mc/bedrock_zips
 
 args=$(getopt -l help -o h -- "$@")
 eval set -- "$args"
@@ -127,7 +128,6 @@ if [ -d ~mc/.mcbe_log ]; then
 	chown -R mc:nogroup ~mc/.mcbe_log
 fi
 # Move bedrock ZIPs
-zips_dir=~mc/bedrock_zips
 if [ ! -d "$zips_dir" ]; then
 	mkdir "$zips_dir"
 	chown mc:nogroup "$zips_dir"

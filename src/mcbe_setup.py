@@ -11,6 +11,8 @@ import subprocess
 import sys
 import zipfile
 
+ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
+
 PARSER = argparse.ArgumentParser(
     description="Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE or\
         import SERVER_DIR."
@@ -56,7 +58,6 @@ subprocess.run(
     ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mcbe_getzip.py"],
     check=True,
 )
-ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()
 else:

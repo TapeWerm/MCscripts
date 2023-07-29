@@ -6,6 +6,7 @@ both=false
 clobber=true
 preview=false
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
+zips_dir=~/bedrock_zips
 
 args=$(getopt -l both,help,no-clobber,preview -o bhnp -- "$@")
 eval set -- "$args"
@@ -54,7 +55,6 @@ else
 	versions=(current)
 fi
 
-zips_dir=~/bedrock_zips
 mkdir -p "$zips_dir"
 
 webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)

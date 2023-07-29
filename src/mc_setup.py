@@ -8,6 +8,8 @@ import shutil
 import subprocess
 import sys
 
+JARS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java_jars"))
+
 PARSER = argparse.ArgumentParser(
     description="Make new Minecraft Java Edition server in ~mc/java/INSTANCE or import\
         SERVER_DIR."
@@ -78,7 +80,6 @@ else:
         ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mc_getjar.py"],
         check=True,
     )
-    JARS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java_jars"))
     try:
         SERVER_DIR.mkdir()
         shutil.copy2(

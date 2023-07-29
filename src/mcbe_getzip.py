@@ -12,6 +12,8 @@ import sys
 import bs4
 import requests
 
+ZIPS_DIR = pathlib.Path(pathlib.Path.home(), "bedrock_zips")
+
 PARSER = argparse.ArgumentParser(
     description="If the ZIP of the current version of Minecraft Bedrock Edition server\
         isn't in ~, download it, and remove outdated ZIPs in ~."
@@ -38,7 +40,6 @@ elif ARGS.preview:
 else:
     VERSIONS = ("current",)
 
-ZIPS_DIR = pathlib.Path(pathlib.Path.home(), "bedrock_zips")
 ZIPS_DIR.mkdir(parents=True, exist_ok=True)
 
 webpage_res = requests.get(
