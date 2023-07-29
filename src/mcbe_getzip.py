@@ -96,9 +96,13 @@ for version in VERSIONS:
                 "Accept-Language": "en-US",
             },
             timeout=60,
+            stream=True,
         )
         zip_res.raise_for_status()
-        pathlib.Path(ZIPS_DIR, current_ver + ".part").write_bytes(zip_res.content)
+        if pathlib.Path(ZIPS_DIR, current_ver + ".part").is_file():
+            pathlib.Path(ZIPS_DIR, current_ver + ".part").unlink()
+        for chunk in zip_res.iter_content(chunk_size=512):
+            pathlib.Path(ZIPS_DIR, current_ver + ".part").open(mode="ab").write(chunk)
         pathlib.Path(ZIPS_DIR, current_ver + ".part").rename(
             pathlib.Path(ZIPS_DIR, current_ver)
         )
