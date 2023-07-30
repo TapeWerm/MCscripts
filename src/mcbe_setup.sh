@@ -56,7 +56,7 @@ if [ -n "$import" ]; then
 	import=$(realpath -- "$import")
 fi
 
-runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh'
+runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh -b'
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
 else

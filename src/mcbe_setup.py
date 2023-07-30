@@ -55,7 +55,15 @@ else:
     VERSION = "current"
 
 subprocess.run(
-    ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mcbe_getzip.py"],
+    [
+        "runuser",
+        "-l",
+        "mc",
+        "-s",
+        "/bin/bash",
+        "-c",
+        "/opt/MCscripts/mcbe_getzip.py -b",
+    ],
     check=True,
 )
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
