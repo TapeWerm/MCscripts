@@ -21,7 +21,9 @@ server_do() {
 		date --iso-8601=ns
 		echo "$*" | socat EXEC:"docker attach -- $no_escape",pty STDIN
 	else
-		journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat | cut -d ' ' -f 3- -s
+		{
+			journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat || true
+		} | cut -d ' ' -f 3- -s
 		echo "$*" > "/run/$service"
 	fi
 }
@@ -33,8 +35,12 @@ server_read() {
 	if [ "$docker" = true ]; then
 		docker logs --since "${1:?}" "$service"
 	else
-		# Output of $service since $1 with no metadata
-		journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "${1:?}" -o cat
+		if [ -n "$1" ]; then
+			# Output of $service since $1 with no metadata
+			journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "$1" -o cat
+		else
+			journalctl "_SYSTEMD_UNIT=$service.service" -o cat
+		fi
 	fi
 }
 

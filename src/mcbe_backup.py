@@ -10,6 +10,7 @@ import shutil
 import subprocess
 import sys
 import time
+import typing
 import zipfile
 
 import docker
@@ -18,7 +19,7 @@ import systemd.journal
 BACKUP_TIME = datetime.datetime.now().astimezone()
 
 
-def server_do(cmd: str) -> str | datetime.datetime:
+def server_do(cmd: str) -> typing.Union[str, None, datetime.datetime]:
     """
     :param cmd: Write to SERVICE input
     :return: systemd cursor or time for server_read
@@ -37,12 +38,16 @@ def server_do(cmd: str) -> str | datetime.datetime:
         journal = systemd.journal.Reader()
         journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
         journal.seek_tail()
-        cmd_cursor = journal.get_previous()["__CURSOR"]
+        cmd_cursor = journal.get_previous()
+        if cmd_cursor:
+            cmd_cursor = cmd_cursor["__CURSOR"]
+        else:
+            cmd_cursor = None
         pathlib.Path("/run", SERVICE).write_text(cmd + "\n", encoding="utf-8")
     return cmd_cursor
 
 
-def server_read(cmd_cursor: str | datetime.datetime) -> str:
+def server_read(cmd_cursor: typing.Union[str, None, datetime.datetime]) -> str:
     """
     :param cmd_cursor: Returned by server_do
     :return: Output of SERVICE after cmd_cursor
@@ -60,8 +65,9 @@ def server_read(cmd_cursor: str | datetime.datetime) -> str:
         )
     journal = systemd.journal.Reader()
     journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
-    journal.seek_cursor(cmd_cursor)
-    journal.get_next()
+    if cmd_cursor:
+        journal.seek_cursor(cmd_cursor)
+        journal.get_next()
     return os.linesep.join([entry["MESSAGE"] for entry in journal])
 
 

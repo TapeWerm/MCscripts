@@ -38,13 +38,18 @@ if subprocess.run(
 journal = systemd.journal.Reader()
 journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
 journal.seek_tail()
-cmd_cursor = journal.get_previous()["__CURSOR"]
+CMD_CURSOR = journal.get_previous()
+if CMD_CURSOR:
+    CMD_CURSOR = CMD_CURSOR["__CURSOR"]
+else:
+    CMD_CURSOR = None
 pathlib.Path("/run", SERVICE).write_text(
     " ".join(ARGS.COMMAND) + "\n", encoding="utf-8"
 )
 time.sleep(1)
-journal.seek_cursor(cmd_cursor)
-journal.get_next()
+if CMD_CURSOR:
+    journal.seek_cursor(CMD_CURSOR)
+    journal.get_next()
 OUTPUT = os.linesep.join([entry["MESSAGE"] for entry in journal])
 if not OUTPUT:
     print("No output from service after 1 second")

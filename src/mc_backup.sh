@@ -13,7 +13,9 @@ syntax='Usage: mc_backup.sh [OPTION]... SERVER_DIR SERVICE'
 # Print systemd cursor for server_read
 # echo "$*" to $service input
 server_do() {
-	journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat | cut -d ' ' -f 3- -s
+	{
+		journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat || true
+	} | cut -d ' ' -f 3- -s
 	echo "$*" > "/run/$service"
 }
 
@@ -21,8 +23,12 @@ server_do() {
 server_read() {
 	# Wait for output
 	sleep 1
-	# Output of $service since $1 with no metadata
-	journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "${1:?}" -o cat
+	if [ -n "$1" ]; then
+		# Output of $service since $1 with no metadata
+		journalctl "_SYSTEMD_UNIT=$service.service" --after-cursor "$1" -o cat
+	else
+		journalctl "_SYSTEMD_UNIT=$service.service" -o cat
+	fi
 }
 
 args=$(getopt -l backup-dir:,help -o b:h -- "$@")
