@@ -12,9 +12,12 @@ ExecStartPre=/bin/bash -c 'chmod +x bedrock_server'
 ExecStart=/opt/MC/bedrock/%i/bedrock_server
 ExecStop=/opt/MCscripts/mc_stop.sh %N
 # Thanks for the security agowa338
-PrivateUsers=true
-ProtectHome=true
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
 ProtectControlGroups=true
+ProtectHome=true
+ProtectKernelLogs=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
 ProtectSystem=full

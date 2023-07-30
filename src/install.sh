@@ -41,7 +41,7 @@ if command -v apt-get &> /dev/null; then
 	apt-get install -y python3-bs4 python3-docker python3-requests python3-systemd
 fi
 if ! id -u mc &> /dev/null; then
-	adduser --home /opt/MC --system mc
+	useradd -rmd /opt/MC -g nogroup -s /usr/sbin/nologin mc
 fi
 mkdir -p /opt/MCscripts
 if [ ! -L /opt/MCscripts/backup_dir ]; then
