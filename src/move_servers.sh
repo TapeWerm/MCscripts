@@ -62,7 +62,7 @@ done
 
 if [ -n "${java[*]}" ]; then
 	mkdir -p ~mc/java
-	chown mc:nogroup ~mc/java
+	chown mc:mc ~mc/java
 	if [ ! "$backup_dir" -ef ~mc ]; then
 		mkdir -p "$backup_dir/java"
 	fi
@@ -76,7 +76,7 @@ done
 
 if [ -n "${bedrock[*]}" ]; then
 	mkdir -p ~mc/bedrock
-	chown mc:nogroup ~mc/bedrock
+	chown mc:mc ~mc/bedrock
 	if [ ! "$backup_dir" -ef ~mc ]; then
 		mkdir -p "$backup_dir/bedrock"
 	fi

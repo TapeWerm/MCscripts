@@ -40,8 +40,14 @@ if command -v apt-get &> /dev/null; then
 	apt-get install -y curl dosfstools html-xml-utils socat zip
 	apt-get install -y python3-bs4 python3-docker python3-requests python3-systemd
 fi
-if ! id -u mc &> /dev/null; then
-	useradd -rmd /opt/MC -g nogroup -s /usr/sbin/nologin mc
+if ! id mc &> /dev/null; then
+	useradd -rmd /opt/MC -s /usr/sbin/nologin mc
+fi
+if ! getent group mc &> /dev/null; then
+	groupadd -r mc
+fi
+if [ "$(id -gr mc)" != mc ]; then
+	usermod -g mc mc
 fi
 mkdir -p /opt/MCscripts
 if [ ! -L /opt/MCscripts/backup_dir ]; then

@@ -56,7 +56,7 @@ if ! command -v java &> /dev/null; then
 fi
 
 mkdir -p ~mc/java
-chown mc:nogroup ~mc/java
+chown mc:mc ~mc/java
 if [ -n "$import" ]; then
 	echo "Enter Y if you stopped the server to import"
 	read -r input
@@ -76,7 +76,7 @@ if [ -n "$import" ]; then
 	done
 	echo java -jar server.jar nogui > "$server_dir/start.bat"
 	chmod +x "$server_dir/start.bat"
-	chown -R mc:nogroup "$server_dir"
+	chown -R mc:mc "$server_dir"
 	trap - ERR
 	rm -r "$import"
 else
@@ -89,5 +89,5 @@ else
 	java -jar server.jar nogui || true
 	echo java -jar server.jar nogui > "$server_dir/start.bat"
 	chmod +x "$server_dir/start.bat"
-	chown -R mc:nogroup "$server_dir"
+	chown -R mc:mc "$server_dir"
 fi

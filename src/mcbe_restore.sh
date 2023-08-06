@@ -52,4 +52,4 @@ fi
 
 rm -rf "${worlds_dir:?}/$world"
 unzip "$backup" -d "$worlds_dir"
-chown -R mc:nogroup "$worlds_dir/$world"
+chown -R mc:mc "$worlds_dir/$world"

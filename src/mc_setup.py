@@ -44,7 +44,7 @@ if not shutil.which("java"):
     sys.exit("No command java")
 
 pathlib.Path.expanduser(pathlib.Path("~mc", "java")).mkdir(exist_ok=True)
-shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "java")), "mc", "nogroup")
+shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "java")), "mc", "mc")
 if ARGS.import_dir:
     print("Enter Y if you stopped the server to import")
     if input().lower() != "y":
@@ -67,7 +67,7 @@ if ARGS.import_dir:
             pathlib.Path(SERVER_DIR, "start.bat").stat().st_mode | 0o111
         )
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-            shutil.chown(file, "mc", "nogroup")
+            shutil.chown(file, "mc", "mc")
     except:
         try:
             shutil.rmtree(SERVER_DIR)
@@ -96,7 +96,7 @@ else:
             pathlib.Path(SERVER_DIR, "start.bat").stat().st_mode | 0o111
         )
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-            shutil.chown(file, "mc", "nogroup")
+            shutil.chown(file, "mc", "mc")
     except:
         try:
             shutil.rmtree(SERVER_DIR)

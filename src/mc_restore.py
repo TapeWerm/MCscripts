@@ -47,4 +47,4 @@ with zipfile.ZipFile(BACKUP, "r") as backup_zipfile:
 for file in [pathlib.Path(SERVER_DIR, WORLD)] + list(
     pathlib.Path(SERVER_DIR, WORLD).rglob("*")
 ):
-    shutil.chown(file, "mc", "nogroup")
+    shutil.chown(file, "mc", "mc")

@@ -67,7 +67,7 @@ fi
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 mkdir -p ~mc/bedrock
-chown mc:nogroup ~mc/bedrock
+chown mc:mc ~mc/bedrock
 if [ -n "$import" ]; then
 	echo "Enter Y if you stopped the server to import"
 	read -r input
@@ -85,7 +85,7 @@ if [ -n "$import" ]; then
 			sed -i 's/\r$//' "$file"
 		fi
 	done
-	chown -R mc:nogroup "$server_dir"
+	chown -R mc:mc "$server_dir"
 	# mcbe_update.sh reads y asking if you stopped the server
 	runuser -l mc -s /bin/bash -c "$(printf 'echo y | /opt/MCscripts/mcbe_update.sh -- %q %q' "$server_dir" "$minecraft_zip")"
 	trap - ERR
@@ -96,6 +96,6 @@ else
 	trap 'rm -rf "$server_dir"' ERR
 	unzip -q "$minecraft_zip" -d "$server_dir"
 	echo "$current_ver" > "$server_dir/version"
-	chown -R mc:nogroup "$server_dir"
+	chown -R mc:mc "$server_dir"
 	echo "@@@ Don't forget to edit $server_dir/server.properties @@@"
 fi

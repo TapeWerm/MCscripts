@@ -51,4 +51,4 @@ fi
 
 rm -rf "${server_dir:?}/$world"
 unzip "$backup" -d "$server_dir"
-chown -R mc:nogroup "$server_dir/$world"
+chown -R mc:mc "$server_dir/$world"

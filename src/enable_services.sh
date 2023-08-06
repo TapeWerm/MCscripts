@@ -125,12 +125,12 @@ if [ -d /opt/MCscripts/.mcbe_log ]; then
 	mv /opt/MCscripts/.mcbe_log ~mc/
 fi
 if [ -d ~mc/.mcbe_log ]; then
-	chown -R mc:nogroup ~mc/.mcbe_log
+	chown -R mc:mc ~mc/.mcbe_log
 fi
 # Move bedrock ZIPs
 if [ ! -d "$zips_dir" ]; then
 	mkdir "$zips_dir"
-	chown mc:nogroup "$zips_dir"
+	chown mc:mc "$zips_dir"
 	for zip in ~mc/bedrock-server-*.zip; do
 		if [ -f "$zip" ]; then
 			mv "$zip" "$zips_dir/"

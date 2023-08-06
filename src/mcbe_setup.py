@@ -73,7 +73,7 @@ else:
 CURRENT_VER = MINECRAFT_ZIP.stem
 
 pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock")).mkdir(exist_ok=True)
-shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock")), "mc", "nogroup")
+shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock")), "mc", "mc")
 if ARGS.import_dir:
     print("Enter Y if you stopped the server to import")
     if input().lower() != "y":
@@ -89,7 +89,7 @@ if ARGS.import_dir:
                 file.read_text(encoding="utf-8").replace("\r\n", "\n"), encoding="utf-8"
             )
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-            shutil.chown(file, "mc", "nogroup")
+            shutil.chown(file, "mc", "mc")
         # mcbe_update.py reads y asking if you stopped the server
         subprocess.run(
             [
@@ -122,7 +122,7 @@ else:
                 CURRENT_VER + "\n", encoding="utf-8"
             )
             for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-                shutil.chown(file, "mc", "nogroup")
+                shutil.chown(file, "mc", "mc")
             print(
                 "@@@ Don't forget to edit",
                 f"{pathlib.Path(SERVER_DIR, 'server.properties')} @@@",
