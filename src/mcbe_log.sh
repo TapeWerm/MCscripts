@@ -57,9 +57,9 @@ webhook_file=~/.mcbe_log/${instance}_webhook.txt
 chmod 600 "$webhook_file"
 
 send "Server $instance starting"
-trap 'send "Server $instance stopping"' EXIT
+trap 'send "Server $instance stopping"; pkill -s $$' EXIT
 # Follow log for unit $service 0 lines from bottom, no metadata
-while IFS='' read -r line; do
+journalctl "_SYSTEMD_UNIT=$service.service" -fn 0 -o cat | while IFS='' read -r line; do
 	if echo "$line" | grep -q 'Player connected'; then
 		# Gamertags can have spaces as long as they're not leading/trailing/contiguous
 		# shellcheck disable=SC2001
@@ -78,4 +78,4 @@ while IFS='' read -r line; do
 		reason=${reason#' '}
 		send "$player was kicked from $instance because $reason"
 	fi
-done < <(journalctl "_SYSTEMD_UNIT=$service.service" -fn 0 -o cat)
+done
