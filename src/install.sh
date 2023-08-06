@@ -46,7 +46,7 @@ fi
 if ! getent group mc &> /dev/null; then
 	groupadd -r mc
 fi
-if [ "$(id -gr mc)" != mc ]; then
+if [ "$(id -grn mc)" != mc ]; then
 	usermod -g mc mc
 fi
 mkdir -p /opt/MCscripts
