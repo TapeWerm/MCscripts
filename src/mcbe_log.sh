@@ -63,11 +63,11 @@ journalctl "_SYSTEMD_UNIT=$service.service" -fn 0 -o cat | while IFS='' read -r 
 	if echo "$line" | grep -q 'Player connected'; then
 		# Gamertags can have spaces as long as they're not leading/trailing/contiguous
 		# shellcheck disable=SC2001
-		player=$(echo "$line" | sed 's/.*Player connected: \(.*\),.*/\1/')
+		player=$(echo "$line" | sed 's/.*Player connected: \(.*\), xuid:.*/\1/')
 		send "$player connected to $instance"
 	elif echo "$line" | grep -q 'Player disconnected'; then
 		# shellcheck disable=SC2001
-		player=$(echo "$line" | sed 's/.*Player disconnected: \(.*\),.*/\1/')
+		player=$(echo "$line" | sed 's/.*Player disconnected: \(.*\), xuid:.*/\1/')
 		send "$player disconnected from $instance"
 	elif echo "$line" | grep -q Kicked; then
 		# shellcheck disable=SC2001

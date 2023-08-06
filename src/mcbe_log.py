@@ -81,10 +81,10 @@ try:
             if "Player connected" in line:
                 # Gamertags can have spaces as long as they're not leading/trailing/
                 # contiguous
-                player = re.sub(r".*Player connected: (.*),.*", r"\1", line)
+                player = re.sub(r".*Player connected: (.*), xuid:.*", r"\1", line)
                 send(f"{player} connected to {INSTANCE}")
             elif "Player disconnected" in line:
-                player = re.sub(r".*Player disconnected: (.*),.*", r"\1", line)
+                player = re.sub(r".*Player disconnected: (.*), xuid:.*", r"\1", line)
                 send(f"{player} disconnected from {INSTANCE}")
             elif "Kicked" in line:
                 player = re.sub(r".*Kicked (.*) from the game.*", r"\1", line)
