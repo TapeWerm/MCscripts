@@ -3,6 +3,16 @@ Please run modified Python scripts through `pylint` and `black` before making a 
 Like spell checkers, code linters aren't always right, but neither are we.
 
 You can also test modified scripts through `time` to see how runtime is affected by changes.
+```bash
+sudo true
+sudo systemctl start SERVICE &
+until [ "$(systemctl show -p MainPID --value SERVICE)" != 0 ]
+do sleep 0.1
+done
+while ps -o pcpu,rss --no-header "$(systemctl show -p MainPID --value SERVICE)"
+do sleep 0.1
+done
+```
 
 Please test modified scripts before making a pull request.
 ```bash
