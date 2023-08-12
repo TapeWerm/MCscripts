@@ -3,6 +3,7 @@ Please run modified Python scripts through `pylint` and `black` before making a 
 Like spell checkers, code linters aren't always right, but neither are we.
 
 You can also test modified scripts through `time` to see how runtime is affected by changes.
+
 How to monitor CPU and memory usage of SERVICE MainPID:
 ```bash
 sudo true
