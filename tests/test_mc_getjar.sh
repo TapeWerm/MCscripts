@@ -2,21 +2,29 @@
 
 # Exit if error
 set -e
-syntax='Usage: test_mc_getjar.sh'
+extension=.py
+syntax='Usage: test_mc_getjar.sh [OPTION]...'
 jars_dir=~/java_jars
 
 test_getjar() {
-    echo y | /opt/MCscripts/mc_getjar.py > /dev/null
+    echo y | "/opt/MCscripts/mc_getjar$extension" > /dev/null
     unzip -tq "$jars_dir/current"
 }
 
-args=$(getopt -l help -o h -- "$@")
+args=$(getopt -l bash,help -o h -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
+	--bash)
+		extension=.sh
+		shift 1
+		;;
 	--help|-h)
 		echo "$syntax"
 		echo Test mc_getjar.
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '--bash  test Bash scripts instead of Python'
 		exit
 		;;
 	esac
@@ -37,7 +45,7 @@ test_getjar
 touch "$jars_dir/minecraft_server.nope.nada.never.jar"
 
 echo Test mc_getjar no clobber
-echo y | /opt/MCscripts/mc_getjar.py -n > /dev/null
+echo y | "/opt/MCscripts/mc_getjar$extension" -n > /dev/null
 unzip -tq "$jars_dir/current"
 if [ ! -f "$jars_dir/minecraft_server.nope.nada.never.jar" ]; then
     >&2 echo minecraft_server.nope.nada.never.jar was clobbered

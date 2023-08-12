@@ -2,14 +2,14 @@
 
 # Exit if error
 set -e
-extension=py
+extension=.py
 instance=testme
 backup_override=/etc/systemd/system/mc-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mc@$instance.service.d/z.conf
 server_dir=~mc/java/$instance
 properties=$server_dir/server.properties
 port=25765
-syntax='Usage: test_mc.sh'
+syntax='Usage: test_mc.sh [OPTION]...'
 
 cleanup() {
 	if mountpoint -q /mnt/test_mc_backup; then
@@ -75,7 +75,7 @@ test_backup() {
 	fi
 	backup=$(echo "$backup" | cut -d ' ' -f 3- -s)
 	systemctl stop "mc@$instance.socket"
-	echo y | "/opt/MCscripts/mc_restore.$extension" "$server_dir" "$backup" > /dev/null
+	echo y | "/opt/MCscripts/mc_restore$extension" "$server_dir" "$backup" > /dev/null
 	start_server
 }
 
@@ -84,7 +84,7 @@ eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
 	--bash)
-		extension='sh'
+		extension=.sh
 		shift 1
 		;;
 	--help|-h)
@@ -125,15 +125,15 @@ trap 'cleanup' EXIT
 mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
 echo 'ExecStop=' >> "$server_override"
-echo "ExecStop=/opt/MCscripts/mc_stop.$extension -s 0 %N" >> "$server_override"
+echo "ExecStop=/opt/MCscripts/mc_stop$extension -s 0 %N" >> "$server_override"
 mkdir -p "$(dirname "$backup_override")"
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mc_backup.$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/mc_backup$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo Test mc_setup new server
-echo y | "/opt/MCscripts/mc_setup.$extension" "$instance" > /dev/null
+echo y | "/opt/MCscripts/mc_setup$extension" "$instance" > /dev/null
 sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
 sed -i 's/^eula=.*/eula=true/' "$server_dir/eula.txt"
@@ -145,7 +145,7 @@ mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
 echo Test mc_setup import Windows server
-yes | "/opt/MCscripts/mc_setup.$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
+yes | "/opt/MCscripts/mc_setup$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
 start_server
 
 echo Test mc-backup@testme
@@ -170,16 +170,16 @@ mount -t vfat /tmp/test_mc_backup.img /mnt/test_mc_backup
 
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mc_backup.$extension -b /mnt/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/mc_backup$extension -b /mnt/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo Test mc-backup@testme FAT32 backup directory
 test_backup
 
 echo Test mc_cmd multiline input
-"/opt/MCscripts/mc_cmd.$extension" "mc@$instance" help$'\n'say Hello world
+"/opt/MCscripts/mc_cmd$extension" "mc@$instance" help$'\n'say Hello world
 
 echo Test mc_stop runs outside systemd
-"/opt/MCscripts/mc_stop.$extension" -s 0 "mc@$instance"
+"/opt/MCscripts/mc_stop$extension" -s 0 "mc@$instance"
 
 echo All tests passed

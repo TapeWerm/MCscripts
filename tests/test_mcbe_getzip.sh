@@ -2,22 +2,30 @@
 
 # Exit if error
 set -e
-syntax='Usage: test_mcbe_getzip.sh'
+extension=.py
+syntax='Usage: test_mcbe_getzip.sh [OPTION]...'
 zips_dir=~/bedrock_zips
 
 test_getzip() {
-    echo y | /opt/MCscripts/mcbe_getzip.py -b > /dev/null
+    echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null
     unzip -tq "$zips_dir/current"
     unzip -tq "$zips_dir/preview"
 }
 
-args=$(getopt -l help -o h -- "$@")
+args=$(getopt -l bash,help -o h -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
+	--bash)
+		extension=.sh
+		shift 1
+		;;
 	--help|-h)
 		echo "$syntax"
 		echo Test mcbe_getzip.
+		echo
+		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '--bash  test Bash scripts instead of Python'
 		exit
 		;;
 	esac
@@ -38,7 +46,7 @@ test_getzip
 touch "$zips_dir/bedrock-server-nope.nada.never.zip"
 
 echo Test mcbe_getzip no clobber
-echo y | /opt/MCscripts/mcbe_getzip.py -bn > /dev/null
+echo y | "/opt/MCscripts/mcbe_getzip$extension" -bn > /dev/null
 unzip -tq "$zips_dir/current"
 unzip -tq "$zips_dir/preview"
 if [ ! -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
