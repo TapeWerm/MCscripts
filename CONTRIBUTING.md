@@ -12,9 +12,9 @@ sudo systemctl start "$service" &
 while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]
 do sleep 0.1
 done
-ps -o pid,cputimes,rss --ppid "$pid" "$pid"
+ps -o pid,cputimes,rss,args --ppid "$pid" "$pid"
 sleep 0.1
-while ps -o pid,cputimes,rss --no-header --ppid "$pid" "$pid"
+while ps -o pid,cputimes,rss,args --no-header --ppid "$pid" "$pid"
 do sleep 0.1
 done
 ```

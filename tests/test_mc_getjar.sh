@@ -47,9 +47,9 @@ if [ "$perf" = true ]; then
 	elif [ "$extension" = .sh ]; then
 		pid=$(pgrep -P $$ -f 'bash /opt/MCscripts/mc_getjar\.sh')
 	fi
-	ps -o pid,cputimes,rss --ppid "$pid" "$pid"
+	ps -o pid,cputimes,rss,args --ppid "$pid" "$pid"
 	sleep 0.1
-	while ps -o pid,cputimes,rss --no-header --ppid "$pid" "$pid"; do
+	while ps -o pid,cputimes,rss,args --no-header --ppid "$pid" "$pid"; do
 		sleep 0.1
 	done
 	exit
