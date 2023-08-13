@@ -9,8 +9,7 @@ How to monitor CPU and memory usage of systemd service:
 service=SERVICE
 sudo true
 sudo systemctl start "$service" &
-while pid=$(systemctl show -p MainPID --value -- "$service") &&
-[ "$pid" = 0 ]
+while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]
 do sleep 0.1
 done
 ps -o pid,cputimes,rss --ppid "$pid" "$pid"
