@@ -112,7 +112,10 @@ for version in VERSIONS:
         pathlib.Path(ZIPS_DIR, version).symlink_to(pathlib.Path(ZIPS_DIR, current_ver))
 if not ARGS.no_clobber:
     for zipfile in ZIPS_DIR.glob("bedrock-server-*.zip"):
-        if not zipfile.samefile(
-            pathlib.Path(ZIPS_DIR, "current")
-        ) and not zipfile.samefile(pathlib.Path(ZIPS_DIR, "preview")):
-            zipfile.unlink()
+        try:
+            if not zipfile.samefile(
+                pathlib.Path(ZIPS_DIR, "current")
+            ) and not zipfile.samefile(pathlib.Path(ZIPS_DIR, "preview")):
+                zipfile.unlink()
+        except FileNotFoundError:
+            pass

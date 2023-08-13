@@ -59,4 +59,10 @@ if [ -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
     >&2 echo "bedrock-server-nope.nada.never.zip wasn't clobbered"
 fi
 
+rm "$zips_dir/preview"
+
+echo Test mcbe_getzip no preview symlink
+echo y | "/opt/MCscripts/mcbe_getzip$extension" > /dev/null
+unzip -tq "$zips_dir/current"
+
 echo All tests passed
