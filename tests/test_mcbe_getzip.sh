@@ -3,6 +3,7 @@
 # Exit if error
 set -e
 extension=.py
+perf=false
 syntax='Usage: test_mcbe_getzip.sh [OPTION]...'
 zips_dir=~/bedrock_zips
 
@@ -12,7 +13,7 @@ test_getzip() {
     unzip -tq "$zips_dir/preview"
 }
 
-args=$(getopt -l bash,help -o h -- "$@")
+args=$(getopt -l bash,help,perf -o h -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -26,7 +27,12 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '--bash  test Bash scripts instead of Python'
+		echo '--perf  monitor CPU and memory usage'
 		exit
+		;;
+	--perf)
+		perf=true
+		shift 1
 		;;
 	esac
 done
@@ -34,6 +40,21 @@ shift
 
 rm -rf "$zips_dir"
 trap 'rm -rf "$zips_dir"' EXIT
+
+if [ "$perf" = true ]; then
+	echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null &
+	if [ "$extension" = .py ]; then
+		pid=$(pgrep -P $$ -f 'python3 /opt/MCscripts/mcbe_getzip\.py -b')
+	elif [ "$extension" = .sh ]; then
+		pid=$(pgrep -P $$ -f 'bash /opt/MCscripts/mcbe_getzip\.sh -b')
+	fi
+	ps -o pid,cputimes,rss --ppid "$pid" "$pid"
+	sleep 0.1
+	while ps -o pid,cputimes,rss --no-header --ppid "$pid" "$pid"; do
+		sleep 0.1
+	done
+	exit
+fi
 
 echo Test mcbe_getzip first run
 test_getzip

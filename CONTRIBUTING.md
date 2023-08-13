@@ -18,18 +18,6 @@ while ps -o pid,cputimes,rss --no-header --ppid "$pid" "$pid"
 do sleep 0.1
 done
 ```
-How to monitor CPU and memory usage of [mcbe_getzip.py](src/mcbe_getzip.py):
-```bash
-rm -rf ~/bedrock_zips
-echo y | /opt/MCscripts/mcbe_getzip.py -b > /dev/null &
-pid=$(pgrep -P $$ -f 'python3 /opt/MCscripts/mcbe_getzip\.py -b')
-ps -o pid,cputimes,rss --ppid "$pid" "$pid"
-sleep 0.1
-while ps -o pid,cputimes,rss --no-header --ppid "$pid" "$pid"
-do sleep 0.1
-done
-rm -rf ~/bedrock_zips
-```
 Please test modified scripts before making a pull request.
 ```bash
 sudo tests/test_mcbe.sh
