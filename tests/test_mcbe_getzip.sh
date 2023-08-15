@@ -7,6 +7,16 @@ perf=false
 syntax='Usage: test_mcbe_getzip.sh [OPTION]...'
 zips_dir=~/bedrock_zips
 
+ps_recursive() {
+	if ! ps -o pid,cputimes,rss,args --no-header "$1"; then
+		false
+	else
+		for child_pid in $(ps -o pid --no-header --ppid "$1"); do
+			ps_recursive "$child_pid"
+		done
+	fi
+}
+
 test_getzip() {
     echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null
     unzip -tq "$zips_dir/current"
@@ -48,9 +58,8 @@ if [ "$perf" = true ]; then
 	elif [ "$extension" = .sh ]; then
 		pid=$(pgrep -P $$ -f 'bash /opt/MCscripts/mcbe_getzip\.sh -b')
 	fi
-	ps -o pid,cputimes,rss,args --ppid "$pid" "$pid"
-	sleep 0.1
-	while ps -o pid,cputimes,rss,args --no-header --ppid "$pid" "$pid"; do
+	echo pid cputimes rss args
+	while ps_recursive "$pid"; do
 		sleep 0.1
 	done
 	exit

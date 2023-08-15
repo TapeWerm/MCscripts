@@ -7,14 +7,22 @@ You can also test modified scripts through `time` to see how runtime is affected
 How to monitor CPU and memory usage of systemd service:
 ```bash
 service=SERVICE
+ps_recursive() {
+if ! ps -o pid,cputimes,rss,args --no-header "$1"
+then false
+else
+for child_pid in $(ps -o pid --no-header --ppid "$1")
+do ps_recursive "$child_pid"
+done
+fi
+}
 sudo true
 sudo systemctl start "$service" &
 while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]
 do sleep 0.1
 done
-ps -o pid,cputimes,rss,args --ppid "$pid" "$pid"
-sleep 0.1
-while ps -o pid,cputimes,rss,args --no-header --ppid "$pid" "$pid"
+echo pid cputimes rss args
+while ps_recursive "$pid"
 do sleep 0.1
 done
 ```
