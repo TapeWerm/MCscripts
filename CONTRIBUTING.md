@@ -8,22 +8,22 @@ How to monitor CPU and memory usage of systemd service:
 ```bash
 service=SERVICE
 ps_recursive() {
-if ! ps -o pid,cputimes,rss,args --no-header "$1"
-then false
+if ! ps -o pid,cputimes,rss,args --no-header "$1"; then
+false
 else
-for child_pid in $(ps -o pid --no-header --ppid "$1")
-do ps_recursive "$child_pid"
+for child_pid in $(ps -o pid --no-header --ppid "$1"); do
+ps_recursive "$child_pid"
 done
 fi
 }
 sudo true
 sudo systemctl start "$service" &
-while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]
-do sleep 0.1
+while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]; do
+sleep 0.1
 done
 echo pid cputimes rss args
-while ps_recursive "$pid"
-do sleep 0.1
+while ps_recursive "$pid"; do
+sleep 0.1
 done
 ```
 Please test modified scripts before making a pull request.
