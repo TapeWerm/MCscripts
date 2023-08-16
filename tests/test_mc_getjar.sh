@@ -57,8 +57,8 @@ if [ "$perf" = true ]; then
 	elif [ "$extension" = .sh ]; then
 		pid=$(pgrep -P $$ -f 'bash /opt/MCscripts/mc_getjar\.sh')
 	fi
-	echo pid cputimes rss args
-	while ps_recursive "$pid"; do
+	echo '    PID     TIME   RSS COMMAND'
+	while date --iso-8601=ns && ps_recursive "$pid"; do
 		sleep 0.1
 	done
 	exit
