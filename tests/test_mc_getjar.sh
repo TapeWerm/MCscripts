@@ -53,9 +53,9 @@ trap 'rm -rf "$jars_dir"' EXIT
 if [ "$perf" = true ]; then
 	echo y | "/opt/MCscripts/mc_getjar$extension" > /dev/null &
 	if [ "$extension" = .py ]; then
-		pid=$(pgrep -P $$ -f 'python3 /opt/MCscripts/mc_getjar\.py')
+		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/mc_getjar\.py')
 	elif [ "$extension" = .sh ]; then
-		pid=$(pgrep -P $$ -f 'bash /opt/MCscripts/mc_getjar\.sh')
+		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/mc_getjar\.sh')
 	fi
 	echo '    PID     TIME   RSS COMMAND'
 	while date --iso-8601=ns && ps_recursive "$pid"; do

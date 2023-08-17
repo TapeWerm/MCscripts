@@ -54,9 +54,9 @@ trap 'rm -rf "$zips_dir"' EXIT
 if [ "$perf" = true ]; then
 	echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null &
 	if [ "$extension" = .py ]; then
-		pid=$(pgrep -P $$ -f 'python3 /opt/MCscripts/mcbe_getzip\.py -b')
+		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/mcbe_getzip\.py -b')
 	elif [ "$extension" = .sh ]; then
-		pid=$(pgrep -P $$ -f 'bash /opt/MCscripts/mcbe_getzip\.sh -b')
+		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/mcbe_getzip\.sh -b')
 	fi
 	echo '    PID     TIME   RSS COMMAND'
 	while date --iso-8601=ns && ps_recursive "$pid"; do
