@@ -9,12 +9,11 @@ zips_dir=~/bedrock_zips
 
 ps_recursive() {
 	if ! ps -o pid,cputimes,rss,args --no-header "$1"; then
-		false
-	else
-		for child_pid in $(ps -o pid --no-header --ppid "$1"); do
-			ps_recursive "$child_pid"
-		done
+		return 1
 	fi
+	for child_pid in $(ps -o pid --no-header --ppid "$1"); do
+		ps_recursive "$child_pid" || true
+	done
 }
 
 test_getzip() {
