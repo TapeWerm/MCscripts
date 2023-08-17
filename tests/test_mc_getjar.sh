@@ -11,6 +11,7 @@ ps_recursive() {
 	if ! ps -o pid,cputimes,rss,args --no-header "$1"; then
 		return 1
 	fi
+	local child_pid
 	for child_pid in $(ps -o pid --no-header --ppid "$1"); do
 		ps_recursive "$child_pid" || true
 	done
