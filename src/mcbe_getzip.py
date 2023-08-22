@@ -101,7 +101,7 @@ for version in VERSIONS:
         zip_res.raise_for_status()
         if pathlib.Path(ZIPS_DIR, current_ver + ".part").is_file():
             pathlib.Path(ZIPS_DIR, current_ver + ".part").unlink()
-        for chunk in zip_res.iter_content(chunk_size=512):
+        for chunk in zip_res.iter_content(chunk_size=8192):
             pathlib.Path(ZIPS_DIR, current_ver + ".part").open(mode="ab").write(chunk)
         pathlib.Path(ZIPS_DIR, current_ver + ".part").rename(
             pathlib.Path(ZIPS_DIR, current_ver)
