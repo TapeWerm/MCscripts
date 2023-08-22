@@ -47,7 +47,11 @@ while [ "$1"  != -- ]; do
 done
 shift
 
-rm -rf "$jars_dir"
+if [ -d "$jars_dir" ]; then
+	>&2 echo "JARs directory $jars_dir already exists"
+	exit 1
+fi
+
 trap 'rm -rf "$jars_dir"' EXIT
 
 if [ "$perf" = true ]; then

@@ -48,7 +48,11 @@ while [ "$1"  != -- ]; do
 done
 shift
 
-rm -rf "$zips_dir"
+if [ -d "$zips_dir" ]; then
+	>&2 echo "ZIPs directory $zips_dir already exists"
+	exit 1
+fi
+
 trap 'rm -rf "$zips_dir"' EXIT
 
 if [ "$perf" = true ]; then
