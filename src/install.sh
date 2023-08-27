@@ -62,6 +62,7 @@ chown -h root:root /opt/MCscripts/backup_dir
 echo y | "$dir/move_servers.sh"
 "$dir/move_backups.sh"
 cp "$dir"/*.{py,sed,sh} /opt/MCscripts/
+cp "$dir/../LICENSE" /opt/MCscripts/
 cp "$dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
 "$dir/enable_services.sh"
