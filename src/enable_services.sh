@@ -79,8 +79,6 @@ for override in /etc/systemd/system/mc-backup@*.service.d/*.conf; do
 done
 for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's|MC/%i_Backups|MC/backup_dir/%i_Backups|g' "$override"
-		sed -i 's|backup_dir/%i_Backups|backup_dir/java/%i_Backups|g' "$override"
 		sed -i 's/%i_Backups/%i_backups/g' "$override"
 		sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
 		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
@@ -101,8 +99,6 @@ for override in /etc/systemd/system/mcbe-backup@*.service.d/*.conf; do
 done
 for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's|MC/%i_Backups|MC/backup_dir/%i_Backups|g' "$override"
-		sed -i 's|backup_dir/%i_Backups|backup_dir/bedrock/%i_Backups|g' "$override"
 		sed -i 's/%i_Backups/%i_backups/g' "$override"
 		sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
 		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
