@@ -67,6 +67,7 @@ fi
 for file in "${scripts[@]}"; do
 	rm -f {~mc,/opt/MCscripts}/"$file"
 done
+rm -f /opt/MCscripts/LICENSE
 for file in "${units[@]}"; do
 	rm -f "/etc/systemd/system/$file"
 done
