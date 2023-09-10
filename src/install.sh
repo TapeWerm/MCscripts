@@ -66,5 +66,6 @@ cp "$dir/../LICENSE" /opt/MCscripts/
 cp "$dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
 "$dir/enable_services.sh"
+cp "$dir/../version" /opt/MCscripts/
 echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@
 echo @@@ https://www.creeperhost.net/blog/mitigating-cve/ @@@

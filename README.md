@@ -55,6 +55,10 @@ sudo systemctl stop mcbe@MCBE
 sudo /opt/MCscripts/mcbe_restore.sh ~mc/bedrock/MCBE BACKUP
 sudo systemctl start mcbe@MCBE
 ```
+How to see MCscripts version:
+```bash
+cat /opt/MCscripts/version
+```
 How to see MCscripts commit hash:
 ```bash
 unzip -z /tmp/master.zip | tail -n +2
