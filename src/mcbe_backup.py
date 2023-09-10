@@ -25,8 +25,8 @@ def server_do(cmd: str) -> typing.Union[str, None, datetime.datetime]:
     :return: systemd cursor or time for server_read
     """
     if ARGS.docker:
-        # Escape "][(){}‘’:,!\\\"\\n" for socat address specifications
-        no_escape = re.sub(r"([][(){}‘’:,!\\\"])", r"\\\\\\\1", SERVICE)
+        # Escape r'][(){}‘’:,!\"\n' for socat address specifications
+        no_escape = re.sub(r'([][(){}‘’:,!\\"])', r"\\\\\\\1", SERVICE)
         cmd_cursor = datetime.datetime.now().astimezone()
         subprocess.run(
             ["socat", f"EXEC:docker attach -- {no_escape},pty", "STDIN"],

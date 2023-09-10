@@ -17,7 +17,7 @@ server_do() {
 		# Escape '][(){}‘’:,!\"\n' for socat address specifications
 		local no_escape
 		# shellcheck disable=SC2001,SC1112
-		no_escape=$(echo "$service" | sed 's/\([][(){}‘’:,!\"]\)/\\\\\\\1/g')
+		no_escape=$(echo "$service" | sed 's/\([][(){}‘’:,!\\"]\)/\\\\\\\1/g')
 		date --iso-8601=ns
 		echo "$*" | socat EXEC:"docker attach -- $no_escape",pty STDIN
 	else

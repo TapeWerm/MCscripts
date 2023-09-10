@@ -82,9 +82,9 @@ for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
 		sed -i 's/%i_Backups/%i_backups/g' "$override"
 		sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
 		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
-		sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0rd '\\\n' ls -t/xargs -rd '\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0d '\\\n' rm -f/xargs -d '\\\n' rm -f/g" "$override"
+		sed -i "s/xargs -0d '\\\\n' ls -t/xargs -0rd '\\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0rd '\\\\n' ls -t/xargs -rd '\\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
@@ -104,9 +104,9 @@ for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
 		sed -i 's/%i_Backups/%i_backups/g' "$override"
 		sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
 		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
-		sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0rd '\\\n' ls -t/xargs -rd '\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0d '\\\n' rm -f/xargs -d '\\\n' rm -f/g" "$override"
+		sed -i "s/xargs -0d '\\\\n' ls -t/xargs -0rd '\\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0rd '\\\\n' ls -t/xargs -rd '\\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
@@ -132,7 +132,7 @@ if [ -d ~mc/.mcbe_log ]; then
 	chown -R mc:mc ~mc/.mcbe_log
 fi
 # Move bedrock ZIPs
-if [ ! -d "$zips_dir" ]; then
+if ls ~mc/bedrock-server-*.zip &> /dev/null && [ ! -d "$zips_dir" ]; then
 	mkdir "$zips_dir"
 	chown mc:mc "$zips_dir"
 	for zip in ~mc/bedrock-server-*.zip; do
