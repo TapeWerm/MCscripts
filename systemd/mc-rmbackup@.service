@@ -5,8 +5,8 @@ Description=Automatically remove Minecraft Java Edition backups more than 2-week
 
 [Service]
 # Automatically remove Minecraft Java Edition backups except the 14 newest ones @ %i
-# ExecStart=/bin/bash -c "find /opt/MCscripts/backup_dir/java_backups/%i -type f | xargs -0rd '\n' ls -t | tail -n +15 | xargs -0d '\n' rm -f"
-ExecStart=/usr/bin/find /opt/MCscripts/backup_dir/java_backups/%i -type f -mtime +13 -delete
+# ExecStart=/bin/bash -c "find /opt/MCscripts/backup_dir/java_backups/%i -type f | xargs -rd '\n' ls -t | tail -n +15 | xargs -d '\n' rm -f"
+ExecStart=/usr/bin/find /opt/MCscripts/backup_dir/java_backups/%i -type f -mtime +14 -delete
 ExecStartPost=/usr/bin/find /opt/MCscripts/backup_dir/java_backups/%i -type d -empty -delete
 Type=oneshot
 

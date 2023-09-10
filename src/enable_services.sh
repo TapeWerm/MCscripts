@@ -83,6 +83,8 @@ for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
 		sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
 		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
 		sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0rd '\\\n' ls -t/xargs -rd '\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0d '\\\n' rm -f/xargs -d '\\\n' rm -f/g" "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
@@ -103,6 +105,8 @@ for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
 		sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
 		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
 		sed -i "s/xargs -0d '\\\n' ls -t/xargs -0rd '\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0rd '\\\n' ls -t/xargs -rd '\\\n' ls -t/g" "$override"
+		sed -i "s/xargs -0d '\\\n' rm -f/xargs -d '\\\n' rm -f/g" "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
