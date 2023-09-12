@@ -1,13 +1,13 @@
 # Description
 Minecraft Java and Bedrock Dedicated Server systemd units and scripts for backups, automatic updates, and posting logs to chat bots
 
-**[mcbe_backup.sh](src/mcbe_backup.sh) also works with Docker**
+**[mcbe_backup.py](src/mcbe_backup.py) also works with Docker**
 
 @@@ **Compatible with Ubuntu** @@@
 
 Ubuntu on Windows Subsystem for Linux does not support systemctl poweroff.
 Try [Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server).
-You can run [mc_getjar.sh](src/mc_getjar.sh), [mcbe_getzip.sh](src/mcbe_getzip.sh), and [mcbe_update.sh](src/mcbe_update.sh) without enabling the systemd units, but not others.
+You can run [mc_getjar.py](src/mc_getjar.py), [mcbe_getzip.py](src/mcbe_getzip.py), and [mcbe_update.py](src/mcbe_update.py) without enabling the systemd units, but not others.
 No automatic updates nor chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
@@ -22,9 +22,9 @@ No automatic updates nor chat bots for Java Edition.
 # Notes
 How to run commands in the server console:
 ```bash
-sudo /opt/MCscripts/mc_cmd.sh SERVICE COMMAND...
+sudo /opt/MCscripts/mc_cmd.py SERVICE COMMAND...
 # Minecraft Bedrock Edition server example
-sudo /opt/MCscripts/mc_cmd.sh mcbe@MCBE help 2
+sudo /opt/MCscripts/mc_cmd.py mcbe@MCBE help 2
 ```
 How to see server output:
 ```bash
@@ -34,7 +34,7 @@ journalctl -u SERVICE | /opt/MCscripts/mc_color.sed | less -r +G
 How to add everyone to allowlist:
 ```bash
 allowlist=$(for x in steve alex herobrine; do echo allowlist add "$x"; done)
-sudo /opt/MCscripts/mc_cmd.sh SERVICE "$allowlist"
+sudo /opt/MCscripts/mc_cmd.py SERVICE "$allowlist"
 ```
 How to control systemd services:
 ```bash
@@ -52,7 +52,7 @@ sudo systemctl stop mcbe@MCBE
 How to restore backup for Minecraft Bedrock Edition server:
 ```bash
 sudo systemctl stop mcbe@MCBE
-sudo /opt/MCscripts/mcbe_restore.sh ~mc/bedrock/MCBE BACKUP
+sudo /opt/MCscripts/mcbe_restore.py ~mc/bedrock/MCBE BACKUP
 sudo systemctl start mcbe@MCBE
 ```
 How to see MCscripts version:
@@ -65,8 +65,8 @@ unzip -z /tmp/master.zip | tail -n +2
 ```
 
 Backups are in /opt/MCscripts/backup_dir.
-Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.sh](src/mcbe_getzip.sh).
-[mcbe_update.sh](src/mcbe_update.sh) only keeps packs, worlds, JSON files, and PROPERTIES files.
+Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.py](src/mcbe_getzip.py).
+[mcbe_update.py](src/mcbe_update.py) only keeps packs, worlds, JSON files, and PROPERTIES files.
 Other files will be removed.
 
 [PlayStation and Xbox can only connect on LAN with subscription, Nintendo Switch cannot connect at all.](https://help.minecraft.net/hc/en-us/articles/4408873961869-Minecraft-Dedicated-and-Featured-Servers-FAQ-)
@@ -90,11 +90,11 @@ Do one of the following:
 - Import server directory:
   ```bash
   # Replace SERVER_DIR with Minecraft server directory
-  sudo /opt/MCscripts/mc_setup.sh --import SERVER_DIR MC
+  sudo /opt/MCscripts/mc_setup.py --import SERVER_DIR MC
   ```
 - Make new server directory:
   ```bash
-  sudo /opt/MCscripts/mc_setup.sh MC
+  sudo /opt/MCscripts/mc_setup.py MC
   ```
   Enter `sudo nano ~mc/java/MC/eula.txt`, fill it in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>).
 ```bash
@@ -109,11 +109,11 @@ Do one of the following:
 - Import server directory:
   ```bash
   # Replace SERVER_DIR with Minecraft server directory
-  sudo /opt/MCscripts/mcbe_setup.sh --import SERVER_DIR MCBE
+  sudo /opt/MCscripts/mcbe_setup.py --import SERVER_DIR MCBE
   ```
 - Make new server directory:
   ```bash
-  sudo /opt/MCscripts/mcbe_setup.sh MCBE
+  sudo /opt/MCscripts/mcbe_setup.py MCBE
   ```
 ```bash
 sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer --now
@@ -150,15 +150,15 @@ How to change mcbe@MCBE shutdown warning to 20 seconds:
    ```
    [Service]
    ExecStop=
-   ExecStop=/opt/MCscripts/mc_stop.sh -s 20 %N
+   ExecStop=/opt/MCscripts/mc_stop.py -s 20 %N
    ```
 2. If you want to revert the edit enter `sudo systemctl revert mcbe@MCBE`
 
 Other services you might want to edit:
 - [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur (check time zone with `date`)
 - [mcbe-rmbackup@MCBE.service](systemd/mcbe-rmbackup@.service) - How many backups to keep
-- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.sh](src/mcbe_getzip.sh) --no-clobber
-- [mcbe-autoupdate@MCBE.service](systemd/mcbe-autoupdate@.service) - [mcbe_autoupdate.sh](src/mcbe_autoupdate.sh) --preview
+- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.py](src/mcbe_getzip.py) --no-clobber
+- [mcbe-autoupdate@MCBE.service](systemd/mcbe-autoupdate@.service) - [mcbe_autoupdate.py](src/mcbe_autoupdate.py) --preview
 
 How to restart mcbe@MCBE at 3 AM daily:
 

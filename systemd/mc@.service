@@ -7,7 +7,7 @@ Description=Minecraft Java Edition server @ %i
 [Service]
 ExecReload=/bin/bash -c 'echo reload > %t/%N'
 ExecStart=/bin/bash -c './start.bat'
-ExecStop=/opt/MCscripts/mc_stop.sh %N
+ExecStop=/opt/MCscripts/mc_stop.py %N
 # Thanks for the security agowa338
 NoNewPrivileges=true
 PrivateDevices=true
