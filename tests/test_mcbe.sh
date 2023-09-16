@@ -101,6 +101,10 @@ test_update() {
 		>&2 echo "mcbe_update didn't keep server.properties"
 		exit 1
 	fi
+	if [ ! -f "$server_dir/test_mcbe_update.json" ]; then
+		>&2 echo "mcbe_update didn't keep test_mcbe_update.json"
+		exit 1
+	fi
 	if [ ! -d "$server_dir/worlds/--nope" ]; then
 		>&2 echo "mcbe_update didn't keep worlds"
 		exit 1
@@ -180,6 +184,8 @@ sed -i 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
 sed -i "s/^server-portv6=.*/server-portv6=$portv6/" "$properties"
 echo '# Test mcbe_update keeps server.properties' >> "$properties"
+touch "$server_dir/test_mcbe_update.json"
+chown mc:mc "$server_dir/test_mcbe_update.json"
 start_server
 
 systemctl stop "mcbe@$instance.socket"

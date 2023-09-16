@@ -77,6 +77,11 @@ ln -snf "$zips_dir/bedrock-server-nope.nada.never.zip" "$zips_dir/current"
 echo Test mcbe_getzip different symlink
 test_getzip
 
+mv "$(realpath "$zips_dir/current")" "$(realpath "$zips_dir/current").part"
+
+echo Test mcbe_getzip partial download
+test_getzip
+
 touch "$zips_dir/bedrock-server-nope.nada.never.zip"
 
 echo Test mcbe_getzip no clobber

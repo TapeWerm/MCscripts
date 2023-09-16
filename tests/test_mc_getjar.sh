@@ -76,6 +76,11 @@ ln -snf "$jars_dir/minecraft_server.nope.nada.never.jar" "$jars_dir/current"
 echo Test mc_getjar different symlink
 test_getjar
 
+mv "$(realpath "$jars_dir/current")" "$(realpath "$jars_dir/current").part"
+
+echo Test mc_getjar partial download
+test_getjar
+
 touch "$jars_dir/minecraft_server.nope.nada.never.jar"
 
 echo Test mc_getjar no clobber
