@@ -141,7 +141,7 @@ $url
 sudo systemctl enable mcbe-log@MCBE.service --now
 ```
 ## Override systemd unit configuration
-If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `systemctl edit SERVICE` to override specific options.
+If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `sudo systemctl edit SERVICE` to override specific options.
 Options that are a list, such as ExecStop, must first be reset by setting it to an empty string.
 
 How to change mcbe@MCBE shutdown warning to 20 seconds:

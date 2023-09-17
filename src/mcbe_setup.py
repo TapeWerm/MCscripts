@@ -62,7 +62,7 @@ subprocess.run(
         "-s",
         "/bin/bash",
         "-c",
-        "/opt/MCscripts/mcbe_getzip.py -b",
+        "/opt/MCscripts/mcbe_getzip.py -bn",
     ],
     check=True,
 )

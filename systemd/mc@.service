@@ -17,6 +17,7 @@ ProtectHome=true
 ProtectKernelLogs=true
 ProtectKernelModules=true
 ProtectKernelTunables=true
+ProtectProc=invisible
 ProtectSystem=full
 Restart=on-failure
 StandardInput=socket
