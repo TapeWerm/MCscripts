@@ -77,7 +77,15 @@ if ARGS.import_dir:
     shutil.rmtree(IMPORT_DIR)
 else:
     subprocess.run(
-        ["runuser", "-l", "mc", "-s", "/bin/bash", "-c", "/opt/MCscripts/mc_getjar.py"],
+        [
+            "runuser",
+            "-l",
+            "mc",
+            "-s",
+            "/bin/bash",
+            "-c",
+            "/opt/MCscripts/mc_getjar.py -n",
+        ],
         check=True,
     )
     try:

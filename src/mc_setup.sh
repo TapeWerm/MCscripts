@@ -80,7 +80,7 @@ if [ -n "$import" ]; then
 	trap - ERR
 	rm -r "$import"
 else
-	runuser -l mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.sh'
+	runuser -l mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.sh -n'
 	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
 	cp "$jars_dir/current" "$server_dir/server.jar"
