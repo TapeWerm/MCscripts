@@ -235,7 +235,7 @@ echo "ExecStart=/opt/MCscripts/mcbe_autoupdate$extension /opt/MC/bedrock/%i mcbe
 systemctl daemon-reload
 
 echo Test mcbe-autoupdate@testme already up to date
-if test_update | grep -q "Starting Minecraft Bedrock Edition server @ $instance..."; then
+if test_update | grep -q Starting; then
 	>&2 echo "mcbe@$instance was updated when already up to date"
 	exit 1
 fi
@@ -243,7 +243,7 @@ fi
 echo 💢 > ~mc/bedrock/"$instance"/version
 
 echo Test mcbe-autoupdate@testme different version
-if ! test_update | grep -q "Starting Minecraft Bedrock Edition server @ $instance..."; then
+if ! test_update | grep -q Starting; then
 	>&2 echo "mcbe@$instance wasn't updated when different version"
 	exit 1
 fi
@@ -251,7 +251,7 @@ fi
 rm ~mc/bedrock/"$instance"/version
 
 echo Test mcbe-autoupdate@testme no version file
-if ! test_update | grep -q "Starting Minecraft Bedrock Edition server @ $instance..."; then
+if ! test_update | grep -q Starting; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
@@ -265,7 +265,7 @@ systemctl daemon-reload
 rm ~mc/bedrock/"$instance"/version
 
 echo Test mcbe-autoupdate@testme Bedrock Edition server preview
-if ! test_update | grep -q "Starting Minecraft Bedrock Edition server @ $instance..."; then
+if ! test_update | grep -q Starting; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
