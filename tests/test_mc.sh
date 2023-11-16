@@ -3,6 +3,7 @@
 # Exit if error
 set -e
 extension=.py
+getjar=true
 instance=testme
 backup_override=/etc/systemd/system/mc-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mc@$instance.service.d/z.conf
@@ -79,7 +80,7 @@ test_backup() {
 	start_server
 }
 
-args=$(getopt -l bash,help,port: -o h4: -- "$@")
+args=$(getopt -l bash,help,no-getjar,port: -o hn4: -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -94,9 +95,14 @@ while [ "$1"  != -- ]; do
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-4, --port=PORT  port for IPv4. defaults to 25765.'
 		echo '--bash           test Bash scripts instead of Python'
+		echo "-n, --no-getjar  don't run mc_getjar"
 		echo
 		echo "1GB free disk space required."
 		exit
+		;;
+	--no-getjar|-n)
+		getjar=false
+		shift
 		;;
 	--port|-4)
 		port=$2
@@ -133,7 +139,11 @@ echo "ExecStart=/opt/MCscripts/mc_backup$extension -b /tmp/test_mc_backup /opt/M
 systemctl daemon-reload
 
 echo Test mc_setup new server
-echo y | "/opt/MCscripts/mc_setup$extension" "$instance" > /dev/null
+if [ "$getjar" = true ]; then
+	echo y | "/opt/MCscripts/mc_setup$extension" "$instance" > /dev/null
+else
+	echo y | "/opt/MCscripts/mc_setup$extension" -n "$instance" > /dev/null
+fi
 sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
 sed -i 's/^eula=.*/eula=true/' "$server_dir/eula.txt"
@@ -145,7 +155,11 @@ mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
 echo Test mc_setup import Windows server
-yes | "/opt/MCscripts/mc_setup$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
+if [ "$getjar" = true ]; then
+	yes | "/opt/MCscripts/mc_setup$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
+else
+	yes | "/opt/MCscripts/mc_setup$extension" -ni /tmp/test_mc_setup "$instance" > /dev/null
+fi
 start_server
 
 echo Test mc-backup@testme

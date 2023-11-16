@@ -2,11 +2,12 @@
 
 # Exit if error
 set -e
+getzip=true
 syntax='Usage: mcbe_setup.sh [OPTION]... INSTANCE'
 version=current
 zips_dir=~mc/bedrock_zips
 
-args=$(getopt -l help,import:,preview -o hi:p -- "$@")
+args=$(getopt -l help,import:,no-getzip,preview -o hi:np -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -16,12 +17,17 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-i, --import=SERVER_DIR  minecraft bedrock edition server directory to import'
+		echo "-n, --no-getzip          don't run mcbe_getzip"
 		echo '-p, --preview            use preview instead of current version'
 		exit
 		;;
 	--import|-i)
 		import=$2
 		shift 2
+		;;
+	--no-getzip|-n)
+		getzip=false
+		shift
 		;;
 	--preview|-p)
 		version=preview
@@ -56,7 +62,9 @@ if [ -n "$import" ]; then
 	import=$(realpath -- "$import")
 fi
 
-runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh -bn'
+if [ "$getzip" = true ]; then
+	runuser -l mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.sh -bn'
+fi
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
 else

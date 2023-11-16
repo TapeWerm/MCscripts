@@ -23,6 +23,9 @@ PARSER.add_argument(
     metavar="SERVER_DIR",
     help="minecraft java edition server directory to import",
 )
+PARSER.add_argument(
+    "-n", "--no-getjar", action="store_true", help="don't run mc_getjar"
+)
 ARGS = PARSER.parse_args()
 
 INSTANCE = ARGS.INSTANCE
@@ -76,18 +79,19 @@ if ARGS.import_dir:
         raise
     shutil.rmtree(IMPORT_DIR)
 else:
-    subprocess.run(
-        [
-            "runuser",
-            "-l",
-            "mc",
-            "-s",
-            "/bin/bash",
-            "-c",
-            "/opt/MCscripts/mc_getjar.py -n",
-        ],
-        check=True,
-    )
+    if not ARGS.no_getjar:
+        subprocess.run(
+            [
+                "runuser",
+                "-l",
+                "mc",
+                "-s",
+                "/bin/bash",
+                "-c",
+                "/opt/MCscripts/mc_getjar.py -n",
+            ],
+            check=True,
+        )
     try:
         SERVER_DIR.mkdir()
         shutil.copy2(

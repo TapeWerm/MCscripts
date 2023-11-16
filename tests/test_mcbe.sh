@@ -3,6 +3,7 @@
 # Exit if error
 set -e
 extension=.py
+getzip=true
 instance=testme
 backup_override=/etc/systemd/system/mcbe-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mcbe@$instance.service.d/z.conf
@@ -111,7 +112,7 @@ test_update() {
 	fi
 }
 
-args=$(getopt -l bash,help,port:,portv6: -o h4:6: -- "$@")
+args=$(getopt -l bash,help,no-getzip,port:,portv6: -o hn4:6: -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -127,9 +128,14 @@ while [ "$1"  != -- ]; do
 		echo '-4, --port=PORT      port for IPv4. defaults to 20132.'
 		echo '-6, --portv6=PORTV6  port for IPv6. defaults to 20133.'
 		echo '--bash               test Bash scripts instead of Python'
+		echo "-n, --no-getzip      don't run mcbe_getzip"
 		echo
 		echo "1GB free disk space required."
 		exit
+		;;
+	--no-getzip|-n)
+		getzip=false
+		shift
 		;;
 	--port|-4)
 		port=$2
@@ -178,7 +184,11 @@ echo "ExecStart=/opt/MCscripts/mcbe_backup$extension -b /tmp/test_mcbe_backup /o
 systemctl daemon-reload
 
 echo Test mcbe_setup new server
-echo y | "/opt/MCscripts/mcbe_setup$extension" "$instance" > /dev/null
+if [ "$getzip" = true ]; then
+	echo y | "/opt/MCscripts/mcbe_setup$extension" "$instance" > /dev/null
+else
+	echo y | "/opt/MCscripts/mcbe_setup$extension" -n "$instance" > /dev/null
+fi
 sed -i 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
 sed -i 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
@@ -194,7 +204,11 @@ mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
 echo Test mcbe_setup import Windows server
-yes | "/opt/MCscripts/mcbe_setup$extension" -i /tmp/test_mcbe_setup "$instance" > /dev/null
+if [ "$getzip" = true ]; then
+	yes | "/opt/MCscripts/mcbe_setup$extension" -i /tmp/test_mcbe_setup "$instance" > /dev/null
+else
+	yes | "/opt/MCscripts/mcbe_setup$extension" -ni /tmp/test_mcbe_setup "$instance" > /dev/null
+fi
 start_server
 
 echo Test mcbe-backup@testme

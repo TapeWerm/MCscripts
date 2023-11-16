@@ -27,6 +27,9 @@ PARSER.add_argument(
     help="minecraft bedrock edition server directory to import",
 )
 PARSER.add_argument(
+    "-n", "--no-getzip", action="store_true", help="don't run mcbe_getzip"
+)
+PARSER.add_argument(
     "-p",
     "--preview",
     action="store_true",
@@ -54,18 +57,19 @@ if ARGS.preview:
 else:
     VERSION = "current"
 
-subprocess.run(
-    [
-        "runuser",
-        "-l",
-        "mc",
-        "-s",
-        "/bin/bash",
-        "-c",
-        "/opt/MCscripts/mcbe_getzip.py -bn",
-    ],
-    check=True,
-)
+if not ARGS.no_getzip:
+    subprocess.run(
+        [
+            "runuser",
+            "-l",
+            "mc",
+            "-s",
+            "/bin/bash",
+            "-c",
+            "/opt/MCscripts/mcbe_getzip.py -bn",
+        ],
+        check=True,
+    )
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()
 else:

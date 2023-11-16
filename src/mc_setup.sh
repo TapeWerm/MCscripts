@@ -2,10 +2,11 @@
 
 # Exit if error
 set -e
+getjar=true
 jars_dir=~mc/java_jars
 syntax='Usage: mc_setup.sh [OPTION]... INSTANCE'
 
-args=$(getopt -l help,import: -o hi: -- "$@")
+args=$(getopt -l help,import:,no-getjar -o hi:n -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
@@ -15,11 +16,16 @@ while [ "$1"  != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-i, --import=SERVER_DIR  minecraft java edition server directory to import'
+		echo "-n, --no-getjar          don't run mc_getjar"
 		exit
 		;;
 	--import|-i)
 		import=$2
 		shift 2
+		;;
+	--no-getjar|-n)
+		getjar=false
+		shift
 		;;
 	esac
 done
@@ -80,7 +86,9 @@ if [ -n "$import" ]; then
 	trap - ERR
 	rm -r "$import"
 else
-	runuser -l mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.sh -n'
+	if [ "$getjar" = true ]; then
+		runuser -l mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.sh -n'
+	fi
 	trap 'rm -rf "$server_dir"' ERR
 	mkdir "$server_dir"
 	cp "$jars_dir/current" "$server_dir/server.jar"
