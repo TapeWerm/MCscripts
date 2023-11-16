@@ -69,6 +69,12 @@ if [ "$perf" = true ]; then
 	exit
 fi
 
+echo Test mcbe_getzip EULA prompt
+if echo nope | "/opt/MCscripts/mcbe_getzip$extension" &> /dev/null; then
+	>&2 echo "nope didn't fail EULA prompt"
+	exit 1
+fi
+
 echo Test mcbe_getzip first run
 test_getzip
 
@@ -90,12 +96,14 @@ unzip -tq "$zips_dir/current"
 unzip -tq "$zips_dir/preview"
 if [ ! -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
     >&2 echo bedrock-server-nope.nada.never.zip was clobbered
+	exit 1
 fi
 
 echo Test mcbe_getzip clobber
 test_getzip
 if [ -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
     >&2 echo "bedrock-server-nope.nada.never.zip wasn't clobbered"
+	exit 1
 fi
 
 rm "$zips_dir/preview"

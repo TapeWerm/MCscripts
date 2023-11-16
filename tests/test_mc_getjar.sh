@@ -68,6 +68,12 @@ if [ "$perf" = true ]; then
 	exit
 fi
 
+echo Test mc_getjar EULA prompt
+if echo nope | "/opt/MCscripts/mc_getjar$extension" &> /dev/null; then
+	>&2 echo "nope didn't fail EULA prompt"
+	exit 1
+fi
+
 echo Test mc_getjar first run
 test_getjar
 
@@ -88,12 +94,14 @@ echo y | "/opt/MCscripts/mc_getjar$extension" -n > /dev/null
 unzip -tq "$jars_dir/current"
 if [ ! -f "$jars_dir/minecraft_server.nope.nada.never.jar" ]; then
     >&2 echo minecraft_server.nope.nada.never.jar was clobbered
+	exit 1
 fi
 
 echo Test mc_getjar clobber
 test_getjar
 if [ -f "$jars_dir/minecraft_server.nope.nada.never.jar" ]; then
     >&2 echo "minecraft_server.nope.nada.never.jar wasn't clobbered"
+	exit 1
 fi
 
 echo All tests passed
