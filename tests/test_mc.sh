@@ -79,7 +79,7 @@ test_backup() {
 	start_server
 }
 
-args=$(getopt -l bash,help,port: -o h,4: -- "$@")
+args=$(getopt -l bash,help,port: -o h4: -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in

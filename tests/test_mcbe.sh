@@ -111,7 +111,7 @@ test_update() {
 	fi
 }
 
-args=$(getopt -l bash,help,port:,portv6: -o h,4:,6: -- "$@")
+args=$(getopt -l bash,help,port:,portv6: -o h4:6: -- "$@")
 eval set -- "$args"
 while [ "$1"  != -- ]; do
 	case $1 in
