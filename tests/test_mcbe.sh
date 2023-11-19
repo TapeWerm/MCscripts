@@ -117,16 +117,16 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--bash)
 		extension=.sh
-		shift 1
+		shift
 		;;
 	--help|-h)
 		echo "$syntax"
 		echo Test scripts for mcbe@testme.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-4, --port    port for IPv4. defaults to 20132.'
-		echo '-6, --portv6  port for IPv6. defaults to 20133.'
-		echo '--bash        test Bash scripts instead of Python'
+		echo '-4, --port=PORT      port for IPv4. defaults to 20132.'
+		echo '-6, --portv6=PORTV6  port for IPv6. defaults to 20133.'
+		echo '--bash               test Bash scripts instead of Python'
 		echo
 		echo "1GB free disk space required."
 		exit

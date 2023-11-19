@@ -28,7 +28,7 @@ while [ "$1"  != -- ]; do
 	case $1 in
 	--bash)
 		extension=.sh
-		shift 1
+		shift
 		;;
 	--help|-h)
 		echo "$syntax"
@@ -41,7 +41,7 @@ while [ "$1"  != -- ]; do
 		;;
 	--perf)
 		perf=true
-		shift 1
+		shift
 		;;
 	esac
 done
