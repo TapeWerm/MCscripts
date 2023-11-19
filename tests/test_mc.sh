@@ -92,8 +92,8 @@ while [ "$1"  != -- ]; do
 		echo Test scripts for mc@testme.
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-4, --port=PORT    port for IPv4. defaults to 25765.'
-		echo '--bash             test Bash scripts instead of Python'
+		echo '-4, --port=PORT  port for IPv4. defaults to 25765.'
+		echo '--bash           test Bash scripts instead of Python'
 		echo
 		echo "1GB free disk space required."
 		exit
