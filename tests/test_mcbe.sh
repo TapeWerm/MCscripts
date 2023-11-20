@@ -173,6 +173,10 @@ fi
 cleanup
 trap 'cleanup' EXIT
 
+echo Test mcbe_setup no getzip
+systemd-run --wait -Gqp Type=oneshot -p PrivateNetwork=true "/opt/MCscripts/mcbe_setup$extension" -n "$instance"
+rm -r "$server_dir"
+
 mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
 echo 'ExecStop=' >> "$server_override"
@@ -187,7 +191,7 @@ echo Test mcbe_setup new server
 if [ "$getzip" = true ]; then
 	echo y | "/opt/MCscripts/mcbe_setup$extension" "$instance" > /dev/null
 else
-	echo y | "/opt/MCscripts/mcbe_setup$extension" -n "$instance" > /dev/null
+	"/opt/MCscripts/mcbe_setup$extension" -n "$instance" > /dev/null
 fi
 sed -i 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
 sed -i 's/^level-name=.*/level-name=Bedrock level/' "$properties"
@@ -207,7 +211,7 @@ echo Test mcbe_setup import Windows server
 if [ "$getzip" = true ]; then
 	yes | "/opt/MCscripts/mcbe_setup$extension" -i /tmp/test_mcbe_setup "$instance" > /dev/null
 else
-	yes | "/opt/MCscripts/mcbe_setup$extension" -ni /tmp/test_mcbe_setup "$instance" > /dev/null
+	echo y | "/opt/MCscripts/mcbe_setup$extension" -ni /tmp/test_mcbe_setup "$instance" > /dev/null
 fi
 start_server
 

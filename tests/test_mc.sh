@@ -128,6 +128,10 @@ fi
 cleanup
 trap 'cleanup' EXIT
 
+echo Test mc_setup no getjar
+systemd-run --wait -Gqp Type=oneshot -p PrivateNetwork=true "/opt/MCscripts/mc_setup$extension" -n "$instance"
+rm -r "$server_dir"
+
 mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
 echo 'ExecStop=' >> "$server_override"
@@ -142,7 +146,7 @@ echo Test mc_setup new server
 if [ "$getjar" = true ]; then
 	echo y | "/opt/MCscripts/mc_setup$extension" "$instance" > /dev/null
 else
-	echo y | "/opt/MCscripts/mc_setup$extension" -n "$instance" > /dev/null
+	"/opt/MCscripts/mc_setup$extension" -n "$instance" > /dev/null
 fi
 sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
@@ -158,7 +162,7 @@ echo Test mc_setup import Windows server
 if [ "$getjar" = true ]; then
 	yes | "/opt/MCscripts/mc_setup$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
 else
-	yes | "/opt/MCscripts/mc_setup$extension" -ni /tmp/test_mc_setup "$instance" > /dev/null
+	echo y | "/opt/MCscripts/mc_setup$extension" -ni /tmp/test_mc_setup "$instance" > /dev/null
 fi
 start_server
 
