@@ -54,6 +54,8 @@ fi
 
 trap 'rm -rf "$jars_dir"' EXIT
 
+echo MCscripts version "$(cat /opt/MCscripts/version)"
+
 if [ "$perf" = true ]; then
 	echo y | "/opt/MCscripts/mc_getjar$extension" > /dev/null &
 	if [ "$extension" = .py ]; then

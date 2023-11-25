@@ -173,6 +173,8 @@ fi
 cleanup
 trap 'cleanup' EXIT
 
+echo MCscripts version "$(cat /opt/MCscripts/version)"
+
 echo Test mcbe_setup no getzip
 systemd-run --wait -Gqp Type=oneshot -p PrivateNetwork=true "/opt/MCscripts/mcbe_setup$extension" -n "$instance"
 rm -r "$server_dir"

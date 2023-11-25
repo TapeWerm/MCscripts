@@ -55,6 +55,8 @@ fi
 
 trap 'rm -rf "$zips_dir"' EXIT
 
+echo MCscripts version "$(cat /opt/MCscripts/version)"
+
 if [ "$perf" = true ]; then
 	echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null &
 	if [ "$extension" = .py ]; then

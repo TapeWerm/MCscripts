@@ -128,6 +128,8 @@ fi
 cleanup
 trap 'cleanup' EXIT
 
+echo MCscripts version "$(cat /opt/MCscripts/version)"
+
 echo Test mc_setup no getjar
 systemd-run --wait -Gqp Type=oneshot -p PrivateNetwork=true "/opt/MCscripts/mc_setup$extension" -n "$instance"
 rm -r "$server_dir"
@@ -159,11 +161,7 @@ mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
 echo Test mc_setup import Windows server
-if [ "$getjar" = true ]; then
-	yes | "/opt/MCscripts/mc_setup$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
-else
-	echo y | "/opt/MCscripts/mc_setup$extension" -ni /tmp/test_mc_setup "$instance" > /dev/null
-fi
+echo y | "/opt/MCscripts/mc_setup$extension" -i /tmp/test_mc_setup "$instance" > /dev/null
 start_server
 
 echo Test mc-backup@testme
