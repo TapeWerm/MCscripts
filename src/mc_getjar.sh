@@ -8,7 +8,7 @@ syntax='Usage: mc_getjar.sh [OPTION]...'
 
 args=$(getopt -l help,no-clobber -o hn -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"

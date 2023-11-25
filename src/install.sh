@@ -7,7 +7,7 @@ syntax='Usage: install.sh [OPTION]...'
 
 args=$(getopt -l help,update -o hu -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"

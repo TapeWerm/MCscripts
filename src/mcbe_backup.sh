@@ -46,7 +46,7 @@ server_read() {
 
 args=$(getopt -l backup-dir:,docker,help -o b:dh -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--backup-dir|-b)
 		backup_dir=$2

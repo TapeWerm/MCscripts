@@ -82,7 +82,7 @@ test_backup() {
 
 args=$(getopt -l bash,help,no-getjar,port: -o hn4: -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--bash)
 		extension=.sh

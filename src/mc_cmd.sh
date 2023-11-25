@@ -6,7 +6,7 @@ syntax='Usage: mc_cmd.sh SERVICE COMMAND...'
 
 args=$(getopt -l help -o h -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"

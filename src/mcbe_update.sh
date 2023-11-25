@@ -6,7 +6,7 @@ syntax='Usage: mcbe_update.sh SERVER_DIR MINECRAFT_ZIP`'
 
 args=$(getopt -l help -o h -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"

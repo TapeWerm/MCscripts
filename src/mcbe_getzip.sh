@@ -10,7 +10,7 @@ zips_dir=~/bedrock_zips
 
 args=$(getopt -l both,help,no-clobber,preview -o bhnp -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--both|-b)
 		both=true

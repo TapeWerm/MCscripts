@@ -8,7 +8,7 @@ syntax='Usage: mc_setup.sh [OPTION]... INSTANCE'
 
 args=$(getopt -l help,import:,no-getjar -o hi:n -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"

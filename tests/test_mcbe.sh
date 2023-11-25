@@ -114,7 +114,7 @@ test_update() {
 
 args=$(getopt -l bash,help,no-getzip,port:,portv6: -o hn4:6: -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--bash)
 		extension=.sh

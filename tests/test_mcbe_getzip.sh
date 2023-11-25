@@ -25,7 +25,7 @@ test_getzip() {
 
 args=$(getopt -l bash,help,perf -o h -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--bash)
 		extension=.sh

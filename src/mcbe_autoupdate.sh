@@ -8,7 +8,7 @@ zips_dir=~mc/bedrock_zips
 
 args=$(getopt -l help,preview -o hp -- "$@")
 eval set -- "$args"
-while [ "$1"  != -- ]; do
+while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
