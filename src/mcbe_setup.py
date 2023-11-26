@@ -127,13 +127,10 @@ else:
             )
             for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
                 shutil.chown(file, "mc", "mc")
-            print(
-                "@@@ Don't forget to edit",
-                f"{pathlib.Path(SERVER_DIR, 'server.properties')} @@@",
-            )
         except:
             try:
                 shutil.rmtree(SERVER_DIR)
             except FileNotFoundError:
                 pass
             raise
+print(f"@@@ Remember to edit {pathlib.Path(SERVER_DIR, 'server.properties')} @@@")

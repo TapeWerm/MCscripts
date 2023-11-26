@@ -115,3 +115,4 @@ else:
         except FileNotFoundError:
             pass
         raise
+print(f"@@@ Remember to edit {pathlib.Path(SERVER_DIR, 'server.properties')} @@@")

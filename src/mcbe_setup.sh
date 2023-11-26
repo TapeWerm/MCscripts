@@ -105,5 +105,5 @@ else
 	unzip -q "$minecraft_zip" -d "$server_dir"
 	echo "$current_ver" > "$server_dir/version"
 	chown -R mc:mc "$server_dir"
-	echo "@@@ Don't forget to edit $server_dir/server.properties @@@"
 fi
+echo "@@@ Remember to edit $server_dir/server.properties @@@"

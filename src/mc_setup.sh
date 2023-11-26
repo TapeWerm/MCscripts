@@ -99,3 +99,4 @@ else
 	chmod +x "$server_dir/start.bat"
 	chown -R mc:mc "$server_dir"
 fi
+echo "@@@ Remember to edit $server_dir/server.properties @@@"
