@@ -85,12 +85,14 @@ sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ```
 ## Java Edition setup
 Bring your own Java or `sudo apt update && sudo apt install openjdk-17-jre-headless`.
-
+```bash
+sudo su mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.py'
+```
 Do one of the following:
 - Import server directory:
   ```bash
   # Replace SERVER_DIR with Minecraft server directory
-  sudo /opt/MCscripts/mc_setup.py --import SERVER_DIR MC
+  sudo /opt/MCscripts/mc_import.py SERVER_DIR MC
   ```
 - Make new server directory:
   ```bash
@@ -105,11 +107,14 @@ If you want to automatically remove backups more than 2-weeks-old to save storag
 sudo systemctl enable mc-rmbackup@MC.service --now
 ```
 ## Bedrock Edition setup
+```bash
+sudo su mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.py'
+```
 Do one of the following:
 - Import server directory:
   ```bash
   # Replace SERVER_DIR with Minecraft server directory
-  sudo /opt/MCscripts/mcbe_setup.py --import SERVER_DIR MCBE
+  sudo /opt/MCscripts/mcbe_import.py SERVER_DIR MCBE
   ```
 - Make new server directory:
   ```bash

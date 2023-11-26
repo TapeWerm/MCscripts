@@ -3,7 +3,6 @@
 # Exit if error
 set -e
 extension=.py
-getzip=true
 instance=testme
 backup_override=/etc/systemd/system/mcbe-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mcbe@$instance.service.d/z.conf
@@ -13,6 +12,7 @@ properties=$server_dir/server.properties
 port=20132
 portv6=20133
 syntax='Usage: test_mcbe.sh [OPTION]...'
+zips_dir=~mc/bedrock_zips
 
 cleanup() {
 	if mountpoint -q /mnt/test_mcbe_backup; then
@@ -112,7 +112,7 @@ test_update() {
 	fi
 }
 
-args=$(getopt -l bash,help,no-getzip,port:,portv6: -o hn4:6: -- "$@")
+args=$(getopt -l bash,help,port:,portv6: -o h4:6: -- "$@")
 eval set -- "$args"
 while [ "$1" != -- ]; do
 	case $1 in
@@ -128,14 +128,9 @@ while [ "$1" != -- ]; do
 		echo '-4, --port=PORT      port for IPv4. defaults to 20132.'
 		echo '-6, --portv6=PORTV6  port for IPv6. defaults to 20133.'
 		echo '--bash               test Bash scripts instead of Python'
-		echo "-n, --no-getzip      don't run mcbe_getzip"
 		echo
 		echo "1GB free disk space required."
 		exit
-		;;
-	--no-getzip|-n)
-		getzip=false
-		shift
 		;;
 	--port|-4)
 		port=$2
@@ -174,10 +169,17 @@ cleanup
 trap 'cleanup' EXIT
 
 echo MCscripts version "$(cat /opt/MCscripts/version)"
-
-echo Test mcbe_setup no getzip
-systemd-run --wait -Gqp Type=oneshot -p PrivateNetwork=true "/opt/MCscripts/mcbe_setup$extension" -n "$instance"
-rm -r "$server_dir"
+for version in current preview; do
+	if [ -h "$zips_dir/$version" ]; then
+		minecraft_zip=$(realpath "$zips_dir/$version")
+	else
+		>&2 echo 'No bedrock-server ZIP found in ~mc'
+		exit 1
+	fi
+	# Trim off $minecraft_zip after last .zip
+	current_ver=$(basename "${minecraft_zip%.zip}")
+	echo "$version version $current_ver"
+done
 
 mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
@@ -190,11 +192,7 @@ echo "ExecStart=/opt/MCscripts/mcbe_backup$extension -b /tmp/test_mcbe_backup /o
 systemctl daemon-reload
 
 echo Test mcbe_setup new server
-if [ "$getzip" = true ]; then
-	echo y | "/opt/MCscripts/mcbe_setup$extension" "$instance" > /dev/null
-else
-	"/opt/MCscripts/mcbe_setup$extension" -n "$instance" > /dev/null
-fi
+"/opt/MCscripts/mcbe_setup$extension" "$instance" > /dev/null
 sed -i 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
 sed -i 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
@@ -209,12 +207,8 @@ sed -i 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
-echo Test mcbe_setup import Windows server
-if [ "$getzip" = true ]; then
-	yes | "/opt/MCscripts/mcbe_setup$extension" -i /tmp/test_mcbe_setup "$instance" > /dev/null
-else
-	echo y | "/opt/MCscripts/mcbe_setup$extension" -ni /tmp/test_mcbe_setup "$instance" > /dev/null
-fi
+echo Test mcbe_import Windows server
+echo y | "/opt/MCscripts/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
 start_server
 
 echo Test mcbe-backup@testme

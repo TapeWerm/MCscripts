@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""
-Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE or import SERVER_DIR.
-"""
+"""Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE."""
 
 import argparse
 import pathlib
-import shlex
 import shutil
 import subprocess
 import sys
@@ -14,21 +11,9 @@ import zipfile
 ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
 
 PARSER = argparse.ArgumentParser(
-    description="Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE or\
-        import SERVER_DIR."
+    description="Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE."
 )
 PARSER.add_argument("INSTANCE", help="systemd instance name. ex: mcbe@MCBE")
-PARSER.add_argument(
-    "-i",
-    "--import",
-    type=pathlib.Path,
-    dest="import_dir",
-    metavar="SERVER_DIR",
-    help="minecraft bedrock edition server directory to import",
-)
-PARSER.add_argument(
-    "-n", "--no-getzip", action="store_true", help="don't run mcbe_getzip"
-)
 PARSER.add_argument(
     "-p",
     "--preview",
@@ -49,27 +34,11 @@ SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock", INSTANCE))
 if SERVER_DIR.is_dir():
     sys.exit(f"Server directory {SERVER_DIR} already exists")
 
-if ARGS.import_dir:
-    IMPORT_DIR = pathlib.Path(ARGS.import_dir).resolve()
-
 if ARGS.preview:
     VERSION = "preview"
 else:
     VERSION = "current"
 
-if not ARGS.no_getzip:
-    subprocess.run(
-        [
-            "runuser",
-            "-l",
-            "mc",
-            "-s",
-            "/bin/bash",
-            "-c",
-            "/opt/MCscripts/mcbe_getzip.py -bn",
-        ],
-        check=True,
-    )
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()
 else:
@@ -78,59 +47,20 @@ CURRENT_VER = MINECRAFT_ZIP.stem
 
 pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock")).mkdir(exist_ok=True)
 shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock")), "mc", "mc")
-if ARGS.import_dir:
-    print("Enter Y if you stopped the server to import")
-    if input().lower() != "y":
-        sys.exit("input != y")
-
+with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
+    if minecraft_zipfile.testzip():
+        sys.exit("minecraft_zipfile test failed")
     try:
-        shutil.copytree(IMPORT_DIR, SERVER_DIR)
-        # Convert DOS line endings to UNIX line endings
-        for file in list(SERVER_DIR.glob("*.json")) + list(
-            SERVER_DIR.glob("*.properties")
-        ):
-            file.write_text(
-                file.read_text(encoding="utf-8").replace("\r\n", "\n"), encoding="utf-8"
-            )
+        minecraft_zipfile.extractall(SERVER_DIR)
+        pathlib.Path(SERVER_DIR, "version").write_text(
+            CURRENT_VER + "\n", encoding="utf-8"
+        )
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
             shutil.chown(file, "mc", "mc")
-        # mcbe_update.py reads y asking if you stopped the server
-        subprocess.run(
-            [
-                "runuser",
-                "-l",
-                "mc",
-                "-s",
-                "/bin/bash",
-                "-c",
-                f"echo y | /opt/MCscripts/mcbe_update.py --\
-                    {shlex.quote(str(SERVER_DIR))}\
-                    {shlex.quote(str(MINECRAFT_ZIP))}",
-            ],
-            check=True,
-        )
     except:
         try:
             shutil.rmtree(SERVER_DIR)
         except FileNotFoundError:
             pass
         raise
-    shutil.rmtree(IMPORT_DIR)
-else:
-    with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
-        if minecraft_zipfile.testzip():
-            sys.exit("minecraft_zipfile test failed")
-        try:
-            minecraft_zipfile.extractall(SERVER_DIR)
-            pathlib.Path(SERVER_DIR, "version").write_text(
-                CURRENT_VER + "\n", encoding="utf-8"
-            )
-            for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-                shutil.chown(file, "mc", "mc")
-        except:
-            try:
-                shutil.rmtree(SERVER_DIR)
-            except FileNotFoundError:
-                pass
-            raise
 print(f"@@@ Remember to edit {pathlib.Path(SERVER_DIR, 'server.properties')} @@@")
