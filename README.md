@@ -22,19 +22,19 @@ No automatic updates nor chat bots for Java Edition.
 # Notes
 How to run commands in the server console:
 ```bash
-sudo /opt/MCscripts/mc_cmd.py SERVICE COMMAND...
+sudo /opt/MCscripts/bin/mc_cmd.py SERVICE COMMAND...
 # Minecraft Bedrock Edition server example
-sudo /opt/MCscripts/mc_cmd.py mcbe@MCBE help 2
+sudo /opt/MCscripts/bin/mc_cmd.py mcbe@MCBE help 2
 ```
 How to see server output:
 ```bash
 # Press H for help
-journalctl -u SERVICE | /opt/MCscripts/mc_color.sed | less -r +G
+journalctl -u SERVICE | /opt/MCscripts/bin/mc_color.sed | less -r +G
 ```
 How to add everyone to allowlist:
 ```bash
 allowlist=$(for x in steve alex herobrine; do echo allowlist add "$x"; done)
-sudo /opt/MCscripts/mc_cmd.py SERVICE "$allowlist"
+sudo /opt/MCscripts/bin/mc_cmd.py SERVICE "$allowlist"
 ```
 How to control systemd services:
 ```bash
@@ -52,7 +52,7 @@ sudo systemctl stop mcbe@MCBE
 How to restore backup for Minecraft Bedrock Edition server:
 ```bash
 sudo systemctl stop mcbe@MCBE
-sudo /opt/MCscripts/mcbe_restore.py ~mc/bedrock/MCBE BACKUP
+sudo /opt/MCscripts/bin/mcbe_restore.py ~mc/bedrock/MCBE BACKUP
 sudo systemctl start mcbe@MCBE
 ```
 How to see MCscripts version:
@@ -86,18 +86,18 @@ sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ## Java Edition setup
 Bring your own Java or `sudo apt update && sudo apt install openjdk-17-jre-headless`.
 ```bash
-sudo su mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.py'
+sudo su mc -s /bin/bash -c '/opt/MCscripts/bin/mc_getjar.py'
 ```
 Do one of the following:
 - Import server directory:
   ```bash
   /opt/MCscripts/bin/mc_import.py --help
   # Replace SERVER_DIR with Minecraft server directory
-  sudo /opt/MCscripts/mc_import.py SERVER_DIR MC
+  sudo /opt/MCscripts/bin/mc_import.py SERVER_DIR MC
   ```
 - Make new server directory:
   ```bash
-  sudo /opt/MCscripts/mc_setup.py MC
+  sudo /opt/MCscripts/bin/mc_setup.py MC
   ```
   Enter `sudo nano ~mc/java/MC/eula.txt`, fill it in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>).
 ```bash
@@ -109,18 +109,18 @@ sudo systemctl enable mc-rmbackup@MC.service --now
 ```
 ## Bedrock Edition setup
 ```bash
-sudo su mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.py'
+sudo su mc -s /bin/bash -c '/opt/MCscripts/bin/mcbe_getzip.py'
 ```
 Do one of the following:
 - Import server directory:
   ```bash
   /opt/MCscripts/bin/mcbe_import.py --help
   # Replace SERVER_DIR with Minecraft server directory
-  sudo /opt/MCscripts/mcbe_import.py SERVER_DIR MCBE
+  sudo /opt/MCscripts/bin/mcbe_import.py SERVER_DIR MCBE
   ```
 - Make new server directory:
   ```bash
-  sudo /opt/MCscripts/mcbe_setup.py MCBE
+  sudo /opt/MCscripts/bin/mcbe_setup.py MCBE
   ```
 ```bash
 sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer --now
@@ -157,7 +157,7 @@ How to change mcbe@MCBE shutdown warning to 20 seconds:
    ```
    [Service]
    ExecStop=
-   ExecStop=/opt/MCscripts/mc_stop.py -s 20 %N
+   ExecStop=/opt/MCscripts/bin/mc_stop.py -s 20 %N
    ```
 2. If you want to revert the edit enter `sudo systemctl revert mcbe@MCBE`
 

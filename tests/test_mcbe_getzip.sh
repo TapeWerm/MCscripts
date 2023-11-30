@@ -18,7 +18,7 @@ ps_recursive() {
 }
 
 test_getzip() {
-    echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null
+    echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -b > /dev/null
     unzip -tq "$zips_dir/current"
     unzip -tq "$zips_dir/preview"
 }
@@ -58,11 +58,11 @@ trap 'rm -rf "$zips_dir"' EXIT
 echo MCscripts version "$(cat /opt/MCscripts/version)"
 
 if [ "$perf" = true ]; then
-	echo y | "/opt/MCscripts/mcbe_getzip$extension" -b > /dev/null &
+	echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -b > /dev/null &
 	if [ "$extension" = .py ]; then
-		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/mcbe_getzip\.py -b')
+		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/bin/mcbe_getzip\.py -b')
 	elif [ "$extension" = .sh ]; then
-		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/mcbe_getzip\.sh -b')
+		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mcbe_getzip\.sh -b')
 	fi
 	echo '    PID     TIME   RSS COMMAND'
 	while date --iso-8601=ns && ps_recursive "$pid"; do
@@ -72,7 +72,7 @@ if [ "$perf" = true ]; then
 fi
 
 echo Test mcbe_getzip EULA prompt
-if echo nope | "/opt/MCscripts/mcbe_getzip$extension" &> /dev/null; then
+if echo nope | "/opt/MCscripts/bin/mcbe_getzip$extension" &> /dev/null; then
 	>&2 echo "nope didn't fail EULA prompt"
 	exit 1
 fi
@@ -93,7 +93,7 @@ test_getzip
 touch "$zips_dir/bedrock-server-nope.nada.never.zip"
 
 echo Test mcbe_getzip no clobber
-echo y | "/opt/MCscripts/mcbe_getzip$extension" -bn > /dev/null
+echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -bn > /dev/null
 unzip -tq "$zips_dir/current"
 unzip -tq "$zips_dir/preview"
 if [ ! -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
@@ -111,7 +111,7 @@ fi
 rm "$zips_dir/preview"
 
 echo Test mcbe_getzip no preview symlink
-echo y | "/opt/MCscripts/mcbe_getzip$extension" > /dev/null
+echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" > /dev/null
 unzip -tq "$zips_dir/current"
 
 echo All tests passed

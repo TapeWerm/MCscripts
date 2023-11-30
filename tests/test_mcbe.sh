@@ -82,7 +82,7 @@ test_backup() {
 	fi
 	backup=$(echo "$backup" | cut -d ' ' -f 3- -s)
 	systemctl stop "mcbe@$instance.socket"
-	echo y | "/opt/MCscripts/mcbe_restore$extension" "$server_dir" "$backup" > /dev/null
+	echo y | "/opt/MCscripts/bin/mcbe_restore$extension" "$server_dir" "$backup" > /dev/null
 	start_server
 }
 
@@ -184,15 +184,15 @@ done
 mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
 echo 'ExecStop=' >> "$server_override"
-echo "ExecStop=/opt/MCscripts/mc_stop$extension -s 0 %N" >> "$server_override"
+echo "ExecStop=/opt/MCscripts/bin/mc_stop$extension -s 0 %N" >> "$server_override"
 mkdir -p "$(dirname "$backup_override")"
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mcbe_backup$extension -b /tmp/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/bin/mcbe_backup$extension -b /tmp/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo Test mcbe_setup new server
-"/opt/MCscripts/mcbe_setup$extension" "$instance" > /dev/null
+"/opt/MCscripts/bin/mcbe_setup$extension" "$instance" > /dev/null
 sed -i 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
 sed -i 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
@@ -208,7 +208,7 @@ mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
 echo Test mcbe_import Windows server
-echo y | "/opt/MCscripts/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
+echo y | "/opt/MCscripts/bin/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
 start_server
 
 echo Test mcbe-backup@testme
@@ -233,7 +233,7 @@ mount -t vfat /tmp/test_mcbe_backup.img /mnt/test_mcbe_backup
 
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mcbe_backup$extension -b /mnt/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/bin/mcbe_backup$extension -b /mnt/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo Test mcbe-backup@testme FAT32 backup directory
@@ -241,11 +241,11 @@ test_backup
 
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mcbe_backup$extension -b /tmp/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/bin/mcbe_backup$extension -b /tmp/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
 mkdir -p "$(dirname "$update_override")"
 echo '[Service]' > "$update_override"
 echo 'ExecStart=' >> "$update_override"
-echo "ExecStart=/opt/MCscripts/mcbe_autoupdate$extension /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
+echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
 systemctl daemon-reload
 
 echo Test mcbe-autoupdate@testme already up to date
@@ -272,7 +272,7 @@ fi
 
 echo '[Service]' > "$update_override"
 echo 'ExecStart=' >> "$update_override"
-echo "ExecStart=/opt/MCscripts/mcbe_autoupdate$extension -p /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
+echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -p /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
 systemctl daemon-reload
 
 # In case current and preview are the same version, force update
@@ -288,9 +288,9 @@ echo Test mcbe-backup@testme Bedrock Edition server preview
 test_backup
 
 echo Test mc_cmd multiline input
-"/opt/MCscripts/mc_cmd$extension" "mcbe@$instance" help$'\n'say Hello world
+"/opt/MCscripts/bin/mc_cmd$extension" "mcbe@$instance" help$'\n'say Hello world
 
 echo Test mc_stop runs outside systemd
-"/opt/MCscripts/mc_stop$extension" -s 0 "mcbe@$instance"
+"/opt/MCscripts/bin/mc_stop$extension" -s 0 "mcbe@$instance"
 
 echo All tests passed

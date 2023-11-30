@@ -84,7 +84,7 @@ done
 chown -R mc:mc "$server_dir"
 if [ "$update" = true ]; then
 	# mcbe_update.sh reads y asking if you stopped the server
-	runuser -l mc -s /bin/bash -c "$(printf 'echo y | /opt/MCscripts/mcbe_update.sh -- %q %q' "$server_dir" "$minecraft_zip")"
+	runuser -l mc -s /bin/bash -c "$(printf 'echo y | /opt/MCscripts/bin/mcbe_update.sh -- %q %q' "$server_dir" "$minecraft_zip")"
 fi
 trap - ERR
 rm -r "$import"

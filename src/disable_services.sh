@@ -65,7 +65,7 @@ if [ -n "${active[*]}" ]; then
 fi
 
 for file in "${scripts[@]}"; do
-	rm -f {~mc,/opt/MCscripts}/"$file"
+	rm -f {~mc,/opt/MCscripts,/opt/MCscripts/bin}/"$file"
 done
 rm -f /opt/MCscripts/LICENSE
 for file in "${units[@]}"; do

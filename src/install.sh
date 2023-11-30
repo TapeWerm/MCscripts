@@ -30,7 +30,7 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-if [ "$dir" = /opt/MCscripts ]; then
+if [ "$dir" = /opt/MCscripts/bin ]; then
 	>&2 echo "install.sh cannot be ran inside $dir"
 	exit 1
 fi
@@ -49,7 +49,7 @@ fi
 if [ "$(id -grn mc)" != mc ]; then
 	usermod -g mc mc
 fi
-mkdir -p /opt/MCscripts
+mkdir -p /opt/MCscripts/bin
 if [ ! -L /opt/MCscripts/backup_dir ]; then
 	if [ -L ~mc/backup_dir ]; then
 		mv ~mc/backup_dir /opt/MCscripts/
@@ -61,7 +61,7 @@ chown -h root:root /opt/MCscripts/backup_dir
 "$dir/disable_services.sh"
 echo y | "$dir/move_servers.sh"
 "$dir/move_backups.sh"
-cp "$dir"/*.{py,sed,sh} /opt/MCscripts/
+cp "$dir"/*.{py,sed,sh} /opt/MCscripts/bin/
 cp "$dir/../LICENSE" /opt/MCscripts/
 cp "$dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload

@@ -4,6 +4,6 @@ Description=Back up Minecraft Bedrock Edition server world @ %i
 Requisite=mcbe@%i.service
 
 [Service]
-ExecStart=/opt/MCscripts/mcbe_backup.py -b /opt/MCscripts/backup_dir /opt/MC/bedrock/%i mcbe@%i
+ExecStart=/opt/MCscripts/bin/mcbe_backup.py -b /opt/MCscripts/backup_dir /opt/MC/bedrock/%i mcbe@%i
 KillMode=mixed
 Type=oneshot

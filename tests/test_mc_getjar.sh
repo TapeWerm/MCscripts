@@ -18,7 +18,7 @@ ps_recursive() {
 }
 
 test_getjar() {
-    echo y | "/opt/MCscripts/mc_getjar$extension" > /dev/null
+    echo y | "/opt/MCscripts/bin/mc_getjar$extension" > /dev/null
     unzip -tq "$jars_dir/current"
 }
 
@@ -57,11 +57,11 @@ trap 'rm -rf "$jars_dir"' EXIT
 echo MCscripts version "$(cat /opt/MCscripts/version)"
 
 if [ "$perf" = true ]; then
-	echo y | "/opt/MCscripts/mc_getjar$extension" > /dev/null &
+	echo y | "/opt/MCscripts/bin/mc_getjar$extension" > /dev/null &
 	if [ "$extension" = .py ]; then
-		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/mc_getjar\.py')
+		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/bin/mc_getjar\.py')
 	elif [ "$extension" = .sh ]; then
-		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/mc_getjar\.sh')
+		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mc_getjar\.sh')
 	fi
 	echo '    PID     TIME   RSS COMMAND'
 	while date --iso-8601=ns && ps_recursive "$pid"; do
@@ -71,7 +71,7 @@ if [ "$perf" = true ]; then
 fi
 
 echo Test mc_getjar EULA prompt
-if echo nope | "/opt/MCscripts/mc_getjar$extension" &> /dev/null; then
+if echo nope | "/opt/MCscripts/bin/mc_getjar$extension" &> /dev/null; then
 	>&2 echo "nope didn't fail EULA prompt"
 	exit 1
 fi
@@ -92,7 +92,7 @@ test_getjar
 touch "$jars_dir/minecraft_server.nope.nada.never.jar"
 
 echo Test mc_getjar no clobber
-echo y | "/opt/MCscripts/mc_getjar$extension" -n > /dev/null
+echo y | "/opt/MCscripts/bin/mc_getjar$extension" -n > /dev/null
 unzip -tq "$jars_dir/current"
 if [ ! -f "$jars_dir/minecraft_server.nope.nada.never.jar" ]; then
     >&2 echo minecraft_server.nope.nada.never.jar was clobbered

@@ -45,4 +45,4 @@ if [ -z "$output" ]; then
 	echo "No output from service after 1 second"
 	exit
 fi
-echo "$output" | /opt/MCscripts/mc_color.sed
+echo "$output" | /opt/MCscripts/bin/mc_color.sed

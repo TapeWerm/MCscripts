@@ -55,7 +55,7 @@ if not OUTPUT:
     print("No output from service after 1 second")
     sys.exit()
 subprocess.run(
-    ["/opt/MCscripts/mc_color.sed"],
+    ["/opt/MCscripts/bin/mc_color.sed"],
     check=True,
     input=OUTPUT + "\n",
     encoding="utf-8",

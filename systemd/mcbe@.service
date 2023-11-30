@@ -9,7 +9,7 @@ Environment=LD_LIBRARY_PATH=.
 ExecReload=/bin/bash -c 'echo reload > %t/%N'
 ExecStartPre=/bin/bash -c 'chmod +x bedrock_server'
 ExecStart=/opt/MC/bedrock/%i/bedrock_server
-ExecStop=/opt/MCscripts/mc_stop.py %N
+ExecStop=/opt/MCscripts/bin/mc_stop.py %N
 # Thanks for the security agowa338
 NoNewPrivileges=true
 PrivateDevices=true

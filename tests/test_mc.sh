@@ -76,7 +76,7 @@ test_backup() {
 	fi
 	backup=$(echo "$backup" | cut -d ' ' -f 3- -s)
 	systemctl stop "mc@$instance.socket"
-	echo y | "/opt/MCscripts/mc_restore$extension" "$server_dir" "$backup" > /dev/null
+	echo y | "/opt/MCscripts/bin/mc_restore$extension" "$server_dir" "$backup" > /dev/null
 	start_server
 }
 
@@ -137,15 +137,15 @@ echo "current version $current_ver"
 mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
 echo 'ExecStop=' >> "$server_override"
-echo "ExecStop=/opt/MCscripts/mc_stop$extension -s 0 %N" >> "$server_override"
+echo "ExecStop=/opt/MCscripts/bin/mc_stop$extension -s 0 %N" >> "$server_override"
 mkdir -p "$(dirname "$backup_override")"
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mc_backup$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/bin/mc_backup$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo Test mc_setup new server
-"/opt/MCscripts/mc_setup$extension" "$instance" > /dev/null
+"/opt/MCscripts/bin/mc_setup$extension" "$instance" > /dev/null
 sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
 sed -i 's/^eula=.*/eula=true/' "$server_dir/eula.txt"
@@ -157,7 +157,7 @@ mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
 echo Test mc_import Windows server
-echo y | "/opt/MCscripts/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
+echo y | "/opt/MCscripts/bin/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
 start_server
 
 echo Test mc-backup@testme
@@ -182,16 +182,16 @@ mount -t vfat /tmp/test_mc_backup.img /mnt/test_mc_backup
 
 echo '[Service]' > "$backup_override"
 echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/mc_backup$extension -b /mnt/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/bin/mc_backup$extension -b /mnt/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo Test mc-backup@testme FAT32 backup directory
 test_backup
 
 echo Test mc_cmd multiline input
-"/opt/MCscripts/mc_cmd$extension" "mc@$instance" help$'\n'say Hello world
+"/opt/MCscripts/bin/mc_cmd$extension" "mc@$instance" help$'\n'say Hello world
 
 echo Test mc_stop runs outside systemd
-"/opt/MCscripts/mc_stop$extension" -s 0 "mc@$instance"
+"/opt/MCscripts/bin/mc_stop$extension" -s 0 "mc@$instance"
 
 echo All tests passed

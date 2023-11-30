@@ -69,12 +69,16 @@ for override in /etc/systemd/system/mc@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
 		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mc-backup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
 		sed -i 's|MC/mc_backup\.sh|MCscripts/mc_backup\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_backup\.sh|MCscripts/bin/mc_backup\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_backup\.py|MCscripts/bin/mc_backup\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
@@ -91,12 +95,16 @@ for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
 		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-backup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
 		sed -i 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_backup\.sh|MCscripts/bin/mcbe_backup\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_backup\.py|MCscripts/bin/mcbe_backup\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
@@ -113,6 +121,8 @@ for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
 		sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_getzip\.sh|MCscripts/bin/mcbe_getzip\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_getzip\.py|MCscripts/bin/mcbe_getzip\.py|g' "$override"
 	fi
 done
 # Move webhooks for mcbe-log
