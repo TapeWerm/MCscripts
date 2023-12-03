@@ -137,12 +137,12 @@ sleep 1
 query_cursor=$(server_do save query)
 query=$(server_read "$query_cursor")
 timeout=$(date -d '1 minute' +%s)
-until echo "$query" | grep -q 'Data saved. Files are now ready to be copied.'; do
+until echo "$query" | grep -q 'Data saved\. Files are now ready to be copied\.'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
 		>&2 echo save query timeout
 		exit 1
 	fi
-	if echo "$query" | grep -q 'A previous save has not been completed.'; then
+	if echo "$query" | grep -q 'A previous save has not been completed\.'; then
 		query_cursor=$(server_do save query)
 	fi
 	query=$(server_read "$query_cursor")

@@ -50,19 +50,19 @@ for x in "${!enabled[@]}"; do
 	# If there's mc service but no socket add socket
 	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}
-		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
+		if ! echo "${enabled[*]}" | grep -q "$instance\\.socket"; then
 			enabled+=("$instance.socket")
 		fi
 	# If there's mcbe service but no socket add socket
 	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}
-		if ! echo "${enabled[*]}" | grep -q "$instance.socket"; then
+		if ! echo "${enabled[*]}" | grep -q "$instance\\.socket"; then
 			enabled+=("$instance.socket")
 		fi
 	fi
 done
 if [ "$getzip" = true ]; then
-	enabled+=("mcbe-getzip.timer")
+	enabled+=(mcbe-getzip.timer)
 fi
 # Update systemd overrides
 for override in /etc/systemd/system/mc@*.service.d/*.conf; do

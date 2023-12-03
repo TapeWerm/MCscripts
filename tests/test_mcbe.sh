@@ -49,7 +49,7 @@ start_server() {
 	local timeout
 	timeout=$(date -d '1 minute' +%s)
 	local query
-	until echo "$query" | grep -q 'Server started.'; do
+	until echo "$query" | grep -q 'Server started\.'; do
 		if [ "$(date +%s)" -ge "$timeout" ]; then
 			>&2 echo Server started timeout
 			exit 1
@@ -98,7 +98,7 @@ test_update() {
 	else
 		journalctl "UNIT=mcbe@$instance.service" _PID=1 -o cat
 	fi
-	if ! grep -q '^# Test mcbe_update keeps server.properties$' "$properties"; then
+	if ! grep -q '^# Test mcbe_update keeps server\.properties$' "$properties"; then
 		>&2 echo "mcbe_update didn't keep server.properties"
 		exit 1
 	fi

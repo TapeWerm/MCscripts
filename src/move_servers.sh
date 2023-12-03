@@ -69,8 +69,8 @@ if [ -n "${java[*]}" ]; then
 fi
 for server in "${java[@]}"; do
 	mv "$temp_dir/$server" ~mc/java/
-	if [ -d "$backup_dir/$server"_Backups ]; then
-		mv "$backup_dir/$server"_Backups "$backup_dir/java/"
+	if [ -d "$backup_dir/${server}_Backups" ]; then
+		mv "$backup_dir/${server}_Backups" "$backup_dir/java/"
 	fi
 done
 
@@ -83,8 +83,8 @@ if [ -n "${bedrock[*]}" ]; then
 fi
 for server in "${bedrock[@]}"; do
 	mv "$temp_dir/$server" ~mc/bedrock/
-	if [ -d "$backup_dir/$server"_Backups ]; then
-		mv "$backup_dir/$server"_Backups "$backup_dir/bedrock/"
+	if [ -d "$backup_dir/${server}_Backups" ]; then
+		mv "$backup_dir/${server}_Backups" "$backup_dir/bedrock/"
 	fi
 done
 
