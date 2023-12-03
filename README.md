@@ -91,6 +91,7 @@ sudo su mc -s /bin/bash -c '/opt/MCscripts/mc_getjar.py'
 Do one of the following:
 - Import server directory:
   ```bash
+  /opt/MCscripts/bin/mc_import.py --help
   # Replace SERVER_DIR with Minecraft server directory
   sudo /opt/MCscripts/mc_import.py SERVER_DIR MC
   ```
@@ -113,6 +114,7 @@ sudo su mc -s /bin/bash -c '/opt/MCscripts/mcbe_getzip.py'
 Do one of the following:
 - Import server directory:
   ```bash
+  /opt/MCscripts/bin/mcbe_import.py --help
   # Replace SERVER_DIR with Minecraft server directory
   sudo /opt/MCscripts/mcbe_import.py SERVER_DIR MCBE
   ```
