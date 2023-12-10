@@ -92,7 +92,7 @@ Do one of the following:
 - Import server directory:
   ```bash
   /opt/MCscripts/bin/mc_import.py --help
-  # Replace SERVER_DIR with Minecraft server directory
+  # Replace SERVER_DIR with server directory
   sudo /opt/MCscripts/bin/mc_import.py SERVER_DIR MC
   ```
 - Make new server directory:
@@ -115,7 +115,7 @@ Do one of the following:
 - Import server directory:
   ```bash
   /opt/MCscripts/bin/mcbe_import.py --help
-  # Replace SERVER_DIR with Minecraft server directory
+  # Replace SERVER_DIR with server directory
   sudo /opt/MCscripts/bin/mcbe_import.py SERVER_DIR MCBE
   ```
 - Make new server directory:
