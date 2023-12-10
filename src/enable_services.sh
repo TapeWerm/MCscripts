@@ -125,6 +125,12 @@ for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
 		sed -i 's|MCscripts/mcbe_getzip\.py|MCscripts/bin/mcbe_getzip\.py|g' "$override"
 	fi
 done
+for override in /etc/systemd/system/mcbe-autoupdate@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's|MCscripts/mcbe_autoupdate\.sh|MCscripts/bin/mcbe_autoupdate\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_autoupdate\.py|MCscripts/bin/mcbe_autoupdate\.py|g' "$override"
+	fi
+done
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
 	for file in ~mc/.MCBE_Bot/*_BotWebhook.txt; do
