@@ -5,7 +5,7 @@ set -e
 services_file=/opt/MCscripts/disabled_services.txt
 syntax='Usage: disable_services.sh'
 
-# Current scripts
+# v3.0.0-beta.0 scripts
 scripts=(mc_backup.sh mc_cmd.sh mc_getjar.sh mc_import.sh mc_restore.sh mc_setup.sh mc_stop.sh)
 scripts+=(mc_backup.py mc_cmd.py mc_getjar.py mc_import.py mc_restore.py mc_setup.py mc_stop.py)
 scripts+=(mc_color.sed)
@@ -65,8 +65,9 @@ if [ -n "${active[*]}" ]; then
 fi
 
 for file in "${scripts[@]}"; do
-	rm -f {~mc,/opt/MCscripts,/opt/MCscripts/bin}/"$file"
+	rm -f {~mc,/opt/MCscripts}/"$file"
 done
+rm -rf /opt/MCscripts/bin
 rm -f /opt/MCscripts/LICENSE
 for file in "${units[@]}"; do
 	rm -f "/etc/systemd/system/$file"

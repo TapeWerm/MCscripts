@@ -49,7 +49,7 @@ fi
 if [ "$(id -grn mc)" != mc ]; then
 	usermod -g mc mc
 fi
-mkdir -p /opt/MCscripts/bin
+mkdir -p /opt/MCscripts
 if [ ! -L /opt/MCscripts/backup_dir ]; then
 	if [ -L ~mc/backup_dir ]; then
 		mv ~mc/backup_dir /opt/MCscripts/
@@ -59,6 +59,7 @@ if [ ! -L /opt/MCscripts/backup_dir ]; then
 fi
 chown -h root:root /opt/MCscripts/backup_dir
 "$dir/disable_services.sh"
+mkdir /opt/MCscripts/bin
 echo y | "$dir/move_servers.sh"
 "$dir/move_backups.sh"
 cp "$dir"/*.{py,sed,sh} /opt/MCscripts/bin/
