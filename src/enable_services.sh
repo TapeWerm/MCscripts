@@ -31,28 +31,28 @@ for x in $disabled; do
 done
 # Update list of services to be reenabled
 for x in "${!enabled[@]}"; do
+	# If there's mc service but no socket add socket
+	if [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
+		instance=${enabled[x]%.*}
+		if ! echo "${enabled[*]}" | grep -q "$instance\\.socket"; then
+			enabled+=("$instance.socket")
+		fi
 	# Replace mcbe-autoupdate timer with service and mcbe-getzip
-	if [[ "${enabled[x]}" =~ ^mcbe-autoupdate@.+\.timer$ ]]; then
+	elif [[ "${enabled[x]}" =~ ^mcbe-autoupdate@.+\.timer$ ]]; then
 		# Trim off ${enabled[x]} after last .
 		instance=${enabled[x]%.*}
 		enabled+=("$instance.service")
 		getzip=true
 		unset 'enabled[x]'
-	# Don't reenable removed timer
-	elif [[ "${enabled[x]}" =~ ^mcbe-log@.+\.timer$ ]]; then
+	# Don't reenable removed service
+	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.service$ ]]; then
 		unset 'enabled[x]'
 	# Don't reenable removed timer
 	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.timer$ ]]; then
 		unset 'enabled[x]'
-	# Don't reenable removed service
-	elif [[ "${enabled[x]}" =~ ^mcbe-bot@.+\.service$ ]]; then
+	# Don't reenable removed timer
+	elif [[ "${enabled[x]}" =~ ^mcbe-log@.+\.timer$ ]]; then
 		unset 'enabled[x]'
-	# If there's mc service but no socket add socket
-	elif [[ "${enabled[x]}" =~ ^mc@.+\.service$ ]]; then
-		instance=${enabled[x]%.*}
-		if ! echo "${enabled[*]}" | grep -q "$instance\\.socket"; then
-			enabled+=("$instance.socket")
-		fi
 	# If there's mcbe service but no socket add socket
 	elif [[ "${enabled[x]}" =~ ^mcbe@.+\.service$ ]]; then
 		instance=${enabled[x]%.*}
@@ -65,14 +65,6 @@ if [ "$getzip" = true ]; then
 	enabled+=(mcbe-getzip.timer)
 fi
 # Update systemd overrides
-for override in /etc/systemd/system/mc@*.service.d/*.conf; do
-	if [ -f "$override" ]; then
-		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
-	fi
-done
 for override in /etc/systemd/system/mc-backup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
@@ -91,12 +83,18 @@ for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
 		sed -i "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
 	fi
 done
-for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
+for override in /etc/systemd/system/mc@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
 		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
 		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
 		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
 		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
+	fi
+done
+for override in /etc/systemd/system/mcbe-autoupdate@*.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's|MCscripts/mcbe_autoupdate\.sh|MCscripts/bin/mcbe_autoupdate\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_autoupdate\.py|MCscripts/bin/mcbe_autoupdate\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-backup@*.service.d/*.conf; do
@@ -105,6 +103,14 @@ for override in /etc/systemd/system/mcbe-backup@*.service.d/*.conf; do
 		sed -i 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh|g' "$override"
 		sed -i 's|MCscripts/mcbe_backup\.sh|MCscripts/bin/mcbe_backup\.sh|g' "$override"
 		sed -i 's|MCscripts/mcbe_backup\.py|MCscripts/bin/mcbe_backup\.py|g' "$override"
+	fi
+done
+for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
+	if [ -f "$override" ]; then
+		sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+		sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_getzip\.sh|MCscripts/bin/mcbe_getzip\.sh|g' "$override"
+		sed -i 's|MCscripts/mcbe_getzip\.py|MCscripts/bin/mcbe_getzip\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
@@ -117,18 +123,12 @@ for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
 		sed -i "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
 	fi
 done
-for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
+for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
-		sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_getzip\.sh|MCscripts/bin/mcbe_getzip\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_getzip\.py|MCscripts/bin/mcbe_getzip\.py|g' "$override"
-	fi
-done
-for override in /etc/systemd/system/mcbe-autoupdate@*.service.d/*.conf; do
-	if [ -f "$override" ]; then
-		sed -i 's|MCscripts/mcbe_autoupdate\.sh|MCscripts/bin/mcbe_autoupdate\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_autoupdate\.py|MCscripts/bin/mcbe_autoupdate\.py|g' "$override"
+		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
+		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
 	fi
 done
 # Move webhooks for mcbe-log
