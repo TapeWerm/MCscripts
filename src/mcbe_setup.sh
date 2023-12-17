@@ -50,7 +50,7 @@ fi
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
 else
-	>&2 echo 'No bedrock-server ZIP found in ~mc'
+	>&2 echo No "$version" bedrock-server ZIP found in '~mc'
 	exit 1
 fi
 # Trim off $minecraft_zip after last .zip

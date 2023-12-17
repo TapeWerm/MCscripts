@@ -42,7 +42,7 @@ else:
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()
 else:
-    sys.exit("No bedrock-server ZIP found in ~mc")
+    sys.exit(f"No {VERSION} bedrock-server ZIP found in ~mc")
 CURRENT_VER = MINECRAFT_ZIP.stem
 
 pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock")).mkdir(exist_ok=True)
