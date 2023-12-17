@@ -34,7 +34,7 @@ if not shutil.which("java"):
 if pathlib.Path(JARS_DIR, "current").is_symlink():
     MINECRAFT_JAR = pathlib.Path(JARS_DIR, "current").resolve()
 else:
-    sys.exit("No minecraft_server JAR found in ~mc")
+    sys.exit(f"No minecraft_server JAR {pathlib.Path(JARS_DIR, 'current')}")
 
 pathlib.Path.expanduser(pathlib.Path("~mc", "java")).mkdir(exist_ok=True)
 shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "java")), "mc", "mc")

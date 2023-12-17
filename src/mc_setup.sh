@@ -47,7 +47,7 @@ fi
 if [ -h "$jars_dir/current" ]; then
 	minecraft_jar=$(realpath "$jars_dir/current")
 else
-	>&2 echo 'No minecraft_server JAR found in ~mc'
+	>&2 echo "No minecraft_server JAR $jars_dir/current"
 	exit 1
 fi
 

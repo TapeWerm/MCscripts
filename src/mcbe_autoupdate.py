@@ -58,7 +58,7 @@ INSTANCE = SERVICE.split("@")[-1]
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()
 else:
-    sys.exit(f"No {VERSION} bedrock-server ZIP found in ~mc")
+    sys.exit(f"No bedrock-server ZIP {pathlib.Path(ZIPS_DIR, VERSION)}")
 CURRENT_VER = MINECRAFT_ZIP.stem
 
 if INSTALLED_VER == "fail":

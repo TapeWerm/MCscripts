@@ -127,7 +127,7 @@ echo MCscripts version "$(cat /opt/MCscripts/version)"
 if [ -h "$jars_dir/current" ]; then
 	minecraft_jar=$(realpath "$jars_dir/current")
 else
-	>&2 echo 'No minecraft_server JAR found in ~mc'
+	>&2 echo "No minecraft_server JAR $jars_dir/current"
 	exit 1
 fi
 # Trim off $minecraft_jar after last .jar
