@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-dir=$(dirname "$0")
+dir=$(dirname "$(realpath -- "${BASH_SOURCE[0]}")")
 syntax='Usage: install.sh [OPTION]...'
 
 args=$(getopt -l help,update -o hu -- "$@")

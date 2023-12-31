@@ -49,19 +49,19 @@ if [ "$#" -gt 0 ]; then
 fi
 
 while read -r instance; do
-	if systemctl is-enabled --quiet "$instance"; then
+	if systemctl is-enabled -q -- "$instance"; then
 		enabled+=("$instance")
-	elif systemctl is-active --quiet "$instance"; then
+	elif systemctl is-active -q -- "$instance"; then
 		active+=("$instance")
 	fi
-done < <(systemctl show "${services[@]}" -p Id --value | grep .)
+done < <(systemctl show -ap Id --value -- "${services[@]}" | grep .)
 
 echo "${enabled[*]}" > "$services_file"
 if [ -n "${enabled[*]}" ]; then
-	systemctl disable "${enabled[@]}" --now
+	systemctl disable --now -- "${enabled[@]}"
 fi
 if [ -n "${active[*]}" ]; then
-	systemctl stop "${active[@]}"
+	systemctl stop -- "${active[@]}"
 fi
 
 for file in "${scripts[@]}"; do

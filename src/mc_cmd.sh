@@ -26,7 +26,7 @@ fi
 # Trim off $1 after last .service
 service=${1%.service}
 shift
-if ! systemctl is-active --quiet -- "$service"; then
+if ! systemctl is-active -q -- "$service"; then
 	>&2 echo "Service $service not active"
 	exit 1
 fi

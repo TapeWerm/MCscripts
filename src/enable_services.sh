@@ -160,16 +160,16 @@ fi
 # Enable dependencies first
 for x in "${!enabled[@]}"; do
 	if [[ "${enabled[x]}" =~ ^mc@.+\.socket$|^mcbe@.+\.socket$ ]]; then
-		systemctl enable "${enabled[x]}" --now
+		systemctl enable --now -- "${enabled[x]}"
 		unset 'enabled[x]'
 	fi
 done
 for x in "${!enabled[@]}"; do
 	if [[ "${enabled[x]}" =~ ^mc@.+\.service$|^mcbe@.+\.service$ ]]; then
-		systemctl enable "${enabled[x]}" --now
+		systemctl enable --now -- "${enabled[x]}"
 		unset 'enabled[x]'
 	fi
 done
 if [ -n "${enabled[*]}" ]; then
-	systemctl enable "${enabled[@]}" --now
+	systemctl enable --now -- "${enabled[@]}"
 fi

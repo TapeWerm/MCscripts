@@ -101,11 +101,11 @@ Do one of the following:
   ```
   Enter `sudo nano ~mc/java/MC/eula.txt`, fill it in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>).
 ```bash
-sudo systemctl enable mc@MC.socket mc@MC.service mc-backup@MC.timer --now
+sudo systemctl enable --now mc@MC.socket mc@MC.service mc-backup@MC.timer
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
-sudo systemctl enable mc-rmbackup@MC.service --now
+sudo systemctl enable --now mc-rmbackup@MC.service
 ```
 ## Bedrock Edition setup
 ```bash
@@ -123,12 +123,12 @@ Do one of the following:
   sudo /opt/MCscripts/bin/mcbe_setup.py MCBE
   ```
 ```bash
-sudo systemctl enable mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer --now
-sudo systemctl enable mcbe-getzip.timer mcbe-autoupdate@MCBE.service --now
+sudo systemctl enable --now mcbe@MCBE.socket mcbe@MCBE.service mcbe-backup@MCBE.timer
+sudo systemctl enable --now mcbe-getzip.timer mcbe-autoupdate@MCBE.service
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
-sudo systemctl enable mcbe-rmbackup@MCBE.service --now
+sudo systemctl enable --now mcbe-rmbackup@MCBE.service
 ```
 ## Bedrock Edition webhook bots setup
 If you want to post server logs to webhooks (Discord and Rocket Chat):
@@ -145,7 +145,7 @@ $url
 ...
 ```
 ```bash
-sudo systemctl enable mcbe-log@MCBE.service --now
+sudo systemctl enable --now mcbe-log@MCBE.service
 ```
 ## Override systemd unit configuration
 If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `sudo systemctl edit SERVICE` to override specific options.
@@ -189,7 +189,8 @@ sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ## Remove MCscripts
 ```bash
 sudo /opt/MCscripts/bin/disable_services.sh
-sudo deluser --system mc
+sudo userdel mc
+sudo groupdel mc
 sudo chown -R root:root /opt/MC
 sudo mv -T --backup=numbered /opt/MC /opt/MC.old
 sudo mv -T --backup=numbered /opt/MCscripts /opt/MCscripts.old

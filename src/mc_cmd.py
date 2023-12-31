@@ -31,7 +31,7 @@ SERVICE = ARGS.SERVICE
 if SERVICE.endswith(".service"):
     SERVICE = SERVICE[: -len(".service")]
 if subprocess.run(
-    ["systemctl", "is-active", "--quiet", "--", SERVICE], check=False
+    ["systemctl", "is-active", "-q", "--", SERVICE], check=False
 ).returncode:
     sys.exit(f"Service {SERVICE} not active")
 
