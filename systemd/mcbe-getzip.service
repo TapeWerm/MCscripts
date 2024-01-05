@@ -4,7 +4,7 @@ Description=Automatically download Minecraft Bedrock Edition server ZIP
 
 [Service]
 # DNS check
-ExecStartPre=/bin/bash -c 'until ping -c 1 google.com &> /dev/null; do sleep 1; done'
+ExecStartPre=/bin/bash -c 'until dig google.com &> /dev/null; do sleep 1; done'
 # mcbe_getzip.py reads y asking if you agree to the EULA
 ExecStart=/bin/bash -c 'echo y | /opt/MCscripts/bin/mcbe_getzip.py -b'
 Type=oneshot

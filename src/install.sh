@@ -37,7 +37,7 @@ fi
 
 if command -v apt-get &> /dev/null; then
 	apt-get update
-	apt-get install -y curl dosfstools html-xml-utils socat zip
+	apt-get install -y bind9-dnsutils curl dosfstools html-xml-utils socat zip
 	apt-get install -y python3-bs4 python3-docker python3-requests python3-systemd
 fi
 if ! id mc &> /dev/null; then
