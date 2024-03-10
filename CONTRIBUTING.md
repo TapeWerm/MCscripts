@@ -4,13 +4,28 @@ Like spell checkers, code linters aren't always right, but neither are we.
 
 You can also test modified scripts through `time` to see how runtime is affected by changes.
 
-How to monitor CPU and memory usage of systemd service:
+How to monitor CPU and memory usage of systemd service in CSV:
 ```bash
 service=SERVICE
 ps_recursive() {
-if ! ps -o pid,cputimes,rss,args --no-header "$1"; then
+local cputimes
+if ! cputimes=$(ps -o cputimes --no-header "$1"); then
 return 1
 fi
+# Trim off $cputimes before last space
+cputimes=${cputimes##* }
+local rss
+if ! rss=$(ps -o rss --no-header "$1"); then
+return 1
+fi
+# Trim off $rss before last space
+rss=${rss##* }
+local cmd
+if ! cmd=$(ps -o args --no-header "$1"); then
+return 1
+fi
+cmd=${cmd//'"'/'""'}
+echo "\"$timestamp\",$1,$cputimes,$rss,\"$cmd\""
 local child_pid
 for child_pid in $(ps -o pid --no-header --ppid "$1"); do
 ps_recursive "$child_pid" || true
@@ -21,8 +36,8 @@ sudo systemctl start "$service" &
 while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]; do
 sleep 0.1
 done
-echo '    PID     TIME   RSS COMMAND'
-while date --iso-8601=ns && ps_recursive "$pid"; do
+echo Timestamp,PID,CPU Time,RSS,Command
+while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
 sleep 0.1
 done
 ```

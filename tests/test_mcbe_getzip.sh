@@ -8,9 +8,24 @@ syntax='Usage: test_mcbe_getzip.sh [OPTION]...'
 zips_dir=~/bedrock_zips
 
 ps_recursive() {
-	if ! ps -o pid,cputimes,rss,args --no-header "$1"; then
+	local cputimes
+	if ! cputimes=$(ps -o cputimes --no-header "$1"); then
 		return 1
 	fi
+	# Trim off $cputimes before last space
+	cputimes=${cputimes##* }
+	local rss
+	if ! rss=$(ps -o rss --no-header "$1"); then
+		return 1
+	fi
+	# Trim off $rss before last space
+	rss=${rss##* }
+	local cmd
+	if ! cmd=$(ps -o args --no-header "$1"); then
+		return 1
+	fi
+	cmd=${cmd//'"'/'""'}
+	echo "\"$timestamp\",$1,$cputimes,$rss,\"$cmd\""
 	local child_pid
 	for child_pid in $(ps -o pid --no-header --ppid "$1"); do
 		ps_recursive "$child_pid" || true
@@ -37,7 +52,7 @@ while [ "$1" != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '--bash  test Bash scripts instead of Python'
-		echo '--perf  monitor CPU and memory usage'
+		echo '--perf  monitor CPU and memory usage in CSV'
 		exit
 		;;
 	--perf)
@@ -55,8 +70,6 @@ fi
 
 trap 'rm -rf "$zips_dir"' EXIT
 
-echo MCscripts version "$(cat /opt/MCscripts/version)"
-
 if [ "$perf" = true ]; then
 	echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -b > /dev/null &
 	if [ "$extension" = .py ]; then
@@ -64,12 +77,14 @@ if [ "$perf" = true ]; then
 	elif [ "$extension" = .sh ]; then
 		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mcbe_getzip\.sh -b')
 	fi
-	echo '    PID     TIME   RSS COMMAND'
-	while date --iso-8601=ns && ps_recursive "$pid"; do
+	echo Timestamp,PID,CPU Time,RSS,Command
+	while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
 		sleep 0.1
 	done
 	exit
 fi
+
+echo MCscripts version "$(cat /opt/MCscripts/version)"
 
 echo Test mcbe_getzip EULA prompt
 if echo nope | "/opt/MCscripts/bin/mcbe_getzip$extension" &> /dev/null; then
