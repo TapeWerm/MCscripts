@@ -60,7 +60,7 @@ print(
     "Policy",
 )
 # Does prompting the EULA seem so official that it violates the EULA?
-print("Minecraft End User License Agreement: https://minecraft.net/terms")
+print("Minecraft End User License Agreement: https://minecraft.net/eula")
 print("Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839")
 if input().lower() != "y":
     sys.exit("input != y")

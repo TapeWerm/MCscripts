@@ -63,7 +63,7 @@ urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
 
 echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
 # Does prompting the EULA seem so official that it violates the EULA?
-echo Minecraft End User License Agreement: https://minecraft.net/terms
+echo Minecraft End User License Agreement: https://minecraft.net/eula
 echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')

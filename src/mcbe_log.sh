@@ -75,7 +75,7 @@ journalctl "_SYSTEMD_UNIT=$service.service" -fn 0 -o cat | while IFS='' read -r 
 		# shellcheck disable=SC2001
 		reason=$(echo "$line" | sed "s/.*from the game: '\(.*\)'.*/\1/")
 		# Trim off leading space from $reason
-		reason=${reason#' '}
+		reason=${reason# }
 		send "$player was kicked from $instance because $reason"
 	fi
 done
