@@ -31,11 +31,8 @@ for child_pid in $(ps -o pid --no-header --ppid "$1"); do
 ps_recursive "$child_pid" || true
 done
 }
-sudo true
-sudo systemctl start "$service" &
-while pid=$(systemctl show -p MainPID --value -- "$service") && [ "$pid" = 0 ]; do
-sleep 0.1
-done
+sudo systemctl start --no-block "$service"
+pid=$(systemctl show -p MainPID --value "$service")
 echo Timestamp,PID,CPU Time,RSS,Command
 while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
 sleep 0.1

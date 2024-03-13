@@ -54,7 +54,7 @@ while read -r instance; do
 	elif systemctl is-active -q -- "$instance"; then
 		active+=("$instance")
 	fi
-done < <(systemctl show -ap Id --value -- "${services[@]}" | grep .)
+done < <(systemctl show -ap Id --value "${services[@]}" | grep .)
 
 echo "${enabled[*]}" > "$services_file"
 if [ -n "${enabled[*]}" ]; then
