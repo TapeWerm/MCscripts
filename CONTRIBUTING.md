@@ -33,10 +33,12 @@ done
 }
 sudo systemctl start --no-block "$service"
 pid=$(systemctl show -p MainPID --value "$service")
+{
 echo Timestamp,PID,CPU Time,RSS,Command
 while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
 sleep 0.1
 done
+} | tee /dev/null
 ```
 Please test modified scripts before making a pull request.
 ```bash
