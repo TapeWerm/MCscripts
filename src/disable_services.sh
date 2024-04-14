@@ -64,13 +64,13 @@ if [ -n "${active[*]}" ]; then
 	systemctl stop -- "${active[@]}"
 fi
 
-for file in "${scripts[@]}"; do
-	rm -f {~mc,/opt/MCscripts}/"$file"
+for script in "${scripts[@]}"; do
+	rm -f {~mc,/opt/MCscripts}/"$script"
 done
 rm -rf /opt/MCscripts/bin
 rm -f /opt/MCscripts/LICENSE
-for file in "${units[@]}"; do
-	rm -f "/etc/systemd/system/$file"
+for unit in "${units[@]}"; do
+	rm -f "/etc/systemd/system/$unit"
 done
 
 echo "@@@ Disabled services are listed in $services_file @@@"

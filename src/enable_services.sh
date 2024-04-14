@@ -133,10 +133,10 @@ for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
 done
 # Move webhooks for mcbe-log
 if [ -d ~mc/.MCBE_Bot ]; then
-	for file in ~mc/.MCBE_Bot/*_BotWebhook.txt; do
-		if [ -f "$file" ]; then
-			# Trim off $file after last suffix
-			mv "$file" "${file%_BotWebhook.txt}_webhook.txt"
+	for webhook_file in ~mc/.MCBE_Bot/*_BotWebhook.txt; do
+		if [ -f "$webhook_file" ]; then
+			# Trim off $webhook_file after last suffix
+			mv "$webhook_file" "${webhook_file%_BotWebhook.txt}_webhook.txt"
 		fi
 	done
 	mv ~mc/.MCBE_Bot ~mc/.mcbe_log
