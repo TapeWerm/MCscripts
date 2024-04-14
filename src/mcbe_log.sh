@@ -5,16 +5,17 @@ set -e
 syntax='Usage: mcbe_log.sh SERVICE'
 
 send() {
-	if [ -f "$webhook_file" ]; then
+	if [ -f "$discord_file" ]; then
 		local url
 		while read -r url; do
-			if echo "$url" | grep -Eq '^https://discord(app)?\.com'; then
-				curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" -sS "$url" &
-			# Rocket Chat can be hosted by any domain
-			elif echo "$url" | grep -q '^https://rocket\.'; then
-				curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" -sS "$url" &
-			fi
-		done < "$webhook_file"
+			curl -X POST -H 'Content-Type: application/json' -d "{\"content\":\"$*\"}" -sS "$url" &
+		done < "$discord_file"
+	fi
+	if [ -f "$rocket_file" ]; then
+		local url
+		while read -r url; do
+			curl -X POST -H 'Content-Type: application/json' -d "{\"text\":\"$*\"}" -sS "$url" &
+		done < "$rocket_file"
 	fi
 	wait
 }
@@ -53,8 +54,14 @@ fi
 
 # Trim off $service before last @
 instance=${service##*@}
-webhook_file=~/.mcbe_log/${instance}_webhook.txt
-chmod 600 "$webhook_file"
+discord_file=~/.mcbe_log/${instance}_discord.txt
+if [ -f "$discord_file" ]; then
+	chmod 600 "$discord_file"
+fi
+rocket_file=~/.mcbe_log/${instance}_rocket.txt
+if [ -f "$rocket_file" ]; then
+	chmod 600 "$rocket_file"
+fi
 
 send "Server $instance starting"
 trap 'send "Server $instance stopping"; pkill -s $$' EXIT

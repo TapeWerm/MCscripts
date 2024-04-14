@@ -146,6 +146,29 @@ if [ -d /opt/MCscripts/.mcbe_log ]; then
 fi
 if [ -d ~mc/.mcbe_log ]; then
 	chown -R mc:mc ~mc/.mcbe_log
+	for webhook_file in ~mc/.mcbe_log/*_webhook.txt; do
+		if [ -f "$webhook_file" ]; then
+			for chat in discord rocket; do
+				if [ "$chat" = discord ]; then
+					chat_urls=$(grep -E '^https://discord(app)?\.com' "$webhook_file" || true)
+					# Trim off $webhook_file after last suffix
+					chat_file=${webhook_file%_webhook.txt}_discord.txt
+				elif [ "$chat" = rocket ]; then
+					# Rocket Chat can be hosted by any domain
+					chat_urls=$(grep -E '^https://rocket\.' "$webhook_file" || true)
+					# Trim off $webhook_file after last suffix
+					chat_file=${webhook_file%_webhook.txt}_rocket.txt
+				fi
+				if [ -n "$chat_urls" ]; then
+					touch "$chat_file"
+					chmod 600 "$chat_file"
+					chown mc:mc "$chat_file"
+					echo "$chat_urls" > "$chat_file"
+				fi
+			done
+			rm "$webhook_file"
+		fi
+	done
 fi
 # Move bedrock ZIPs
 if ls ~mc/bedrock-server-*.zip &> /dev/null && [ ! -d "$zips_dir" ]; then

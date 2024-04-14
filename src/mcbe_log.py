@@ -19,27 +19,28 @@ import systemd.journal
 
 def send(msg: str):
     """
-    :param msg: Message to send to URLs in WEBHOOK_FILE
+    :param msg: Message to send to URLs in webhook files
     """
-    if WEBHOOK_FILE.is_file():
-        for url in WEBHOOK_FILE.read_text(encoding="utf-8").split(os.linesep):
-            match = re.match(r"^https://discord(app)?\.com", url)
-            if match:
+    if DISCORD_FILE.is_file():
+        for url in DISCORD_FILE.read_text(encoding="utf-8").split(os.linesep)[:-1]:
+            try:
                 requests.post(
-                    match.string,
+                    url,
                     json={"content": msg},
                     timeout=60,
                 )
-                continue
-            # Rocket Chat can be hosted by any domain
-            match = re.match(r"^https://rocket\.", url)
-            if match:
+            except requests.exceptions.RequestException as err:
+                print(type(err))
+    if ROCKET_FILE.is_file():
+        for url in ROCKET_FILE.read_text(encoding="utf-8").split(os.linesep)[:-1]:
+            try:
                 requests.post(
-                    match.string,
+                    url,
                     json={"text": msg},
                     timeout=60,
                 )
-                continue
+            except requests.exceptions.RequestException as err:
+                print(type(err))
 
 
 PARSER = argparse.ArgumentParser(
@@ -61,8 +62,12 @@ if subprocess.run(
 
 # Trim off SERVICE before last @
 INSTANCE = SERVICE.split("@")[-1]
-WEBHOOK_FILE = pathlib.Path(pathlib.Path.home(), ".mcbe_log", f"{INSTANCE}_webhook.txt")
-WEBHOOK_FILE.chmod(0o600)
+DISCORD_FILE = pathlib.Path(pathlib.Path.home(), ".mcbe_log", f"{INSTANCE}_discord.txt")
+if DISCORD_FILE.is_file():
+    DISCORD_FILE.chmod(0o600)
+ROCKET_FILE = pathlib.Path(pathlib.Path.home(), ".mcbe_log", f"{INSTANCE}_rocket.txt")
+if ROCKET_FILE.is_file():
+    ROCKET_FILE.chmod(0o600)
 
 send(f"Server {INSTANCE} starting")
 journal = systemd.journal.Reader()
