@@ -9,12 +9,17 @@ server_override=/etc/systemd/system/mcbe@$instance.service.d/z.conf
 update_override=/etc/systemd/system/mcbe-autoupdate@$instance.service.d/z.conf
 server_dir=~mc/bedrock/$instance
 properties=$server_dir/server.properties
+discord_file=~mc/.mcbe_log/${instance}_discord.txt
 port=20132
 portv6=20133
 syntax='Usage: test_mcbe.sh [OPTION]...'
 zips_dir=~mc/bedrock_zips
 
 cleanup() {
+	rm -f "$discord_file"
+	if [ -d ~mc/.mcbe_log ]; then
+		rmdir --ignore-fail-on-non-empty ~mc/.mcbe_log
+	fi
 	if mountpoint -q /mnt/test_mcbe_backup; then
 		umount /mnt/test_mcbe_backup
 	fi
@@ -286,6 +291,19 @@ fi
 
 echo Test mcbe-backup@testme Bedrock Edition server preview
 test_backup
+
+mkdir -p ~mc/.mcbe_log
+touch "$discord_file"
+chmod 600 "$discord_file"
+chown -R mc:mc ~mc/.mcbe_log
+echo https://discord.com/do-not-print > "$discord_file"
+
+echo "Test mcbe_log doesn't print webhook when offline"
+offline=$(systemd-run -PGqp KillMode=mixed -p PrivateNetwork=true -p RuntimeMaxSec=1 -p SupplementaryGroups=systemd-journal -p User=mc "/opt/MCscripts/bin/mcbe_log$extension" "mcbe@$instance" 2>&1 || true)
+if echo "$offline" | grep -q do-not-print; then
+	>&2 echo mcbe_log printed webhook when offline
+	exit 1
+fi
 
 echo Test mc_cmd multiline input
 "/opt/MCscripts/bin/mc_cmd$extension" "mcbe@$instance" help$'\n'say Hello world
