@@ -11,17 +11,36 @@ import sys
 
 import bs4
 import requests
+import toml
 
+CLOBBER = True
+CONFIG_FILE = pathlib.Path("/etc/MCscripts/mc-getjar.toml")
 JARS_DIR = pathlib.Path(pathlib.Path.home(), "java_jars")
 
 PARSER = argparse.ArgumentParser(
     description="If the JAR of the current version of Minecraft Java Edition server\
         isn't in ~, download it, and remove outdated JARs in ~."
 )
-PARSER.add_argument(
+CLOBBER_GROUP = PARSER.add_mutually_exclusive_group()
+CLOBBER_GROUP.add_argument(
+    "--clobber", action="store_true", help="remove outdated JARs in ~ (default)"
+)
+CLOBBER_GROUP.add_argument(
     "-n", "--no-clobber", action="store_true", help="don't remove outdated JARs in ~"
 )
 ARGS = PARSER.parse_args()
+
+if CONFIG_FILE.is_file():
+    CONFIG = toml.load(CONFIG_FILE)
+    if "clobber" in CONFIG:
+        if not isinstance(CONFIG["clobber"], bool):
+            sys.exit(f"clobber must be TOML boolean, check {CONFIG_FILE}")
+        CLOBBER = CONFIG["clobber"]
+
+if ARGS.clobber:
+    CLOBBER = True
+elif ARGS.no_clobber:
+    CLOBBER = False
 
 JARS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -84,7 +103,7 @@ if INSTALLED_VER != current_ver:
     if pathlib.Path(JARS_DIR, "current").is_symlink():
         pathlib.Path(JARS_DIR, "current").unlink()
     pathlib.Path(JARS_DIR, "current").symlink_to(pathlib.Path(JARS_DIR, current_ver))
-if not ARGS.no_clobber:
+if CLOBBER:
     for jarfile in JARS_DIR.glob("minecraft_server.*.jar"):
         if not jarfile.samefile(pathlib.Path(JARS_DIR, "current")):
             jarfile.unlink()

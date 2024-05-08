@@ -11,6 +11,9 @@ import shlex
 import subprocess
 import sys
 
+import toml
+
+VERSION = "current"
 ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
 
 PARSER = argparse.ArgumentParser(
@@ -21,18 +24,14 @@ PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
-PARSER.add_argument(
-    "-p",
-    "--preview",
-    action="store_true",
-    help="update to preview instead of current version",
+VERSION_GROUP = PARSER.add_mutually_exclusive_group()
+VERSION_GROUP.add_argument(
+    "-c", "--current", action="store_true", help="update to current version (default)"
+)
+VERSION_GROUP.add_argument(
+    "-p", "--preview", action="store_true", help="update to preview version"
 )
 ARGS = PARSER.parse_args()
-
-if ARGS.preview:
-    VERSION = "preview"
-else:
-    VERSION = "current"
 
 SERVER_DIR = ARGS.SERVER_DIR.resolve()
 if pathlib.Path(SERVER_DIR, "version").is_file():
@@ -54,6 +53,26 @@ if subprocess.run(
     sys.exit(f"Service {SERVICE} not active")
 # Trim off SERVICE before last @
 INSTANCE = SERVICE.split("@")[-1]
+
+CONFIG_FILES = (
+    pathlib.Path("/etc/MCscripts/mcbe-autoupdate.toml"),
+    pathlib.Path("/etc/MCscripts/mcbe-autoupdate", f"{INSTANCE}.toml"),
+)
+for config_file in CONFIG_FILES:
+    if config_file.is_file():
+        config = toml.load(config_file)
+        if "version" in config:
+            if config["version"] == "current":
+                VERSION = "current"
+            elif config["version"] == "preview":
+                VERSION = "preview"
+            else:
+                sys.exit(f"No version {config['version']}, check {config_file}")
+
+if ARGS.current:
+    VERSION = "current"
+elif ARGS.preview:
+    VERSION = "preview"
 
 if pathlib.Path(ZIPS_DIR, VERSION).is_symlink():
     MINECRAFT_ZIP = pathlib.Path(ZIPS_DIR, VERSION).resolve()

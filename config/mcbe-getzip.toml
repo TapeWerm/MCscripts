@@ -1,0 +1,7 @@
+# Remove outdated ZIPs in ~.
+# true or false
+# clobber = true
+
+# Download version.
+# "both", "current", or "preview"
+# versions = "both"

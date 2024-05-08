@@ -1,0 +1,3 @@
+# Remove outdated JARs in ~.
+# true or false
+# clobber = true

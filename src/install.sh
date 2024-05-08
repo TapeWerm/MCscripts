@@ -2,8 +2,36 @@
 
 # Exit if error
 set -e
-dir=$(dirname "$(realpath -- "${BASH_SOURCE[0]}")")
+src_dir=$(dirname "$(realpath -- "${BASH_SOURCE[0]}")")
 syntax='Usage: install.sh [OPTION]...'
+
+# Merge directory $1 into directory $2
+merge_dirs() {
+	local src
+	src=$(realpath -- "$1")
+	local dest
+	dest=$(realpath -- "$2")
+	merge_dirs_recursive "$src" "$dest"
+}
+
+merge_dirs_recursive() {
+	local src
+	src=$1
+	local dest
+	dest=$2
+	find "$src" -mindepth 1 -maxdepth 1 -type f -print0 | while IFS='' read -rd '' file; do
+		cp -n "$file" "$dest/"
+	done
+	find "$src" -mindepth 1 -maxdepth 1 -type d -print0 | while IFS='' read -rd '' dir; do
+		dir=$(basename "$dir")
+		if [ ! -e "$dest/$dir" ]; then
+			mkdir "$dest/$dir"
+		fi
+		if [ -d "$dest/$dir" ] && [ ! -h "$dest/$dir" ]; then
+			merge_dirs_recursive "$src/$dir" "$dest/$dir"
+		fi
+	done
+}
 
 args=$(getopt -l help,update -o hu -- "$@")
 eval set -- "$args"
@@ -30,15 +58,15 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-if [ "$dir" = /opt/MCscripts/bin ]; then
-	>&2 echo "install.sh cannot be ran inside $dir"
+if [ "$src_dir" = /opt/MCscripts/bin ]; then
+	>&2 echo "install.sh cannot be ran inside $src_dir"
 	exit 1
 fi
 
 if command -v apt-get &> /dev/null; then
 	apt-get update
 	apt-get install -y curl dosfstools html-xml-utils socat zip
-	apt-get install -y python3-bs4 python3-docker python3-requests python3-systemd
+	apt-get install -y python3-bs4 python3-docker python3-requests python3-systemd python3-toml
 fi
 if ! id mc &> /dev/null; then
 	useradd -rmd /opt/MC -s /usr/sbin/nologin mc
@@ -58,15 +86,17 @@ if [ ! -L /opt/MCscripts/backup_dir ]; then
 	fi
 fi
 chown -h root:root /opt/MCscripts/backup_dir
-"$dir/disable_services.sh"
+mkdir -p /etc/MCscripts
+merge_dirs "$src_dir/../config" /etc/MCscripts
+"$src_dir/disable_services.sh"
 mkdir /opt/MCscripts/bin
-echo y | "$dir/move_servers.sh"
-"$dir/move_backups.sh"
-cp "$dir"/*.{py,sed,sh} /opt/MCscripts/bin/
-cp "$dir/../LICENSE" /opt/MCscripts/
-cp "$dir"/../systemd/* /etc/systemd/system/
+echo y | "$src_dir/move_servers.sh"
+"$src_dir/move_backups.sh"
+cp "$src_dir"/*.{py,sed,sh} /opt/MCscripts/bin/
+cp "$src_dir/../LICENSE" /opt/MCscripts/
+cp "$src_dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
-"$dir/enable_services.sh"
-cp "$dir/../version" /opt/MCscripts/
+"$src_dir/enable_services.sh"
+cp "$src_dir/../version" /opt/MCscripts/
 echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@
 echo @@@ https://www.creeperhost.net/blog/mitigating-cve/ @@@

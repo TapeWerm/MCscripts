@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+seconds=10
 syntax='Usage: mc_stop.sh [OPTION]... SERVICE'
 
 server_do() {
@@ -30,13 +31,9 @@ while [ "$1" != -- ]; do
 		exit
 		;;
 	--seconds|-s)
-		seconds=$2
-		if [[ ! "$seconds" =~ ^-?[0-9]+$ ]]; then
+		args_seconds=$2
+		if [[ ! "$args_seconds" =~ ^-?[0-9]+$ ]]; then
 			>&2 echo SECONDS must be an integer
-			exit 1
-		fi
-		if [ "$seconds" -lt 0 ] || [ "$seconds" -gt 60 ]; then
-			>&2 echo SECONDS must be between 0 and 60
 			exit 1
 		fi
 		shift 2
@@ -64,9 +61,34 @@ if [ "$MAINPID" = 0 ]; then
 	echo "Service $service already stopped"
 	exit
 fi
+# Trim off $service before last @
+instance=${service##*@}
+# Trim off $service after first @
+template=${service%@*}
 
-if [ -z "$seconds" ]; then
-	seconds=10
+config_files=("/etc/MCscripts/$template.toml" "/etc/MCscripts/$template/$instance.toml")
+for config_file in "${config_files[@]}"; do
+	if [ -f "$config_file" ]; then
+		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("seconds" in CONFIG)' "$config_file")" = True ]; then
+			if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["seconds"], int))' "$config_file")" = False ]; then
+				>&2 echo "seconds must be TOML integer, check $config_file"
+				exit 1
+			fi
+			seconds=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["seconds"])' "$config_file")
+			if [ "$seconds" -lt 0 ] || [ "$seconds" -gt 60 ]; then
+				>&2 echo "seconds must be between 0 and 60, check $config_file"
+				exit 1
+			fi
+		fi
+	fi
+done
+
+if [ -n "$args_seconds" ]; then
+	seconds=$args_seconds
+	if [ "$seconds" -lt 0 ] || [ "$seconds" -gt 60 ]; then
+		>&2 echo SECONDS must be between 0 and 60
+		exit 1
+	fi
 fi
 
 if [ "$seconds" -gt 3 ]; then

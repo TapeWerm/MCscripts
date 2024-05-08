@@ -16,6 +16,7 @@ No automatic updates nor chat bots for Java Edition.
   - [Java Edition setup](#java-edition-setup)
   - [Bedrock Edition setup](#bedrock-edition-setup)
   - [Bedrock Edition webhook bots setup](#bedrock-edition-webhook-bots-setup)
+  - [Config files](#config-files)
   - [Override systemd unit configuration](#override-systemd-unit-configuration)
   - [Update MCscripts](#update-mcscripts)
   - [Remove MCscripts](#remove-mcscripts)
@@ -148,25 +149,41 @@ $url
 ```bash
 sudo systemctl enable --now mcbe-log@MCBE.service
 ```
-## Override systemd unit configuration
-If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `sudo systemctl edit SERVICE` to override specific options.
-Options that are a list, such as ExecStop, must first be reset by setting it to an empty string.
-
+## Config files
 How to change mcbe@MCBE shutdown warning to 20 seconds:
 
-1. Enter `sudo systemctl edit mcbe@MCBE`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+1. ```bash
+   sudo mkdir -p /etc/MCscripts/mcbe
+   sudo cp /etc/MCscripts/mcbe.toml /etc/MCscripts/mcbe/MCBE.toml
+   ```
+2. Enter `sudo nano /etc/MCscripts/mcbe/MCBE.toml`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+   ```toml
+   # Seconds before stopping.
+   # 0-60
+   seconds = 20
+   ```
+
+mcbe.toml configures mcbe@*.
+mcbe/MCBE.toml only configures mcbe@MCBE.
+mcbe/MCBE.toml overrides mcbe.toml.
+
+MCscripts config files are [TOML format](https://toml.io/en/).
+## Override systemd unit configuration
+If you want to edit systemd units in a way that won't get overwritten when you update MCscripts, use `sudo systemctl edit SERVICE` to override specific options.
+Options that are a list, such as ExecStart, must first be reset by setting it to an empty string.
+
+How to change mcbe-rmbackup@MCBE to keep backups for 4 weeks:
+
+1. Enter `sudo systemctl edit mcbe-rmbackup@MCBE`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
    ```
    [Service]
-   ExecStop=
-   ExecStop=/opt/MCscripts/bin/mc_stop.py -s 20 %N
+   ExecStart=
+   ExecStart=/usr/bin/find /opt/MCscripts/backup_dir/bedrock_backups/%i -type f -mtime +28 -delete
    ```
-2. If you want to revert the edit enter `sudo systemctl revert mcbe@MCBE`
+2. If you want to revert the edit enter `sudo systemctl revert mcbe-rmbackup@MCBE`
 
 Other services you might want to edit:
 - [mcbe-backup@MCBE.timer](systemd/mcbe-backup@.timer) - When backups occur (check time zone with `date`)
-- [mcbe-rmbackup@MCBE.service](systemd/mcbe-rmbackup@.service) - How many backups to keep
-- [mcbe-getzip.service](systemd/mcbe-getzip.service) - [mcbe_getzip.py](src/mcbe_getzip.py) --no-clobber
-- [mcbe-autoupdate@MCBE.service](systemd/mcbe-autoupdate@.service) - [mcbe_autoupdate.py](src/mcbe_autoupdate.py) --preview
 
 How to restart mcbe@MCBE at 3 AM daily:
 
@@ -195,4 +212,5 @@ sudo groupdel mc
 sudo chown -R root:root /opt/MC
 sudo mv -T --backup=numbered /opt/MC /opt/MC.old
 sudo mv -T --backup=numbered /opt/MCscripts /opt/MCscripts.old
+sudo mv -T --backup=numbered /etc/MCscripts /etc/MCscripts.old
 ```

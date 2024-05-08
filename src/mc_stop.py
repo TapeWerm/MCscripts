@@ -11,6 +11,10 @@ import subprocess
 import sys
 import time
 
+import toml
+
+SECONDS = 10
+
 
 def server_do(cmd: str):
     """
@@ -38,7 +42,6 @@ PARSER.add_argument(
     "-s",
     "--seconds",
     type=int,
-    default=10,
     help="seconds before stopping. must be between 0 and 60. defaults to 10",
 )
 ARGS = PARSER.parse_args()
@@ -59,10 +62,29 @@ else:
 if MAINPID == "0":
     print(f"Service {SERVICE} already stopped")
     sys.exit()
+# Trim off SERVICE before last @
+INSTANCE = SERVICE.split("@")[-1]
+# Trim off SERVICE after first @
+TEMPLATE = SERVICE.split("@")[0]
 
-SECONDS = ARGS.seconds
-if SECONDS < 0 or SECONDS > 60:
-    sys.exit("SECONDS must be between 0 and 60")
+CONFIG_FILES = (
+    pathlib.Path("/etc/MCscripts", f"{TEMPLATE}.toml"),
+    pathlib.Path("/etc/MCscripts", TEMPLATE, f"{INSTANCE}.toml"),
+)
+for config_file in CONFIG_FILES:
+    if config_file.is_file():
+        config = toml.load(config_file)
+        if "seconds" in config:
+            if not isinstance(config["seconds"], int):
+                sys.exit(f"seconds must be TOML integer, check {config_file}")
+            SECONDS = config["seconds"]
+            if SECONDS < 0 or SECONDS > 60:
+                sys.exit(f"seconds must be between 0 and 60, check {config_file}")
+
+if ARGS.seconds is not None:
+    SECONDS = ARGS.seconds
+    if SECONDS < 0 or SECONDS > 60:
+        sys.exit("SECONDS must be between 0 and 60")
 
 if SECONDS > 3:
     countdown(SECONDS)

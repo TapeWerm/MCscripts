@@ -11,34 +11,66 @@ import sys
 
 import bs4
 import requests
+import toml
 
+CLOBBER = True
+CONFIG_FILE = pathlib.Path("/etc/MCscripts/mcbe-getzip.toml")
+VERSIONS = ("current", "preview")
 ZIPS_DIR = pathlib.Path(pathlib.Path.home(), "bedrock_zips")
 
 PARSER = argparse.ArgumentParser(
     description="If the ZIP of the current version of Minecraft Bedrock Edition server\
         isn't in ~, download it, and remove outdated ZIPs in ~."
 )
-PARSER.add_argument(
+CLOBBER_GROUP = PARSER.add_mutually_exclusive_group()
+CLOBBER_GROUP.add_argument(
+    "--clobber", action="store_true", help="remove outdated ZIPs in ~ (default)"
+)
+CLOBBER_GROUP.add_argument(
     "-n", "--no-clobber", action="store_true", help="don't remove outdated ZIPs in ~"
 )
-GROUP = PARSER.add_mutually_exclusive_group()
-GROUP.add_argument(
-    "-p",
-    "--preview",
+VERSIONS_GROUP = PARSER.add_mutually_exclusive_group()
+VERSIONS_GROUP.add_argument(
+    "-b",
+    "--both",
     action="store_true",
-    help="download preview instead of the current version",
+    help="download current and preview versions (default)",
 )
-GROUP.add_argument(
-    "-b", "--both", action="store_true", help="download current and preview versions"
+VERSIONS_GROUP.add_argument(
+    "-c", "--current", action="store_true", help="download current version"
+)
+VERSIONS_GROUP.add_argument(
+    "-p", "--preview", action="store_true", help="download preview version"
 )
 ARGS = PARSER.parse_args()
 
+if CONFIG_FILE.is_file():
+    CONFIG = toml.load(CONFIG_FILE)
+    if "clobber" in CONFIG:
+        if not isinstance(CONFIG["clobber"], bool):
+            sys.exit(f"clobber must be TOML boolean, check {CONFIG_FILE}")
+        CLOBBER = CONFIG["clobber"]
+    if "versions" in CONFIG:
+        if CONFIG["versions"] == "both":
+            VERSIONS = ("current", "preview")
+        elif CONFIG["versions"] == "current":
+            VERSIONS = ("current",)
+        elif CONFIG["versions"] == "preview":
+            VERSIONS = ("preview",)
+        else:
+            sys.exit(f"No versions {CONFIG['versions']}, check {CONFIG_FILE}")
+
+if ARGS.clobber:
+    CLOBBER = True
+elif ARGS.no_clobber:
+    CLOBBER = False
+
 if ARGS.both:
     VERSIONS = ("current", "preview")
+elif ARGS.current:
+    VERSIONS = ("current",)
 elif ARGS.preview:
     VERSIONS = ("preview",)
-else:
-    VERSIONS = ("current",)
 
 ZIPS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -110,7 +142,7 @@ for version in VERSIONS:
         if pathlib.Path(ZIPS_DIR, version).is_symlink():
             pathlib.Path(ZIPS_DIR, version).unlink()
         pathlib.Path(ZIPS_DIR, version).symlink_to(pathlib.Path(ZIPS_DIR, current_ver))
-if not ARGS.no_clobber:
+if CLOBBER:
     for zipfile in ZIPS_DIR.glob("bedrock-server-*.zip"):
         try:
             if not zipfile.samefile(

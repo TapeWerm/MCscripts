@@ -3,23 +3,31 @@
 # Exit if error
 set -e
 clobber=true
+args_clobber=false
+args_no_clobber=false
+config_file=/etc/MCscripts/mc-getjar.toml
 jars_dir=~/java_jars
 syntax='Usage: mc_getjar.sh [OPTION]...'
 
-args=$(getopt -l help,no-clobber -o hn -- "$@")
+args=$(getopt -l clobber,help,no-clobber -o hn -- "$@")
 eval set -- "$args"
 while [ "$1" != -- ]; do
 	case $1 in
+	--clobber)
+		args_clobber=true
+		shift
+		;;
 	--help|-h)
 		echo "$syntax"
 		echo "If the JAR of the current version of Minecraft Java Edition server isn't in ~, download it, and remove outdated JARs in ~."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
+		echo '--clobber         remove outdated JARs in ~ (default)'
 		echo "-n, --no-clobber  don't remove outdated JARs in ~"
 		exit
 		;;
 	--no-clobber|-n)
-		clobber=false
+		args_no_clobber=true
 		shift
 		;;
 	esac
@@ -30,6 +38,28 @@ if [ "$#" -gt 0 ]; then
 	>&2 echo Too much arguments
 	>&2 echo "$syntax"
 	exit 1
+fi
+
+if [ "$(echo "$args_clobber $args_no_clobber" | grep -o true | wc -l)" -gt 1 ]; then
+	>&2 echo clobber and no-clobber are mutually exclusive
+	exit 1
+fi
+
+if [ -f "$config_file" ]; then
+	if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")" = True ]; then
+		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")" = False ]; then
+			>&2 echo "clobber must be TOML boolean, check $config_file"
+			exit 1
+		fi
+		clobber=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["clobber"])' "$config_file")
+		clobber=$(echo "$clobber" | tr '[:upper:]' '[:lower:]')
+	fi
+fi
+
+if [ "$args_clobber" = true ]; then
+	clobber=true
+elif [ "$args_no_clobber" = true ]; then
+	clobber=false
 fi
 
 mkdir -p "$jars_dir"

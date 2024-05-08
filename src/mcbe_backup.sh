@@ -2,6 +2,7 @@
 
 # Exit if error
 set -e
+backup_dir=~
 backup_time=$(date +%s)
 # Filenames can't contain : on some filesystems
 minute=$(date --date "@$backup_time" +%H-%M)
@@ -49,7 +50,7 @@ eval set -- "$args"
 while [ "$1" != -- ]; do
 	case $1 in
 	--backup-dir|-b)
-		backup_dir=$2
+		args_backup_dir=$2
 		shift 2
 		;;
 	--docker|-d)
@@ -114,12 +115,30 @@ else
 		>&2 echo "Service $service not active"
 		exit 1
 	fi
+	# Trim off $service before last @
+	instance=${service##*@}
 fi
 
-if [ -n "$backup_dir" ]; then
-	backup_dir=$(realpath -- "$backup_dir")
+if [ "$docker" = true ]; then
+	config_files=(/etc/MCscripts/docker-mcbe-backup.toml "/etc/MCscripts/docker-mcbe-backup/$service.toml")
 else
-	backup_dir=~
+	config_files=(/etc/MCscripts/mcbe-backup.toml "/etc/MCscripts/mcbe-backup/$instance.toml")
+fi
+for config_file in "${config_files[@]}"; do
+	if [ -f "$config_file" ]; then
+		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("backup_dir" in CONFIG)' "$config_file")" = True ]; then
+			if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["backup_dir"], str))' "$config_file")" = False ]; then
+				>&2 echo "backup_dir must be TOML string, check $config_file"
+				exit 1
+			fi
+			backup_dir=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["backup_dir"])' "$config_file")
+			backup_dir=$(realpath -- "$backup_dir")
+		fi
+	fi
+done
+
+if [ -n "$args_backup_dir" ]; then
+	backup_dir=$(realpath -- "$args_backup_dir")
 fi
 if [ "$docker" = true ]; then
 	backup_dir=$backup_dir/docker_bedrock_backups/$(basename "$(dirname "$server_dir")")/$world/$year/$month

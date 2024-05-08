@@ -4,22 +4,29 @@
 set -e
 syntax='Usage: mcbe_autoupdate.sh [OPTION]... SERVER_DIR SERVICE'
 version=current
+args_current=false
+args_preview=false
 zips_dir=~mc/bedrock_zips
 
-args=$(getopt -l help,preview -o hp -- "$@")
+args=$(getopt -l current,help,preview -o chp -- "$@")
 eval set -- "$args"
 while [ "$1" != -- ]; do
 	case $1 in
+	--current|-c)
+		args_current=true
+		shift
+		;;
 	--help|-h)
 		echo "$syntax"
 		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-p, --preview  update to preview instead of current version'
+		echo '-c, --current  update to current version (default)'
+		echo '-p, --preview  update to preview version'
 		exit
 		;;
 	--preview|-p)
-		version=preview
+		args_preview=true
 		shift
 		;;
 	esac
@@ -36,6 +43,11 @@ elif [ "$#" -gt 2 ]; then
 	exit 1
 fi
 
+if [ "$(echo "$args_current $args_preview" | grep -o true | wc -l)" -gt 1 ]; then
+	>&2 echo current and preview are mutually exclusive
+	exit 1
+fi
+
 server_dir=$(realpath -- "$1")
 # cat fails if there's no file $server_dir/version
 installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
@@ -48,6 +60,29 @@ if ! systemctl is-active -q -- "$service"; then
 fi
 # Trim off $service before last @
 instance=${service##*@}
+
+config_files=(/etc/MCscripts/mcbe-autoupdate.toml "/etc/MCscripts/mcbe-autoupdate/$instance.toml")
+for config_file in "${config_files[@]}"; do
+	if [ -f "$config_file" ]; then
+		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("version" in CONFIG)' "$config_file")" = True ]; then
+			config_version=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["version"])' "$config_file")
+			if [ "$config_version" = current ]; then
+				version=current
+			elif [ "$config_version" = preview ]; then
+				version=preview
+			else
+				>&2 echo "No version $config_version, check $config_file"
+				exit 1
+			fi
+		fi
+	fi
+done
+
+if [ "$args_current" = true ]; then
+	version=current
+elif [ "$args_preview" = true ]; then
+	version=preview
+fi
 
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")

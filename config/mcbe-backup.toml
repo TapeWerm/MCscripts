@@ -1,0 +1,2 @@
+# Directory backups go in. Best on another drive.
+backup_dir = "/opt/MCscripts/backup_dir"

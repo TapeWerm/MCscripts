@@ -12,8 +12,10 @@ import time
 import typing
 import zipfile
 
+import toml
 import systemd.journal
 
+BACKUP_DIR = pathlib.Path.home()
 BACKUP_TIME = datetime.datetime.now().astimezone()
 
 
@@ -91,11 +93,23 @@ if subprocess.run(
     ["systemctl", "is-active", "-q", "--", SERVICE], check=False
 ).returncode:
     sys.exit(f"Service {SERVICE} not active")
+# Trim off SERVICE before last @
+INSTANCE = SERVICE.split("@")[-1]
+
+CONFIG_FILES = (
+    pathlib.Path("/etc/MCscripts/mc-backup.toml"),
+    pathlib.Path("/etc/MCscripts/mc-backup", f"{INSTANCE}.toml"),
+)
+for config_file in CONFIG_FILES:
+    if config_file.is_file():
+        config = toml.load(config_file)
+        if "backup_dir" in config:
+            if not isinstance(config["backup_dir"], str):
+                sys.exit(f"backup_dir must be TOML string, check {config_file}")
+            BACKUP_DIR = pathlib.Path(config["backup_dir"]).resolve()
 
 if ARGS.backup_dir:
     BACKUP_DIR = ARGS.backup_dir.resolve()
-else:
-    BACKUP_DIR = pathlib.Path.home()
 BACKUP_DIR = pathlib.Path(
     BACKUP_DIR,
     "java_backups",

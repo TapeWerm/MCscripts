@@ -2,18 +2,31 @@
 
 # Exit if error
 set -e
-both=false
 clobber=true
-preview=false
+args_clobber=false
+args_no_clobber=false
+config_file=/etc/MCscripts/mcbe-getzip.toml
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
+versions=(current preview)
+args_both=false
+args_current=false
+args_preview=false
 zips_dir=~/bedrock_zips
 
-args=$(getopt -l both,help,no-clobber,preview -o bhnp -- "$@")
+args=$(getopt -l both,clobber,current,help,no-clobber,preview -o bchnp -- "$@")
 eval set -- "$args"
 while [ "$1" != -- ]; do
 	case $1 in
 	--both|-b)
-		both=true
+		args_both=true
+		shift
+		;;
+	--clobber)
+		args_clobber=true
+		shift
+		;;
+	--current|-c)
+		args_current=true
 		shift
 		;;
 	--help|-h)
@@ -21,17 +34,19 @@ while [ "$1" != -- ]; do
 		echo "If the ZIP of the current version of Minecraft Bedrock Edition server isn't in ~, download it, and remove outdated ZIPs in ~."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
-		echo '-b, --both        download current and preview versions'
+		echo '-b, --both        download current and preview versions (default)'
+		echo '-c, --current     download current version'
+		echo '--clobber         remove outdated ZIPs in ~ (default)'
 		echo "-n, --no-clobber  don't remove outdated ZIPs in ~"
-		echo '-p, --preview     download preview instead of the current version'
+		echo '-p, --preview     download preview version'
 		exit
 		;;
 	--no-clobber|-n)
-		clobber=false
+		args_no_clobber=true
 		shift
 		;;
 	--preview|-p)
-		preview=true
+		args_preview=true
 		shift
 		;;
 	esac
@@ -44,15 +59,51 @@ if [ "$#" -gt 0 ]; then
 	exit 1
 fi
 
-if [ "$both" = true ] && [ "$preview" = true ]; then
-	>&2 echo both and preview are mutually exclusive
+if [ "$(echo "$args_clobber $args_no_clobber" | grep -o true | wc -l)" -gt 1 ]; then
+	>&2 echo clobber and no-clobber are mutually exclusive
 	exit 1
-elif [ "$both" = true ]; then
+fi
+if [ "$(echo "$args_both $args_current $args_preview" | grep -o true | wc -l)" -gt 1 ]; then
+	>&2 echo both, current, and preview are mutually exclusive
+	exit 1
+fi
+
+if [ -f "$config_file" ]; then
+	if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")" = True ]; then
+		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")" = False ]; then
+			>&2 echo "clobber must be TOML boolean, check $config_file"
+			exit 1
+		fi
+		clobber=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["clobber"])' "$config_file")
+		clobber=$(echo "$clobber" | tr '[:upper:]' '[:lower:]')
+	fi
+	if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("versions" in CONFIG)' "$config_file")" = True ]; then
+		config_versions=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["versions"])' "$config_file")
+		if [ "$config_versions" = both ]; then
+			versions=(current preview)
+		elif [ "$config_versions" = current ]; then
+			versions=(current)
+		elif [ "$config_versions" = preview ]; then
+			versions=(preview)
+		else
+			>&2 echo "No versions $config_versions, check $config_file"
+			exit 1
+		fi
+	fi
+fi
+
+if [ "$args_clobber" = true ]; then
+	clobber=true
+elif [ "$args_no_clobber" = true ]; then
+	clobber=false
+fi
+
+if [ "$args_both" = true ]; then
 	versions=(current preview)
-elif [ "$preview" = true ]; then
-	versions=(preview)
-else
+elif [ "$args_current" = true ]; then
 	versions=(current)
+elif [ "$args_preview" = true ]; then
+	versions=(preview)
 fi
 
 mkdir -p "$zips_dir"

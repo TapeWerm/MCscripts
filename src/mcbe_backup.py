@@ -14,8 +14,10 @@ import typing
 import zipfile
 
 import docker
+import toml
 import systemd.journal
 
+BACKUP_DIR = pathlib.Path.home()
 BACKUP_TIME = datetime.datetime.now().astimezone()
 
 
@@ -133,11 +135,29 @@ else:
         ["systemctl", "is-active", "-q", "--", SERVICE], check=False
     ).returncode:
         sys.exit(f"Service {SERVICE} not active")
+    # Trim off SERVICE before last @
+    INSTANCE = SERVICE.split("@")[-1]
+
+if ARGS.docker:
+    CONFIG_FILES = (
+        pathlib.Path("/etc/MCscripts/docker-mcbe-backup.toml"),
+        pathlib.Path("/etc/MCscripts/docker-mcbe-backup", f"{SERVICE}.toml"),
+    )
+else:
+    CONFIG_FILES = (
+        pathlib.Path("/etc/MCscripts/mcbe-backup.toml"),
+        pathlib.Path("/etc/MCscripts/mcbe-backup", f"{INSTANCE}.toml"),
+    )
+for config_file in CONFIG_FILES:
+    if config_file.is_file():
+        config = toml.load(config_file)
+        if "backup_dir" in config:
+            if not isinstance(config["backup_dir"], str):
+                sys.exit(f"backup_dir must be TOML string, check {config_file}")
+            BACKUP_DIR = pathlib.Path(config["backup_dir"]).resolve()
 
 if ARGS.backup_dir:
     BACKUP_DIR = ARGS.backup_dir.resolve()
-else:
-    BACKUP_DIR = pathlib.Path.home()
 if ARGS.docker:
     BACKUP_DIR = pathlib.Path(
         BACKUP_DIR,
