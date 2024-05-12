@@ -11,14 +11,27 @@ merge_dirs() {
 	src=$(realpath -- "$1")
 	local dest
 	dest=$(realpath -- "$2")
-	find "$src" -type f -print0 | while IFS='' read -rd '' file; do
-		# Trim off $file before first $src/
-		file=${file#"$src"/}
-		dir=$(dirname -- "$file")
-		mkdir -p "$dest/$dir"
-		mv -n "$src/$file" "$dest/$file"
-	done
+	merge_dirs_recursive "$src" "$dest"
 	find "$src" -type d -empty -delete
+}
+
+merge_dirs_recursive() {
+	local src
+	src=$1
+	local dest
+	dest=$2
+	find "$src" -mindepth 1 -maxdepth 1 -type f -print0 | while IFS='' read -rd '' file; do
+		mv -n "$file" "$dest/"
+	done
+	find "$src" -mindepth 1 -maxdepth 1 -type d -print0 | while IFS='' read -rd '' dir; do
+		dir=$(basename "$dir")
+		if [ ! -e "$dest/$dir" ]; then
+			mkdir "$dest/$dir"
+		fi
+		if [ -d "$dest/$dir" ] && [ ! -h "$dest/$dir" ]; then
+			merge_dirs_recursive "$src/$dir" "$dest/$dir"
+		fi
+	done
 }
 
 args=$(getopt -l help -o h -- "$@")
