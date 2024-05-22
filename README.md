@@ -69,7 +69,7 @@ Outdated bedrock-server ZIPs in ~mc will be removed by [mcbe_getzip.py](src/mcbe
 [mcbe_update.py](src/mcbe_update.py) only keeps packs, worlds, JSON files, and PROPERTIES files.
 Other files will be removed.
 
-[PlayStation and Xbox can only connect on LAN with subscription, Nintendo Switch cannot connect at all.](https://help.minecraft.net/hc/en-us/articles/4408873961869-Minecraft-Dedicated-and-Featured-Servers-FAQ-)
+PlayStation and Xbox can only connect on LAN with subscription, Nintendo Switch cannot connect at all.
 Try [ProfessorValko's Bedrock Dedicated Server Tutorial](https://www.reddit.com/user/ProfessorValko/comments/9f438p/bedrock_dedicated_server_tutorial/).
 # Setup
 Open Terminal:
