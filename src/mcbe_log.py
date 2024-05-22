@@ -30,7 +30,7 @@ def send(msg: str):
                     timeout=60,
                 )
             except requests.exceptions.RequestException as err:
-                print(type(err))
+                print(type(err), flush=True)
     if ROCKET_FILE.is_file():
         for url in ROCKET_FILE.read_text(encoding="utf-8").split(os.linesep)[:-1]:
             try:
@@ -40,7 +40,7 @@ def send(msg: str):
                     timeout=60,
                 )
             except requests.exceptions.RequestException as err:
-                print(type(err))
+                print(type(err), flush=True)
 
 
 PARSER = argparse.ArgumentParser(
