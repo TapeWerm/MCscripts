@@ -13,7 +13,6 @@ import time
 import typing
 import zipfile
 
-import docker
 import toml
 import systemd.journal
 
@@ -57,14 +56,12 @@ def server_read(cmd_cursor: typing.Union[str, None, datetime.datetime]) -> str:
     # Wait for output
     time.sleep(1)
     if ARGS.docker:
-        return (
-            CONTAINER.logs(
-                since=cmd_cursor.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-            )
-            .decode("utf-8")
-            .replace("\r\n", "\n")
-            .rstrip("\n")
-        )
+        return subprocess.run(
+            ["docker", "logs", "--since", cmd_cursor.isoformat(), SERVICE],
+            check=True,
+            stdout=subprocess.PIPE,
+            encoding="utf-8",
+        ).stdout[: -len(os.linesep)]
     journal = systemd.journal.Reader()
     journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
     if cmd_cursor:
@@ -123,9 +120,15 @@ else:
 
 SERVICE = ARGS.SERVICE
 if ARGS.docker:
-    CLIENT = docker.from_env()
-    CONTAINER = CLIENT.containers.get(SERVICE)
-    if CONTAINER.status != "running":
+    if (
+        SERVICE
+        not in subprocess.run(
+            ["docker", "ps", "--format", "{{.Names}}"],
+            check=True,
+            stdout=subprocess.PIPE,
+            encoding="utf-8",
+        ).stdout.split(os.linesep)[:-1]
+    ):
         sys.exit(f"Container {SERVICE} not running")
 else:
     # Trim off SERVICE after last .service
