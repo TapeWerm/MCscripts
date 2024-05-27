@@ -30,9 +30,10 @@ def server_do(cmd: str) -> typing.Union[str, None, datetime.datetime]:
         no_escape = re.sub(r'([][(){}‘’:,!\\"])', r"\\\\\\\1", SERVICE)
         cmd_cursor = datetime.datetime.now().astimezone()
         subprocess.run(
-            ["socat", f"EXEC:docker attach -- {no_escape},pty", "STDIN"],
+            ["socat", "-", f"EXEC:docker attach -- {no_escape},pty"],
             check=True,
             input=cmd + "\n",
+            stdout=subprocess.DEVNULL,
             encoding="utf-8",
         )
     else:

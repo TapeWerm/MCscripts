@@ -20,7 +20,7 @@ server_do() {
 		# shellcheck disable=SC2001,SC1112
 		no_escape=$(echo "$service" | sed 's/\([][(){}‘’:,!\\"]\)/\\\\\\\1/g')
 		date --iso-8601=ns
-		echo "$*" | socat EXEC:"docker attach -- $no_escape",pty STDIN
+		echo "$*" | socat - EXEC:"docker attach -- $no_escape",pty > /dev/null
 	else
 		{
 			journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat || true
