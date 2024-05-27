@@ -2,6 +2,7 @@
 """Import Minecraft Bedrock Edition server to ~mc/bedrock/INSTANCE."""
 
 import argparse
+import os
 import pathlib
 import shlex
 import shutil
@@ -37,12 +38,15 @@ ARGS = PARSER.parse_args()
 IMPORT_DIR = pathlib.Path(ARGS.IMPORT_DIR).resolve()
 
 INSTANCE = ARGS.INSTANCE
-if INSTANCE != subprocess.run(
-    ["systemd-escape", "--", INSTANCE],
-    check=True,
-    stdout=subprocess.PIPE,
-    encoding="utf-8",
-).stdout.rstrip("\n"):
+if (
+    INSTANCE
+    != subprocess.run(
+        ["systemd-escape", "--", INSTANCE],
+        check=True,
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    ).stdout[: -len(os.linesep)]
+):
     sys.exit("INSTANCE should be indentical to systemd-escape INSTANCE")
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock", INSTANCE))
 if SERVER_DIR.is_dir():

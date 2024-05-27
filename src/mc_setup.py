@@ -17,12 +17,15 @@ PARSER.add_argument("INSTANCE", help="systemd instance name. ex: mc@MC")
 ARGS = PARSER.parse_args()
 
 INSTANCE = ARGS.INSTANCE
-if INSTANCE != subprocess.run(
-    ["systemd-escape", "--", INSTANCE],
-    check=True,
-    stdout=subprocess.PIPE,
-    encoding="utf-8",
-).stdout.rstrip("\n"):
+if (
+    INSTANCE
+    != subprocess.run(
+        ["systemd-escape", "--", INSTANCE],
+        check=True,
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    ).stdout[: -len(os.linesep)]
+):
     sys.exit("INSTANCE should be indentical to systemd-escape INSTANCE")
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java", INSTANCE))
 if SERVER_DIR.is_dir():

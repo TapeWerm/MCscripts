@@ -2,6 +2,7 @@
 """Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE."""
 
 import argparse
+import os
 import pathlib
 import shutil
 import subprocess
@@ -23,12 +24,15 @@ PARSER.add_argument(
 ARGS = PARSER.parse_args()
 
 INSTANCE = ARGS.INSTANCE
-if INSTANCE != subprocess.run(
-    ["systemd-escape", "--", INSTANCE],
-    check=True,
-    stdout=subprocess.PIPE,
-    encoding="utf-8",
-).stdout.rstrip("\n"):
+if (
+    INSTANCE
+    != subprocess.run(
+        ["systemd-escape", "--", INSTANCE],
+        check=True,
+        stdout=subprocess.PIPE,
+        encoding="utf-8",
+    ).stdout[: -len(os.linesep)]
+):
     sys.exit("INSTANCE should be indentical to systemd-escape INSTANCE")
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock", INSTANCE))
 if SERVER_DIR.is_dir():

@@ -23,7 +23,7 @@ with pathlib.Path(SERVER_DIR, "server.properties").open(
 ) as properties:
     for line in properties:
         if line.startswith("level-name="):
-            WORLD = "=".join(line.split("=")[1:]).rstrip("\n")
+            WORLD = "=".join(line.split("=")[1:])[:-1]
             WORLD = pathlib.Path(WORLD).name
             break
 if not WORLD:

@@ -58,7 +58,7 @@ else:
         check=True,
         stdout=subprocess.PIPE,
         encoding="utf-8",
-    ).stdout.rstrip("\n")
+    ).stdout[: -len(os.linesep)]
 if MAINPID == "0":
     print(f"Service {SERVICE} already stopped")
     sys.exit()
