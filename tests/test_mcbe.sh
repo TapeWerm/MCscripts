@@ -250,7 +250,7 @@ echo "ExecStart=/opt/MCscripts/bin/mcbe_backup$extension -b /tmp/test_mcbe_backu
 mkdir -p "$(dirname "$update_override")"
 echo '[Service]' > "$update_override"
 echo 'ExecStart=' >> "$update_override"
-echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
+echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -c /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
 systemctl daemon-reload
 
 echo Test mcbe-autoupdate@testme already up to date

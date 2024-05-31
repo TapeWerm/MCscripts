@@ -33,7 +33,7 @@ ps_recursive() {
 }
 
 test_getzip() {
-    echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -b > /dev/null
+    echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" --clobber -b > /dev/null
     unzip -tq "$zips_dir/current"
     unzip -tq "$zips_dir/preview"
 }
@@ -71,11 +71,11 @@ fi
 trap 'rm -rf "$zips_dir"' EXIT
 
 if [ "$perf" = true ]; then
-	echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -b > /dev/null &
+	echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" --clobber -b > /dev/null &
 	if [ "$extension" = .py ]; then
-		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/bin/mcbe_getzip\.py -b')
+		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/bin/mcbe_getzip\.py --clobber -b')
 	elif [ "$extension" = .sh ]; then
-		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mcbe_getzip\.sh -b')
+		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mcbe_getzip\.sh --clobber -b')
 	fi
 	echo Timestamp,PID,CPU Time,RSS,Command
 	while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
@@ -126,7 +126,7 @@ fi
 rm "$zips_dir/preview"
 
 echo Test mcbe_getzip no preview symlink
-echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" > /dev/null
+echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" --clobber -c > /dev/null
 unzip -tq "$zips_dir/current"
 
 echo All tests passed

@@ -33,7 +33,7 @@ ps_recursive() {
 }
 
 test_getjar() {
-    echo y | "/opt/MCscripts/bin/mc_getjar$extension" > /dev/null
+    echo y | "/opt/MCscripts/bin/mc_getjar$extension" --clobber > /dev/null
     unzip -tq "$jars_dir/current"
 }
 
@@ -70,11 +70,11 @@ fi
 trap 'rm -rf "$jars_dir"' EXIT
 
 if [ "$perf" = true ]; then
-	echo y | "/opt/MCscripts/bin/mc_getjar$extension" > /dev/null &
+	echo y | "/opt/MCscripts/bin/mc_getjar$extension" --clobber > /dev/null &
 	if [ "$extension" = .py ]; then
-		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/bin/mc_getjar\.py')
+		pid=$(pgrep -P $$ -fx 'python3 /opt/MCscripts/bin/mc_getjar\.py --clobber')
 	elif [ "$extension" = .sh ]; then
-		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mc_getjar\.sh')
+		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mc_getjar\.sh --clobber')
 	fi
 	echo Timestamp,PID,CPU Time,RSS,Command
 	while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
