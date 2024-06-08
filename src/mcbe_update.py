@@ -62,7 +62,7 @@ try:
     shutil.copytree(pathlib.Path(SERVER_DIR, "worlds"), pathlib.Path(NEW_DIR, "worlds"))
 
     for file in list(SERVER_DIR.glob("*.json")) + list(SERVER_DIR.glob("*.properties")):
-        shutil.copy2(file, pathlib.Path(NEW_DIR, file.name))
+        shutil.copy2(file, NEW_DIR)
 
     for packs_dir in SERVER_DIR.glob("*_packs"):
         pathlib.Path(NEW_DIR, packs_dir.name).mkdir(exist_ok=True)
