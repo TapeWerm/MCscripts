@@ -31,7 +31,7 @@ def server_do(cmd: str) -> typing.Union[str, None, datetime.datetime]:
         no_escape = re.sub(r'([][(){}‘’:,!"])', r"\\\1", no_escape)
         cmd_cursor = datetime.datetime.now().astimezone()
         subprocess.run(
-            ["socat", "-", f"EXEC:docker attach -- {no_escape},pty"],
+            ["socat", "-", f"EXEC:docker container attach -- {no_escape},pty"],
             check=True,
             input=cmd + "\n",
             stdout=subprocess.DEVNULL,
@@ -59,7 +59,7 @@ def server_read(cmd_cursor: typing.Union[str, None, datetime.datetime]) -> str:
     time.sleep(1)
     if ARGS.docker:
         return subprocess.run(
-            ["docker", "logs", "--since", cmd_cursor.isoformat(), SERVICE],
+            ["docker", "container", "logs", "--since", cmd_cursor.isoformat(), SERVICE],
             check=True,
             stdout=subprocess.PIPE,
             encoding="utf-8",
@@ -125,7 +125,7 @@ if ARGS.docker:
     if (
         SERVICE
         not in subprocess.run(
-            ["docker", "ps", "--format", "{{.Names}}"],
+            ["docker", "container", "ls", "--format", "{{.Names}}"],
             check=True,
             stdout=subprocess.PIPE,
             encoding="utf-8",

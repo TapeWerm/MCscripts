@@ -22,7 +22,7 @@ server_do() {
 		# shellcheck disable=SC2001,SC1112
 		no_escape=$(echo "$no_escape" | sed 's/\([][(){}‘’:,!"]\)/\\\1/g')
 		date --iso-8601=ns
-		echo "$*" | socat - EXEC:"docker attach -- $no_escape",pty > /dev/null
+		echo "$*" | socat - EXEC:"docker container attach -- $no_escape",pty > /dev/null
 	else
 		{
 			journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat || true
@@ -36,7 +36,7 @@ server_read() {
 	# Wait for output
 	sleep 1
 	if [ "$docker" = true ]; then
-		docker logs --since "${1:?}" "$service"
+		docker container logs --since "${1:?}" "$service"
 	else
 		if [ -n "$1" ]; then
 			# Output of $service since $1 with no metadata
@@ -106,7 +106,7 @@ fi
 
 if [ "$docker" = true ]; then
 	service=$2
-	if ! docker ps --format '{{.Names}}' | grep -q "^$service$"; then
+	if ! docker container ls --format '{{.Names}}' | grep -q "^$service$"; then
 		>&2 echo "Container $service not running"
 		exit 1
 	fi
