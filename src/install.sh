@@ -20,7 +20,9 @@ merge_dirs_recursive() {
 	local dest
 	dest=$2
 	find "$src" -mindepth 1 -maxdepth 1 -type f -print0 | while IFS='' read -rd '' file; do
-		cp -n "$file" "$dest/"
+		if [ ! -e "$dest/$(basename "$file")" ]; then
+			cp "$file" "$dest/"
+		fi
 	done
 	find "$src" -mindepth 1 -maxdepth 1 -type d -print0 | while IFS='' read -rd '' dir; do
 		dir=$(basename "$dir")
