@@ -80,7 +80,7 @@ for file in "$server_dir"/*.{json,properties}; do
 		sed -i 's/\r$//' "$file"
 	fi
 done
-echo java -jar server.jar nogui > "$server_dir/start.bat"
+echo java -jar server.jar --nogui > "$server_dir/start.bat"
 chmod +x "$server_dir/start.bat"
 chown -R mc:mc "$server_dir"
 if [ "$update" = true ]; then

@@ -58,8 +58,8 @@ mkdir "$server_dir"
 cp "$minecraft_jar" "$server_dir/server.jar"
 cd "$server_dir"
 # Minecraft Java Edition makes eula.txt on first run
-java -jar server.jar nogui || true
-echo java -jar server.jar nogui > "$server_dir/start.bat"
+java -jar server.jar --nogui || true
+echo java -jar server.jar --nogui > "$server_dir/start.bat"
 chmod +x "$server_dir/start.bat"
 chown -R mc:mc "$server_dir"
 echo "@@@ Remember to edit $server_dir/server.properties @@@"
