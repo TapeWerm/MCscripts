@@ -48,7 +48,7 @@ try:
     # Minecraft Java Edition makes eula.txt on first run
     subprocess.run(["java", "-jar", "server.jar", "--nogui"], check=False)
     pathlib.Path(SERVER_DIR, "start.bat").write_text(
-        "java -jar server.jar --nogui", encoding="utf-8"
+        "java -jar server.jar --nogui\n", encoding="utf-8"
     )
     # chmod +x
     pathlib.Path(SERVER_DIR, "start.bat").chmod(
