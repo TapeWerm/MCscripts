@@ -82,9 +82,7 @@ PARSER = argparse.ArgumentParser(
 PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
 )
-PARSER.add_argument(
-    "SERVICE", type=str, help="systemd service or docker container name"
-)
+PARSER.add_argument("SERVICE", type=str, help="systemd service or docker container")
 PARSER.add_argument(
     "-b",
     "--backup-dir",
@@ -96,8 +94,9 @@ PARSER.add_argument(
     "--docker",
     action="store_true",
     help=(
-        "docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v "
-        + "SERVER_DIR:/data itzg/minecraft-bedrock-server"
+        "https://hub.docker.com/r/itzg/minecraft-bedrock-server "
+        + "SERVER_DIR is $(docker container inspect -f '{{range .Mounts}}{{.Source}}"
+        + "{{end}}' SERVICE)"
     ),
 )
 ARGS = PARSER.parse_args()
@@ -127,13 +126,20 @@ else:
 SERVICE = ARGS.SERVICE
 if ARGS.docker:
     if (
-        SERVICE
-        not in subprocess.run(
-            ["docker", "container", "ls", "--format", "{{.Names}}"],
+        subprocess.run(
+            [
+                "docker",
+                "container",
+                "inspect",
+                "-f",
+                "{{.State.Status}}",
+                SERVICE,
+            ],
             check=True,
             stdout=subprocess.PIPE,
             encoding="utf-8",
-        ).stdout.split(os.linesep)[:-1]
+        ).stdout[: -len(os.linesep)]
+        != "running"
     ):
         sys.exit(f"Container {SERVICE} not running")
 else:

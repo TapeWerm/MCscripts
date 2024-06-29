@@ -65,7 +65,7 @@ while [ "$1" != -- ]; do
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
-		echo '-d, --docker                 docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v SERVER_DIR:/data itzg/minecraft-bedrock-server'
+		echo "-d, --docker                 https://hub.docker.com/r/itzg/minecraft-bedrock-server SERVER_DIR is \$(docker container inspect -f '{{range .Mounts}}{{.Source}}{{end}}' SERVICE)"
 		echo
 		echo 'Backups are bedrock_backups/SERVER_DIR/WORLD/YYYY/MM/DD_HH-MM.zip in BACKUP_DIR.'
 		exit
@@ -106,7 +106,7 @@ fi
 
 if [ "$docker" = true ]; then
 	service=$2
-	if ! docker container ls --format '{{.Names}}' | grep -q "^$service$"; then
+	if [ "$(docker container inspect -f '{{.State.Status}}' "$service")" != "running" ]; then
 		>&2 echo "Container $service not running"
 		exit 1
 	fi
