@@ -53,8 +53,9 @@ def server_read(cmd_cursor: typing.Optional[str]) -> str:
 
 PARSER = argparse.ArgumentParser(
     description="Back up Minecraft Java Edition server running in service.",
-    epilog="Backups are java_backups/SERVER_DIR/WORLD/YYYY/MM/DD_HH-MM.zip in\
-        BACKUP_DIR.",
+    epilog=(
+        "Backups are java_backups/SERVER_DIR/WORLD/YYYY/MM/DD_HH-MM.zip in BACKUP_DIR."
+    ),
 )
 PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft java edition server directory"

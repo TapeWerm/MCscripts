@@ -74,8 +74,10 @@ def server_read(cmd_cursor: typing.Union[str, None, datetime.datetime]) -> str:
 
 PARSER = argparse.ArgumentParser(
     description="Back up Minecraft Bedrock Edition server running in service.",
-    epilog="Backups are bedrock_backups/SERVER_DIR/WORLD/YYYY/MM/DD_HH-MM.zip in\
-        BACKUP_DIR.",
+    epilog=(
+        "Backups are bedrock_backups/SERVER_DIR/WORLD/YYYY/MM/DD_HH-MM.zip in "
+        + "BACKUP_DIR."
+    ),
 )
 PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
@@ -93,8 +95,10 @@ PARSER.add_argument(
     "-d",
     "--docker",
     action="store_true",
-    help="docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v\
-        SERVER_DIR:/data itzg/minecraft-bedrock-server",
+    help=(
+        "docker run -d -it --name SERVICE -e EULA=TRUE -p 19132:19132/udp -v "
+        + "SERVER_DIR:/data itzg/minecraft-bedrock-server"
+    ),
 )
 ARGS = PARSER.parse_args()
 

@@ -18,8 +18,10 @@ CONFIG_FILE = pathlib.Path("/etc/MCscripts/mc-getjar.toml")
 JARS_DIR = pathlib.Path(pathlib.Path.home(), "java_jars")
 
 PARSER = argparse.ArgumentParser(
-    description="If the JAR of the current version of Minecraft Java Edition server\
-        isn't in ~, download it, and remove outdated JARs in ~."
+    description=(
+        "If the JAR of the current version of Minecraft Java Edition server isn't in "
+        + "~, download it, and remove outdated JARs in ~."
+    )
 )
 CLOBBER_GROUP = PARSER.add_mutually_exclusive_group()
 CLOBBER_GROUP.add_argument(

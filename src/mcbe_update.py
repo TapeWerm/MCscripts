@@ -12,11 +12,15 @@ import zipfile
 import sys
 
 PARSER = argparse.ArgumentParser(
-    description="Update Minecraft Bedrock Edition server keeping packs, worlds, JSON\
-        files, and PROPERTIES files. Other files will be removed. You can convert a\
-        Windows SERVER_DIR to Ubuntu and vice versa if you convert line endings.",
-    epilog="MINECRAFT_ZIP cannot be in SERVER_DIR. Remember to stop server before\
-        updating.",
+    description=(
+        "Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, "
+        + "and PROPERTIES files. Other files will be removed. You can convert a "
+        + "Windows SERVER_DIR to Ubuntu and vice versa if you convert line endings."
+    ),
+    epilog=(
+        "MINECRAFT_ZIP cannot be in SERVER_DIR. Remember to stop server before "
+        + "updating."
+    ),
 )
 PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"

@@ -19,8 +19,10 @@ VERSIONS = ("current", "preview")
 ZIPS_DIR = pathlib.Path(pathlib.Path.home(), "bedrock_zips")
 
 PARSER = argparse.ArgumentParser(
-    description="If the ZIP of the current version of Minecraft Bedrock Edition server\
-        isn't in ~, download it, and remove outdated ZIPs in ~."
+    description=(
+        "If the ZIP of the current version of Minecraft Bedrock Edition server isn't "
+        + "in ~, download it, and remove outdated ZIPs in ~."
+    )
 )
 CLOBBER_GROUP = PARSER.add_mutually_exclusive_group()
 CLOBBER_GROUP.add_argument(

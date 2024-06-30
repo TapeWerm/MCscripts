@@ -17,8 +17,10 @@ VERSION = "current"
 ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
 
 PARSER = argparse.ArgumentParser(
-    description="If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up,\
-        update, and restart service of Minecraft Bedrock Edition server."
+    description=(
+        "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and "
+        + "restart service of Minecraft Bedrock Edition server."
+    )
 )
 PARSER.add_argument(
     "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
@@ -96,9 +98,10 @@ elif INSTALLED_VER != CURRENT_VER:
                     "-s",
                     "/bin/bash",
                     "-c",
-                    f"echo y | /opt/MCscripts/bin/mcbe_update.py --\
-                        {shlex.quote(str(SERVER_DIR))}\
-                        {shlex.quote(str(MINECRAFT_ZIP))}",
+                    "echo y | /opt/MCscripts/bin/mcbe_update.py -- "
+                    + shlex.quote(str(SERVER_DIR))
+                    + " "
+                    + shlex.quote(str(MINECRAFT_ZIP)),
                 ],
                 check=True,
             )

@@ -44,8 +44,10 @@ def send(msg: str):
 
 
 PARSER = argparse.ArgumentParser(
-    description="Post Minecraft Bedrock Edition server logs running in service to\
-        webhooks (Discord and Rocket Chat).",
+    description=(
+        "Post Minecraft Bedrock Edition server logs running in service to webhooks "
+        + "(Discord and Rocket Chat)."
+    ),
     epilog="Logs include server start/stop and player connect/disconnect/kicks.",
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")

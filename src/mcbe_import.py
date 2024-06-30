@@ -88,9 +88,10 @@ try:
                 "-s",
                 "/bin/bash",
                 "-c",
-                f"echo y | /opt/MCscripts/bin/mcbe_update.py --\
-                    {shlex.quote(str(SERVER_DIR))}\
-                    {shlex.quote(str(MINECRAFT_ZIP))}",
+                "echo y | /opt/MCscripts/bin/mcbe_update.py -- "
+                + shlex.quote(str(SERVER_DIR))
+                + " "
+                + shlex.quote(str(MINECRAFT_ZIP)),
             ],
             check=True,
         )

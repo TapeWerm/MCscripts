@@ -14,8 +14,10 @@ import time
 import systemd.journal
 
 PARSER = argparse.ArgumentParser(
-    description="Run command in the server console of Minecraft Java Edition or Bedrock\
-        Edition server running in service."
+    description=(
+        "Run command in the server console of Minecraft Java Edition or Bedrock "
+        + "Edition server running in service."
+    )
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
 PARSER.add_argument(

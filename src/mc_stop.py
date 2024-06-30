@@ -33,8 +33,10 @@ def countdown(seconds: int):
 
 
 PARSER = argparse.ArgumentParser(
-    description="Warn Minecraft Java Edition or Bedrock Edition server running in\
-        service 10 seconds before stopping.",
+    description=(
+        "Warn Minecraft Java Edition or Bedrock Edition server running in service 10 "
+        + "seconds before stopping."
+    ),
     epilog="Best ran by systemd before shutdown.",
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
