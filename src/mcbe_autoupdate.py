@@ -7,7 +7,6 @@ service of Minecraft Bedrock Edition server.
 import argparse
 import os
 import pathlib
-import shlex
 import subprocess
 import sys
 
@@ -93,17 +92,17 @@ elif INSTALLED_VER != CURRENT_VER:
             subprocess.run(
                 [
                     "runuser",
-                    "-l",
+                    "-u",
                     "mc",
-                    "-s",
-                    "/bin/bash",
-                    "-c",
-                    "echo y | /opt/MCscripts/bin/mcbe_update.py -- "
-                    + shlex.quote(str(SERVER_DIR))
-                    + " "
-                    + shlex.quote(str(MINECRAFT_ZIP)),
+                    "--",
+                    "/opt/MCscripts/bin/mcbe_update.py",
+                    "--",
+                    SERVER_DIR,
+                    MINECRAFT_ZIP,
                 ],
                 check=True,
+                input="y\n",
+                encoding="utf-8",
             )
         finally:
             subprocess.run(["systemctl", "start", SERVICE], check=True)

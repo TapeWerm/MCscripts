@@ -4,7 +4,6 @@
 import argparse
 import os
 import pathlib
-import shlex
 import shutil
 import subprocess
 import sys
@@ -83,17 +82,17 @@ try:
         subprocess.run(
             [
                 "runuser",
-                "-l",
+                "-u",
                 "mc",
-                "-s",
-                "/bin/bash",
-                "-c",
-                "echo y | /opt/MCscripts/bin/mcbe_update.py -- "
-                + shlex.quote(str(SERVER_DIR))
-                + " "
-                + shlex.quote(str(MINECRAFT_ZIP)),
+                "--",
+                "/opt/MCscripts/bin/mcbe_update.py",
+                "--",
+                SERVER_DIR,
+                MINECRAFT_ZIP,
             ],
             check=True,
+            input="y\n",
+            encoding="utf-8",
         )
 except:
     try:
