@@ -83,7 +83,7 @@ if [ "$perf" = true ]; then
 	exit
 fi
 
-echo MCscripts version "$(cat /opt/MCscripts/version)"
+echo "MCscripts version $(cat /opt/MCscripts/version)"
 
 echo Test mc_getjar EULA prompt
 if echo nope | "/opt/MCscripts/bin/mc_getjar$extension" &> /dev/null; then

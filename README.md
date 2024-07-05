@@ -34,7 +34,7 @@ journalctl -u SERVICE | /opt/MCscripts/bin/mc_color.sed | less -r +G
 ```
 How to add everyone to allowlist:
 ```bash
-allowlist=$(for x in steve alex herobrine; do echo allowlist add "$x"; done)
+allowlist=$(for x in steve alex herobrine; do echo "allowlist add $x"; done)
 sudo /opt/MCscripts/bin/mc_cmd.py SERVICE "$allowlist"
 ```
 How to control systemd services:

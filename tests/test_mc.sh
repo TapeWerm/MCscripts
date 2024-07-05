@@ -123,7 +123,7 @@ fi
 cleanup
 trap 'cleanup' EXIT
 
-echo MCscripts version "$(cat /opt/MCscripts/version)"
+echo "MCscripts version $(cat /opt/MCscripts/version)"
 if [ -h "$jars_dir/current" ]; then
 	minecraft_jar=$(realpath "$jars_dir/current")
 else

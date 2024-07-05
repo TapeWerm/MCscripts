@@ -173,7 +173,7 @@ fi
 cleanup
 trap 'cleanup' EXIT
 
-echo MCscripts version "$(cat /opt/MCscripts/version)"
+echo "MCscripts version $(cat /opt/MCscripts/version)"
 for version in current preview; do
 	if [ -h "$zips_dir/$version" ]; then
 		minecraft_zip=$(realpath "$zips_dir/$version")

@@ -84,7 +84,7 @@ if [ "$perf" = true ]; then
 	exit
 fi
 
-echo MCscripts version "$(cat /opt/MCscripts/version)"
+echo "MCscripts version $(cat /opt/MCscripts/version)"
 
 echo Test mcbe_getzip EULA prompt
 if echo nope | "/opt/MCscripts/bin/mcbe_getzip$extension" &> /dev/null; then
