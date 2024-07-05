@@ -37,6 +37,7 @@ if (
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock", INSTANCE))
 if SERVER_DIR.is_dir():
     sys.exit(f"Server directory {SERVER_DIR} already exists")
+MCSCRIPTS_DIR = pathlib.Path(SERVER_DIR, ".MCscripts")
 
 if ARGS.preview:
     VERSION = "preview"
@@ -56,7 +57,8 @@ with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
         sys.exit("minecraft_zipfile test failed")
     try:
         minecraft_zipfile.extractall(SERVER_DIR)
-        pathlib.Path(SERVER_DIR, "version").write_text(
+        MCSCRIPTS_DIR.mkdir()
+        pathlib.Path(MCSCRIPTS_DIR, "version").write_text(
             CURRENT_VER + "\n", encoding="utf-8"
         )
         for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):

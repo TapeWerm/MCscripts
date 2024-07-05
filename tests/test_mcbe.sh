@@ -8,6 +8,7 @@ backup_override=/etc/systemd/system/mcbe-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mcbe@$instance.service.d/z.conf
 update_override=/etc/systemd/system/mcbe-autoupdate@$instance.service.d/z.conf
 server_dir=~mc/bedrock/$instance
+mcscripts_dir=$server_dir/.MCscripts
 properties=$server_dir/server.properties
 discord_file=~mc/.mcbe_log/${instance}_discord.txt
 port=20132
@@ -208,11 +209,20 @@ chown mc:mc "$server_dir/test_mcbe_update.json"
 start_server
 
 systemctl stop "mcbe@$instance.socket"
+rm -r "$mcscripts_dir"
 sed -i 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
 echo Test mcbe_import Windows server
+echo y | "/opt/MCscripts/bin/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
+start_server
+
+systemctl stop "mcbe@$instance.socket"
+mv "$server_dir" /tmp/test_mcbe_setup
+chown -R root:root /tmp/test_mcbe_setup
+
+echo Test mcbe_import .MCscripts already exists
 echo y | "/opt/MCscripts/bin/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
 start_server
 
@@ -259,7 +269,7 @@ if test_update | grep -q Starting; then
 	exit 1
 fi
 
-echo 💢 > "$server_dir/version"
+echo 💢 > "$mcscripts_dir/version"
 
 echo Test mcbe-autoupdate@testme different version
 if ! test_update | grep -q Starting; then
@@ -267,7 +277,7 @@ if ! test_update | grep -q Starting; then
 	exit 1
 fi
 
-rm "$server_dir/version"
+rm -r "$mcscripts_dir"
 
 echo Test mcbe-autoupdate@testme no version file
 if ! test_update | grep -q Starting; then
@@ -281,7 +291,7 @@ echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -p /opt/MC/bedrock/
 systemctl daemon-reload
 
 # In case current and preview are the same version, force update
-rm "$server_dir/version"
+rm -r "$mcscripts_dir"
 
 echo Test mcbe-autoupdate@testme Bedrock Edition server preview
 if ! test_update | grep -q Starting; then

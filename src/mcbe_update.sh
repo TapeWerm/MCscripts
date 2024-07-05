@@ -36,6 +36,8 @@ if [ ! -f "$server_dir/bedrock_server" ] && [ ! -f "$server_dir/bedrock_server.e
 fi
 new_server=$server_dir.new
 old_server=$server_dir.old
+mcscripts_dir=$server_dir/.MCscripts
+new_mcscripts=$new_server/.MCscripts
 
 minecraft_zip=$(realpath -- "$2")
 if [ -n "$(find "$server_dir" -path "$minecraft_zip")" ]; then
@@ -54,11 +56,12 @@ if [ "$input" != y ]; then
 fi
 
 rm -rf "$new_server"
-trap 'rm -rf "$new_server"; echo fail > "$server_dir/version"' ERR
+trap 'rm -rf "$new_server"; mkdir -p "$mcscripts_dir"; echo fail > "$mcscripts_dir/version"' ERR
 unzip -q "$minecraft_zip" -d "$new_server"
 
+mkdir "$new_mcscripts"
 # Trim off $minecraft_zip after last .zip
-basename "${minecraft_zip%.zip}" > "$new_server/version"
+basename "${minecraft_zip%.zip}" > "$new_mcscripts/version"
 cp -r "$server_dir/worlds" "$new_server/"
 
 for file in "$server_dir"/*.{json,properties}; do

@@ -18,7 +18,7 @@ while [ "$1" != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server."
+		echo "If SERVER_DIR/.MCscripts/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server."
 		echo
 		echo Mandatory arguments to long options are mandatory for short options too.
 		echo '-c, --current  update to current version (default)'
@@ -49,8 +49,9 @@ if [ "$(echo "$args_current $args_preview" | grep -o true | wc -l)" -gt 1 ]; the
 fi
 
 server_dir=$(realpath -- "$1")
-# cat fails if there's no file $server_dir/version
-installed_ver=$(cat "$server_dir/version" 2> /dev/null || true)
+mcscripts_dir=$server_dir/.MCscripts
+# cat fails if there's no file $mcscripts_dir/version
+installed_ver=$(cat "$mcscripts_dir/version" 2> /dev/null || true)
 
 # Trim off $2 after last .service
 service=${2%.service}
@@ -94,10 +95,10 @@ fi
 current_ver=$(basename "${minecraft_zip%.zip}")
 
 if [ "$installed_ver" = fail ]; then
-	echo "Previous update failed, rm $server_dir/version and try again"
+	echo "Previous update failed, rm $mcscripts_dir/version and try again"
 	exit 1
 elif [ "$installed_ver" != "$current_ver" ]; then
-	trap 'echo fail > "$server_dir/version"' ERR
+	trap 'mkdir -p "$mcscripts_dir"; echo fail > "$mcscripts_dir/version"' ERR
 	systemctl start "mcbe-backup@$instance"
 	trap 'systemctl start "$service"' EXIT
 	systemctl stop "$service.socket"

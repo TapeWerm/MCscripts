@@ -46,6 +46,7 @@ if [ -d "$server_dir" ]; then
 	>&2 echo "Server directory $server_dir already exists"
 	exit 1
 fi
+mcscripts_dir=$server_dir/.MCscripts
 
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
@@ -62,6 +63,7 @@ chown mc:mc ~mc/bedrock
 unzip -tq "$minecraft_zip"
 trap 'rm -rf "$server_dir"' ERR
 unzip -q "$minecraft_zip" -d "$server_dir"
-echo "$current_ver" > "$server_dir/version"
+mkdir "$mcscripts_dir"
+echo "$current_ver" > "$mcscripts_dir/version"
 chown -R mc:mc "$server_dir"
 echo "@@@ Remember to edit $server_dir/server.properties @@@"

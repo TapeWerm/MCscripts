@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and restart
-service of Minecraft Bedrock Edition server.
+If SERVER_DIR/.MCscripts/version isn't the same as the ZIP in ~mc, back up, update, and
+restart service of Minecraft Bedrock Edition server.
 """
 
 import argparse
@@ -17,8 +17,8 @@ ZIPS_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock_zips"))
 
 PARSER = argparse.ArgumentParser(
     description=(
-        "If SERVER_DIR/version isn't the same as the ZIP in ~mc, back up, update, and "
-        + "restart service of Minecraft Bedrock Edition server."
+        "If SERVER_DIR/.MCscripts/version isn't the same as the ZIP in ~mc, back up, "
+        + "update, and restart service of Minecraft Bedrock Edition server."
     )
 )
 PARSER.add_argument(
@@ -35,9 +35,10 @@ VERSION_GROUP.add_argument(
 ARGS = PARSER.parse_args()
 
 SERVER_DIR = ARGS.SERVER_DIR.resolve()
-if pathlib.Path(SERVER_DIR, "version").is_file():
+MCSCRIPTS_DIR = pathlib.Path(SERVER_DIR, ".MCscripts")
+if pathlib.Path(MCSCRIPTS_DIR, "version").is_file():
     INSTALLED_VER = (
-        pathlib.Path(SERVER_DIR, "version")
+        pathlib.Path(MCSCRIPTS_DIR, "version")
         .read_text(encoding="utf-8")
         .split(os.linesep)[0]
     )
@@ -83,7 +84,7 @@ CURRENT_VER = MINECRAFT_ZIP.stem
 
 if INSTALLED_VER == "fail":
     sys.exit(
-        f"Previous update failed, rm {pathlib.Path(SERVER_DIR, 'version')} and try "
+        f"Previous update failed, rm {pathlib.Path(MCSCRIPTS_DIR, 'version')} and try "
         + "again"
     )
 elif INSTALLED_VER != CURRENT_VER:
@@ -110,5 +111,6 @@ elif INSTALLED_VER != CURRENT_VER:
         finally:
             subprocess.run(["systemctl", "start", SERVICE], check=True)
     except:
-        pathlib.Path(SERVER_DIR, "version").write_text("fail\n", encoding="utf-8")
+        MCSCRIPTS_DIR.mkdir(exist_ok=True)
+        pathlib.Path(MCSCRIPTS_DIR, "version").write_text("fail\n", encoding="utf-8")
         raise

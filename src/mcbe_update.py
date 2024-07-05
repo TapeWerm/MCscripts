@@ -40,6 +40,8 @@ if (
     sys.exit("SERVER_DIR should have file bedrock_server or bedrock_server.exe")
 NEW_SERVER = SERVER_DIR.with_name(SERVER_DIR.name + ".new")
 OLD_SERVER = SERVER_DIR.with_name(SERVER_DIR.name + ".old")
+MCSCRIPTS_DIR = pathlib.Path(SERVER_DIR, ".MCscripts")
+NEW_MCSCRIPTS = pathlib.Path(NEW_SERVER, ".MCscripts")
 
 MINECRAFT_ZIP = ARGS.MINECRAFT_ZIP.resolve()
 if SERVER_DIR in MINECRAFT_ZIP.parents:
@@ -60,7 +62,8 @@ try:
     with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
         minecraft_zipfile.extractall(NEW_SERVER)
 
-    pathlib.Path(NEW_SERVER, "version").write_text(
+    NEW_MCSCRIPTS.mkdir()
+    pathlib.Path(NEW_MCSCRIPTS, "version").write_text(
         MINECRAFT_ZIP.stem + "\n", encoding="utf-8"
     )
     shutil.copytree(
@@ -96,5 +99,6 @@ except:
         shutil.rmtree(NEW_SERVER)
     except FileNotFoundError:
         pass
-    pathlib.Path(SERVER_DIR, "version").write_text("fail\n", encoding="utf-8")
+    MCSCRIPTS_DIR.mkdir(exist_ok=True)
+    pathlib.Path(MCSCRIPTS_DIR, "version").write_text("fail\n", encoding="utf-8")
     raise
