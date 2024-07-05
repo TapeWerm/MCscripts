@@ -7,6 +7,7 @@ instance=testme
 backup_override=/etc/systemd/system/mc-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mc@$instance.service.d/z.conf
 server_dir=~mc/java/$instance
+mcscripts_dir=$server_dir/.MCscripts
 jars_dir=~mc/java_jars
 properties=$server_dir/server.properties
 port=25765
@@ -152,11 +153,20 @@ sed -i 's/^eula=.*/eula=true/' "$server_dir/eula.txt"
 start_server
 
 systemctl stop "mc@$instance.socket"
+rm -r "$mcscripts_dir"
 sed -i 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
 echo Test mc_import Windows server
+echo y | "/opt/MCscripts/bin/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
+start_server
+
+systemctl stop "mc@$instance.socket"
+mv "$server_dir" /tmp/test_mc_setup
+chown -R root:root /tmp/test_mc_setup
+
+echo Test mc_import .MCscripts already exists
 echo y | "/opt/MCscripts/bin/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
 start_server
 

@@ -30,6 +30,7 @@ if (
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java", INSTANCE))
 if SERVER_DIR.is_dir():
     sys.exit(f"Server directory {SERVER_DIR} already exists")
+MCSCRIPTS_DIR = pathlib.Path(SERVER_DIR, ".MCscripts")
 
 if not shutil.which("java"):
     sys.exit("No command java")
@@ -47,12 +48,13 @@ try:
     os.chdir(SERVER_DIR)
     # Minecraft Java Edition makes eula.txt on first run
     subprocess.run(["java", "-jar", "server.jar", "--nogui"], check=False)
-    pathlib.Path(SERVER_DIR, "start.bat").write_text(
-        "java -jar server.jar --nogui\n", encoding="utf-8"
+    MCSCRIPTS_DIR.mkdir()
+    pathlib.Path(MCSCRIPTS_DIR, "start.sh").write_text(
+        "#!/bin/bash\n\njava -jar server.jar --nogui\n", encoding="utf-8"
     )
     # chmod +x
-    pathlib.Path(SERVER_DIR, "start.bat").chmod(
-        pathlib.Path(SERVER_DIR, "start.bat").stat().st_mode | 0o111
+    pathlib.Path(MCSCRIPTS_DIR, "start.sh").chmod(
+        pathlib.Path(MCSCRIPTS_DIR, "start.sh").stat().st_mode | 0o111
     )
     for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
         shutil.chown(file, "mc", "mc")

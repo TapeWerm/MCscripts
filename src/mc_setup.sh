@@ -38,6 +38,7 @@ if [ -d "$server_dir" ]; then
 	>&2 echo "Server directory $server_dir already exists"
 	exit 1
 fi
+mcscripts_dir=$server_dir/.MCscripts
 
 if ! command -v java &> /dev/null; then
 	>&2 echo "No command java"
@@ -59,7 +60,10 @@ cp "$minecraft_jar" "$server_dir/server.jar"
 cd "$server_dir"
 # Minecraft Java Edition makes eula.txt on first run
 java -jar server.jar --nogui || true
-echo java -jar server.jar --nogui > "$server_dir/start.bat"
-chmod +x "$server_dir/start.bat"
+mkdir "$mcscripts_dir"
+echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
+echo >> "$mcscripts_dir/start.sh"
+echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
+chmod +x "$mcscripts_dir/start.sh"
 chown -R mc:mc "$server_dir"
 echo "@@@ Remember to edit $server_dir/server.properties @@@"

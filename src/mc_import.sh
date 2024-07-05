@@ -48,6 +48,7 @@ if [ -d "$server_dir" ]; then
 	>&2 echo "Server directory $server_dir already exists"
 	exit 1
 fi
+mcscripts_dir=$server_dir/.MCscripts
 
 if ! command -v java &> /dev/null; then
 	>&2 echo "No command java"
@@ -80,8 +81,11 @@ for file in "$server_dir"/*.{json,properties}; do
 		sed -i 's/\r$//' "$file"
 	fi
 done
-echo java -jar server.jar --nogui > "$server_dir/start.bat"
-chmod +x "$server_dir/start.bat"
+mkdir -p "$mcscripts_dir"
+echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
+echo >> "$mcscripts_dir/start.sh"
+echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
+chmod +x "$mcscripts_dir/start.sh"
 chown -R mc:mc "$server_dir"
 if [ "$update" = true ]; then
 	cp "$minecraft_jar" "$server_dir/server.jar"
