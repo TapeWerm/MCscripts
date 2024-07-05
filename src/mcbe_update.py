@@ -38,8 +38,8 @@ if (
     and not pathlib.Path(SERVER_DIR, "bedrock_server.exe").is_file()
 ):
     sys.exit("SERVER_DIR should have file bedrock_server or bedrock_server.exe")
-NEW_DIR = SERVER_DIR.with_name(SERVER_DIR.name + ".new")
-OLD_DIR = SERVER_DIR.with_name(SERVER_DIR.name + ".old")
+NEW_SERVER = SERVER_DIR.with_name(SERVER_DIR.name + ".new")
+OLD_SERVER = SERVER_DIR.with_name(SERVER_DIR.name + ".old")
 
 MINECRAFT_ZIP = ARGS.MINECRAFT_ZIP.resolve()
 if SERVER_DIR in MINECRAFT_ZIP.parents:
@@ -53,43 +53,47 @@ if input().lower() != "y":
     sys.exit("input != y")
 
 try:
-    shutil.rmtree(NEW_DIR)
+    shutil.rmtree(NEW_SERVER)
 except FileNotFoundError:
     pass
 try:
     with zipfile.ZipFile(MINECRAFT_ZIP, "r") as minecraft_zipfile:
-        minecraft_zipfile.extractall(NEW_DIR)
+        minecraft_zipfile.extractall(NEW_SERVER)
 
-    pathlib.Path(NEW_DIR, "version").write_text(
+    pathlib.Path(NEW_SERVER, "version").write_text(
         MINECRAFT_ZIP.stem + "\n", encoding="utf-8"
     )
-    shutil.copytree(pathlib.Path(SERVER_DIR, "worlds"), pathlib.Path(NEW_DIR, "worlds"))
+    shutil.copytree(
+        pathlib.Path(SERVER_DIR, "worlds"), pathlib.Path(NEW_SERVER, "worlds")
+    )
 
     for file in list(SERVER_DIR.glob("*.json")) + list(SERVER_DIR.glob("*.properties")):
-        shutil.copy2(file, NEW_DIR)
+        shutil.copy2(file, NEW_SERVER)
 
     for packs_dir in SERVER_DIR.glob("*_packs"):
-        pathlib.Path(NEW_DIR, packs_dir.name).mkdir(exist_ok=True)
+        pathlib.Path(NEW_SERVER, packs_dir.name).mkdir(exist_ok=True)
         for pack in packs_dir.iterdir():
             # Don't clobber 1st party packs
-            if not pathlib.Path(NEW_DIR, packs_dir.name, pack.name).is_dir():
-                shutil.copytree(pack, pathlib.Path(NEW_DIR, packs_dir.name, pack.name))
+            if not pathlib.Path(NEW_SERVER, packs_dir.name, pack.name).is_dir():
+                shutil.copytree(
+                    pack, pathlib.Path(NEW_SERVER, packs_dir.name, pack.name)
+                )
 
     try:
-        shutil.rmtree(OLD_DIR)
+        shutil.rmtree(OLD_SERVER)
     except FileNotFoundError:
         pass
     try:
-        SERVER_DIR.rename(OLD_DIR)
+        SERVER_DIR.rename(OLD_SERVER)
     finally:
-        NEW_DIR.rename(SERVER_DIR)
+        NEW_SERVER.rename(SERVER_DIR)
         try:
-            shutil.rmtree(OLD_DIR)
+            shutil.rmtree(OLD_SERVER)
         except FileNotFoundError:
             pass
 except:
     try:
-        shutil.rmtree(NEW_DIR)
+        shutil.rmtree(NEW_SERVER)
     except FileNotFoundError:
         pass
     pathlib.Path(SERVER_DIR, "version").write_text("fail\n", encoding="utf-8")

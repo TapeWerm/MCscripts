@@ -34,8 +34,8 @@ if [ ! -f "$server_dir/bedrock_server" ] && [ ! -f "$server_dir/bedrock_server.e
 	>&2 echo SERVER_DIR should have file bedrock_server or bedrock_server.exe
 	exit 1
 fi
-new_dir=$server_dir.new
-old_dir=$server_dir.old
+new_server=$server_dir.new
+old_server=$server_dir.old
 
 minecraft_zip=$(realpath -- "$2")
 if [ -n "$(find "$server_dir" -path "$minecraft_zip")" ]; then
@@ -53,37 +53,37 @@ if [ "$input" != y ]; then
 	exit 1
 fi
 
-rm -rf "$new_dir"
-trap 'rm -rf "$new_dir"; echo fail > "$server_dir/version"' ERR
-unzip -q "$minecraft_zip" -d "$new_dir"
+rm -rf "$new_server"
+trap 'rm -rf "$new_server"; echo fail > "$server_dir/version"' ERR
+unzip -q "$minecraft_zip" -d "$new_server"
 
 # Trim off $minecraft_zip after last .zip
-basename "${minecraft_zip%.zip}" > "$new_dir/version"
-cp -r "$server_dir/worlds" "$new_dir/"
+basename "${minecraft_zip%.zip}" > "$new_server/version"
+cp -r "$server_dir/worlds" "$new_server/"
 
 for file in "$server_dir"/*.{json,properties}; do
 	if [ -f "$file" ]; then
 		file=$(basename "$file")
-		cp "$server_dir/$file" "$new_dir/"
+		cp "$server_dir/$file" "$new_server/"
 	fi
 done
 
 for packs_dir in "$server_dir"/*_packs; do
 	if [ -d "$packs_dir" ]; then
 		packs_dir=$(basename "$packs_dir")
-		mkdir -p "$new_dir/$packs_dir"
+		mkdir -p "$new_server/$packs_dir"
 		for pack in "$server_dir/$packs_dir"/*; do
 			if [ -d "$pack" ]; then
 				pack=$(basename "$pack")
 				# Don't clobber 1st party packs
-				if [ ! -d "$new_dir/$packs_dir/$pack" ]; then
-					cp -r "$server_dir/$packs_dir/$pack" "$new_dir/$packs_dir/"
+				if [ ! -d "$new_server/$packs_dir/$pack" ]; then
+					cp -r "$server_dir/$packs_dir/$pack" "$new_server/$packs_dir/"
 				fi
 			fi
 		done
 	fi
 done
 
-rm -rf "$old_dir"
-trap 'mv "$new_dir" "$server_dir"; rm -rf "$old_dir"' EXIT
-mv "$server_dir" "$old_dir"
+rm -rf "$old_server"
+trap 'mv "$new_server" "$server_dir"; rm -rf "$old_server"' EXIT
+mv "$server_dir" "$old_server"
