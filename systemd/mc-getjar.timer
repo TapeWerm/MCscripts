@@ -1,0 +1,10 @@
+[Unit]
+Description=Automatically download Minecraft Java Edition server JAR every 2 hours
+
+[Timer]
+OnCalendar=0/2:00:00
+# 30 minutes
+RandomizedDelaySec=1800
+
+[Install]
+WantedBy=timers.target

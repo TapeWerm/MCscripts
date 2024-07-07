@@ -1,0 +1,11 @@
+[Unit]
+After=network-online.target
+Description=Automatically download Minecraft Java Edition server JAR
+
+[Service]
+# DNS check
+ExecStartPre=/bin/bash -c 'until getent ahosts example.com &> /dev/null; do sleep 1; done'
+# mc_getjar.py reads y asking if you agree to the EULA
+ExecStart=/bin/bash -c 'echo y | /opt/MCscripts/bin/mc_getjar.py'
+Type=oneshot
+User=mc

@@ -1,0 +1,12 @@
+[Unit]
+After=mc-getjar.service mc@%i.service
+Description=Automatically update Minecraft Java Edition server @ %i
+
+[Service]
+ExecStart=/opt/MCscripts/bin/mc_autoupdate.py /opt/MC/java/%i mc@%i
+KillMode=mixed
+Type=oneshot
+
+[Install]
+# Start after mc-getjar.service
+WantedBy=mc-getjar.service

@@ -54,6 +54,8 @@ else
 	>&2 echo "No minecraft_server JAR $jars_dir/current"
 	exit 1
 fi
+# Trim off $minecraft_jar after last .jar
+current_ver=$(basename "${minecraft_jar%.jar}")
 
 mkdir -p ~mc/java
 chown mc:mc ~mc/java
@@ -61,6 +63,7 @@ trap 'rm -rf "$server_dir"' ERR
 mkdir "$server_dir"
 mkdir "$mcscripts_dir"
 cp "$minecraft_jar" "$server_dir/server.jar"
+echo "$current_ver" > "$mcscripts_dir/version"
 cd "$server_dir"
 # Minecraft Java Edition makes eula.txt on first run
 java -jar server.jar --nogui || true

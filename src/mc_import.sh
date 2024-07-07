@@ -65,6 +65,8 @@ else
 	>&2 echo "No minecraft_server JAR $jars_dir/current"
 	exit 1
 fi
+# Trim off $minecraft_jar after last .jar
+current_ver=$(basename "${minecraft_jar%.jar}")
 
 mkdir -p ~mc/java
 chown mc:mc ~mc/java
@@ -92,6 +94,7 @@ echo 'java -jar server.jar --nogui' >> "$mcscripts_dir/start.sh"
 chmod +x "$mcscripts_dir/start.sh"
 if [ "$update" = true ]; then
 	cp "$minecraft_jar" "$server_dir/server.jar"
+	echo "$current_ver" > "$mcscripts_dir/version"
 fi
 chown -R mc:mc "$server_dir"
 trap - ERR

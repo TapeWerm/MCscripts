@@ -6,6 +6,7 @@ extension=.py
 instance=testme
 backup_override=/etc/systemd/system/mc-backup@$instance.service.d/z.conf
 server_override=/etc/systemd/system/mc@$instance.service.d/z.conf
+update_override=/etc/systemd/system/mc-autoupdate@$instance.service.d/z.conf
 server_dir=~mc/java/$instance
 mcscripts_dir=$server_dir/.MCscripts
 jars_dir=~mc/java_jars
@@ -25,6 +26,10 @@ cleanup() {
 	rm -rf /tmp/test_mc_setup
 	systemctl stop "mc@$instance.socket"
 	rm -rf "$server_dir"
+	rm -f "$update_override"
+	if [ -d "$(dirname "$update_override")" ]; then
+		rmdir --ignore-fail-on-non-empty "$(dirname "$update_override")"
+	fi
 	rm -f "$backup_override"
 	if [ -d "$(dirname "$backup_override")" ]; then
 		rmdir --ignore-fail-on-non-empty "$(dirname "$backup_override")"
@@ -86,6 +91,21 @@ test_backup() {
 	systemctl stop "mc@$instance.socket"
 	echo y | "/opt/MCscripts/bin/mc_restore$extension" "$server_dir" "$backup" > /dev/null
 	start_server
+}
+
+# Print systemd messages for mc@$instance.service
+# systemd says Started Minecraft Java Edition server @ $instance.
+test_update() {
+	local update_cursor
+	update_cursor=$(journalctl "UNIT=mc@$instance.service" _PID=1 --show-cursor -n 0 -o cat || true)
+	update_cursor=$(echo "$update_cursor" | cut -d ' ' -f 3- -s)
+	systemctl start "mc-autoupdate@$instance"
+	if [ -n "$update_cursor" ]; then
+		journalctl "UNIT=mc@$instance.service" _PID=1 --after-cursor "$update_cursor" -o cat
+	else
+		journalctl "UNIT=mc@$instance.service" _PID=1 -o cat
+	fi
+	wait_for_server
 }
 
 args=$(getopt -l bash,help,port: -o h4: -- "$@")
@@ -206,6 +226,34 @@ systemctl daemon-reload
 
 echo 'Test mc-backup@testme FAT32 backup directory'
 test_backup
+
+mkdir -p "$(dirname "$update_override")"
+echo '[Service]' > "$update_override"
+echo 'ExecStart=' >> "$update_override"
+echo "ExecStart=/opt/MCscripts/bin/mc_autoupdate$extension /opt/MC/java/%i mc@%i" >> "$update_override"
+systemctl daemon-reload
+
+echo 'Test mc-autoupdate@testme already up to date'
+if test_update | grep -q Started; then
+	>&2 echo "mc@$instance was updated when already up to date"
+	exit 1
+fi
+
+echo 💢 > "$mcscripts_dir/version"
+
+echo 'Test mc-autoupdate@testme different version'
+if ! test_update | grep -q Started; then
+	>&2 echo "mc@$instance wasn't updated when different version"
+	exit 1
+fi
+
+rm "$mcscripts_dir/version"
+
+echo 'Test mc-autoupdate@testme no version file'
+if ! test_update | grep -q Started; then
+	>&2 echo "mc@$instance wasn't updated when no version file"
+	exit 1
+fi
 
 echo 'Test mc_cmd multiline input'
 "/opt/MCscripts/bin/mc_cmd$extension" "mc@$instance" help$'\n'say Hello world

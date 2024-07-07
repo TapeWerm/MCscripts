@@ -53,6 +53,7 @@ if pathlib.Path(JARS_DIR, "current").is_symlink():
     MINECRAFT_JAR = pathlib.Path(JARS_DIR, "current").resolve()
 else:
     sys.exit(f"No minecraft_server JAR {pathlib.Path(JARS_DIR, 'current')}")
+CURRENT_VER = MINECRAFT_JAR.stem
 
 pathlib.Path.expanduser(pathlib.Path("~mc", "java")).mkdir(exist_ok=True)
 shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "java")), "mc", "mc")
@@ -78,6 +79,9 @@ try:
     )
     if not ARGS.no_update:
         shutil.copy2(MINECRAFT_JAR, pathlib.Path(SERVER_DIR, "server.jar"))
+        pathlib.Path(MCSCRIPTS_DIR, "version").write_text(
+            CURRENT_VER + "\n", encoding="utf-8"
+        )
     for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
         shutil.chown(file, "mc", "mc")
 except:

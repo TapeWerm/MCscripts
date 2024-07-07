@@ -8,7 +8,7 @@ Minecraft Java and Bedrock Dedicated Server systemd units and scripts for backup
 Ubuntu on Windows Subsystem for Linux does not support systemctl poweroff.
 Try [Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server).
 You can run [mc_getjar.py](src/mc_getjar.py), [mcbe_getzip.py](src/mcbe_getzip.py), and [mcbe_update.py](src/mcbe_update.py) without enabling the systemd units, but not others.
-No automatic updates nor chat bots for Java Edition.
+No chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
 - [Notes](#notes)
@@ -103,6 +103,7 @@ Do one of the following:
   Enter `sudo nano ~mc/java/MC/eula.txt`, fill it in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>).
 ```bash
 sudo systemctl enable --now mc@MC.socket mc@MC.service mc-backup@MC.timer
+sudo systemctl enable --now mc-getjar.timer mc-autoupdate@MC.service
 ```
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
