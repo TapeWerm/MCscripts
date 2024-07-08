@@ -95,12 +95,10 @@ elif INSTALLED_VER != CURRENT_VER:
             # mcbe_update.py reads y asking if you stopped the server
             subprocess.run(
                 [
-                    "runuser",
-                    "-u",
-                    "mc",
-                    "--",
+                    "systemd-run",
+                    "-PGqp",
+                    "User=mc",
                     "/opt/MCscripts/bin/mcbe_update.py",
-                    "--",
                     SERVER_DIR,
                     MINECRAFT_ZIP,
                 ],

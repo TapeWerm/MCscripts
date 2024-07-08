@@ -87,7 +87,7 @@ sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ## Java Edition setup
 Bring your own Java or `sudo apt update && sudo apt install openjdk-21-jre-headless`.
 ```bash
-sudo runuser -u mc -- /opt/MCscripts/bin/mc_getjar.py
+sudo systemd-run -PGqp User=mc -- /opt/MCscripts/bin/mc_getjar.py
 ```
 Do one of the following:
 - Import server directory:
@@ -110,7 +110,7 @@ sudo systemctl enable --now mc-rmbackup@MC.service
 ```
 ## Bedrock Edition setup
 ```bash
-sudo runuser -u mc -- /opt/MCscripts/bin/mcbe_getzip.py
+sudo systemd-run -PGqp User=mc -- /opt/MCscripts/bin/mcbe_getzip.py
 ```
 Do one of the following:
 - Import server directory:
