@@ -76,10 +76,10 @@ try:
     pathlib.Path(MCSCRIPTS_DIR, "start.sh").chmod(
         pathlib.Path(MCSCRIPTS_DIR, "start.sh").stat().st_mode | 0o111
     )
-    for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
-        shutil.chown(file, "mc", "mc")
     if not ARGS.no_update:
         shutil.copy2(MINECRAFT_JAR, pathlib.Path(SERVER_DIR, "server.jar"))
+    for file in [SERVER_DIR] + list(SERVER_DIR.rglob("*")):
+        shutil.chown(file, "mc", "mc")
 except:
     try:
         shutil.rmtree(SERVER_DIR)

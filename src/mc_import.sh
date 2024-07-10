@@ -86,10 +86,10 @@ echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 echo >> "$mcscripts_dir/start.sh"
 echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
 chmod +x "$mcscripts_dir/start.sh"
-chown -R mc:mc "$server_dir"
 if [ "$update" = true ]; then
 	cp "$minecraft_jar" "$server_dir/server.jar"
 fi
+chown -R mc:mc "$server_dir"
 trap - ERR
 rm -r "$import"
 echo "@@@ Remember to edit $server_dir/server.properties @@@"
