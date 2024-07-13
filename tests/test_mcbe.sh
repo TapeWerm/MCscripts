@@ -277,7 +277,7 @@ if ! test_update | grep -q Starting; then
 	exit 1
 fi
 
-rm -r "$mcscripts_dir"
+rm "$mcscripts_dir/version"
 
 echo Test mcbe-autoupdate@testme no version file
 if ! test_update | grep -q Starting; then
@@ -291,7 +291,7 @@ echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -p /opt/MC/bedrock/
 systemctl daemon-reload
 
 # In case current and preview are the same version, force update
-rm -r "$mcscripts_dir"
+rm "$mcscripts_dir/version"
 
 echo Test mcbe-autoupdate@testme Bedrock Edition server preview
 if ! test_update | grep -q Starting; then

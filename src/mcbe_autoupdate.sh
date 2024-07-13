@@ -98,7 +98,7 @@ if [ "$installed_ver" = fail ]; then
 	echo "Previous update failed, rm $mcscripts_dir/version and try again"
 	exit 1
 elif [ "$installed_ver" != "$current_ver" ]; then
-	trap 'mkdir -p "$mcscripts_dir"; echo fail > "$mcscripts_dir/version"' ERR
+	trap 'echo fail > "$mcscripts_dir/version"' ERR
 	systemctl start "mcbe-backup@$instance"
 	trap 'systemctl start "$service"' EXIT
 	systemctl stop "$service.socket"

@@ -109,6 +109,5 @@ elif INSTALLED_VER != CURRENT_VER:
         finally:
             subprocess.run(["systemctl", "start", SERVICE], check=True)
     except:
-        MCSCRIPTS_DIR.mkdir(exist_ok=True)
         pathlib.Path(MCSCRIPTS_DIR, "version").write_text("fail\n", encoding="utf-8")
         raise
