@@ -93,7 +93,7 @@ test_backup() {
 }
 
 # Print systemd messages for mcbe@$instance.service
-# systemd says Starting Minecraft Bedrock Edition server @ $instance...
+# systemd says Started Minecraft Bedrock Edition server @ $instance.
 test_update() {
 	local update_cursor
 	update_cursor=$(journalctl "UNIT=mcbe@$instance.service" _PID=1 --show-cursor -n 0 -o cat || true)
@@ -264,7 +264,7 @@ echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -c /opt/MC/bedrock/
 systemctl daemon-reload
 
 echo Test mcbe-autoupdate@testme already up to date
-if test_update | grep -q Starting; then
+if test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance was updated when already up to date"
 	exit 1
 fi
@@ -272,7 +272,7 @@ fi
 echo 💢 > "$mcscripts_dir/version"
 
 echo Test mcbe-autoupdate@testme different version
-if ! test_update | grep -q Starting; then
+if ! test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance wasn't updated when different version"
 	exit 1
 fi
@@ -280,7 +280,7 @@ fi
 rm "$mcscripts_dir/version"
 
 echo Test mcbe-autoupdate@testme no version file
-if ! test_update | grep -q Starting; then
+if ! test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
@@ -294,7 +294,7 @@ systemctl daemon-reload
 rm "$mcscripts_dir/version"
 
 echo Test mcbe-autoupdate@testme Bedrock Edition server preview
-if ! test_update | grep -q Starting; then
+if ! test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
