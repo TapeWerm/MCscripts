@@ -50,6 +50,7 @@ if (
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "bedrock", INSTANCE))
 if SERVER_DIR.is_dir():
     sys.exit(f"Server directory {SERVER_DIR} already exists")
+MCSCRIPTS_DIR = pathlib.Path(SERVER_DIR, ".MCscripts")
 
 if ARGS.preview:
     VERSION = "preview"
@@ -70,6 +71,7 @@ if input().lower() != "y":
 
 try:
     shutil.copytree(IMPORT_DIR, SERVER_DIR)
+    MCSCRIPTS_DIR.mkdir(exist_ok=True)
     # Convert DOS line endings to UNIX line endings
     for file in list(SERVER_DIR.glob("*.json")) + list(SERVER_DIR.glob("*.properties")):
         file.write_text(

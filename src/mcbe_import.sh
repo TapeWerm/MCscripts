@@ -54,6 +54,7 @@ if [ -d "$server_dir" ]; then
 	>&2 echo "Server directory $server_dir already exists"
 	exit 1
 fi
+mcscripts_dir=$server_dir/.MCscripts
 
 if [ -h "$zips_dir/$version" ]; then
 	minecraft_zip=$(realpath "$zips_dir/$version")
@@ -75,6 +76,7 @@ fi
 
 trap 'rm -rf "$server_dir"' ERR
 cp -r "$import" "$server_dir"
+mkdir -p "$mcscripts_dir"
 # Convert DOS line endings to UNIX line endings
 for file in "$server_dir"/*.{json,properties}; do
 	if [ -f "$file" ]; then
