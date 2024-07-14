@@ -180,18 +180,27 @@ if ls ~mc/bedrock-server-*.zip &> /dev/null && [ ! -d "$zips_dir" ]; then
 		fi
 	done
 fi
-# Make .MCscripts/start.sh
+# Make .MCscripts
+for server_dir in ~mc/bedrock/*; do
+	if [ -d "$server_dir" ]; then
+		mcscripts_dir=$server_dir/.MCscripts
+		mkdir -p "$mcscripts_dir"
+		chown mc:mc "$mcscripts_dir"
+	fi
+done
 for server_dir in ~mc/java/*; do
 	if [ -d "$server_dir" ]; then
 		mcscripts_dir=$server_dir/.MCscripts
+		mkdir -p "$mcscripts_dir"
+		chown mc:mc "$mcscripts_dir"
 		if [ ! -f "$mcscripts_dir/start.sh" ]; then
-			mkdir "$mcscripts_dir"
 			echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 			echo >> "$mcscripts_dir/start.sh"
 			echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
-			chmod +x "$mcscripts_dir/start.sh"
 			echo "@@@ $mcscripts_dir/start.sh replaced $server_dir/start.bat in MCscripts v6.0.0 @@@"
 		fi
+		chmod +x "$mcscripts_dir/start.sh"
+		chown mc:mc "$mcscripts_dir/start.sh"
 	fi
 done
 # Enable dependencies first
