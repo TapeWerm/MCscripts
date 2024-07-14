@@ -63,12 +63,12 @@ if input().lower() != "y":
 
 try:
     shutil.copytree(IMPORT_DIR, SERVER_DIR)
+    MCSCRIPTS_DIR.mkdir(exist_ok=True)
     # Convert DOS line endings to UNIX line endings
     for file in list(SERVER_DIR.glob("*.json")) + list(SERVER_DIR.glob("*.properties")):
         file.write_text(
             file.read_text(encoding="utf-8").replace("\r\n", "\n"), encoding="utf-8"
         )
-    MCSCRIPTS_DIR.mkdir(exist_ok=True)
     pathlib.Path(MCSCRIPTS_DIR, "start.sh").write_text(
         "#!/bin/bash\n\njava -jar server.jar --nogui\n", encoding="utf-8"
     )

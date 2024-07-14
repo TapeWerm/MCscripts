@@ -44,11 +44,11 @@ pathlib.Path.expanduser(pathlib.Path("~mc", "java")).mkdir(exist_ok=True)
 shutil.chown(pathlib.Path.expanduser(pathlib.Path("~mc", "java")), "mc", "mc")
 try:
     SERVER_DIR.mkdir()
+    MCSCRIPTS_DIR.mkdir()
     shutil.copy2(MINECRAFT_JAR, pathlib.Path(SERVER_DIR, "server.jar"))
     os.chdir(SERVER_DIR)
     # Minecraft Java Edition makes eula.txt on first run
     subprocess.run(["java", "-jar", "server.jar", "--nogui"], check=False)
-    MCSCRIPTS_DIR.mkdir()
     pathlib.Path(MCSCRIPTS_DIR, "start.sh").write_text(
         "#!/bin/bash\n\njava -jar server.jar --nogui\n", encoding="utf-8"
     )

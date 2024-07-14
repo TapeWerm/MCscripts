@@ -56,11 +56,11 @@ mkdir -p ~mc/java
 chown mc:mc ~mc/java
 trap 'rm -rf "$server_dir"' ERR
 mkdir "$server_dir"
+mkdir "$mcscripts_dir"
 cp "$minecraft_jar" "$server_dir/server.jar"
 cd "$server_dir"
 # Minecraft Java Edition makes eula.txt on first run
 java -jar server.jar --nogui || true
-mkdir "$mcscripts_dir"
 echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 echo >> "$mcscripts_dir/start.sh"
 echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"

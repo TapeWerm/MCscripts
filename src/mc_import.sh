@@ -75,13 +75,13 @@ fi
 
 trap 'rm -rf "$server_dir"' ERR
 cp -r "$import" "$server_dir"
+mkdir -p "$mcscripts_dir"
 # Convert DOS line endings to UNIX line endings
 for file in "$server_dir"/*.{json,properties}; do
 	if [ -f "$file" ]; then
 		sed -i 's/\r$//' "$file"
 	fi
 done
-mkdir -p "$mcscripts_dir"
 echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 echo >> "$mcscripts_dir/start.sh"
 echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
