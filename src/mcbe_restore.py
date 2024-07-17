@@ -13,10 +13,10 @@ PARSER = argparse.ArgumentParser(
     description="Restore backup for Minecraft Bedrock Edition server."
 )
 PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
+    "SERVER_DIR", type=pathlib.Path, help="Minecraft Bedrock Edition server directory"
 )
 PARSER.add_argument(
-    "BACKUP", type=pathlib.Path, help="minecraft bedrock edition backup"
+    "BACKUP", type=pathlib.Path, help="Minecraft Bedrock Edition backup"
 )
 ARGS = PARSER.parse_args()
 

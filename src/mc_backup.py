@@ -58,7 +58,7 @@ PARSER = argparse.ArgumentParser(
     ),
 )
 PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft java edition server directory"
+    "SERVER_DIR", type=pathlib.Path, help="Minecraft Java Edition server directory"
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
 PARSER.add_argument(

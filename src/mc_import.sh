@@ -14,8 +14,12 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo 'Import Minecraft Java Edition server to ~mc/java/INSTANCE.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
-		echo "-n, --no-update  don't update minecraft java edition server"
+		echo 'Positional arguments:'
+		echo 'SERVER_DIR  Minecraft Java Edition server directory to import'
+		echo 'INSTANCE    systemd instance name. ex: mc@MC'
+		echo
+		echo 'Options:'
+		echo "-n, --no-update  don't update Minecraft Java Edition server"
 		exit
 		;;
 	--no-update|-n)
@@ -27,11 +31,11 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -40,7 +44,7 @@ import=$(realpath -- "$1")
 
 instance=$2
 if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
-	>&2 echo INSTANCE should be identical to systemd-escape INSTANCE
+	>&2 echo 'INSTANCE should be identical to systemd-escape INSTANCE'
 	exit 1
 fi
 server_dir=~mc/java/$instance
@@ -51,7 +55,7 @@ fi
 mcscripts_dir=$server_dir/.MCscripts
 
 if ! command -v java &> /dev/null; then
-	>&2 echo "No command java"
+	>&2 echo 'No command java'
 	exit 1
 fi
 
@@ -65,7 +69,7 @@ fi
 mkdir -p ~mc/java
 chown mc:mc ~mc/java
 
-echo "Enter Y if you stopped the server to import"
+echo 'Enter Y if you stopped the server to import'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then
@@ -84,7 +88,7 @@ for file in "$server_dir"/*.{json,properties}; do
 done
 echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 echo >> "$mcscripts_dir/start.sh"
-echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
+echo 'java -jar server.jar --nogui' >> "$mcscripts_dir/start.sh"
 chmod +x "$mcscripts_dir/start.sh"
 if [ "$update" = true ]; then
 	cp "$minecraft_jar" "$server_dir/server.jar"

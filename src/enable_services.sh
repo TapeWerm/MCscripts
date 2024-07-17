@@ -20,7 +20,7 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -196,7 +196,7 @@ for server_dir in ~mc/java/*; do
 		if [ ! -f "$mcscripts_dir/start.sh" ]; then
 			echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 			echo >> "$mcscripts_dir/start.sh"
-			echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
+			echo 'java -jar server.jar --nogui' >> "$mcscripts_dir/start.sh"
 			echo "@@@ $mcscripts_dir/start.sh replaced $server_dir/start.bat in MCscripts v6.0.0 @@@"
 		fi
 		chmod +x "$mcscripts_dir/start.sh"

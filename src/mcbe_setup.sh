@@ -14,7 +14,10 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo 'Make new Minecraft Bedrock Edition server in ~mc/bedrock/INSTANCE.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Positional arguments:'
+		echo 'INSTANCE  systemd instance name. ex: mcbe@MCBE'
+		echo
+		echo 'Options:'
 		echo '-p, --preview  use preview instead of current version'
 		exit
 		;;
@@ -27,18 +30,18 @@ done
 shift
 
 if [ "$#" -lt 1 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 1 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
 
 instance=$1
 if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
-	>&2 echo INSTANCE should be identical to systemd-escape INSTANCE
+	>&2 echo 'INSTANCE should be identical to systemd-escape INSTANCE'
 	exit 1
 fi
 server_dir=~mc/bedrock/$instance

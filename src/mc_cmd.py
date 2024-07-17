@@ -24,7 +24,7 @@ PARSER.add_argument(
     "COMMAND",
     type=str,
     nargs="+",
-    help="minecraft java edition or bedrock edition command",
+    help="Minecraft Java Edition or Bedrock Edition command",
 )
 ARGS = PARSER.parse_args()
 

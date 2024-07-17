@@ -46,7 +46,7 @@ start_server() {
 	local query
 	until echo "$query" | grep -Eq 'Done \([^)]+\)!'; do
 		if [ "$(date +%s)" -ge "$timeout" ]; then
-			>&2 echo Server started timeout
+			>&2 echo 'Server started timeout'
 			exit 1
 		fi
 		sleep 1
@@ -72,7 +72,7 @@ test_backup() {
 		backup=$(journalctl "_SYSTEMD_UNIT=mc-backup@$instance.service" -o cat)
 	fi
 	if ! echo "$backup" | grep -q '^Backup is '; then
-		>&2 echo No backup printed
+		>&2 echo 'No backup printed'
 		exit 1
 	fi
 	backup=$(echo "$backup" | cut -d ' ' -f 3- -s)
@@ -91,23 +91,23 @@ while [ "$1" != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo Test scripts for mc@testme.
+		echo 'Test scripts for mc@testme.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Options:'
 		echo '-4, --port=PORT  port for IPv4. defaults to 25765.'
 		echo '--bash           test Bash scripts instead of Python'
 		echo
-		echo "1GB free disk space required."
+		echo '1GB free disk space required.'
 		exit
 		;;
 	--port|-4)
 		port=$2
 		if [[ ! "$port" =~ ^-?[0-9]+$ ]]; then
-			>&2 echo PORT must be an integer
+			>&2 echo 'PORT must be an integer'
 			exit 1
 		fi
 		if [ "$port" -lt 0 ] || [ "$port" -gt 65535 ]; then
-			>&2 echo PORT must be between 0 and 65535
+			>&2 echo 'PORT must be between 0 and 65535'
 			exit 1
 		fi
 		shift 2
@@ -145,7 +145,7 @@ echo 'ExecStart=' >> "$backup_override"
 echo "ExecStart=/opt/MCscripts/bin/mc_backup$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
-echo Test mc_setup new server
+echo 'Test mc_setup new server'
 "/opt/MCscripts/bin/mc_setup$extension" "$instance" > /dev/null
 sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
 sed -i "s/^server-port=.*/server-port=$port/" "$properties"
@@ -158,7 +158,7 @@ sed -i 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
-echo Test mc_import Windows server
+echo 'Test mc_import Windows server'
 echo y | "/opt/MCscripts/bin/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
 start_server
 
@@ -166,18 +166,18 @@ systemctl stop "mc@$instance.socket"
 mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
-echo Test mc_import .MCscripts already exists
+echo 'Test mc_import .MCscripts already exists'
 echo y | "/opt/MCscripts/bin/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
 start_server
 
-echo Test mc-backup@testme
+echo 'Test mc-backup@testme'
 test_backup
 
 systemctl stop "mc@$instance.socket"
 sed -i 's/^level-name=.*/level-name=--nope/' "$properties"
 start_server
 
-echo Test mc-backup@testme level-name flag injection
+echo 'Test mc-backup@testme level-name flag injection'
 test_backup
 
 systemctl stop "mc@$instance.socket"
@@ -195,13 +195,13 @@ echo 'ExecStart=' >> "$backup_override"
 echo "ExecStart=/opt/MCscripts/bin/mc_backup$extension -b /mnt/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
-echo Test mc-backup@testme FAT32 backup directory
+echo 'Test mc-backup@testme FAT32 backup directory'
 test_backup
 
-echo Test mc_cmd multiline input
+echo 'Test mc_cmd multiline input'
 "/opt/MCscripts/bin/mc_cmd$extension" "mc@$instance" help$'\n'say Hello world
 
-echo Test mc_stop runs outside systemd
+echo 'Test mc_stop runs outside systemd'
 "/opt/MCscripts/bin/mc_stop$extension" -s 0 "mc@$instance"
 
-echo All tests passed
+echo 'All tests passed'

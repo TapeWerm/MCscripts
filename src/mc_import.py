@@ -17,14 +17,14 @@ PARSER.add_argument(
     "IMPORT_DIR",
     type=pathlib.Path,
     metavar="SERVER_DIR",
-    help="minecraft java edition server directory to import",
+    help="Minecraft Java Edition server directory to import",
 )
 PARSER.add_argument("INSTANCE", help="systemd instance name. ex: mc@MC")
 PARSER.add_argument(
     "-n",
     "--no-update",
     action="store_true",
-    help="don't update minecraft java edition server",
+    help="don't update Minecraft Java Edition server",
 )
 ARGS = PARSER.parse_args()
 

@@ -57,7 +57,7 @@ start_server() {
 	local query
 	until echo "$query" | grep -q 'Server started\.'; do
 		if [ "$(date +%s)" -ge "$timeout" ]; then
-			>&2 echo Server started timeout
+			>&2 echo 'Server started timeout'
 			exit 1
 		fi
 		sleep 1
@@ -83,7 +83,7 @@ test_backup() {
 		backup=$(journalctl "_SYSTEMD_UNIT=mcbe-backup@$instance.service" -o cat)
 	fi
 	if ! echo "$backup" | grep -q '^Backup is '; then
-		>&2 echo No backup printed
+		>&2 echo 'No backup printed'
 		exit 1
 	fi
 	backup=$(echo "$backup" | cut -d ' ' -f 3- -s)
@@ -128,24 +128,24 @@ while [ "$1" != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo Test scripts for mcbe@testme.
+		echo 'Test scripts for mcbe@testme.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Options:'
 		echo '-4, --port=PORT      port for IPv4. defaults to 20132.'
 		echo '-6, --portv6=PORTV6  port for IPv6. defaults to 20133.'
 		echo '--bash               test Bash scripts instead of Python'
 		echo
-		echo "1GB free disk space required."
+		echo '1GB free disk space required.'
 		exit
 		;;
 	--port|-4)
 		port=$2
 		if [[ ! "$port" =~ ^-?[0-9]+$ ]]; then
-			>&2 echo PORT must be an integer
+			>&2 echo 'PORT must be an integer'
 			exit 1
 		fi
 		if [ "$port" -lt 0 ] || [ "$port" -gt 65535 ]; then
-			>&2 echo PORT must be between 0 and 65535
+			>&2 echo 'PORT must be between 0 and 65535'
 			exit 1
 		fi
 		shift 2
@@ -153,11 +153,11 @@ while [ "$1" != -- ]; do
 	--portv6|-6)
 		portv6=$2
 		if [[ ! "$portv6" =~ ^-?[0-9]+$ ]]; then
-			>&2 echo PORTV6 must be an integer
+			>&2 echo 'PORTV6 must be an integer'
 			exit 1
 		fi
 		if [ "$portv6" -lt 0 ] || [ "$portv6" -gt 65535 ]; then
-			>&2 echo PORTV6 must be between 0 and 65535
+			>&2 echo 'PORTV6 must be between 0 and 65535'
 			exit 1
 		fi
 		shift 2
@@ -197,7 +197,7 @@ echo 'ExecStart=' >> "$backup_override"
 echo "ExecStart=/opt/MCscripts/bin/mcbe_backup$extension -b /tmp/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
 systemctl daemon-reload
 
-echo Test mcbe_setup new server
+echo 'Test mcbe_setup new server'
 "/opt/MCscripts/bin/mcbe_setup$extension" "$instance" > /dev/null
 sed -i 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
 sed -i 's/^level-name=.*/level-name=Bedrock level/' "$properties"
@@ -214,7 +214,7 @@ sed -i 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
-echo Test mcbe_import Windows server
+echo 'Test mcbe_import Windows server'
 echo y | "/opt/MCscripts/bin/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
 start_server
 
@@ -222,18 +222,18 @@ systemctl stop "mcbe@$instance.socket"
 mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
-echo Test mcbe_import .MCscripts already exists
+echo 'Test mcbe_import .MCscripts already exists'
 echo y | "/opt/MCscripts/bin/mcbe_import$extension" /tmp/test_mcbe_setup "$instance" > /dev/null
 start_server
 
-echo Test mcbe-backup@testme
+echo 'Test mcbe-backup@testme'
 test_backup
 
 systemctl stop "mcbe@$instance.socket"
 sed -i 's/^level-name=.*/level-name=--nope/' "$properties"
 start_server
 
-echo Test mcbe-backup@testme level-name flag injection
+echo 'Test mcbe-backup@testme level-name flag injection'
 test_backup
 
 systemctl stop "mcbe@$instance.socket"
@@ -251,7 +251,7 @@ echo 'ExecStart=' >> "$backup_override"
 echo "ExecStart=/opt/MCscripts/bin/mcbe_backup$extension -b /mnt/test_mcbe_backup /opt/MC/bedrock/%i mcbe@%i" >> "$backup_override"
 systemctl daemon-reload
 
-echo Test mcbe-backup@testme FAT32 backup directory
+echo 'Test mcbe-backup@testme FAT32 backup directory'
 test_backup
 
 echo '[Service]' > "$backup_override"
@@ -263,7 +263,7 @@ echo 'ExecStart=' >> "$update_override"
 echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -c /opt/MC/bedrock/%i mcbe@%i" >> "$update_override"
 systemctl daemon-reload
 
-echo Test mcbe-autoupdate@testme already up to date
+echo 'Test mcbe-autoupdate@testme already up to date'
 if test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance was updated when already up to date"
 	exit 1
@@ -271,7 +271,7 @@ fi
 
 echo 💢 > "$mcscripts_dir/version"
 
-echo Test mcbe-autoupdate@testme different version
+echo 'Test mcbe-autoupdate@testme different version'
 if ! test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance wasn't updated when different version"
 	exit 1
@@ -279,7 +279,7 @@ fi
 
 rm "$mcscripts_dir/version"
 
-echo Test mcbe-autoupdate@testme no version file
+echo 'Test mcbe-autoupdate@testme no version file'
 if ! test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
@@ -293,13 +293,13 @@ systemctl daemon-reload
 # In case current and preview are the same version, force update
 rm "$mcscripts_dir/version"
 
-echo Test mcbe-autoupdate@testme Bedrock Edition server preview
+echo 'Test mcbe-autoupdate@testme Bedrock Edition server preview'
 if ! test_update | grep -q Started; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
 
-echo Test mcbe-backup@testme Bedrock Edition server preview
+echo 'Test mcbe-backup@testme Bedrock Edition server preview'
 test_backup
 
 mkdir -p ~mc/.mcbe_log
@@ -311,14 +311,14 @@ echo https://discord.com/do-not-print > "$discord_file"
 echo "Test mcbe_log doesn't print webhook when offline"
 offline=$(systemd-run -PGqp KillMode=mixed -p PrivateNetwork=true -p RuntimeMaxSec=1 -p SupplementaryGroups=systemd-journal -p User=mc "/opt/MCscripts/bin/mcbe_log$extension" "mcbe@$instance" 2>&1 || true)
 if echo "$offline" | grep -q do-not-print; then
-	>&2 echo mcbe_log printed webhook when offline
+	>&2 echo 'mcbe_log printed webhook when offline'
 	exit 1
 fi
 
-echo Test mc_cmd multiline input
+echo 'Test mc_cmd multiline input'
 "/opt/MCscripts/bin/mc_cmd$extension" "mcbe@$instance" help$'\n'say Hello world
 
-echo Test mc_stop runs outside systemd
+echo 'Test mc_stop runs outside systemd'
 "/opt/MCscripts/bin/mc_stop$extension" -s 0 "mcbe@$instance"
 
-echo All tests passed
+echo 'All tests passed'

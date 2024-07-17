@@ -12,6 +12,9 @@ while [ "$1" != -- ]; do
 	--help|-h)
 		echo "$syntax"
 		echo 'Make new Minecraft Java Edition server in ~mc/java/INSTANCE.'
+		echo
+		echo 'Positional arguments:'
+		echo 'INSTANCE  systemd instance name. ex: mc@MC'
 		exit
 		;;
 	esac
@@ -19,18 +22,18 @@ done
 shift
 
 if [ "$#" -lt 1 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 1 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
 
 instance=$1
 if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
-	>&2 echo INSTANCE should be identical to systemd-escape INSTANCE
+	>&2 echo 'INSTANCE should be identical to systemd-escape INSTANCE'
 	exit 1
 fi
 server_dir=~mc/java/$instance
@@ -41,7 +44,7 @@ fi
 mcscripts_dir=$server_dir/.MCscripts
 
 if ! command -v java &> /dev/null; then
-	>&2 echo "No command java"
+	>&2 echo 'No command java'
 	exit 1
 fi
 
@@ -63,7 +66,7 @@ cd "$server_dir"
 java -jar server.jar --nogui || true
 echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
 echo >> "$mcscripts_dir/start.sh"
-echo java -jar server.jar --nogui >> "$mcscripts_dir/start.sh"
+echo 'java -jar server.jar --nogui' >> "$mcscripts_dir/start.sh"
 chmod +x "$mcscripts_dir/start.sh"
 chown -R mc:mc "$server_dir"
 echo "@@@ Remember to edit $server_dir/server.properties @@@"

@@ -10,7 +10,11 @@ while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo Restore backup for Minecraft Bedrock Edition server.
+		echo 'Restore backup for Minecraft Bedrock Edition server.'
+		echo
+		echo 'Positional arguments:'
+		echo 'SERVER_DIR  Minecraft Bedrock Edition server directory'
+		echo 'BACKUP      Minecraft Bedrock Edition backup'
 		exit
 		;;
 	esac
@@ -18,11 +22,11 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -42,7 +46,7 @@ backup=$(realpath -- "$2")
 # Test extracting $backup partially quietly
 unzip -tq "$backup"
 
-echo "Enter Y if you stopped the server to restore"
+echo 'Enter Y if you stopped the server to restore'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

@@ -11,9 +11,9 @@ PARSER = argparse.ArgumentParser(
     description="Restore backup for Minecraft Java Edition server."
 )
 PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft java edition server directory"
+    "SERVER_DIR", type=pathlib.Path, help="Minecraft Java Edition server directory"
 )
-PARSER.add_argument("BACKUP", type=pathlib.Path, help="minecraft java edition backup")
+PARSER.add_argument("BACKUP", type=pathlib.Path, help="Minecraft Java Edition backup")
 ARGS = PARSER.parse_args()
 
 SERVER_DIR = ARGS.SERVER_DIR.resolve()

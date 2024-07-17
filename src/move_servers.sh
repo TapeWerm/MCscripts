@@ -20,7 +20,7 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -38,12 +38,12 @@ for dir in ~mc/*; do
 done
 
 if [ -z "${java[*]}" ] && [ -z "${bedrock[*]}" ]; then
-	echo No servers to move
+	echo 'No servers to move'
 	exit
 fi
 echo "Java servers to move: ${java[*]}"
 echo "Bedrock servers to move: ${bedrock[*]}"
-echo "Enter Y if you stopped the servers to move (disable_services.sh stops them)"
+echo 'Enter Y if you stopped the servers to move (disable_services.sh stops them)'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

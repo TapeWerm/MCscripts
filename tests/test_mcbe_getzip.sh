@@ -48,9 +48,9 @@ while [ "$1" != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo Test mcbe_getzip.
+		echo 'Test mcbe_getzip.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Options:'
 		echo '--bash  test Bash scripts instead of Python'
 		echo '--perf  monitor CPU and memory usage in CSV'
 		exit
@@ -77,7 +77,7 @@ if [ "$perf" = true ]; then
 	elif [ "$extension" = .sh ]; then
 		pid=$(pgrep -P $$ -fx 'bash /opt/MCscripts/bin/mcbe_getzip\.sh --clobber -b')
 	fi
-	echo Timestamp,PID,CPU Time,RSS,Command
+	echo 'Timestamp,PID,CPU Time,RSS,Command'
 	while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
 		sleep 0.1
 	done
@@ -86,37 +86,37 @@ fi
 
 echo "MCscripts version $(cat /opt/MCscripts/version)"
 
-echo Test mcbe_getzip EULA prompt
+echo 'Test mcbe_getzip EULA prompt'
 if echo nope | "/opt/MCscripts/bin/mcbe_getzip$extension" &> /dev/null; then
 	>&2 echo "nope didn't fail EULA prompt"
 	exit 1
 fi
 
-echo Test mcbe_getzip first run
+echo 'Test mcbe_getzip first run'
 test_getzip
 
 ln -snf "$zips_dir/bedrock-server-nope.nada.never.zip" "$zips_dir/current"
 
-echo Test mcbe_getzip different symlink
+echo 'Test mcbe_getzip different symlink'
 test_getzip
 
 mv "$(realpath "$zips_dir/current")" "$(realpath "$zips_dir/current").part"
 
-echo Test mcbe_getzip partial download
+echo 'Test mcbe_getzip partial download'
 test_getzip
 
 touch "$zips_dir/bedrock-server-nope.nada.never.zip"
 
-echo Test mcbe_getzip no clobber
+echo 'Test mcbe_getzip no clobber'
 echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" -bn > /dev/null
 unzip -tq "$zips_dir/current"
 unzip -tq "$zips_dir/preview"
 if [ ! -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
-    >&2 echo bedrock-server-nope.nada.never.zip was clobbered
+    >&2 echo 'bedrock-server-nope.nada.never.zip was clobbered'
 	exit 1
 fi
 
-echo Test mcbe_getzip clobber
+echo 'Test mcbe_getzip clobber'
 test_getzip
 if [ -f "$zips_dir/bedrock-server-nope.nada.never.zip" ]; then
     >&2 echo "bedrock-server-nope.nada.never.zip wasn't clobbered"
@@ -125,8 +125,8 @@ fi
 
 rm "$zips_dir/preview"
 
-echo Test mcbe_getzip no preview symlink
+echo 'Test mcbe_getzip no preview symlink'
 echo y | "/opt/MCscripts/bin/mcbe_getzip$extension" --clobber -c > /dev/null
 unzip -tq "$zips_dir/current"
 
-echo All tests passed
+echo 'All tests passed'

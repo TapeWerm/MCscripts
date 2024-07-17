@@ -44,7 +44,7 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo "Find Minecraft Java Edition or Bedrock Edition backups in $backup_dir and update their paths."
 		echo
-		echo Run move_servers.sh before running move_backup.sh.
+		echo 'Run move_servers.sh before running move_backup.sh.'
 		exit
 		;;
 	esac
@@ -52,7 +52,7 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi

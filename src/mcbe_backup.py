@@ -80,9 +80,9 @@ PARSER = argparse.ArgumentParser(
     ),
 )
 PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
+    "SERVER_DIR", type=pathlib.Path, help="Minecraft Bedrock Edition server directory"
 )
-PARSER.add_argument("SERVICE", type=str, help="systemd service or docker container")
+PARSER.add_argument("SERVICE", type=str, help="systemd service or Docker container")
 PARSER.add_argument(
     "-b",
     "--backup-dir",

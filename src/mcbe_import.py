@@ -17,14 +17,14 @@ PARSER.add_argument(
     "IMPORT_DIR",
     type=pathlib.Path,
     metavar="SERVER_DIR",
-    help="minecraft bedrock edition server directory to import",
+    help="Minecraft Bedrock Edition server directory to import",
 )
 PARSER.add_argument("INSTANCE", help="systemd instance name. ex: mcbe@MCBE")
 PARSER.add_argument(
     "-n",
     "--no-update",
     action="store_true",
-    help="don't update minecraft bedrock edition server",
+    help="don't update Minecraft Bedrock Edition server",
 )
 PARSER.add_argument(
     "-p",

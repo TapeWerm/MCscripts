@@ -61,9 +61,13 @@ while [ "$1" != -- ]; do
 		;;
 	--help|-h)
 		echo "$syntax"
-		echo Back up Minecraft Bedrock Edition server running in service.
+		echo 'Back up Minecraft Bedrock Edition server running in service.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Positional arguments:'
+		echo 'SERVER_DIR  Minecraft Bedrock Edition server directory'
+		echo 'SERVICE     systemd service or Docker container'
+		echo
+		echo 'Options:'
 		echo '-b, --backup-dir=BACKUP_DIR  directory backups go in. defaults to ~. best on another drive'
 		echo "-d, --docker                 https://hub.docker.com/r/itzg/minecraft-bedrock-server SERVER_DIR is \$(docker container inspect -f '{{range .Mounts}}{{.Source}}{{end}}' SERVICE)"
 		echo
@@ -75,11 +79,11 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -160,7 +164,7 @@ query=$(server_read "$query_cursor")
 timeout=$(date -d '1 minute' +%s)
 until echo "$query" | grep -q 'Data saved\. Files are now ready to be copied\.'; do
 	if [ "$(date +%s)" -ge "$timeout" ]; then
-		>&2 echo save query timeout
+		>&2 echo 'save query timeout'
 		exit 1
 	fi
 	if echo "$query" | grep -q 'A previous save has not been completed\.'; then

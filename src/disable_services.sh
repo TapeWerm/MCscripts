@@ -43,7 +43,7 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi

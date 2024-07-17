@@ -23,12 +23,12 @@ PARSER = argparse.ArgumentParser(
     ),
 )
 PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
+    "SERVER_DIR", type=pathlib.Path, help="Minecraft Bedrock Edition server directory"
 )
 PARSER.add_argument(
     "MINECRAFT_ZIP",
     type=pathlib.Path,
-    help="minecraft bedrock edition server zip to update to",
+    help="Minecraft Bedrock Edition server ZIP to update to",
 )
 ARGS = PARSER.parse_args()
 

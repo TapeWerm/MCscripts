@@ -10,9 +10,13 @@ while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, and PROPERTIES files. Other files will be removed. You can convert a Windows SERVER_DIR to Ubuntu and vice versa if you convert line endings.
+		echo 'Update Minecraft Bedrock Edition server keeping packs, worlds, JSON files, and PROPERTIES files. Other files will be removed. You can convert a Windows SERVER_DIR to Ubuntu and vice versa if you convert line endings.'
 		echo
-		echo MINECRAFT_ZIP cannot be in SERVER_DIR. Remember to stop server before updating.
+		echo 'Positional arguments:'
+		echo 'SERVER_DIR     Minecraft Bedrock Edition server directory'
+		echo 'MINECRAFT_ZIP  Minecraft Bedrock Edition server ZIP to update to'
+		echo
+		echo 'MINECRAFT_ZIP cannot be in SERVER_DIR. Remember to stop server before updating.'
 		exit
 		;;
 	esac
@@ -20,18 +24,18 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
 
 server_dir=$(realpath -- "$1")
 if [ ! -f "$server_dir/bedrock_server" ] && [ ! -f "$server_dir/bedrock_server.exe" ]; then
-	>&2 echo SERVER_DIR should have file bedrock_server or bedrock_server.exe
+	>&2 echo 'SERVER_DIR should have file bedrock_server or bedrock_server.exe'
 	exit 1
 fi
 new_server=$server_dir.new
@@ -41,13 +45,13 @@ new_mcscripts=$new_server/.MCscripts
 
 minecraft_zip=$(realpath -- "$2")
 if [ -n "$(find "$server_dir" -path "$minecraft_zip")" ]; then
-	>&2 echo MINECRAFT_ZIP cannot be in SERVER_DIR
+	>&2 echo 'MINECRAFT_ZIP cannot be in SERVER_DIR'
 	exit 1
 fi
 # Test extracting $minecraft_zip partially quietly
 unzip -tq "$minecraft_zip"
 
-echo "Enter Y if you backed up and stopped the server to update"
+echo 'Enter Y if you backed up and stopped the server to update'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

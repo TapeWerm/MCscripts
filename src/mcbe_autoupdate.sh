@@ -20,7 +20,11 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo "If SERVER_DIR/.MCscripts/version isn't the same as the ZIP in ~mc, back up, update, and restart service of Minecraft Bedrock Edition server."
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Positional arguments:'
+		echo 'SERVER_DIR  Minecraft Bedrock Edition server directory'
+		echo 'SERVICE     systemd service'
+		echo
+		echo 'Options:'
 		echo '-c, --current  update to current version (default)'
 		echo '-p, --preview  update to preview version'
 		exit
@@ -34,17 +38,17 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
 
 if [ "$(echo "$args_current $args_preview" | grep -o true | wc -l)" -gt 1 ]; then
-	>&2 echo current and preview are mutually exclusive
+	>&2 echo 'current and preview are mutually exclusive'
 	exit 1
 fi
 

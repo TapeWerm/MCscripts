@@ -22,7 +22,7 @@ PARSER = argparse.ArgumentParser(
     )
 )
 PARSER.add_argument(
-    "SERVER_DIR", type=pathlib.Path, help="minecraft bedrock edition server directory"
+    "SERVER_DIR", type=pathlib.Path, help="Minecraft Bedrock Edition server directory"
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
 VERSION_GROUP = PARSER.add_mutually_exclusive_group()

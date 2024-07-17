@@ -10,7 +10,11 @@ while [ "$1" != -- ]; do
 	case $1 in
 	--help|-h)
 		echo "$syntax"
-		echo "Run command in the server console of Minecraft Java Edition or Bedrock Edition server running in service."
+		echo 'Run command in the server console of Minecraft Java Edition or Bedrock Edition server running in service.'
+		echo
+		echo 'Positional arguments:'
+		echo 'SERVICE  systemd service'
+		echo 'COMMAND  Minecraft Java Edition or Bedrock Edition command'
 		exit
 		;;
 	esac
@@ -18,7 +22,7 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -42,7 +46,7 @@ else
 	output=$(journalctl "_SYSTEMD_UNIT=$service.service" -o cat)
 fi
 if [ -z "$output" ]; then
-	echo "No output from service after 1 second"
+	echo 'No output from service after 1 second'
 	exit
 fi
 echo "$output" | /opt/MCscripts/bin/mc_color.sed

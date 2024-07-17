@@ -21,7 +21,7 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo "If the JAR of the current version of Minecraft Java Edition server isn't in ~, download it, and remove outdated JARs in ~."
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Options:'
 		echo '--clobber         remove outdated JARs in ~ (default)'
 		echo "-n, --no-clobber  don't remove outdated JARs in ~"
 		exit
@@ -35,13 +35,13 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
 
 if [ "$(echo "$args_clobber $args_no_clobber" | grep -o true | wc -l)" -gt 1 ]; then
-	>&2 echo clobber and no-clobber are mutually exclusive
+	>&2 echo 'clobber and no-clobber are mutually exclusive'
 	exit 1
 fi
 
@@ -70,10 +70,10 @@ while IFS='' read -rd '' link; do
 	links+=("$link")
 done < <(echo "$webpage" | hxselect -s '\000' 'a')
 
-echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
+echo 'Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy'
 # Does prompting the EULA seem so official that it violates the EULA?
-echo Minecraft End User License Agreement: https://minecraft.net/eula
-echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
+echo 'Minecraft End User License Agreement: https://minecraft.net/eula'
+echo 'Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

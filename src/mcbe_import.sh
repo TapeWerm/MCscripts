@@ -15,8 +15,12 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo 'Import Minecraft Bedrock Edition server to ~mc/bedrock/INSTANCE.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
-		echo "-n, --no-update  don't update minecraft bedrock edition server"
+		echo 'Positional arguments:'
+		echo 'SERVER_DIR  Minecraft Bedrock Edition server directory to import'
+		echo 'INSTANCE    systemd instance name. ex: mcbe@MCBE'
+		echo
+		echo 'Options:'
+		echo "-n, --no-update  don't update Minecraft Bedrock Edition server"
 		echo '-p, --preview    use preview instead of current version'
 		exit
 		;;
@@ -33,11 +37,11 @@ done
 shift
 
 if [ "$#" -lt 2 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 2 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -46,7 +50,7 @@ import=$(realpath -- "$1")
 
 instance=$2
 if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
-	>&2 echo INSTANCE should be identical to systemd-escape INSTANCE
+	>&2 echo 'INSTANCE should be identical to systemd-escape INSTANCE'
 	exit 1
 fi
 server_dir=~mc/bedrock/$instance
@@ -66,7 +70,7 @@ fi
 mkdir -p ~mc/bedrock
 chown mc:mc ~mc/bedrock
 
-echo "Enter Y if you stopped the server to import"
+echo 'Enter Y if you stopped the server to import'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

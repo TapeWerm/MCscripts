@@ -34,7 +34,7 @@ done
 sudo systemctl start --no-block "$service"
 pid=$(systemctl show -p MainPID --value "$service")
 {
-echo Timestamp,PID,CPU Time,RSS,Command
+echo 'Timestamp,PID,CPU Time,RSS,Command'
 while timestamp=$(date --iso-8601=ns) && ps_recursive "$pid"; do
 sleep 0.1
 done

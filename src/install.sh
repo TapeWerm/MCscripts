@@ -43,7 +43,7 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo 'Install or update MCscripts.'
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Options:'
 		echo '-u, --update  deprecated flag'
 		exit
 		;;
@@ -55,7 +55,7 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
@@ -100,5 +100,5 @@ cp "$src_dir"/../systemd/* /etc/systemd/system/
 systemctl daemon-reload
 "$src_dir/enable_services.sh"
 cp "$src_dir/../version" /opt/MCscripts/
-echo @@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@
-echo @@@ https://www.creeperhost.net/blog/mitigating-cve/ @@@
+echo '@@@ How to mitigate Minecraft Java Edition CVE-2021-45046 and CVE-2021-44228: @@@'
+echo '@@@ https://www.creeperhost.net/blog/mitigating-cve/ @@@'

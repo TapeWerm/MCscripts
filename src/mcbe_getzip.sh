@@ -33,7 +33,7 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo "If the ZIP of the current version of Minecraft Bedrock Edition server isn't in ~, download it, and remove outdated ZIPs in ~."
 		echo
-		echo Mandatory arguments to long options are mandatory for short options too.
+		echo 'Options:'
 		echo '-b, --both        download current and preview versions (default)'
 		echo '-c, --current     download current version'
 		echo '--clobber         remove outdated ZIPs in ~ (default)'
@@ -54,17 +54,17 @@ done
 shift
 
 if [ "$#" -gt 0 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
 
 if [ "$(echo "$args_clobber $args_no_clobber" | grep -o true | wc -l)" -gt 1 ]; then
-	>&2 echo clobber and no-clobber are mutually exclusive
+	>&2 echo 'clobber and no-clobber are mutually exclusive'
 	exit 1
 fi
 if [ "$(echo "$args_both $args_current $args_preview" | grep -o true | wc -l)" -gt 1 ]; then
-	>&2 echo both, current, and preview are mutually exclusive
+	>&2 echo 'both, current, and preview are mutually exclusive'
 	exit 1
 fi
 
@@ -112,10 +112,10 @@ webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-
 webpage=$(echo "$webpage_raw" | hxnormalize -x)
 urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
 
-echo Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy
+echo 'Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy'
 # Does prompting the EULA seem so official that it violates the EULA?
-echo Minecraft End User License Agreement: https://minecraft.net/eula
-echo Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839
+echo 'Minecraft End User License Agreement: https://minecraft.net/eula'
+echo 'Privacy Policy: https://go.microsoft.com/fwlink/?LinkId=521839'
 read -r input
 input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
 if [ "$input" != y ]; then

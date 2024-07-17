@@ -28,7 +28,10 @@ while [ "$1" != -- ]; do
 		echo "$syntax"
 		echo 'Post Minecraft Bedrock Edition server logs running in service to webhooks (Discord and Rocket Chat).'
 		echo
-		echo Logs include server start/stop and player connect/disconnect/kicks.
+		echo 'Positional arguments:'
+		echo 'SERVICE  systemd service'
+		echo
+		echo 'Logs include server start/stop and player connect/disconnect/kicks.'
 		exit
 		;;
 	esac
@@ -36,11 +39,11 @@ done
 shift
 
 if [ "$#" -lt 1 ]; then
-	>&2 echo Not enough arguments
+	>&2 echo 'Not enough arguments'
 	>&2 echo "$syntax"
 	exit 1
 elif [ "$#" -gt 1 ]; then
-	>&2 echo Too much arguments
+	>&2 echo 'Too much arguments'
 	>&2 echo "$syntax"
 	exit 1
 fi
