@@ -2,7 +2,7 @@
 
 # Exit if error
 set -e
-syntax='Usage: mcbe_update.sh SERVER_DIR MINECRAFT_ZIP`'
+syntax='Usage: mcbe_update.sh SERVER_DIR MINECRAFT_ZIP'
 
 args=$(getopt -l help -o h -- "$@")
 eval set -- "$args"
