@@ -26,7 +26,7 @@ if (
         encoding="utf-8",
     ).stdout[: -len(os.linesep)]
 ):
-    sys.exit("INSTANCE should be indentical to systemd-escape INSTANCE")
+    sys.exit("INSTANCE should be identical to systemd-escape INSTANCE")
 SERVER_DIR = pathlib.Path.expanduser(pathlib.Path("~mc", "java", INSTANCE))
 if SERVER_DIR.is_dir():
     sys.exit(f"Server directory {SERVER_DIR} already exists")

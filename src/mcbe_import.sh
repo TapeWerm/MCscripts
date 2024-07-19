@@ -46,7 +46,7 @@ import=$(realpath -- "$1")
 
 instance=$2
 if [ "$instance" != "$(systemd-escape -- "$instance")" ]; then
-	>&2 echo INSTANCE should be indentical to systemd-escape INSTANCE
+	>&2 echo INSTANCE should be identical to systemd-escape INSTANCE
 	exit 1
 fi
 server_dir=~mc/bedrock/$instance
