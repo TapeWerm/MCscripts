@@ -139,10 +139,6 @@ mkdir -p "$(dirname "$server_override")"
 echo '[Service]' > "$server_override"
 echo 'ExecStop=' >> "$server_override"
 echo "ExecStop=/opt/MCscripts/bin/mc_stop$extension -s 0 %N" >> "$server_override"
-mkdir -p "$(dirname "$backup_override")"
-echo '[Service]' > "$backup_override"
-echo 'ExecStart=' >> "$backup_override"
-echo "ExecStart=/opt/MCscripts/bin/mc_backup$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
 systemctl daemon-reload
 
 echo 'Test mc_setup new server'
@@ -169,6 +165,12 @@ chown -R root:root /tmp/test_mc_setup
 echo 'Test mc_import .MCscripts already exists'
 echo y | "/opt/MCscripts/bin/mc_import$extension" /tmp/test_mc_setup "$instance" > /dev/null
 start_server
+
+mkdir -p "$(dirname "$backup_override")"
+echo '[Service]' > "$backup_override"
+echo 'ExecStart=' >> "$backup_override"
+echo "ExecStart=/opt/MCscripts/bin/mc_backup$extension -b /tmp/test_mc_backup /opt/MC/java/%i mc@%i" >> "$backup_override"
+systemctl daemon-reload
 
 echo 'Test mc-backup@testme'
 test_backup
