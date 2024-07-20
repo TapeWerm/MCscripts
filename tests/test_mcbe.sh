@@ -47,14 +47,16 @@ cleanup() {
 	systemctl daemon-reload
 }
 
-start_server() {
+wait_for_server() {
+	local invocation_id
+	invocation_id=$(systemctl show -p InvocationID --value "mcbe@$instance")
+	local query
+	query=$(journalctl "_SYSTEMD_INVOCATION_ID=$invocation_id" --show-cursor -o cat || true)
 	local query_cursor
-	query_cursor=$(journalctl "_SYSTEMD_UNIT=mcbe@$instance.service" --show-cursor -n 0 -o cat || true)
-	query_cursor=$(echo "$query_cursor" | cut -d ' ' -f 3- -s)
-	systemctl start "mcbe@$instance"
+	query_cursor=$(echo "$query" | tail -n 1 | cut -d ' ' -f 3- -s)
+	query=$(echo "$query" | head -n -1)
 	local timeout
 	timeout=$(date -d '1 minute' +%s)
-	local query
 	until echo "$query" | grep -q 'Server started\.'; do
 		if [ "$(date +%s)" -ge "$timeout" ]; then
 			>&2 echo 'Server started timeout'
@@ -62,13 +64,18 @@ start_server() {
 		fi
 		sleep 1
 		if [ -n "$query_cursor" ]; then
-			query=$(journalctl "_SYSTEMD_UNIT=mcbe@$instance.service" --after-cursor "$query_cursor" --show-cursor -o cat || true)
+			query=$(journalctl "_SYSTEMD_INVOCATION_ID=$invocation_id" --after-cursor "$query_cursor" --show-cursor -o cat || true)
 		else
-			query=$(journalctl "_SYSTEMD_UNIT=mcbe@$instance.service" --show-cursor -o cat || true)
+			query=$(journalctl "_SYSTEMD_INVOCATION_ID=$invocation_id" --show-cursor -o cat || true)
 		fi
 		query_cursor=$(echo "$query" | tail -n 1 | cut -d ' ' -f 3- -s)
 		query=$(echo "$query" | head -n -1)
 	done
+}
+
+start_server() {
+	systemctl start "mcbe@$instance"
+	wait_for_server
 }
 
 test_backup() {
@@ -116,6 +123,7 @@ test_update() {
 		>&2 echo "mcbe_update didn't keep worlds"
 		exit 1
 	fi
+	wait_for_server
 }
 
 args=$(getopt -l bash,help,port:,portv6: -o h4:6: -- "$@")
