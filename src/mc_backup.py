@@ -136,7 +136,7 @@ try:
         QUERY = server_read(query_cursor)
         # Filter out chat
         QUERY = os.linesep.join(
-            [line for line in QUERY.split(os.linesep) if not re.findall("<.+>", line)]
+            [line for line in QUERY.split(os.linesep) if not re.search("<.+>", line)]
         )
 
     # zip restores path of directory given to it (WORLD), not just the directory itself
