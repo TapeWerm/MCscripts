@@ -28,7 +28,7 @@ def server_do(cmd: str) -> typing.Union[str, None, datetime.datetime]:
     if ARGS.docker:
         # Escape r'][(){}:,!!\" ' for socat address specifications and command line
         no_escape = re.sub(r'([\\" ])', r"\\\\\\\1", SERVICE)
-        no_escape = re.sub(r"([][(){}:,!])", r"\\\1", no_escape)
+        no_escape = re.sub("([][(){}:,!])", r"\\\1", no_escape)
         cmd_cursor = datetime.datetime.now().astimezone()
         subprocess.run(
             ["socat", "-", f"EXEC:docker container attach -- {no_escape},pty"],
