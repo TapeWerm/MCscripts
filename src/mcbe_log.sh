@@ -31,7 +31,7 @@ while [ "$1" != -- ]; do
 		echo 'Positional arguments:'
 		echo 'SERVICE  systemd service'
 		echo
-		echo 'Logs include server start/stop and player connect/disconnect/kicks.'
+		echo 'Logs include server start/stop and player connect/disconnect/kick.'
 		exit
 		;;
 	esac
@@ -66,26 +66,22 @@ if [ -f "$rocket_file" ]; then
 	chmod 600 "$rocket_file"
 fi
 
-send "Server $instance starting"
-trap 'send "Server $instance stopping"; pkill -s $$' EXIT
+send "Server $service starting"
+trap 'send "Server $service stopping"; pkill -s $$' EXIT
 # Follow log for unit $service 0 lines from bottom, no metadata
 journalctl "_SYSTEMD_UNIT=$service.service" -fn 0 -o cat | while IFS='' read -r line; do
-	if echo "$line" | grep -q 'Player connected'; then
-		# Gamertags can have spaces as long as they're not leading/trailing/contiguous
-		# shellcheck disable=SC2001
-		player=$(echo "$line" | sed 's/.*Player connected: \(.*\), xuid:.*/\1/')
-		send "$player connected to $instance"
-	elif echo "$line" | grep -q 'Player disconnected'; then
-		# shellcheck disable=SC2001
-		player=$(echo "$line" | sed 's/.*Player disconnected: \(.*\), xuid:.*/\1/')
-		send "$player disconnected from $instance"
-	elif echo "$line" | grep -q Kicked; then
-		# shellcheck disable=SC2001
-		player=$(echo "$line" | sed 's/.*Kicked \(.*\) from the game.*/\1/')
-		# shellcheck disable=SC2001
-		reason=$(echo "$line" | sed "s/.*from the game: '\(.*\)'.*/\1/")
+	if connect=$(echo "$line" | grep -Eo 'Player connected: [^,]+'); then
+		# Gamertags can have spaces if they're not leading/trailing/consecutive
+		player=$(echo "$connect" | sed -Ee 's/Player connected: ([^,]+)/\1/')
+		send "$player connected to $service"
+	elif disconnect=$(echo "$line" | grep -Eo 'Player disconnected: [^,]+'); then
+		player=$(echo "$disconnect" | sed -Ee 's/Player disconnected: ([^,]+)/\1/')
+		send "$player disconnected from $service"
+	elif kick=$(echo "$line" | grep -Eo "Kicked .+ from the game: '.*'"); then
+		player=$(echo "$kick" | sed -Ee "s/Kicked (.+) from the game: '.*'/\\1/")
+		reason=$(echo "$kick" | sed -Ee "s/Kicked .+ from the game: '(.*)'/\\1/")
 		# Trim off leading space from $reason
 		reason=${reason# }
-		send "$player was kicked from $instance because $reason"
+		send "$player was kicked from $service because $reason"
 	fi
 done

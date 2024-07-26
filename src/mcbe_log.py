@@ -48,7 +48,7 @@ PARSER = argparse.ArgumentParser(
         "Post Minecraft Bedrock Edition server logs running in service to webhooks "
         + "(Discord and Rocket Chat)."
     ),
-    epilog="Logs include server start/stop and player connect/disconnect/kicks.",
+    epilog="Logs include server start/stop and player connect/disconnect/kick.",
 )
 PARSER.add_argument("SERVICE", type=str, help="systemd service")
 ARGS = PARSER.parse_args()
@@ -71,7 +71,7 @@ ROCKET_FILE = pathlib.Path(pathlib.Path.home(), ".mcbe_log", f"{INSTANCE}_rocket
 if ROCKET_FILE.is_file():
     ROCKET_FILE.chmod(0o600)
 
-send(f"Server {INSTANCE} starting")
+send(f"Server {SERVICE} starting")
 journal = systemd.journal.Reader()
 journal.add_match(_SYSTEMD_UNIT=SERVICE + ".service")
 journal.seek_tail()
@@ -85,20 +85,25 @@ try:
         journal.process()
         for entry in journal:
             line = entry["MESSAGE"]
-            if "Player connected" in line:
-                # Gamertags can have spaces as long as they're not leading/trailing/
-                # contiguous
-                player = re.sub(r".*Player connected: (.*), xuid:.*", r"\1", line)
-                send(f"{player} connected to {INSTANCE}")
-            elif "Player disconnected" in line:
-                player = re.sub(r".*Player disconnected: (.*), xuid:.*", r"\1", line)
-                send(f"{player} disconnected from {INSTANCE}")
-            elif "Kicked" in line:
-                player = re.sub(r".*Kicked (.*) from the game.*", r"\1", line)
-                reason = re.sub(r".*from the game: '(.*)'.*", r"\1", line)
+            connect = re.search("Player connected: ([^,]+)", line)
+            if connect:
+                # Gamertags can have spaces if they're not leading/trailing/consecutive
+                player = connect.group(1)
+                send(f"{player} connected to {SERVICE}")
+                continue
+            disconnect = re.search("Player disconnected: ([^,]+)", line)
+            if disconnect:
+                player = disconnect.group(1)
+                send(f"{player} disconnected from {SERVICE}")
+                continue
+            kick = re.search("Kicked (.+) from the game: '(.*)'", line)
+            if kick:
+                player = kick.group(1)
+                reason = kick.group(2)
                 # Trim off leading space from reason
                 if reason.startswith(" "):
                     reason = reason[1:]
-                send(f"{player} was kicked from {INSTANCE} because {reason}")
+                send(f"{player} was kicked from {SERVICE} because {reason}")
+                continue
 finally:
-    send(f"Server {INSTANCE} stopping")
+    send(f"Server {SERVICE} stopping")
