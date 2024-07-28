@@ -67,68 +67,68 @@ fi
 # Update systemd overrides
 for override in /etc/systemd/system/mc-backup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
-		sed -i 's|MC/mc_backup\.sh|MCscripts/mc_backup\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_backup\.sh|MCscripts/bin/mc_backup\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_backup\.py|MCscripts/bin/mc_backup\.py|g' "$override"
+		sed -ie 's/MCbackup\.sh/mc_backup\.sh/g' "$override"
+		sed -ie 's|MC/mc_backup\.sh|MCscripts/mc_backup\.sh|g' "$override"
+		sed -ie 's|MCscripts/mc_backup\.sh|MCscripts/bin/mc_backup\.sh|g' "$override"
+		sed -ie 's|MCscripts/mc_backup\.py|MCscripts/bin/mc_backup\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mc-rmbackup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/%i_Backups/%i_backups/g' "$override"
-		sed -i 's|java/%i_backups|java_backups/%i|g' "$override"
-		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
-		sed -i "s/xargs -0d '\\\\n' ls -t/xargs -0rd '\\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0rd '\\\\n' ls -t/xargs -rd '\\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
+		sed -ie 's/%i_Backups/%i_backups/g' "$override"
+		sed -ie 's|java/%i_backups|java_backups/%i|g' "$override"
+		sed -ie 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
+		sed -ie "s/xargs -0d '\\\\n' ls -t/xargs -0rd '\\\\n' ls -t/g" "$override"
+		sed -ie "s/xargs -0rd '\\\\n' ls -t/xargs -rd '\\\\n' ls -t/g" "$override"
+		sed -ie "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
 	fi
 done
 for override in /etc/systemd/system/mc@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
+		sed -ie 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		sed -ie 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+		sed -ie 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
+		sed -ie 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-autoupdate@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's|MCscripts/mcbe_autoupdate\.sh|MCscripts/bin/mcbe_autoupdate\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_autoupdate\.py|MCscripts/bin/mcbe_autoupdate\.py|g' "$override"
+		sed -ie 's|MCscripts/mcbe_autoupdate\.sh|MCscripts/bin/mcbe_autoupdate\.sh|g' "$override"
+		sed -ie 's|MCscripts/mcbe_autoupdate\.py|MCscripts/bin/mcbe_autoupdate\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-backup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
-		sed -i 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_backup\.sh|MCscripts/bin/mcbe_backup\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_backup\.py|MCscripts/bin/mcbe_backup\.py|g' "$override"
+		sed -ie 's/MCBEbackup\.sh/mcbe_backup\.sh/g' "$override"
+		sed -ie 's|MC/mcbe_backup\.sh|MCscripts/mcbe_backup\.sh|g' "$override"
+		sed -ie 's|MCscripts/mcbe_backup\.sh|MCscripts/bin/mcbe_backup\.sh|g' "$override"
+		sed -ie 's|MCscripts/mcbe_backup\.py|MCscripts/bin/mcbe_backup\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-getzip.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
-		sed -i 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_getzip\.sh|MCscripts/bin/mcbe_getzip\.sh|g' "$override"
-		sed -i 's|MCscripts/mcbe_getzip\.py|MCscripts/bin/mcbe_getzip\.py|g' "$override"
+		sed -ie 's/MCBEgetZIP\.sh/mcbe_getzip\.sh/g' "$override"
+		sed -ie 's|MC/mcbe_getzip\.sh|MCscripts/mcbe_getzip\.sh|g' "$override"
+		sed -ie 's|MCscripts/mcbe_getzip\.sh|MCscripts/bin/mcbe_getzip\.sh|g' "$override"
+		sed -ie 's|MCscripts/mcbe_getzip\.py|MCscripts/bin/mcbe_getzip\.py|g' "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe-rmbackup@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/%i_Backups/%i_backups/g' "$override"
-		sed -i 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
-		sed -i 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
-		sed -i "s/xargs -0d '\\\\n' ls -t/xargs -0rd '\\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0rd '\\\\n' ls -t/xargs -rd '\\\\n' ls -t/g" "$override"
-		sed -i "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
+		sed -ie 's/%i_Backups/%i_backups/g' "$override"
+		sed -ie 's|bedrock/%i_backups|bedrock_backups/%i|g' "$override"
+		sed -ie 's|MC/backup_dir|MCscripts/backup_dir|g' "$override"
+		sed -ie "s/xargs -0d '\\\\n' ls -t/xargs -0rd '\\\\n' ls -t/g" "$override"
+		sed -ie "s/xargs -0rd '\\\\n' ls -t/xargs -rd '\\\\n' ls -t/g" "$override"
+		sed -ie "s/xargs -0d '\\\\n' rm -f/xargs -d '\\\\n' rm -f/g" "$override"
 	fi
 done
 for override in /etc/systemd/system/mcbe@*.service.d/*.conf; do
 	if [ -f "$override" ]; then
-		sed -i 's/MCstop\.sh/mc_stop\.sh/g' "$override"
-		sed -i 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
-		sed -i 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
+		sed -ie 's/MCstop\.sh/mc_stop\.sh/g' "$override"
+		sed -ie 's|MC/mc_stop\.sh|MCscripts/mc_stop\.sh|g' "$override"
+		sed -ie 's|MCscripts/mc_stop\.sh|MCscripts/bin/mc_stop\.sh|g' "$override"
+		sed -ie 's|MCscripts/mc_stop\.py|MCscripts/bin/mc_stop\.py|g' "$override"
 	fi
 done
 # Move webhooks for mcbe-log
