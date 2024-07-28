@@ -99,17 +99,17 @@ test_backup() {
 	start_server
 }
 
-# Print systemd messages for mcbe@$instance.service
-# systemd says Started Minecraft Bedrock Edition server @ $instance.
+# Print true if mcbe@$instance started during mcbe-autoupdate@$instance, print false if not
 test_update() {
-	local update_cursor
-	update_cursor=$(journalctl "UNIT=mcbe@$instance.service" _PID=1 --show-cursor -n 0 -o cat || true)
-	update_cursor=$(echo "$update_cursor" | cut -d ' ' -f 3- -s)
+	local old_invocation_id
+	old_invocation_id=$(systemctl show -p InvocationID --value "mcbe@$instance")
 	systemctl start "mcbe-autoupdate@$instance"
-	if [ -n "$update_cursor" ]; then
-		journalctl "UNIT=mcbe@$instance.service" _PID=1 --after-cursor "$update_cursor" -o cat
+	local new_invocation_id
+	new_invocation_id=$(systemctl show -p InvocationID --value "mcbe@$instance")
+	if [ "$old_invocation_id" = "$new_invocation_id" ]; then
+		echo false
 	else
-		journalctl "UNIT=mcbe@$instance.service" _PID=1 -o cat
+		echo true
 	fi
 	if ! grep -q '^# Test mcbe_update keeps server\.properties$' "$properties"; then
 		>&2 echo "mcbe_update didn't keep server.properties"
@@ -274,7 +274,7 @@ echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -c /opt/MC/bedrock/
 systemctl daemon-reload
 
 echo 'Test mcbe-autoupdate@testme already up to date'
-if test_update | grep -q Started; then
+if [ "$(test_update)" = true ]; then
 	>&2 echo "mcbe@$instance was updated when already up to date"
 	exit 1
 fi
@@ -282,7 +282,7 @@ fi
 echo 💢 > "$mcscripts_dir/version"
 
 echo 'Test mcbe-autoupdate@testme different version'
-if ! test_update | grep -q Started; then
+if [ "$(test_update)" = false ]; then
 	>&2 echo "mcbe@$instance wasn't updated when different version"
 	exit 1
 fi
@@ -290,7 +290,7 @@ fi
 rm "$mcscripts_dir/version"
 
 echo 'Test mcbe-autoupdate@testme no version file'
-if ! test_update | grep -q Started; then
+if [ "$(test_update)" = false ]; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
@@ -304,7 +304,7 @@ systemctl daemon-reload
 rm "$mcscripts_dir/version"
 
 echo 'Test mcbe-autoupdate@testme Bedrock Edition server preview'
-if ! test_update | grep -q Started; then
+if [ "$(test_update)" = false ]; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
