@@ -170,14 +170,14 @@ systemctl daemon-reload
 
 echo 'Test mc_setup new server'
 "/opt/MCscripts/bin/mc_setup$extension" "$instance" > /dev/null
-sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
-sed -i "s/^server-port=.*/server-port=$port/" "$properties"
-sed -i 's/^eula=.*/eula=true/' "$server_dir/eula.txt"
+sed -ie 's/^level-name=.*/level-name=Java level/' "$properties"
+sed -ie "s/^server-port=.*/server-port=$port/" "$properties"
+sed -ie 's/^eula=.*/eula=true/' "$server_dir/eula.txt"
 start_server
 
 systemctl stop "mc@$instance.socket"
 rm -r "$mcscripts_dir"
-sed -i 's/$/\r/' "$properties"
+sed -ie 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mc_setup
 chown -R root:root /tmp/test_mc_setup
 
@@ -203,14 +203,14 @@ echo 'Test mc-backup@testme'
 test_backup
 
 systemctl stop "mc@$instance.socket"
-sed -i 's/^level-name=.*/level-name=--nope/' "$properties"
+sed -ie 's/^level-name=.*/level-name=--nope/' "$properties"
 start_server
 
 echo 'Test mc-backup@testme level-name flag injection'
 test_backup
 
 systemctl stop "mc@$instance.socket"
-sed -i 's/^level-name=.*/level-name=Java level/' "$properties"
+sed -ie 's/^level-name=.*/level-name=Java level/' "$properties"
 start_server
 
 touch /tmp/test_mc_backup.img
