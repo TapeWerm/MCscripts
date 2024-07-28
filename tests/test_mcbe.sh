@@ -247,6 +247,13 @@ echo 'Test mcbe-backup@testme level-name flag injection'
 test_backup
 
 systemctl stop "mcbe@$instance.socket"
+sed -ie 's/^level-name=.*/level-name=.+{()[^$/' "$properties"
+start_server
+
+echo 'Test mcbe-backup@testme level-name regex injection'
+test_backup
+
+systemctl stop "mcbe@$instance.socket"
 sed -ie 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 start_server
 

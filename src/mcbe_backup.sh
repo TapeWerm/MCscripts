@@ -16,11 +16,11 @@ syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 server_do() {
 	if [ "$docker" = true ]; then
 		# Escape '][(){}:,!!\" ' for socat address specifications and command line
-		local no_escape
-		no_escape=$(echo "$service" | sed -Ee 's/([\" ])/\\\\\\\1/g')
-		no_escape=$(echo "$no_escape" | sed -Ee 's/([][(){}:,!])/\\\1/g')
+		local service_esc
+		service_esc=$(echo "$service" | sed -Ee 's/([\" ])/\\\\\\\1/g')
+		service_esc=$(echo "$service_esc" | sed -Ee 's/([][(){}:,!])/\\\1/g')
 		date --iso-8601=ns
-		echo "$*" | socat - EXEC:"docker container attach -- $no_escape",pty > /dev/null
+		echo "$*" | socat - EXEC:"docker container attach -- $service_esc",pty > /dev/null
 	else
 		{
 			journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat || true
@@ -100,6 +100,7 @@ if [ ! -d "$worlds_dir/$world" ]; then
 	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
 	exit 1
 fi
+world_esc=$(echo "$world" | sed -Ee 's/([.?*+{|()[\^$])/\\\1/g')
 if [ "$docker" = true ]; then
 	temp_dir=/tmp/docker_mcbe_backup/$(basename "$(dirname "$server_dir")")
 else
@@ -175,7 +176,7 @@ done
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 # journald LineMax splits lines so delete newlines
 # shellcheck disable=SC1087
-files=$(echo "$query" | tr -d '\n' | grep -Eo -- "$world[^:]+:[0-9]+")
+files=$(echo "$query" | tr -d '\n' | grep -Eo -- "$world_esc[^:]+:[0-9]+")
 
 mkdir -p "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
