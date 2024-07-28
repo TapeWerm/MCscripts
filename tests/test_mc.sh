@@ -93,17 +93,17 @@ test_backup() {
 	start_server
 }
 
-# Print systemd messages for mc@$instance.service
-# systemd says Started Minecraft Java Edition server @ $instance.
+# Print true if mc@$instance started during mc-autoupdate@$instance, print false if not
 test_update() {
-	local update_cursor
-	update_cursor=$(journalctl "UNIT=mc@$instance.service" _PID=1 --show-cursor -n 0 -o cat || true)
-	update_cursor=$(echo "$update_cursor" | cut -d ' ' -f 3- -s)
+	local old_invocation_id
+	old_invocation_id=$(systemctl show -p InvocationID --value "mc@$instance")
 	systemctl start "mc-autoupdate@$instance"
-	if [ -n "$update_cursor" ]; then
-		journalctl "UNIT=mc@$instance.service" _PID=1 --after-cursor "$update_cursor" -o cat
+	local new_invocation_id
+	new_invocation_id=$(systemctl show -p InvocationID --value "mc@$instance")
+	if [ "$old_invocation_id" = "$new_invocation_id" ]; then
+		echo false
 	else
-		journalctl "UNIT=mc@$instance.service" _PID=1 -o cat
+		echo true
 	fi
 	wait_for_server
 }
@@ -234,7 +234,7 @@ echo "ExecStart=/opt/MCscripts/bin/mc_autoupdate$extension /opt/MC/java/%i mc@%i
 systemctl daemon-reload
 
 echo 'Test mc-autoupdate@testme already up to date'
-if test_update | grep -q Started; then
+if [ "$(test_update)" = true ]; then
 	>&2 echo "mc@$instance was updated when already up to date"
 	exit 1
 fi
@@ -242,7 +242,7 @@ fi
 echo 💢 > "$mcscripts_dir/version"
 
 echo 'Test mc-autoupdate@testme different version'
-if ! test_update | grep -q Started; then
+if [ "$(test_update)" = false ]; then
 	>&2 echo "mc@$instance wasn't updated when different version"
 	exit 1
 fi
@@ -250,7 +250,7 @@ fi
 rm "$mcscripts_dir/version"
 
 echo 'Test mc-autoupdate@testme no version file'
-if ! test_update | grep -q Started; then
+if [ "$(test_update)" = false ]; then
 	>&2 echo "mc@$instance wasn't updated when no version file"
 	exit 1
 fi
