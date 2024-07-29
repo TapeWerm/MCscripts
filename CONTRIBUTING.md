@@ -49,5 +49,6 @@ sudo tests/test_mc.sh
 tests/test_mc_getjar.sh
 ```
 The following scripts don't have tests:
+- [mc_log.py](src/mc_log.py)
 - [mcbe_backup.py](src/mcbe_backup.py) --docker
 - [mcbe_log.py](src/mcbe_log.py)

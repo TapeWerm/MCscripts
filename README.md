@@ -8,12 +8,12 @@ Minecraft Java and Bedrock Dedicated Server systemd units and scripts for backup
 Ubuntu on Windows Subsystem for Linux does not support systemctl poweroff.
 Try [Ubuntu Server](https://ubuntu.com/tutorials/install-ubuntu-server).
 You can run [mc_getjar.py](src/mc_getjar.py), [mcbe_getzip.py](src/mcbe_getzip.py), and [mcbe_update.py](src/mcbe_update.py) without enabling the systemd units, but not others.
-No chat bots for Java Edition.
 # [Contributing](CONTRIBUTING.md)
 # Table of contents
 - [Notes](#notes)
 - [Setup](#setup)
   - [Java Edition setup](#java-edition-setup)
+  - [Java Edition webhook bots setup](#java-edition-webhook-bots-setup)
   - [Bedrock Edition setup](#bedrock-edition-setup)
   - [Bedrock Edition webhook bots setup](#bedrock-edition-webhook-bots-setup)
   - [Config files](#config-files)
@@ -108,6 +108,24 @@ sudo systemctl enable --now mc-getjar.timer mc-autoupdate@MC.service
 If you want to automatically remove backups more than 2-weeks-old to save storage:
 ```bash
 sudo systemctl enable --now mc-rmbackup@MC.service
+```
+## Java Edition webhook bots setup
+If you want to post server logs to webhooks (Discord and Rocket Chat):
+```bash
+sudo mkdir -p ~mc/.mc_log
+# Rocket Chat: MC_rocket.txt
+sudo touch ~mc/.mc_log/MC_discord.txt
+sudo chmod 600 ~mc/.mc_log/MC_discord.txt
+sudo chown -R mc:mc ~mc/.mc_log
+```
+Enter `sudo nano ~mc/.mc_log/MC_discord.txt`, fill this in, and write out (^G = <kbd>Ctrl</kbd>-<kbd>G</kbd>):
+```
+$url
+$url
+...
+```
+```bash
+sudo systemctl enable --now mc-log@MC.service
 ```
 ## Bedrock Edition setup
 ```bash

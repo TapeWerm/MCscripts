@@ -10,11 +10,16 @@ update_override=/etc/systemd/system/mc-autoupdate@$instance.service.d/z.conf
 server_dir=~mc/java/$instance
 mcscripts_dir=$server_dir/.MCscripts
 properties=$server_dir/server.properties
+discord_file=~mc/.mc_log/${instance}_discord.txt
 jars_dir=~mc/java_jars
 port=25765
 syntax='Usage: test_mc.sh [OPTION]...'
 
 cleanup() {
+	rm -f "$discord_file"
+	if [ -d ~mc/.mc_log ]; then
+		rmdir --ignore-fail-on-non-empty ~mc/.mc_log
+	fi
 	if mountpoint -q /mnt/test_mc_backup; then
 		umount /mnt/test_mc_backup
 	fi
@@ -252,6 +257,19 @@ rm "$mcscripts_dir/version"
 echo 'Test mc-autoupdate@testme no version file'
 if [ "$(test_update)" = false ]; then
 	>&2 echo "mc@$instance wasn't updated when no version file"
+	exit 1
+fi
+
+mkdir -p ~mc/.mc_log
+touch "$discord_file"
+chmod 600 "$discord_file"
+chown -R mc:mc ~mc/.mc_log
+echo https://discord.com/do-not-print > "$discord_file"
+
+echo "Test mc_log doesn't print webhook when offline"
+offline=$(systemd-run -PGqp KillMode=mixed -p PrivateNetwork=true -p RuntimeMaxSec=1 -p SupplementaryGroups=systemd-journal -p User=mc "/opt/MCscripts/bin/mc_log$extension" "mc@$instance" 2>&1 || true)
+if echo "$offline" | grep -q do-not-print; then
+	>&2 echo 'mc_log printed webhook when offline'
 	exit 1
 fi
 

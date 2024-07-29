@@ -1,0 +1,18 @@
+[Unit]
+After=mc@%i.service network-online.target
+Description=Post Minecraft Java Edition server logs to chat @ %i
+Requisite=mc@%i.service
+
+[Service]
+# DNS check
+ExecStartPre=/bin/bash -c 'until getent ahosts example.com &> /dev/null; do sleep 1; done'
+ExecStart=/opt/MCscripts/bin/mc_log.py mc@%i
+KillMode=mixed
+Restart=always
+SupplementaryGroups=systemd-journal
+Type=simple
+User=mc
+
+[Install]
+# Start after mc@%i.service
+WantedBy=mc@%i.service

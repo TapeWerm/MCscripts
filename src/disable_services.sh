@@ -18,13 +18,13 @@ scripts+=(MCBE_Bot.sh MCBEautoUpdate.sh MCBEbackup.sh MCBEgetZIP.sh MCBElog.sh M
 scripts+=(DisableServices.sh EnableServices.sh MoveServers.sh)
 
 # Current services
-services=(mc@*.socket mc@*.service mc-backup@*.timer mc-getjar.timer mc-autoupdate@*.service mc-rmbackup@*.service)
+services=(mc@*.socket mc@*.service mc-backup@*.timer mc-getjar.timer mc-autoupdate@*.service mc-rmbackup@*.service mc-log@*.service)
 services+=(mcbe@*.socket mcbe@*.service mcbe-backup@*.timer mcbe-getzip.timer mcbe-autoupdate@*.service mcbe-rmbackup@*.service mcbe-log@*.service)
 # Removed services
 services+=(mcbe-autoupdate@*.timer mcbe-bot@*.service mcbe-bot@*.timer mcbe-log@*.timer)
 
 # Current units
-units=(mc-autoupdate@.service mc-backup@.service mc-backup@.timer mc-getjar.service mc-getjar.timer mc-rmbackup@.service mc@.service mc@.socket)
+units=(mc-autoupdate@.service mc-backup@.service mc-backup@.timer mc-getjar.service mc-getjar.timer mc-log@.service mc-rmbackup@.service mc@.service mc@.socket)
 units+=(mcbe-autoupdate@.service mcbe-backup@.service mcbe-backup@.timer mcbe-getzip.service mcbe-getzip.timer mcbe-log@.service mcbe-rmbackup@.service mcbe@.service mcbe@.socket)
 # Removed units
 units+=(mcbe-autoupdate@.timer mcbe-bot@.service mcbe-bot@.timer mcbe-log@.timer)
