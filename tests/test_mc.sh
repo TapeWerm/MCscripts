@@ -9,8 +9,8 @@ server_override=/etc/systemd/system/mc@$instance.service.d/z.conf
 update_override=/etc/systemd/system/mc-autoupdate@$instance.service.d/z.conf
 server_dir=~mc/java/$instance
 mcscripts_dir=$server_dir/.MCscripts
-jars_dir=~mc/java_jars
 properties=$server_dir/server.properties
+jars_dir=~mc/java_jars
 port=25765
 syntax='Usage: test_mc.sh [OPTION]...'
 
