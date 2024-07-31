@@ -50,5 +50,7 @@ tests/test_mc_getjar.sh
 ```
 The following scripts don't have tests:
 - [mc_log.py](src/mc_log.py)
+  - `sudo /opt/MCscripts/bin/mc_cmd.py mc@MC "kick PLAYER You've been kicked by: a smooth operator"`
 - [mcbe_backup.py](src/mcbe_backup.py) --docker
 - [mcbe_log.py](src/mcbe_log.py)
+  - `sudo /opt/MCscripts/bin/mc_cmd.py mcbe@MCBE "kick PLAYER You've been kicked by: a smooth operator"`
