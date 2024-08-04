@@ -26,12 +26,9 @@ def server_do(cmd: str) -> typing.Union[str, None, datetime.datetime]:
     :return: systemd cursor or time for server_read
     """
     if ARGS.docker:
-        # Escape r'][(){}:,!!\" ' for socat address specifications and command line
-        service_esc = re.sub(r'([\\" ])', r"\\\\\\\1", SERVICE)
-        service_esc = re.sub("([][(){}:,!])", r"\\\1", service_esc)
         cmd_cursor = datetime.datetime.now().astimezone()
         subprocess.run(
-            ["socat", "-", f"EXEC:docker container attach -- {service_esc},pty"],
+            ["socat", "-", f"EXEC:docker container attach -- {SERVICE_SOCAT},pty"],
             check=True,
             input=cmd + "\n",
             stdout=subprocess.DEVNULL,
@@ -118,7 +115,7 @@ if not pathlib.Path(WORLDS_DIR, WORLD).is_dir():
     sys.exit(
         f"No world {WORLD} in {WORLDS_DIR}, check level-name in server.properties too"
     )
-WORLD_ESC = re.escape(WORLD)
+WORLD_REGEX = re.escape(WORLD)
 if ARGS.docker:
     TEMP_DIR = pathlib.Path("/tmp/docker_mcbe_backup", SERVER_DIR.parent.name)
 else:
@@ -143,6 +140,9 @@ if ARGS.docker:
         != "running"
     ):
         sys.exit(f"Container {SERVICE} not running")
+    # Escape r'][(){}:,!!\" ' for socat address specifications and command-line
+    SERVICE_SOCAT = re.sub(r'([\\" ])', r"\\\\\\\1", SERVICE)
+    SERVICE_SOCAT = re.sub("([][(){}:,!])", r"\\\1", SERVICE_SOCAT)
 else:
     # Trim off SERVICE after last .service
     if SERVICE.endswith(".service"):
@@ -211,7 +211,7 @@ try:
     # {WORLD}not :...:#...
     # Minecraft Bedrock Edition says file:bytes, file:bytes, ...
     # journald LineMax splits lines so delete newlines
-    files = re.findall(f"{WORLD_ESC}[^:]+:[0-9]+", QUERY.replace(os.linesep, ""))
+    files = re.findall(f"{WORLD_REGEX}[^:]+:[0-9]+", QUERY.replace(os.linesep, ""))
 
     TEMP_DIR.mkdir(parents=True, exist_ok=True)
     # zip restores path of directory given to it (WORLD), not just the directory itself

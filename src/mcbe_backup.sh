@@ -15,12 +15,8 @@ syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 # echo "$*" to $service input
 server_do() {
 	if [ "$docker" = true ]; then
-		# Escape '][(){}:,!!\" ' for socat address specifications and command line
-		local service_esc
-		service_esc=$(echo "$service" | sed -Ee 's/([\" ])/\\\\\\\1/g')
-		service_esc=$(echo "$service_esc" | sed -Ee 's/([][(){}:,!])/\\\1/g')
 		date --iso-8601=ns
-		echo "$*" | socat - EXEC:"docker container attach -- $service_esc",pty > /dev/null
+		echo "$*" | socat - EXEC:"docker container attach -- $service_socat",pty > /dev/null
 	else
 		{
 			journalctl "_SYSTEMD_UNIT=$service.service" --show-cursor -n 0 -o cat || true
@@ -100,7 +96,8 @@ if [ ! -d "$worlds_dir/$world" ]; then
 	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
 	exit 1
 fi
-world_esc=$(echo "$world" | sed -Ee 's/([.?*+{|()[\^$])/\\\1/g')
+# Escape '.?*+{|([\^$' for grep -E
+world_regex=$(echo "$world" | sed -Ee 's/([.?*+{|([\^$])/\\\1/g')
 if [ "$docker" = true ]; then
 	temp_dir=/tmp/docker_mcbe_backup/$(basename "$(dirname "$server_dir")")
 else
@@ -113,6 +110,9 @@ if [ "$docker" = true ]; then
 		>&2 echo "Container $service not running"
 		exit 1
 	fi
+	# Escape '][(){}:,!!\" ' for socat address specifications and command-line
+	service_socat=$(echo "$service" | sed -Ee 's/([\" ])/\\\\\\\1/g')
+	service_socat=$(echo "$service_socat" | sed -Ee 's/([][(){}:,!])/\\\1/g')
 else
 	# Trim off $2 after last .service
 	service=${2%.service}
@@ -176,7 +176,7 @@ done
 # Minecraft Bedrock Edition says $file:$bytes, $file:$bytes, ...
 # journald LineMax splits lines so delete newlines
 # shellcheck disable=SC1087
-files=$(echo "$query" | tr -d '\n' | grep -Eo -- "$world_esc[^:]+:[0-9]+")
+files=$(echo "$query" | tr -d '\n' | grep -Eo -- "$world_regex[^:]+:[0-9]+")
 
 mkdir -p "$temp_dir"
 # zip restores path of directory given to it ($world), not just the directory itself
