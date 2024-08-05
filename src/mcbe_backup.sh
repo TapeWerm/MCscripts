@@ -96,8 +96,8 @@ if [ ! -d "$worlds_dir/$world" ]; then
 	>&2 echo "No world $world in $worlds_dir, check level-name in server.properties too"
 	exit 1
 fi
-# Escape '.?*+{|([\^$' for grep -E
-world_regex=$(echo "$world" | sed -Ee 's/([.?*+{|([\^$])/\\\1/g')
+# Escape '.?*+{|()[\^$' for grep -E
+world_regex=$(echo "$world" | sed -Ee 's/([.?*+{|()[\^$])/\\\1/g')
 if [ "$docker" = true ]; then
 	temp_dir=/tmp/docker_mcbe_backup/$(basename "$(dirname "$server_dir")")
 else
