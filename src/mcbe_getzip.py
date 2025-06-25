@@ -6,10 +6,8 @@ download it, and remove outdated ZIPs in ~.
 
 import argparse
 import pathlib
-import re
 import sys
 
-import bs4
 import requests
 import toml
 
@@ -77,7 +75,11 @@ elif ARGS.preview:
 ZIPS_DIR.mkdir(parents=True, exist_ok=True)
 
 webpage_res = requests.get(
-    "https://www.minecraft.net/en-us/download/server/bedrock",
+    # https://www.minecraft.net/en-us/download/server/bedrock now uses JS to
+    # load the links onto the page, so a simple scrape of that page won't work.
+    # But that page does call this API endpoint to get the current Minecraft
+    # server downloads.
+    "https://net-secondary.web.minecraft-services.net/api/v1.0/download/links",
     headers={
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64)",
         "Accept-Language": "en-US",
@@ -85,9 +87,7 @@ webpage_res = requests.get(
     timeout=60,
 )
 webpage_res.raise_for_status()
-webpage = bs4.BeautifulSoup(webpage_res.text, "html.parser")
-urls = [link.get("href") for link in webpage.find_all("a")]
-urls = [url for url in urls if url]
+urls = webpage_res.json()["result"]["links"]
 
 print(
     "Enter Y if you agree to the Minecraft End User License Agreement and Privacy",
@@ -101,17 +101,13 @@ if input().lower() != "y":
 for version in VERSIONS:
     if version == "current":
         for urlx in urls:
-            urlx = re.match(r"^https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip$", urlx)
-            if urlx:
-                url = urlx.string
+            if urlx["downloadType"] == "serverBedrockLinux":
+                url = urlx["downloadUrl"]
                 break
     elif version == "preview":
         for urlx in urls:
-            urlx = re.match(
-                r"^https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip$", urlx
-            )
-            if urlx:
-                url = urlx.string
+            if urlx["downloadType"] == "serverBedrockPreviewLinux":
+                url = urlx["downloadUrl"]
                 break
     else:
         continue
