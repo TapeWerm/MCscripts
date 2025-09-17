@@ -207,6 +207,7 @@ sed -ie 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
 sed -ie 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 sed -ie "s/^server-port=.*/server-port=$port/" "$properties"
 sed -ie "s/^server-portv6=.*/server-portv6=$portv6/" "$properties"
+echo >> "$properties"
 echo '# Test mcbe_update keeps server.properties' >> "$properties"
 touch "$server_dir/test_mcbe_update.json"
 chown mc:mc "$server_dir/test_mcbe_update.json"
@@ -281,7 +282,8 @@ echo "ExecStart=/opt/MCscripts/bin/mcbe_autoupdate$extension -c /opt/MC/bedrock/
 systemctl daemon-reload
 
 echo 'Test mcbe-autoupdate@testme already up to date'
-if [ "$(test_update)" = true ]; then
+update_res=$(test_update)
+if [ "$update_res" = true ]; then
 	>&2 echo "mcbe@$instance was updated when already up to date"
 	exit 1
 fi
@@ -289,7 +291,8 @@ fi
 echo 💢 > "$mcscripts_dir/version"
 
 echo 'Test mcbe-autoupdate@testme different version'
-if [ "$(test_update)" = false ]; then
+update_res=$(test_update)
+if [ "$update_res" = false ]; then
 	>&2 echo "mcbe@$instance wasn't updated when different version"
 	exit 1
 fi
@@ -297,7 +300,8 @@ fi
 rm "$mcscripts_dir/version"
 
 echo 'Test mcbe-autoupdate@testme no version file'
-if [ "$(test_update)" = false ]; then
+update_res=$(test_update)
+if [ "$update_res" = false ]; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
@@ -311,7 +315,8 @@ systemctl daemon-reload
 rm "$mcscripts_dir/version"
 
 echo 'Test mcbe-autoupdate@testme Bedrock Edition server preview'
-if [ "$(test_update)" = false ]; then
+update_res=$(test_update)
+if [ "$update_res" = false ]; then
 	>&2 echo "mcbe@$instance wasn't updated when no version file"
 	exit 1
 fi
