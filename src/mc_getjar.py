@@ -59,6 +59,17 @@ webpage_res = requests.get(
 webpage_res.raise_for_status()
 urls = webpage_res.json()["result"]["links"]
 
+latest_res = requests.get(
+    "https://net-secondary.web.minecraft-services.net/api/v1.0/download/latest",
+    headers={
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64)",
+        "Accept-Language": "en-US",
+    },
+    timeout=60,
+)
+latest_res.raise_for_status()
+current_ver = "minecraft_server." + latest_res.json()["result"]
+
 print(
     "Enter Y if you agree to the Minecraft End User License Agreement and Privacy",
     "Policy",
@@ -72,7 +83,6 @@ for urlx in urls:
     if urlx["downloadType"] == "serverJar":
         url = urlx["downloadUrl"]
         break
-current_ver = pathlib.Path(url).name
 # Symlink to current jar
 if pathlib.Path(JARS_DIR, "current").is_symlink():
     INSTALLED_VER = pathlib.Path(JARS_DIR, "current").resolve().name
