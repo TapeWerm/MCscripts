@@ -239,7 +239,8 @@ echo "ExecStart=/opt/MCscripts/bin/mc_autoupdate$extension /opt/MC/java/%i mc@%i
 systemctl daemon-reload
 
 echo 'Test mc-autoupdate@testme already up to date'
-if [ "$(test_update)" = true ]; then
+update_res=$(test_update)
+if [ "$update_res" = true ]; then
 	>&2 echo "mc@$instance was updated when already up to date"
 	exit 1
 fi
@@ -247,7 +248,8 @@ fi
 echo 💢 > "$mcscripts_dir/version"
 
 echo 'Test mc-autoupdate@testme different version'
-if [ "$(test_update)" = false ]; then
+update_res=$(test_update)
+if [ "$update_res" = false ]; then
 	>&2 echo "mc@$instance wasn't updated when different version"
 	exit 1
 fi
@@ -255,7 +257,8 @@ fi
 rm "$mcscripts_dir/version"
 
 echo 'Test mc-autoupdate@testme no version file'
-if [ "$(test_update)" = false ]; then
+update_res=$(test_update)
+if [ "$update_res" = false ]; then
 	>&2 echo "mc@$instance wasn't updated when no version file"
 	exit 1
 fi
