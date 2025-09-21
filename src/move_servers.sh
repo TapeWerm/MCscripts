@@ -28,7 +28,7 @@ fi
 for dir in ~mc/*; do
 	if [ -d "$dir" ]; then
 		dir=$(basename "$dir")
-		if [ -f ~mc/"$dir"/server.jar ]; then
+		if [ -f ~mc/"$dir"/server.jar ] && [ -f ~mc/"$dir"/server.properties ]; then
 			java+=("$dir")
 		fi
 		if [ -f ~mc/"$dir"/bedrock_server ]; then
