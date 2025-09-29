@@ -67,7 +67,7 @@ fi
 
 if command -v apt-get &> /dev/null; then
 	apt-get update
-	apt-get install -y curl dosfstools html-xml-utils socat zip
+	apt-get install -y curl dosfstools socat zip
 	apt-get install -y python3-requests python3-systemd python3-toml
 fi
 if ! id mc &> /dev/null; then
