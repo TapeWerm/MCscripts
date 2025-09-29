@@ -64,11 +64,13 @@ fi
 
 mkdir -p "$jars_dir"
 
-webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server)
-webpage=$(echo "$webpage_raw" | hxnormalize -x)
-while IFS='' read -rd '' link; do
-	links+=("$link")
-done < <(echo "$webpage" | hxselect -s '\000' 'a')
+# https://www.minecraft.net/en-us/download/server now uses JS to load the links onto the page, so a simple scrape of that page won't work.
+# But that page does call this API endpoint to get the current Minecraft server downloads.
+webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://net-secondary.web.minecraft-services.net/api/v1.0/download/links)
+urls=$(python3 -c 'import json; import sys; WEBPAGE = json.loads(sys.argv[1]); print(json.dumps(WEBPAGE["result"]["links"]))' "$webpage_raw")
+
+latest_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://net-secondary.web.minecraft-services.net/api/v1.0/download/latest)
+current_ver=minecraft_server.$(python3 -c 'import json; import sys; LATEST = json.loads(sys.argv[1]); print(LATEST["result"])' "$latest_raw")
 
 echo 'Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy'
 # Does prompting the EULA seem so official that it violates the EULA?
@@ -80,17 +82,7 @@ if [ "$input" != y ]; then
 	>&2 echo "$input != y"
 	exit 1
 fi
-for link in "${links[@]}"; do
-	url=$(echo "$link" | hxselect -c 'a::attr(href)')
-	if [ -z "$url" ]; then
-		continue
-	fi
-	if echo "$url" | grep -Eq '^https://[^ ]+server\.jar$'; then
-		current_ver=$(echo "$link" | hxselect -c 'a')
-		current_ver=$(basename -- "$current_ver")
-		break
-	fi
-done
+url=$(python3 -c 'import json; import sys; URLS = json.loads(sys.argv[1])'$'\n''for urlx in URLS:'$'\n''    if urlx["downloadType"] == "serverJar": print(urlx["downloadUrl"]); break' "$urls")
 # Symlink to current jar
 if [ -h "$jars_dir/current" ]; then
 	installed_ver=$(basename "$(realpath "$jars_dir/current")")
