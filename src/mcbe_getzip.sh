@@ -108,9 +108,10 @@ fi
 
 mkdir -p "$zips_dir"
 
-webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://www.minecraft.net/en-us/download/server/bedrock)
-webpage=$(echo "$webpage_raw" | hxnormalize -x)
-urls=$(echo "$webpage" | hxselect -s '\n' -c 'a::attr(href)')
+# https://www.minecraft.net/en-us/download/server/bedrock now uses JS to load the links onto the page, so a simple scrape of that page won't work.
+# But that page does call this API endpoint to get the current Minecraft server downloads.
+webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://net-secondary.web.minecraft-services.net/api/v1.0/download/links)
+urls=$(python3 -c 'import json; import sys; WEBPAGE = json.loads(sys.argv[1]); print(json.dumps(WEBPAGE["result"]["links"]))' "$webpage_raw")
 
 echo 'Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy'
 # Does prompting the EULA seem so official that it violates the EULA?
@@ -125,10 +126,10 @@ fi
 for version in "${versions[@]}"; do
 	case $version in
 	current)
-		url=$(echo "$urls" | grep -E '^https://[^ ]+bin-linux/bedrock-server-[^ ]+\.zip$' | head -n 1)
+		url=$(python3 -c 'import json; import sys; URLS = json.loads(sys.argv[1])'$'\n''for urlx in URLS:'$'\n''    if urlx["downloadType"] == "serverBedrockLinux": print(urlx["downloadUrl"]); break' "$urls")
 		;;
 	preview)
-		url=$(echo "$urls" | grep -E '^https://[^ ]+bin-linux-preview/bedrock-server-[^ ]+\.zip$' | head -n 1)
+		url=$(python3 -c 'import json; import sys; URLS = json.loads(sys.argv[1])'$'\n''for urlx in URLS:'$'\n''    if urlx["downloadType"] == "serverBedrockPreviewLinux": print(urlx["downloadUrl"]); break' "$urls")
 		;;
 	*)
 		continue
