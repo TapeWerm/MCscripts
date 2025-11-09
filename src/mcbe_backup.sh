@@ -131,8 +131,10 @@ else
 fi
 for config_file in "${config_files[@]}"; do
 	if [ -f "$config_file" ]; then
-		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("backup_dir" in CONFIG)' "$config_file")" = True ]; then
-			if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["backup_dir"], str))' "$config_file")" = False ]; then
+		backup_dir_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("backup_dir" in CONFIG)' "$config_file")
+		if [ "$backup_dir_in" = True ]; then
+			backup_dir_str=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["backup_dir"], str))' "$config_file")
+			if [ "$backup_dir_str" = False ]; then
 				>&2 echo "backup_dir must be TOML string, check $config_file"
 				exit 1
 			fi
