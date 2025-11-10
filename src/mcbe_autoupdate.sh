@@ -69,7 +69,8 @@ instance=${service##*@}
 config_files=(/etc/MCscripts/mcbe-autoupdate.toml "/etc/MCscripts/mcbe-autoupdate/$instance.toml")
 for config_file in "${config_files[@]}"; do
 	if [ -f "$config_file" ]; then
-		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("version" in CONFIG)' "$config_file")" = True ]; then
+		version_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("version" in CONFIG)' "$config_file")
+		if [ "$version_in" = True ]; then
 			config_version=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["version"])' "$config_file")
 			if [ "$config_version" = current ]; then
 				version=current
