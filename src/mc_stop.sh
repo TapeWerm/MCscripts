@@ -72,8 +72,10 @@ template=${service%@*}
 config_files=("/etc/MCscripts/$template.toml" "/etc/MCscripts/$template/$instance.toml")
 for config_file in "${config_files[@]}"; do
 	if [ -f "$config_file" ]; then
-		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("seconds" in CONFIG)' "$config_file")" = True ]; then
-			if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["seconds"], int))' "$config_file")" = False ]; then
+		seconds_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("seconds" in CONFIG)' "$config_file")
+		if [ "$seconds_in" = True ]; then
+			seconds_int=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["seconds"], int))' "$config_file")
+			if [ "$seconds_int" = False ]; then
 				>&2 echo "seconds must be TOML integer, check $config_file"
 				exit 1
 			fi
