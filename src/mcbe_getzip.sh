@@ -69,15 +69,18 @@ if [ "$(echo "$args_both $args_current $args_preview" | grep -o true | wc -l)" -
 fi
 
 if [ -f "$config_file" ]; then
-	if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")" = True ]; then
-		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")" = False ]; then
+	clobber_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")
+	if [ "$clobber_in" = True ]; then
+		clobber_bool=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")
+		if [ "$clobber_bool" = False ]; then
 			>&2 echo "clobber must be TOML boolean, check $config_file"
 			exit 1
 		fi
 		clobber=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["clobber"])' "$config_file")
 		clobber=$(echo "$clobber" | tr '[:upper:]' '[:lower:]')
 	fi
-	if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("versions" in CONFIG)' "$config_file")" = True ]; then
+	versions_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("versions" in CONFIG)' "$config_file")
+	if [ "$versions_in" = True ]; then
 		config_versions=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["versions"])' "$config_file")
 		if [ "$config_versions" = both ]; then
 			versions=(current preview)
