@@ -46,8 +46,10 @@ if [ "$(echo "$args_clobber $args_no_clobber" | grep -o true | wc -l)" -gt 1 ]; 
 fi
 
 if [ -f "$config_file" ]; then
-	if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")" = True ]; then
-		if [ "$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")" = False ]; then
+	clobber_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")
+	if [ "$clobber_in" = True ]; then
+		clobber_bool=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")
+		if [ "$clobber_bool" = False ]; then
 			>&2 echo "clobber must be TOML boolean, check $config_file"
 			exit 1
 		fi
