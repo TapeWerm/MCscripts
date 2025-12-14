@@ -72,7 +72,7 @@ webpage_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-
 urls=$(python3 -c 'import json; import sys; WEBPAGE = json.loads(sys.argv[1]); print(json.dumps(WEBPAGE["result"]["links"]))' "$webpage_raw")
 
 latest_raw=$(curl -A 'Mozilla/5.0 (X11; Linux x86_64)' -H 'Accept-Language: en-US' --compressed -LsS https://net-secondary.web.minecraft-services.net/api/v1.0/download/latest)
-current_ver=minecraft_server.$(python3 -c 'import json; import sys; LATEST = json.loads(sys.argv[1]); print(LATEST["result"])' "$latest_raw")
+current_ver=minecraft_server.$(python3 -c 'import json; import sys; LATEST = json.loads(sys.argv[1]); print(LATEST["result"])' "$latest_raw").jar
 
 echo 'Enter Y if you agree to the Minecraft End User License Agreement and Privacy Policy'
 # Does prompting the EULA seem so official that it violates the EULA?

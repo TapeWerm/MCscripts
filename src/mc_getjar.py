@@ -68,7 +68,7 @@ latest_res = requests.get(
     timeout=60,
 )
 latest_res.raise_for_status()
-current_ver = "minecraft_server." + latest_res.json()["result"]
+current_ver = f"minecraft_server.{latest_res.json()['result']}.jar"
 
 print(
     "Enter Y if you agree to the Minecraft End User License Agreement and Privacy",
