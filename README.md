@@ -85,7 +85,7 @@ If you want to change where backups are stored:
 sudo ln -snf EXT_DRIVE /opt/MCscripts/backup_dir
 ```
 ## Java Edition setup
-Bring your own Java or `sudo apt update && sudo apt install openjdk-21-jre-headless`.
+Bring your own Java or `sudo apt update && sudo apt install openjdk-25-jre-headless`.
 ```bash
 sudo systemd-run -PGqp User=mc -- /opt/MCscripts/bin/mc_getjar.py
 ```
