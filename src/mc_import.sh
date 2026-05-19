@@ -85,7 +85,7 @@ mkdir -p "$mcscripts_dir"
 # Convert DOS line endings to UNIX line endings
 for file in "$server_dir"/*.{json,properties}; do
 	if [ -f "$file" ]; then
-		sed -ie 's/\r$//' "$file"
+		sed -i -e 's/\r$//' "$file"
 	fi
 done
 echo '#!/bin/bash' > "$mcscripts_dir/start.sh"
