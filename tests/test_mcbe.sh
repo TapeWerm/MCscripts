@@ -203,10 +203,10 @@ systemctl daemon-reload
 
 echo 'Test mcbe_setup new server'
 "/opt/MCscripts/bin/mcbe_setup$extension" "$instance" > /dev/null
-sed -ie 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
-sed -ie 's/^level-name=.*/level-name=Bedrock level/' "$properties"
-sed -ie "s/^server-port=.*/server-port=$port/" "$properties"
-sed -ie "s/^server-portv6=.*/server-portv6=$portv6/" "$properties"
+sed -i -e 's/^enable-lan-visibility=.*/enable-lan-visibility=false/' "$properties"
+sed -i -e 's/^level-name=.*/level-name=Bedrock level/' "$properties"
+sed -i -e "s/^server-port=.*/server-port=$port/" "$properties"
+sed -i -e "s/^server-portv6=.*/server-portv6=$portv6/" "$properties"
 echo >> "$properties"
 echo '# Test mcbe_update keeps server.properties' >> "$properties"
 touch "$server_dir/test_mcbe_update.json"
@@ -215,7 +215,7 @@ start_server
 
 systemctl stop "mcbe@$instance.socket"
 rm -r "$mcscripts_dir"
-sed -ie 's/$/\r/' "$properties"
+sed -i -e 's/$/\r/' "$properties"
 mv "$server_dir" /tmp/test_mcbe_setup
 chown -R root:root /tmp/test_mcbe_setup
 
@@ -241,21 +241,21 @@ echo 'Test mcbe-backup@testme'
 test_backup
 
 systemctl stop "mcbe@$instance.socket"
-sed -ie 's/^level-name=.*/level-name=--nope/' "$properties"
+sed -i -e 's/^level-name=.*/level-name=--nope/' "$properties"
 start_server
 
 echo 'Test mcbe-backup@testme level-name flag injection'
 test_backup
 
 systemctl stop "mcbe@$instance.socket"
-sed -ie 's/^level-name=.*/level-name=.+{()[^$/' "$properties"
+sed -i -e 's/^level-name=.*/level-name=.+{()[^$/' "$properties"
 start_server
 
 echo 'Test mcbe-backup@testme level-name regex injection'
 test_backup
 
 systemctl stop "mcbe@$instance.socket"
-sed -ie 's/^level-name=.*/level-name=Bedrock level/' "$properties"
+sed -i -e 's/^level-name=.*/level-name=Bedrock level/' "$properties"
 start_server
 
 touch /tmp/test_mcbe_backup.img
