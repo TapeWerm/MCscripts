@@ -203,6 +203,12 @@ for server_dir in ~mc/java/*; do
 		chown mc:mc "$mcscripts_dir/start.sh"
 	fi
 done
+# Remove accidental backups
+for accident in /etc/systemd/system/{mc-backup@*,mc-rmbackup@*,mc@*,mcbe-autoupdate@*,mcbe-backup@*,mcbe-getzip,mcbe-rmbackup@*,mcbe@*}.service.d/*.confe ~mc/{bedrock,java}/*/server.propertiese; do
+	if [ -f "$accident" ]; then
+		rm "$accident"
+	fi
+done
 # Enable dependencies first
 for x in "${!enabled[@]}"; do
 	if [[ "${enabled[x]}" =~ ^mc@.+\.socket$|^mcbe@.+\.socket$ ]]; then
