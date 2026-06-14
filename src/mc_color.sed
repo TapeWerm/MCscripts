@@ -3,7 +3,7 @@
 # Pipe output from Minecraft Java Edition or Bedrock Edition server to this script for color codes on terminal
 # Formatting may not work on your terminal
 
-# Example: journalctl -u mcbe@MCBE | ./mc_color.sed | less -r +G
+# Example: journalctl -u mcbe@MCBE | ./mc_color.sed | less -R +G
 
 # Minecraft colors: https://minecraft.wiki/w/Formatting_codes
 # ANSI colors:      https://en.wikipedia.org/wiki/ANSI_escape_code

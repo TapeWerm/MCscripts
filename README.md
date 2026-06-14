@@ -30,7 +30,7 @@ sudo /opt/MCscripts/bin/mc_cmd.py mcbe@MCBE help 2
 How to see server output:
 ```bash
 # Press H for help
-journalctl -u SERVICE | /opt/MCscripts/bin/mc_color.sed | less -r +G
+journalctl -u SERVICE | /opt/MCscripts/bin/mc_color.sed | less -R +G
 ```
 How to add everyone to allowlist:
 ```bash
