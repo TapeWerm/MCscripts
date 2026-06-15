@@ -13,8 +13,12 @@ import time
 import typing
 import zipfile
 
-import toml
 import systemd.journal
+
+if sys.version_info[:2] >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 BACKUP_DIR = pathlib.Path.home()
 BACKUP_TIME = datetime.datetime.now().astimezone()
@@ -166,7 +170,8 @@ else:
     )
 for config_file in CONFIG_FILES:
     if config_file.is_file():
-        config = toml.load(config_file)
+        with config_file.open("rb") as config_bin:
+            config = tomllib.load(config_bin)
         if "backup_dir" in config:
             if not isinstance(config["backup_dir"], str):
                 sys.exit(f"backup_dir must be TOML string, check {config_file}")
