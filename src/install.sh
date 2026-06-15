@@ -69,6 +69,10 @@ if command -v apt-get &> /dev/null; then
 	apt-get update
 	apt-get install -y curl dosfstools socat zip
 	apt-get install -y python3-requests python3-systemd python3-toml
+	tomllib=$(python3 -c 'import sys; print(sys.version_info[:2] >= (3, 11))')
+	if [ "$tomllib" = False ]; then
+		apt-get install -y python3-tomli
+	fi
 fi
 if ! id mc &> /dev/null; then
 	useradd -rmd /opt/MC -s /usr/sbin/nologin mc
