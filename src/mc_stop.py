@@ -11,7 +11,10 @@ import subprocess
 import sys
 import time
 
-import toml
+if sys.version_info[:2] >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 SECONDS = 10
 
@@ -75,7 +78,8 @@ CONFIG_FILES = (
 )
 for config_file in CONFIG_FILES:
     if config_file.is_file():
-        config = toml.load(config_file)
+        with config_file.open("rb") as config_bin:
+            config = tomllib.load(config_bin)
         if "seconds" in config:
             if not isinstance(config["seconds"], int):
                 sys.exit(f"seconds must be TOML integer, check {config_file}")
