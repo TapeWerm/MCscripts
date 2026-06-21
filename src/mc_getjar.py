@@ -9,7 +9,11 @@ import pathlib
 import sys
 
 import requests
-import toml
+
+if sys.version_info[:2] >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 CLOBBER = True
 CONFIG_FILE = pathlib.Path("/etc/MCscripts/mc-getjar.toml")
@@ -31,7 +35,8 @@ CLOBBER_GROUP.add_argument(
 ARGS = PARSER.parse_args()
 
 if CONFIG_FILE.is_file():
-    CONFIG = toml.load(CONFIG_FILE)
+    with CONFIG_FILE.open("rb") as CONFIG_BIN:
+        CONFIG = tomllib.load(CONFIG_BIN)
     if "clobber" in CONFIG:
         if not isinstance(CONFIG["clobber"], bool):
             sys.exit(f"clobber must be TOML boolean, check {CONFIG_FILE}")
