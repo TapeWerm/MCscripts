@@ -2,6 +2,13 @@
 
 # Exit if error
 set -e
+load_config='import sys'
+load_config+=$'\n''if sys.version_info[:2] >= (3, 11):'
+load_config+=$'\n''    import tomllib'
+load_config+=$'\n''else:'
+load_config+=$'\n''    import tomli as tomllib'
+load_config+=$'\n''with open(sys.argv[1], "rb") as CONFIG_BIN:'
+load_config+=$'\n''    CONFIG = tomllib.load(CONFIG_BIN)'
 seconds=10
 syntax='Usage: mc_stop.sh [OPTION]... SERVICE'
 
@@ -72,14 +79,14 @@ template=${service%@*}
 config_files=("/etc/MCscripts/$template.toml" "/etc/MCscripts/$template/$instance.toml")
 for config_file in "${config_files[@]}"; do
 	if [ -f "$config_file" ]; then
-		seconds_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("seconds" in CONFIG)' "$config_file")
+		seconds_in=$(python3 -c "$load_config"$'\n''print("seconds" in CONFIG)' "$config_file")
 		if [ "$seconds_in" = True ]; then
-			seconds_int=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["seconds"], int))' "$config_file")
+			seconds_int=$(python3 -c "$load_config"$'\n''print(isinstance(CONFIG["seconds"], int))' "$config_file")
 			if [ "$seconds_int" = False ]; then
 				>&2 echo "seconds must be TOML integer, check $config_file"
 				exit 1
 			fi
-			seconds=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["seconds"])' "$config_file")
+			seconds=$(python3 -c "$load_config"$'\n''print(CONFIG["seconds"])' "$config_file")
 			if [ "$seconds" -lt 0 ] || [ "$seconds" -gt 60 ]; then
 				>&2 echo "seconds must be between 0 and 60, check $config_file"
 				exit 1
