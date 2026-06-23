@@ -2,6 +2,13 @@
 
 # Exit if error
 set -e
+load_config='import sys'
+load_config+=$'\n''if sys.version_info[:2] >= (3, 11):'
+load_config+=$'\n''    import tomllib'
+load_config+=$'\n''else:'
+load_config+=$'\n''    import tomli as tomllib'
+load_config+=$'\n''with open(sys.argv[1], "rb") as CONFIG_BIN:'
+load_config+=$'\n''    CONFIG = tomllib.load(CONFIG_BIN)'
 syntax='Usage: mcbe_autoupdate.sh [OPTION]... SERVER_DIR SERVICE'
 version=current
 args_current=false
@@ -69,9 +76,9 @@ instance=${service##*@}
 config_files=(/etc/MCscripts/mcbe-autoupdate.toml "/etc/MCscripts/mcbe-autoupdate/$instance.toml")
 for config_file in "${config_files[@]}"; do
 	if [ -f "$config_file" ]; then
-		version_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("version" in CONFIG)' "$config_file")
+		version_in=$(python3 -c "$load_config"$'\n''print("version" in CONFIG)' "$config_file")
 		if [ "$version_in" = True ]; then
-			config_version=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["version"])' "$config_file")
+			config_version=$(python3 -c "$load_config"$'\n''print(CONFIG["version"])' "$config_file")
 			if [ "$config_version" = current ]; then
 				version=current
 			elif [ "$config_version" = preview ]; then
