@@ -9,6 +9,13 @@ minute=$(date --date "@$backup_time" +%H-%M)
 date=$(date --date "@$backup_time" +%d)
 month=$(date --date "@$backup_time" +%m)
 year=$(date --date "@$backup_time" +%Y)
+load_config='import sys'
+load_config+=$'\n''if sys.version_info[:2] >= (3, 11):'
+load_config+=$'\n''    import tomllib'
+load_config+=$'\n''else:'
+load_config+=$'\n''    import tomli as tomllib'
+load_config+=$'\n''with open(sys.argv[1], "rb") as CONFIG_BIN:'
+load_config+=$'\n''    CONFIG = tomllib.load(CONFIG_BIN)'
 syntax='Usage: mcbe_backup.sh [OPTION]... SERVER_DIR SERVICE'
 
 # Print systemd cursor or ISO 8601 time for server_read
@@ -131,14 +138,14 @@ else
 fi
 for config_file in "${config_files[@]}"; do
 	if [ -f "$config_file" ]; then
-		backup_dir_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("backup_dir" in CONFIG)' "$config_file")
+		backup_dir_in=$(python3 -c "$load_config"$'\n''print("backup_dir" in CONFIG)' "$config_file")
 		if [ "$backup_dir_in" = True ]; then
-			backup_dir_str=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["backup_dir"], str))' "$config_file")
+			backup_dir_str=$(python3 -c "$load_config"$'\n''print(isinstance(CONFIG["backup_dir"], str))' "$config_file")
 			if [ "$backup_dir_str" = False ]; then
 				>&2 echo "backup_dir must be TOML string, check $config_file"
 				exit 1
 			fi
-			backup_dir=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["backup_dir"])' "$config_file")
+			backup_dir=$(python3 -c "$load_config"$'\n''print(CONFIG["backup_dir"])' "$config_file")
 			backup_dir=$(realpath -- "$backup_dir")
 		fi
 	fi
