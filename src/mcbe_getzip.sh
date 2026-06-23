@@ -6,6 +6,13 @@ clobber=true
 args_clobber=false
 args_no_clobber=false
 config_file=/etc/MCscripts/mcbe-getzip.toml
+load_config='import sys'
+load_config+=$'\n''if sys.version_info[:2] >= (3, 11):'
+load_config+=$'\n''    import tomllib'
+load_config+=$'\n''else:'
+load_config+=$'\n''    import tomli as tomllib'
+load_config+=$'\n''with open(sys.argv[1], "rb") as CONFIG_BIN:'
+load_config+=$'\n''    CONFIG = tomllib.load(CONFIG_BIN)'
 syntax='Usage: mcbe_getzip.sh [OPTION]...'
 versions=(current preview)
 args_both=false
@@ -69,19 +76,19 @@ if [ "$(echo "$args_both $args_current $args_preview" | grep -o true | wc -l)" -
 fi
 
 if [ -f "$config_file" ]; then
-	clobber_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("clobber" in CONFIG)' "$config_file")
+	clobber_in=$(python3 -c "$load_config"$'\n''print("clobber" in CONFIG)' "$config_file")
 	if [ "$clobber_in" = True ]; then
-		clobber_bool=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(isinstance(CONFIG["clobber"], bool))' "$config_file")
+		clobber_bool=$(python3 -c "$load_config"$'\n''print(isinstance(CONFIG["clobber"], bool))' "$config_file")
 		if [ "$clobber_bool" = False ]; then
 			>&2 echo "clobber must be TOML boolean, check $config_file"
 			exit 1
 		fi
-		clobber=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["clobber"])' "$config_file")
+		clobber=$(python3 -c "$load_config"$'\n''print(CONFIG["clobber"])' "$config_file")
 		clobber=$(echo "$clobber" | tr '[:upper:]' '[:lower:]')
 	fi
-	versions_in=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print("versions" in CONFIG)' "$config_file")
+	versions_in=$(python3 -c "$load_config"$'\n''print("versions" in CONFIG)' "$config_file")
 	if [ "$versions_in" = True ]; then
-		config_versions=$(python3 -c 'import sys; import toml; CONFIG = toml.load(sys.argv[1]); print(CONFIG["versions"])' "$config_file")
+		config_versions=$(python3 -c "$load_config"$'\n''print(CONFIG["versions"])' "$config_file")
 		if [ "$config_versions" = both ]; then
 			versions=(current preview)
 		elif [ "$config_versions" = current ]; then
